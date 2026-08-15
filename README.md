@@ -131,6 +131,53 @@ From then on, any time we make changes, running `git add -A`, then
 `git commit -m "describe what changed"`, then `git push` will update the
 backup on GitHub.
 
+## Continuing this project with Claude Code on your Mac
+
+Claude Code is a version of Claude that runs in your Mac's Terminal
+instead of a website — it can read, write, and run your project's files
+directly, which is exactly what we've been doing in this cloud session,
+except now it'll be on your actual machine with real internet access (so
+`data_fetch.py` will actually work).
+
+### 1. Install Node.js (Claude Code needs this to run)
+1. Go to **nodejs.org** in a browser.
+2. Click the button for the **LTS** version (LTS = "long-term support," the
+   stable recommended one).
+3. Open the downloaded `.pkg` file, click **Continue** through the
+   installer, then **Install**, enter your Mac password if asked.
+
+### 2. Install Claude Code
+1. Open **Terminal**.
+2. Type this exactly and press Enter:
+   ```
+   npm install -g @anthropic-ai/claude-code
+   ```
+3. Let it finish (a minute or so).
+
+### 3. Open this project and start Claude Code
+1. In Terminal, type `cd ` (with a trailing space), then drag the
+   `nq_research_platform` folder from Finder into the window, press Enter.
+2. Type `claude` and press Enter.
+3. The first time, it'll ask you to log in — this opens a browser window;
+   sign in with your Claude account (the same one you use in the Claude
+   app) and it'll connect automatically.
+4. You're now talking to Claude Code, inside your project folder. Since
+   `README.md` and `docs/ROADMAP.md` already live in this folder, Claude
+   Code can read them for context — it's a good idea to start by saying
+   something like: "Read README.md and docs/ROADMAP.md — continue
+   mentoring me as a Python beginner building this NQ research platform,
+   explain every step clearly."
+
+### A realistic note on "working while I work"
+Within one Claude Code session, you can hand it a task (or a short list of
+tasks) and it will largely work through them on its own — writing code,
+running it, fixing errors it hits — while you do something else nearby.
+It's not, however, a background service you can leave running unattended
+indefinitely; it's best used as "kick off a task, let it run, come back and
+review what it did," rather than true set-and-forget. For anything
+touching real money later (Stage 5 automation), you'll always want to be
+the one reviewing changes before they go live, not just trusting them.
+
 ## What's next
 
 See `docs/ROADMAP.md` — next up is Stage 2: turning one specific trading
