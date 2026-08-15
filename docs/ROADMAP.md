@@ -56,10 +56,24 @@ also now under git version control, with setup instructions in
 `README.md` for backing it up to GitHub and for continuing development
 locally using Claude Code on a Mac.
 
-**Next up — Stage 2:** pick ONE specific trading setup Jason watches for
-around the 8:30 open (e.g. range breakout, failed break/reversal, gap
-fill, opening drive) and turn it into a rule the computer can detect
-automatically in the data. Not yet decided as of the last update.
+**Stage 2 has a first working example:** Jason hadn't picked a specific
+setup yet, so as a starting point (built the evening of 2026-08-15 with
+Jason's go-ahead to make progress without him needing to be hands-on),
+`src/detect_setups.py` implements a standard "Opening Range Breakout"
+(ORB): the high/low of the first 15 minutes after 8:30 defines a range,
+and a break above/below it within the next 60 minutes is the signal,
+with a stop at the opposite side of the range and a 1x-range target.
+`src/plot_setup_example.py` draws real example days showing the range,
+entry, stop, and target on a chart. Both run against the synthetic data
+for now.
+
+**THIS IS A PLACEHOLDER, NOT NECESSARILY JASON'S ACTUAL SETUP.** The
+parameters (15-min range, 60-min watch window, 1x-range target) were
+picked as reasonable, well-documented defaults, not tuned or validated
+in any way. Next real step: Jason describes what he actually watches for
+at the open, and this script gets adjusted (or replaced) to match — then
+we move to Stage 3 (backtest engine) to see how it would have actually
+performed, including on real (not synthetic) data.
 
 ## A note on data quality
 
