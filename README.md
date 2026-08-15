@@ -77,6 +77,60 @@ python3 src/plot_open.py
 This will now automatically prefer the REAL data file over the synthetic
 one, and save an updated chart into `charts/`.
 
+## Backing this project up to GitHub (do this once your Mac is set up)
+
+GitHub is a free website that stores a permanent copy of your project's
+code and its full history. This matters because this project's `git`
+history currently only exists on your own Mac — if that machine's disk
+ever fails, the history goes with it. GitHub gives you an off-machine
+backup. It does NOT change how we write code together; it's just a safety
+net underneath it.
+
+### 1. Create a free GitHub account
+1. Go to **github.com** in a browser and click **Sign up**.
+2. Follow the prompts (email, password, username). Verify your email when
+   it asks.
+
+### 2. Create a new empty repository
+1. Once logged in, click the **+** icon top-right, then **New repository**.
+2. Name it something like `nq-research-platform`.
+3. Leave it **Private** (recommended — this is your personal trading
+   research, no reason to make it public) unless you want it public.
+4. Do NOT check "Add a README" or any other initialize option — we already
+   have those files locally and don't want conflicts.
+5. Click **Create repository**. GitHub will show you a page with some
+   commands — you don't need to copy those, use the steps below instead.
+
+### 3. Create a Personal Access Token (this is like a revocable password)
+1. Click your profile picture (top-right) → **Settings**.
+2. Scroll down the left sidebar to **Developer settings** (at the very
+   bottom).
+3. Click **Personal access tokens** → **Tokens (classic)** → **Generate
+   new token (classic)**.
+4. Give it a name like `nq-research-platform-mac`, set an expiration (90
+   days is fine — you can always make a new one later), and check the box
+   next to **repo** (this grants access to push code, nothing else).
+5. Click **Generate token** and COPY the code it shows you immediately —
+   GitHub only shows it once. Paste it somewhere safe temporarily (like
+   Notes app) — you'll use it in place of a password in the next step.
+
+### 4. Connect and push your local project
+In Terminal, inside the `nq_research_platform` folder, run these one at a
+time (replace `YOUR-USERNAME` with your actual GitHub username):
+```
+git remote add origin https://github.com/YOUR-USERNAME/nq-research-platform.git
+git branch -M main
+git push -u origin main
+```
+When it asks for a username, type your GitHub username. When it asks for
+a password, paste the Personal Access Token from step 3 (typing/pasting a
+password in Terminal shows nothing on screen — that's normal, it's still
+registering keystrokes).
+
+From then on, any time we make changes, running `git add -A`, then
+`git commit -m "describe what changed"`, then `git push` will update the
+backup on GitHub.
+
 ## What's next
 
 See `docs/ROADMAP.md` — next up is Stage 2: turning one specific trading
