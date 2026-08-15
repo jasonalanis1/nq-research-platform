@@ -178,6 +178,19 @@ review what it did," rather than true set-and-forget. For anything
 touching real money later (Stage 5 automation), you'll always want to be
 the one reviewing changes before they go live, not just trusting them.
 
+## Running the automated tests
+
+This project has a `tests/` folder with automated checks that verify the
+core logic (range detection, stop/target resolution) behaves correctly
+against small, hand-built examples where we know the right answer in
+advance. This isn't required to use the project, but it's good practice
+and catches bugs early if the logic ever gets changed. To run them:
+```
+pip3 install pytest
+pytest
+```
+You should see `8 passed`.
+
 ## What's next
 
 See `docs/ROADMAP.md` — next up is Stage 2: turning one specific trading

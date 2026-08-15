@@ -109,6 +109,27 @@ this same pipeline runs on real market data with Jason's actual setup.
 Stage 5 (live automation) remains explicitly gated on Jason's direct,
 in-the-moment approval each time — that boundary hasn't changed.
 
+**Also added:** an automated test suite (`tests/`, run with `pytest`) that
+checks the detection and backtest logic against small hand-built examples
+with known-correct answers — 8 tests, all passing as of the last update.
+This is pure engineering hygiene (doesn't need Jason's input) done while
+waiting on the two items above.
+
+## A note on how tonight's autonomous work was scoped (2026-08-15)
+
+Jason asked me to keep building without him present, including
+overnight/multi-day, until I hit something needing his decision. Two
+honest limits on that, recorded here so future-Claude (and Jason) don't
+lose the thread: (1) there is no standing background process — work only
+happens in a live conversation or when the scheduled daily check-in task
+fires; nothing runs continuously between those. (2) I hit the real
+stopping point the same night: further progress on the trading logic
+itself requires Jason's actual setup description and real (non-synthetic)
+data, neither of which I can generate myself. What I built after
+reaching that point (the test suite) was deliberately scoped to be useful
+regardless of what setup Jason eventually picks, rather than continuing
+to guess at trading-logic decisions that are his to make.
+
 ## A note on data quality
 
 We're starting with free Yahoo Finance data (ticker `NQ=F`) via the
