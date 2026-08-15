@@ -33,11 +33,22 @@ KEY TERMS EXPLAINED (beginner-friendly):
   R-multiples over time -- i.e. the worst losing stretch in this test.
   Useful for gut-checking whether you could stomach the ride.
 
+  Confidence interval (added 2026-08-16): a small sample can make a
+  setup look better or worse than it really is, purely by chance -- flip
+  a fair coin 10 times and getting 7 heads (70%!) isn't rare. The
+  confidence interval below is a rough range for where the TRUE win rate
+  probably falls, given how many trades we actually have. A narrow range
+  means we have enough trades to trust the number; a wide range means
+  "we don't really know yet, we need more trades." This uses everything
+  from backtest.py's NET (cost-adjusted) numbers, not the optimistic
+  gross ones, since net is what you'd actually keep.
+
 HOW TO RUN:
     python3 src/score_results.py
 """
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -65,37 +76,49 @@ def main():
         print("No resolved trades to score yet (all were unresolved -- likely a data-window issue).")
         return
 
-    wins = resolved[resolved["r_multiple"] > 0]
-    losses = resolved[resolved["r_multiple"] <= 0]
+    wins = resolved[resolved["r_multiple_net"] > 0]
+    losses = resolved[resolved["r_multiple_net"] <= 0]
+    n = len(resolved)
 
-    win_rate = len(wins) / len(resolved)
+    win_rate = len(wins) / n
     loss_rate = 1 - win_rate
-    avg_win_r = wins["r_multiple"].mean() if len(wins) else 0.0
-    avg_loss_r = losses["r_multiple"].mean() if len(losses) else 0.0
+    avg_win_r = wins["r_multiple_net"].mean() if len(wins) else 0.0
+    avg_loss_r = losses["r_multiple_net"].mean() if len(losses) else 0.0
     expectancy_r = win_rate * avg_win_r + loss_rate * avg_loss_r
 
-    gross_win_points = wins["pnl_points"].sum()
-    gross_loss_points = abs(losses["pnl_points"].sum())
-    profit_factor = (gross_win_points / gross_loss_points) if gross_loss_points else float("inf")
+    win_points = wins["pnl_points_net"].sum()
+    loss_points = abs(losses["pnl_points_net"].sum())
+    profit_factor = (win_points / loss_points) if loss_points else float("inf")
 
-    # Equity curve: running total of R-multiples, in trade order.
+    # --- Confidence interval on the win rate (normal approximation) ---
+    # Standard error of a proportion: sqrt(p*(1-p)/n). 1.96x that gives a
+    # rough 95% confidence interval -- "we're 95% confident the TRUE win
+    # rate is somewhere in this range," not "the win rate IS this range."
+    # This approximation gets shaky below ~30 trades, so we say so plainly.
+    se = (win_rate * (1 - win_rate) / n) ** 0.5 if n > 0 else float("nan")
+    ci_low = max(0.0, win_rate - 1.96 * se)
+    ci_high = min(1.0, win_rate + 1.96 * se)
+
+    # Equity curve: running total of NET R-multiples, in trade order.
     resolved = resolved.sort_values("date")
-    resolved["cumulative_r"] = resolved["r_multiple"].cumsum()
+    resolved["cumulative_r"] = resolved["r_multiple_net"].cumsum()
     running_max = resolved["cumulative_r"].cummax()
     drawdown = resolved["cumulative_r"] - running_max
     max_drawdown_r = drawdown.min()
 
     print("=" * 60)
-    print("SCORECARD (synthetic data -- pipeline test, not a real result)")
+    print("SCORECARD -- NET of estimated costs (synthetic data -- pipeline test, not a real result)")
     print("=" * 60)
-    print(f"Resolved trades:      {len(resolved)}   (unresolved/excluded: {unresolved_count})")
-    print(f"Win rate:             {win_rate:.1%}")
+    print(f"Resolved trades:      {n}   (unresolved/excluded: {unresolved_count})")
+    print(f"Win rate:             {win_rate:.1%}   (rough 95% confidence range: {ci_low:.1%} - {ci_high:.1%})")
+    if n < 30:
+        print("  ^ fewer than 30 trades -- treat this range as very approximate, not reliable yet.")
     print(f"Average win:          +{avg_win_r:.2f}R")
     print(f"Average loss:         {avg_loss_r:.2f}R")
     print(f"Expectancy per trade: {expectancy_r:+.3f}R")
     print(f"Profit factor:        {profit_factor:.2f}")
     print(f"Max drawdown:         {max_drawdown_r:.2f}R")
-    print(f"Total R (sum):        {resolved['r_multiple'].sum():+.2f}R")
+    print(f"Total R (sum):        {resolved['r_multiple_net'].sum():+.2f}R")
     print("=" * 60)
 
     # --- Equity curve chart ---
@@ -107,8 +130,9 @@ def main():
     ax.fill_between(range(1, len(resolved) + 1), resolved["cumulative_r"], 0,
                      where=(resolved["cumulative_r"] < 0), color=RED, alpha=0.08)
     ax.set_xlabel("Trade number (in date order)")
-    ax.set_ylabel("Cumulative R")
-    ax.set_title("Equity curve — cumulative R-multiple per trade (SYNTHETIC DATA)", fontsize=11, loc="left")
+    ax.set_ylabel("Cumulative R (net of estimated costs)")
+    ax.set_title("Equity curve — cumulative R-multiple per trade, net of costs (SYNTHETIC DATA)",
+                 fontsize=11, loc="left")
     for spine in ["top", "right"]:
         ax.spines[spine].set_visible(False)
 

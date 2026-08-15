@@ -115,6 +115,22 @@ with known-correct answers — 8 tests, all passing as of the last update.
 This is pure engineering hygiene (doesn't need Jason's input) done while
 waiting on the two items above.
 
+**2026-08-16 additions — cost modeling + confidence ranges:**
+`backtest.py` now subtracts an estimated commission + slippage cost from
+every resolved trade (previously results were unrealistically frictionless
+"gross" numbers) — see the cost assumptions documented at the top of that
+file, which are generic placeholders, not Jason's real broker costs.
+`score_results.py` now reports a rough 95% confidence interval on the win
+rate instead of a bare number, so it's visible when a result is based on
+too small a sample to trust. A new script, `confidence_analysis.py`,
+bootstrap-resamples the trade results to show a realistic spread of
+plausible outcomes (both "what if these same trades had landed in a
+different order" and "what might the next 100 trades look like") instead
+of presenting one backtest run as if it were the only possible outcome.
+Logged as `research/experiments/exp-002-orb-synthetic-with-costs.md`,
+without touching or overwriting exp-001, per the project's experiment
+rules.
+
 ## A note on how tonight's autonomous work was scoped (2026-08-15)
 
 Jason asked me to keep building without him present, including

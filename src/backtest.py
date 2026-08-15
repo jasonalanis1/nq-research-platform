@@ -23,6 +23,28 @@ get marked "unresolved" and excluded from the win-rate math, not counted
 as losses. Once real data (which covers a full trading session) is used,
 this should mostly go away.
 
+COST MODELING (added 2026-08-16): real trading costs money per trade --
+commissions the broker charges, plus "slippage" (the difference between
+the price you wanted and the price you actually got, since orders take a
+moment to fill and the market doesn't wait). Earlier versions of this
+script ignored both, which made results look better than they'd really
+be. Every trade below now gets both a GROSS result (pure price action,
+ignoring costs -- what earlier runs showed) and a NET result (after
+estimated costs -- much closer to what you'd actually keep). The NET
+numbers are what scoring should trust.
+
+THE COST ASSUMPTIONS BELOW ARE PLACEHOLDERS, NOT YOUR REAL COSTS. Typical
+retail futures costs, so you have a defensible starting point, but every
+broker is different -- swap these for your actual commission schedule and
+a slippage estimate you trust once you have one:
+  - CONTRACT_MULTIPLIER: $20/point is standard full-size NQ. Micro NQ
+    (MNQ) is $2/point instead -- change this if that's what you trade.
+  - COMMISSION_PER_SIDE: a commonly-cited all-in (commission + exchange +
+    NFA fees) retail futures rate. Round-trip (in + out) is double this.
+  - SLIPPAGE_TICKS_PER_SIDE: how many ticks worse than the signal price
+    we assume you actually get filled at, each side. 1 tick = 0.25
+    points for NQ.
+
 HOW TO RUN:
     python3 src/backtest.py
 """
@@ -32,6 +54,16 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
+
+# --- Cost assumptions (see COST MODELING note above -- placeholders) ---
+CONTRACT_MULTIPLIER = 20.0     # dollars per index point, full-size NQ (MNQ = 2.0)
+TICK_SIZE = 0.25                # NQ minimum price movement, in points
+COMMISSION_PER_SIDE = 2.50      # dollars, all-in estimate, per contract, per side
+SLIPPAGE_TICKS_PER_SIDE = 1.0   # assumed ticks of slippage, per side
+
+ROUND_TRIP_COMMISSION_DOLLARS = COMMISSION_PER_SIDE * 2
+ROUND_TRIP_SLIPPAGE_POINTS = SLIPPAGE_TICKS_PER_SIDE * TICK_SIZE * 2
+ROUND_TRIP_COST_POINTS = (ROUND_TRIP_COMMISSION_DOLLARS / CONTRACT_MULTIPLIER) + ROUND_TRIP_SLIPPAGE_POINTS
 
 
 def load_price_data():
@@ -85,10 +117,17 @@ def main():
 
         risk_points = abs(sig["entry"] - sig["stop"])
         if sig["direction"] == "long":
-            pnl_points = outcome["exit_price"] - sig["entry"]
+            pnl_points_gross = outcome["exit_price"] - sig["entry"]
         else:
-            pnl_points = sig["entry"] - outcome["exit_price"]
-        r_multiple = pnl_points / risk_points if risk_points else float("nan")
+            pnl_points_gross = sig["entry"] - outcome["exit_price"]
+
+        # Unresolved trades never actually closed, so no cost was paid --
+        # only resolved (stop or target hit) trades get costs deducted.
+        is_resolved = not outcome["exit_reason"].startswith("unresolved")
+        pnl_points_net = pnl_points_gross - ROUND_TRIP_COST_POINTS if is_resolved else pnl_points_gross
+
+        r_multiple_gross = pnl_points_gross / risk_points if risk_points else float("nan")
+        r_multiple_net = pnl_points_net / risk_points if risk_points else float("nan")
 
         results.append({
             "date": day,
@@ -99,8 +138,11 @@ def main():
             "exit_time": outcome["exit_time"],
             "exit_price": round(outcome["exit_price"], 2),
             "exit_reason": outcome["exit_reason"],
-            "pnl_points": round(pnl_points, 2),
-            "r_multiple": round(r_multiple, 3),
+            "pnl_points_gross": round(pnl_points_gross, 2),
+            "pnl_points_net": round(pnl_points_net, 2),
+            "pnl_dollars_net": round(pnl_points_net * CONTRACT_MULTIPLIER, 2),
+            "r_multiple_gross": round(r_multiple_gross, 3),
+            "r_multiple_net": round(r_multiple_net, 3),
         })
 
     results_df = pd.DataFrame(results)
@@ -109,17 +151,25 @@ def main():
 
     resolved = results_df[~results_df["exit_reason"].str.startswith("unresolved")]
     unresolved_count = len(results_df) - len(resolved)
-    wins = resolved[resolved["exit_reason"].str.startswith("target")]
-    losses = resolved[resolved["exit_reason"].str.startswith("stop")]
+    wins_net = resolved[resolved["r_multiple_net"] > 0]
+    losses_net = resolved[resolved["r_multiple_net"] <= 0]
 
     print(f"Backtested {len(results_df)} signals.")
     if is_synthetic:
         print("NOTE: SYNTHETIC data -- these results are for testing the pipeline only, not a real edge.")
     print(f"  Resolved (hit stop or target): {len(resolved)}")
     print(f"  Unresolved (ran out of data before either hit): {unresolved_count}")
+    print(f"  Assumed round-trip cost per trade: {ROUND_TRIP_COST_POINTS:.3f} points "
+          f"(${ROUND_TRIP_COMMISSION_DOLLARS:.2f} commission + "
+          f"{ROUND_TRIP_SLIPPAGE_POINTS:.2f}pt slippage) -- see script header to adjust")
     if len(resolved) > 0:
-        print(f"  Wins:   {len(wins)}  ({len(wins)/len(resolved):.1%})")
-        print(f"  Losses: {len(losses)}  ({len(losses)/len(resolved):.1%})")
+        print(f"  Wins (net of costs):   {len(wins_net)}  ({len(wins_net)/len(resolved):.1%})")
+        print(f"  Losses (net of costs): {len(losses_net)}  ({len(losses_net)/len(resolved):.1%})")
+        # Show how much costs alone changed the picture, since that's easy to
+        # miss if you only ever look at the net numbers.
+        flipped = resolved[(resolved["r_multiple_gross"] > 0) & (resolved["r_multiple_net"] <= 0)]
+        if len(flipped) > 0:
+            print(f"  Trades that were winners gross but losers after costs: {len(flipped)}")
     print(f"\nSaved trade-by-trade results to: {out_path}")
 
 
