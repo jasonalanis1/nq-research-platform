@@ -24,6 +24,15 @@ where we currently are.
   being blocked by the sandbox's network restrictions.
 - `src/plot_open.py` — draws a chart of price action around the 8:30 AM
   NY open for the last several days of whatever data is in `data/`.
+- `src/detect_setups.py` / `src/detect_level_sweep.py` — two setups:
+  the original Opening Range Breakout placeholder, and Level Sweep
+  Reversal (Jason's first real candidate setup, see
+  `research/setups/level-sweep-reversal.md`).
+- `src/backtest.py`, `src/score_results.py`, `src/confidence_analysis.py`
+  — the shared pipeline both setups run through. Each accepts an
+  optional filename argument to run against a specific setup's signals,
+  e.g. `python3 src/backtest.py setups_level_sweep.csv`. Run with no
+  argument to use the original ORB setup.
 - `data/` — CSV files of price data (synthetic for now).
 - `charts/` — chart images produced by the scripts.
 

@@ -131,6 +131,27 @@ Logged as `research/experiments/exp-002-orb-synthetic-with-costs.md`,
 without touching or overwriting exp-001, per the project's experiment
 rules.
 
+**2026-08-16 — first real setup defined: Level Sweep Reversal.** Built
+from Jason describing what he wanted pulled from a video he shared (see
+`research/raw/2026-08-16-video-reference-chart.md`) and making the
+concrete calls on level selection and confirmation logic. Full definition
+in `research/setups/level-sweep-reversal.md`. Detection code in
+`src/detect_level_sweep.py`; `backtest.py`, `score_results.py`, and
+`confidence_analysis.py` were generalized to accept a setup name so
+multiple setups' results never overwrite each other. First test logged
+as `exp-003` — unprofitable on synthetic data (expected/correct), with a
+result shape (2.6% win rate, huge average winner) meaningfully different
+from ORB's, a good sign the pipeline isn't just producing generic output.
+The ORB placeholder is left in place, untouched, for comparison — not
+retired.
+
+**Where things stand now:** two setups (ORB placeholder, Level Sweep
+Reversal real candidate), both fully wired through detect → backtest
+(with costs) → score (with confidence range) → bootstrap analysis. Both
+blocked on the same two things: real data (Jason's Mac) and, ideally,
+more real-world refinement of Level Sweep Reversal's specifics once
+Jason can watch it against real price action.
+
 ## A note on how tonight's autonomous work was scoped (2026-08-15)
 
 Jason asked me to keep building without him present, including

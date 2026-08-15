@@ -47,6 +47,7 @@ HOW TO RUN:
     python3 src/score_results.py
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -61,12 +62,25 @@ BLUE = "#2a78d6"
 RED = "#e34948"
 GRAY = "#8a8a86"
 
+# Works with any setup's backtest results now -- run as
+# `python3 src/score_results.py backtest_results_level_sweep.csv` for a
+# different setup. Defaults to the original ORB results.
+DEFAULT_RESULTS_FILE = "backtest_results.csv"
+
 
 def main():
-    results_path = DATA_DIR / "backtest_results.csv"
+    results_filename = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_RESULTS_FILE
+    results_path = DATA_DIR / results_filename
     if not results_path.exists():
-        print("No backtest_results.csv found -- run backtest.py first.")
+        print(f"No {results_filename} found -- run backtest.py first.")
         return
+
+    # Chart filename mirrors the input, same convention as backtest.py.
+    if results_filename == "backtest_results.csv":
+        chart_out_path = CHARTS_DIR / "equity_curve.png"
+    else:
+        suffix = results_filename.replace("backtest_results_", "").replace(".csv", "")
+        chart_out_path = CHARTS_DIR / f"equity_curve_{suffix}.png"
 
     df = pd.read_csv(results_path, parse_dates=["date", "exit_time"])
     resolved = df[~df["exit_reason"].str.startswith("unresolved")].copy()
@@ -136,10 +150,9 @@ def main():
     for spine in ["top", "right"]:
         ax.spines[spine].set_visible(False)
 
-    out_path = CHARTS_DIR / "equity_curve.png"
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor="white")
-    print(f"\nSaved equity curve chart to: {out_path}")
+    fig.savefig(chart_out_path, dpi=150, bbox_inches="tight", facecolor="white")
+    print(f"\nSaved equity curve chart to: {chart_out_path}")
 
 
 if __name__ == "__main__":

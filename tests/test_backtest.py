@@ -41,7 +41,7 @@ def test_target_hit_first_is_a_win():
     ])
     day_df = pd.concat([make_bars(day, tz, [(8, 45, 103, 103, 103, 103)]), bars_after])
 
-    result = bt.simulate_trade(day_df, signal)
+    result = bt.simulate_trade(day_df, signal, "breakout_time")
 
     assert result["exit_reason"] == "target"
     assert result["exit_price"] == 105
@@ -59,7 +59,7 @@ def test_stop_hit_first_is_a_loss():
     ])
     day_df = pd.concat([make_bars(day, tz, [(8, 45, 103, 103, 103, 103)]), bars_after])
 
-    result = bt.simulate_trade(day_df, signal)
+    result = bt.simulate_trade(day_df, signal, "breakout_time")
 
     assert result["exit_reason"] == "stop"
     assert result["exit_price"] == 100
@@ -78,7 +78,7 @@ def test_ambiguous_same_bar_assumes_stop_conservatively():
     wild_bar = make_bars(day, tz, [(8, 46, 103, 106, 99, 104)])  # spans both levels
     day_df = pd.concat([make_bars(day, tz, [(8, 45, 103, 103, 103, 103)]), wild_bar])
 
-    result = bt.simulate_trade(day_df, signal)
+    result = bt.simulate_trade(day_df, signal, "breakout_time")
 
     assert result["exit_reason"] == "stop (ambiguous bar)"
     assert result["exit_price"] == 100
@@ -94,6 +94,6 @@ def test_unresolved_when_data_runs_out():
     calm = make_bars(day, tz, [(8, 46 + m, 103, 103.5, 102.5, 103) for m in range(0, 5)])
     day_df = pd.concat([make_bars(day, tz, [(8, 45, 103, 103, 103, 103)]), calm])
 
-    result = bt.simulate_trade(day_df, signal)
+    result = bt.simulate_trade(day_df, signal, "breakout_time")
 
     assert result["exit_reason"] == "unresolved_end_of_data"

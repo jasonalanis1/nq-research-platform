@@ -30,6 +30,7 @@ HOW TO RUN:
     python3 src/confidence_analysis.py
 """
 
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -47,12 +48,21 @@ BLUE = "#2a78d6"
 GRAY = "#8a8a86"
 RED = "#e34948"
 
+DEFAULT_RESULTS_FILE = "backtest_results.csv"
+
 
 def main():
-    results_path = DATA_DIR / "backtest_results.csv"
+    results_filename = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_RESULTS_FILE
+    results_path = DATA_DIR / results_filename
     if not results_path.exists():
-        print("No backtest_results.csv found -- run backtest.py first.")
+        print(f"No {results_filename} found -- run backtest.py first.")
         return
+
+    if results_filename == "backtest_results.csv":
+        chart_out_path = CHARTS_DIR / "confidence_fan_chart.png"
+    else:
+        suffix = results_filename.replace("backtest_results_", "").replace(".csv", "")
+        chart_out_path = CHARTS_DIR / f"confidence_fan_chart_{suffix}.png"
 
     df = pd.read_csv(results_path)
     resolved = df[~df["exit_reason"].str.startswith("unresolved")]
@@ -137,10 +147,9 @@ def main():
     for spine in ["top", "right"]:
         ax.spines[spine].set_visible(False)
 
-    out_path = CHARTS_DIR / "confidence_fan_chart.png"
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight", facecolor="white")
-    print(f"\nSaved fan chart to: {out_path}")
+    fig.savefig(chart_out_path, dpi=150, bbox_inches="tight", facecolor="white")
+    print(f"\nSaved fan chart to: {chart_out_path}")
 
 
 if __name__ == "__main__":

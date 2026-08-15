@@ -49,11 +49,18 @@ HOW TO RUN:
     python3 src/backtest.py
 """
 
+import sys
 import pandas as pd
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
+
+# This script now works with ANY setup's signal file, not just the ORB
+# one -- run it as `python3 src/backtest.py setups_level_sweep.csv` to
+# backtest a different setup. Defaults to the original ORB signals so
+# existing habits/commands keep working unchanged.
+DEFAULT_SIGNALS_FILE = "setups_orb.csv"
 
 # --- Cost assumptions (see COST MODELING note above -- placeholders) ---
 CONTRACT_MULTIPLIER = 20.0     # dollars per index point, full-size NQ (MNQ = 2.0)
@@ -74,10 +81,13 @@ def load_price_data():
     return df, ("SYNTHETIC" in chosen.name)
 
 
-def simulate_trade(day_df: pd.DataFrame, signal: pd.Series) -> dict:
-    """Walks forward bar-by-bar after the breakout to see which level got
-    touched first: stop or target."""
-    after = day_df[day_df.index > signal["breakout_time"]]
+def simulate_trade(day_df: pd.DataFrame, signal: pd.Series, signal_time_col: str) -> dict:
+    """Walks forward bar-by-bar after the signal to see which level got
+    touched first: stop or target. `signal_time_col` is whichever column
+    in this setup's signal file marks the entry moment (different setups
+    name it differently -- "breakout_time" for ORB, "signal_time" for
+    Level Sweep Reversal)."""
+    after = day_df[day_df.index > signal[signal_time_col]]
 
     for ts, bar in after.iterrows():
         if signal["direction"] == "long":
@@ -102,18 +112,45 @@ def simulate_trade(day_df: pd.DataFrame, signal: pd.Series) -> dict:
 
 
 def main():
+    signals_filename = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_SIGNALS_FILE
+    signals_path = DATA_DIR / signals_filename
+    if not signals_path.exists():
+        print(f"No signals file found at {signals_path}. Run the matching detect_*.py script first.")
+        return
+
+    # Different setups name their "when the signal fired" column
+    # differently -- figure out which one this file uses.
+    header = pd.read_csv(signals_path, nrows=0).columns
+    if "breakout_time" in header:
+        signal_time_col = "breakout_time"
+    elif "signal_time" in header:
+        signal_time_col = "signal_time"
+    else:
+        print(f"Couldn't find a recognized signal-time column in {signals_filename}.")
+        return
+
     price_df, is_synthetic = load_price_data()
-    signals_df = pd.read_csv(DATA_DIR / "setups_orb.csv", parse_dates=["date", "breakout_time"])
+    signals_df = pd.read_csv(signals_path, parse_dates=["date", signal_time_col])
 
     if signals_df.empty:
-        print("No signals to backtest -- run detect_setups.py first.")
+        print(f"No signals in {signals_filename} to backtest.")
         return
+
+    # Output filename mirrors the input, so different setups' results
+    # never overwrite each other: setups_orb.csv -> backtest_results.csv
+    # (kept as the original name for backward compatibility), anything
+    # else -> backtest_results_<suffix>.csv
+    if signals_filename == "setups_orb.csv":
+        out_path = DATA_DIR / "backtest_results.csv"
+    else:
+        suffix = signals_filename.replace("setups_", "").replace(".csv", "")
+        out_path = DATA_DIR / f"backtest_results_{suffix}.csv"
 
     results = []
     for _, sig in signals_df.iterrows():
         day = sig["date"].date()
         day_df = price_df[price_df.index.date == day]
-        outcome = simulate_trade(day_df, sig)
+        outcome = simulate_trade(day_df, sig, signal_time_col)
 
         risk_points = abs(sig["entry"] - sig["stop"])
         if sig["direction"] == "long":
@@ -146,7 +183,6 @@ def main():
         })
 
     results_df = pd.DataFrame(results)
-    out_path = DATA_DIR / "backtest_results.csv"
     results_df.to_csv(out_path, index=False)
 
     resolved = results_df[~results_df["exit_reason"].str.startswith("unresolved")]

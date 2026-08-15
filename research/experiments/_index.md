@@ -9,6 +9,7 @@ instead, even if it's a re-run of a similar idea).
 |----|-----------|------|----------|------------|---------|
 | exp-001 | Opening Range Breakout (15-min range, 60-min watch, 1x-range target) has an edge at the NQ 8:30 NY open | 2026-08-15 | 37.0% | -0.29R (gross, no costs) | retest — pipeline validation only, see notes |
 | exp-002 | Same as exp-001, now with commission/slippage cost modeling + bootstrap confidence range added to the pipeline | 2026-08-16 | 37.0% (95% CI: 23.0%-50.9%) | -0.31R (net of estimated costs) | retest — pipeline validation only, see notes |
+| exp-003 | Level Sweep Reversal (support/resistance from prior-day + pre-market highs/lows, close-back confirmation) has an edge at the NQ 8:30 NY open | 2026-08-16 | 2.6% (95% CI: 0.0%-7.7%) | -0.68R (net of estimated costs) | retest — pipeline validation only, see notes |
 
 **Verdict key:** `keep` (worth pursuing further) · `kill` (edge not
 supported, drop it) · `retest` (inconclusive as tested — data, sample
