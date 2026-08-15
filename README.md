@@ -7,6 +7,11 @@ where we currently are.
 
 ## What's in this folder
 
+- `research/` — the knowledge layer: raw ideas, dated session journals,
+  a tracked log of every experiment/backtest run, and refined setup
+  definitions. See `research/README.md`. The rules for how this gets
+  maintained are also encoded in `CLAUDE.md` so any Claude session
+  follows them automatically.
 - `docs/ROADMAP.md` — the full 5-stage plan in plain English, plus notes
   on data sources and known limitations.
 - `src/data_fetch.py` — pulls REAL NQ minute-bar data from Yahoo Finance.
