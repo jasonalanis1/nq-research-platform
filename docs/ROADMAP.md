@@ -47,8 +47,19 @@ cost real dollars) so it comes last on purpose.
 
 ## Where we are right now
 
-**Stage 0, Step 1 of 1:** confirming we can pull NQ data and see the 8:30
-AM NY open clearly. See `src/data_fetch.py` and the chart in `charts/`.
+**Stage 0 is done:** we can generate/pull NQ minute data, and we produced
+a first chart of the 8:30 AM NY open window (currently using synthetic
+placeholder data, since the cloud sandbox used to build this can't reach
+real market data sites — `src/data_fetch.py` is ready to pull the real
+thing once run on a machine with normal internet access). The project is
+also now under git version control, with setup instructions in
+`README.md` for backing it up to GitHub and for continuing development
+locally using Claude Code on a Mac.
+
+**Next up — Stage 2:** pick ONE specific trading setup Jason watches for
+around the 8:30 open (e.g. range breakout, failed break/reversal, gap
+fill, opening drive) and turn it into a rule the computer can detect
+automatically in the data. Not yet decided as of the last update.
 
 ## A note on data quality
 
