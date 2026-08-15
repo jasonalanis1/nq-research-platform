@@ -70,10 +70,44 @@ for now.
 **THIS IS A PLACEHOLDER, NOT NECESSARILY JASON'S ACTUAL SETUP.** The
 parameters (15-min range, 60-min watch window, 1x-range target) were
 picked as reasonable, well-documented defaults, not tuned or validated
-in any way. Next real step: Jason describes what he actually watches for
-at the open, and this script gets adjusted (or replaced) to match — then
-we move to Stage 3 (backtest engine) to see how it would have actually
-performed, including on real (not synthetic) data.
+in any way.
+
+**Stages 3 and 4 also now have working first passes**, built the same
+evening with Jason's explicit go-ahead to keep moving without him
+needing to be hands-on:
+
+- `src/backtest.py` — walks forward through the minute bars after each
+  signal to see whether the stop or the target got hit first, and saves
+  a trade-by-trade result log to `data/backtest_results.csv`. Caveat:
+  the synthetic data only covers 6:00-11:00 AM each day, so a lot of
+  trades (31 of 77 in the latest run) ran out of data before resolving
+  either way — marked "unresolved" and excluded from scoring rather than
+  guessed at. This should mostly resolve itself once real (full-session)
+  data is used.
+- `src/score_results.py` — turns the resolved trades into a scorecard
+  (win rate, average win/loss in R-multiples, expectancy, profit factor,
+  max drawdown) plus an equity curve chart.
+
+**What the first synthetic-data run actually showed, and why that's a
+GOOD sign, not a bad one:** the placeholder ORB setup came out
+unprofitable on the synthetic data (37% win rate, expectancy -0.29R).
+That's expected and correct — the synthetic data is just random noise
+with no real intraday structure, so a real trading pattern SHOULD NOT
+show an edge on it. Seeing a clean negative result here is actually a
+sanity check that the backtest math itself isn't broken or secretly
+biased toward showing fake wins. The real test only means something once
+this same pipeline runs on real market data with Jason's actual setup.
+
+**What's genuinely still needed from Jason before this can go further:**
+1. His actual setup definition, to replace the ORB placeholder (or tune
+   its parameters) with what he really watches for.
+2. Real data — requires running on his own Mac (or connecting the
+   desktop app) since this cloud sandbox can't reach market data sites.
+3. A decision on position sizing / contract count once we're ready to
+   turn R-multiples into real dollar figures — not needed yet.
+
+Stage 5 (live automation) remains explicitly gated on Jason's direct,
+in-the-moment approval each time — that boundary hasn't changed.
 
 ## A note on data quality
 
