@@ -86,6 +86,16 @@ def main():
     resolved = df[~df["exit_reason"].str.startswith("unresolved")].copy()
     unresolved_count = len(df) - len(resolved)
 
+    # backtest.py records whether the underlying price data was real or
+    # synthetic in an is_synthetic column. Older results files saved before
+    # this column existed are treated as unknown rather than guessed at.
+    if "is_synthetic" in df.columns and len(df) > 0:
+        is_synthetic = bool(df["is_synthetic"].iloc[0])
+        data_label = "SYNTHETIC DATA -- pipeline test, not a real result" if is_synthetic \
+            else "real data"
+    else:
+        data_label = "data source unknown -- re-run backtest.py to record it"
+
     if resolved.empty:
         print("No resolved trades to score yet (all were unresolved -- likely a data-window issue).")
         return
@@ -121,7 +131,7 @@ def main():
     max_drawdown_r = drawdown.min()
 
     print("=" * 60)
-    print("SCORECARD -- NET of estimated costs (synthetic data -- pipeline test, not a real result)")
+    print(f"SCORECARD -- NET of estimated costs ({data_label})")
     print("=" * 60)
     print(f"Resolved trades:      {n}   (unresolved/excluded: {unresolved_count})")
     print(f"Win rate:             {win_rate:.1%}   (rough 95% confidence range: {ci_low:.1%} - {ci_high:.1%})")
@@ -145,7 +155,7 @@ def main():
                      where=(resolved["cumulative_r"] < 0), color=RED, alpha=0.08)
     ax.set_xlabel("Trade number (in date order)")
     ax.set_ylabel("Cumulative R (net of estimated costs)")
-    ax.set_title("Equity curve — cumulative R-multiple per trade, net of costs (SYNTHETIC DATA)",
+    ax.set_title(f"Equity curve — cumulative R-multiple per trade, net of costs ({data_label})",
                  fontsize=11, loc="left")
     for spine in ["top", "right"]:
         ax.spines[spine].set_visible(False)

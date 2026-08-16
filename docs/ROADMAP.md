@@ -152,6 +152,61 @@ blocked on the same two things: real data (Jason's Mac) and, ideally,
 more real-world refinement of Level Sweep Reversal's specifics once
 Jason can watch it against real price action.
 
+**2026-08-16 — first REAL data pulled, both setups re-tested.** Working
+directly on Jason's own Mac (not the cloud sandbox), `src/data_fetch.py`
+successfully pulled real NQ 1-minute bars from Yahoo Finance for the
+first time. Along the way it fixed a bug: the script assumed Yahoo allows
+59 days of 1-minute history in one request; Yahoo's real limit is 30 days
+total, fetched in chunks of ~8 days per request. The script now loops
+over 7-day windows and stitches them together — this got caught by
+Yahoo's API returning a clear error, not by silently-wrong data, so
+nothing bad slipped through. Also fixed: `score_results.py` and
+`confidence_analysis.py` had a hardcoded "SYNTHETIC DATA" label in their
+output regardless of what data was actually used; `backtest.py` now
+records whether the data was real or synthetic in its results file, and
+both scripts read that instead of assuming.
+
+With ~24 trading days of real data (2026-07-19 through 2026-08-14), both
+setups were re-run: ORB placeholder came out positive (63.2% win rate,
++0.206R expectancy, logged as `exp-004`) and Level Sweep Reversal came
+out negative (7.7% win rate, -0.822R expectancy, logged as `exp-005`).
+**Neither result should be treated as a real verdict yet** — both are
+built on very small samples (19 and 13 resolved trades), and Level Sweep
+Reversal in particular is still Claude's first-pass translation of
+Jason's video reference into rules, not something Jason has validated
+against real charts himself. The genuinely useful outcome today is that
+the full pipeline (fetch → detect → backtest → score → confidence) now
+runs cleanly end-to-end on real market data, with correct labeling.
+
+**What's still needed from Jason:** review
+`research/setups/level-sweep-reversal.md` against his own read of real
+price action and flag anything the coded rules got wrong before that
+setup's results mean anything. Real data will also keep accumulating
+over time as `data_fetch.py` is re-run periodically (Yahoo only exposes a
+rolling 30-day window per pull).
+
+**2026-08-16 — Level Sweep Reversal reviewed against the video, target
+rule fixed.** Walked through `research/setups/level-sweep-reversal.md`
+piece by piece with Jason. He didn't have a strong enough feel to judge
+most of it from experience, so left levels/watch-window/sweep-definition
+unchanged. Two changes he did have evidence for or a clear preference on:
+
+- **Target rule fixed.** Comparing the setup against
+  `research/raw/2026-08-16-video-reference-chart.md` showed the original
+  "target the opposite level" rule didn't match the video — that trade's
+  real target was a modest ~1.35x-risk distance, not the far opposite
+  level. Target rule changed to `entry ± 1.35 × risk` accordingly.
+- **Reversal confirmation split into three variants** (`close_any`,
+  `close_min_distance`, `full_bar_range`) instead of picking one, since
+  Jason wanted to compare rather than guess from a single small backtest.
+
+All three variants, re-run with the corrected target rule on the same
+real ~24-day data, turned profitable (exp-006/007/008: +0.132R, +0.545R,
++0.238R expectancy respectively) — a sharp turnaround from exp-005's
+-0.822R. This is encouraging but **not a verdict**: 15-16 trades per
+variant is far too small a sample, and no variant has been chosen as "the"
+setup — that comparison stays open until more real data accumulates.
+
 ## A note on how tonight's autonomous work was scoped (2026-08-15)
 
 Jason asked me to keep building without him present, including

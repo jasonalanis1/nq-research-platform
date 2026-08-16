@@ -30,9 +30,40 @@ WHICH SETUP THIS IMPLEMENTS -- "Level Sweep Reversal":
     4. Entry: the close of the confirming bar.
        Stop: the most extreme price reached during the sweep (if price
        takes that back out, the reversal idea is wrong).
-       Target: the OPPOSITE level (support swept -> target resistance,
-       and vice versa) if it's a sensible distance away, otherwise a
-       fallback of 1x the risk (same fallback rule as the ORB setup).
+       Target: a MODEST target sized off risk (see TARGET_R_MULTIPLE
+       below), not the far opposite level -- see "2026-08-16 target rule
+       change" below for why.
+
+2026-08-16 -- CONFIRMATION RULE, THREE VARIANTS (not yet decided):
+    Jason doesn't yet have a strong feel for which confirmation rule is
+    right, so rather than guess, this file supports three, selectable via
+    a command-line argument, each logged as its own separate experiment
+    for later comparison instead of picking a winner now:
+      - "close_any" (the original/default): any close back beyond the
+        level counts, same bar or later.
+      - "close_min_distance": the close must clear the level by at least
+        MIN_CONFIRM_DISTANCE_POINTS -- filters out marginal/barely-over
+        closes. That point value is an arbitrary illustrative choice, not
+        derived from data yet.
+      - "full_bar_range": the ENTIRE confirming bar (not just its close)
+        must be back beyond the level -- i.e. its low (support case) or
+        high (resistance case) also cleared the level. This is strictly
+        stronger than close_any and, by construction, can never fire on
+        the same bar that did the sweep (since that bar's low/high is
+        what swept it in the first place) -- confirmation always comes on
+        a later bar under this rule.
+
+2026-08-16 -- TARGET RULE CHANGE:
+    The original version targeted the opposite level, which -- reviewed
+    against research/raw/2026-08-16-video-reference-chart.md -- doesn't
+    match what was actually visible in the reference video. That trade's
+    real target (30060) was only 27 points from its entry (30033) against
+    a 20-point risk (stop at 30013) -- a modest ~1.35x-risk target, NOT
+    the far opposite level (price later ran 8-10x further, but that was
+    what happened after the trade, not the target itself). TARGET_R_MULTIPLE
+    below (1.35) is that ratio, taken directly from the one concrete
+    example we have -- not statistically derived, and worth revisiting
+    once there's more than one reference trade to calibrate from.
 
 NOTE ON WHERE THIS CAME FROM: built from reading price levels and an
 entry/stop/target box visible in a screenshot Jason shared of someone
@@ -45,14 +76,23 @@ general idea. The specific level choices and confirmation rule here are
 Jason's calls, made together in conversation.
 
 HOW TO RUN:
-    python3 src/detect_level_sweep.py
+    python3 src/detect_level_sweep.py                       # default: close_any
+    python3 src/detect_level_sweep.py close_any
+    python3 src/detect_level_sweep.py close_min_distance
+    python3 src/detect_level_sweep.py full_bar_range
 """
 
+import sys
 import pandas as pd
 from pathlib import Path
 
 OPEN_HOUR, OPEN_MINUTE = 8, 30
 WATCH_MINUTES = 90  # how long after the open to watch for a sweep + reversal
+
+CONFIRMATION_MODES = ["close_any", "close_min_distance", "full_bar_range"]
+MIN_CONFIRM_DISTANCE_POINTS = 5.0  # arbitrary placeholder for close_min_distance -- see file header
+
+TARGET_R_MULTIPLE = 1.35  # derived from the one video reference trade -- see file header
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
@@ -108,12 +148,40 @@ def compute_levels(df: pd.DataFrame, day, prior_day) -> dict | None:
     }
 
 
-def scan_for_signal(day_df: pd.DataFrame, levels: dict) -> dict | None:
+def _support_confirmed(bar, support, mode) -> bool:
+    """Has this bar confirmed a reversal back above a swept support level?"""
+    if mode == "close_any":
+        return bar["Close"] > support
+    if mode == "close_min_distance":
+        return bar["Close"] > support + MIN_CONFIRM_DISTANCE_POINTS
+    if mode == "full_bar_range":
+        return bar["Low"] > support  # the WHOLE bar, not just the close, is back above
+    raise ValueError(f"Unknown confirmation mode: {mode}")
+
+
+def _resistance_confirmed(bar, resistance, mode) -> bool:
+    """Has this bar confirmed a reversal back below a swept resistance level?"""
+    if mode == "close_any":
+        return bar["Close"] < resistance
+    if mode == "close_min_distance":
+        return bar["Close"] < resistance - MIN_CONFIRM_DISTANCE_POINTS
+    if mode == "full_bar_range":
+        return bar["High"] < resistance  # the WHOLE bar, not just the close, is back below
+    raise ValueError(f"Unknown confirmation mode: {mode}")
+
+
+def scan_for_signal(day_df: pd.DataFrame, levels: dict, confirmation_mode: str = "close_any") -> dict | None:
     """
     Walks forward bar-by-bar from the open, tracking whether support or
-    resistance has been swept, and whether a close-back-beyond-the-level
-    reversal has confirmed. Returns whichever signal (long or short)
-    confirms first, or None if neither does within the watch window.
+    resistance has been swept, and whether a reversal has confirmed under
+    the given confirmation_mode (see CONFIRMATION_MODES / file header).
+    Returns whichever signal (long or short) confirms first, or None if
+    neither does within the watch window.
+
+    Entry is always the confirming bar's close. Stop is always the most
+    extreme price reached during the sweep. Target is a modest
+    TARGET_R_MULTIPLE-times-risk target (see file header for where that
+    number comes from) -- no longer the opposite level.
     """
     watch_end = levels["open_ts"] + pd.Timedelta(minutes=WATCH_MINUTES)
     watch_bars = day_df[(day_df.index >= levels["open_ts"]) & (day_df.index < watch_end)]
@@ -131,17 +199,18 @@ def scan_for_signal(day_df: pd.DataFrame, levels: dict) -> dict | None:
         elif support_swept:
             support_extreme = min(support_extreme, bar["Low"])
 
-        if support_swept and bar["Close"] > levels["support"]:
-            target = levels["resistance"] if levels["resistance"] > bar["Close"] else None
+        if support_swept and _support_confirmed(bar, levels["support"], confirmation_mode):
+            entry = bar["Close"]
+            risk = entry - support_extreme
             return {
                 "direction": "long",
                 "level_swept": levels["support"],
                 "level_source": levels["support_source"],
                 "sweep_extreme": support_extreme,
                 "signal_time": ts,
-                "entry": bar["Close"],
+                "entry": entry,
                 "stop": support_extreme,
-                "target": target if target is not None else bar["Close"] + (bar["Close"] - support_extreme),
+                "target": entry + TARGET_R_MULTIPLE * risk,
             }
 
         # --- resistance side (watching for a short reversal) ---
@@ -151,26 +220,33 @@ def scan_for_signal(day_df: pd.DataFrame, levels: dict) -> dict | None:
         elif resistance_swept:
             resistance_extreme = max(resistance_extreme, bar["High"])
 
-        if resistance_swept and bar["Close"] < levels["resistance"]:
-            target = levels["support"] if levels["support"] < bar["Close"] else None
+        if resistance_swept and _resistance_confirmed(bar, levels["resistance"], confirmation_mode):
+            entry = bar["Close"]
+            risk = resistance_extreme - entry
             return {
                 "direction": "short",
                 "level_swept": levels["resistance"],
                 "level_source": levels["resistance_source"],
                 "sweep_extreme": resistance_extreme,
                 "signal_time": ts,
-                "entry": bar["Close"],
+                "entry": entry,
                 "stop": resistance_extreme,
-                "target": target if target is not None else bar["Close"] - (resistance_extreme - bar["Close"]),
+                "target": entry - TARGET_R_MULTIPLE * risk,
             }
 
     return None
 
 
 def main():
+    confirmation_mode = sys.argv[1] if len(sys.argv) > 1 else "close_any"
+    if confirmation_mode not in CONFIRMATION_MODES:
+        print(f"Unknown confirmation mode '{confirmation_mode}'. Choose one of: {CONFIRMATION_MODES}")
+        return
+
     df, is_synthetic = load_latest_data()
     if is_synthetic:
         print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
+    print(f"Confirmation mode: {confirmation_mode}")
 
     all_days = sorted(set(df.index.date))
     signals = []
@@ -188,7 +264,7 @@ def main():
             continue
 
         day_df = df[df.index.date == day]
-        signal = scan_for_signal(day_df, levels)
+        signal = scan_for_signal(day_df, levels, confirmation_mode)
         if signal is not None:
             signal["date"] = day
             signals.append(signal)
@@ -202,7 +278,7 @@ def main():
         for col in ["level_swept", "sweep_extreme", "entry", "stop", "target"]:
             signals_df[col] = signals_df[col].round(2)
 
-    out_path = DATA_DIR / "setups_level_sweep.csv"
+    out_path = DATA_DIR / f"setups_level_sweep_{confirmation_mode}.csv"
     signals_df.to_csv(out_path, index=False)
 
     print(f"\nScanned {len(all_days) - 1} days (excluding the first, which has no prior day).")

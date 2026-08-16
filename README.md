@@ -27,13 +27,17 @@ where we currently are.
 - `src/detect_setups.py` / `src/detect_level_sweep.py` — two setups:
   the original Opening Range Breakout placeholder, and Level Sweep
   Reversal (Jason's first real candidate setup, see
-  `research/setups/level-sweep-reversal.md`).
+  `research/setups/level-sweep-reversal.md`). Level Sweep Reversal has
+  three reversal-confirmation variants, not yet compared/decided between
+  — run with `python3 src/detect_level_sweep.py <mode>` where `<mode>` is
+  `close_any` (default), `close_min_distance`, or `full_bar_range`.
 - `src/backtest.py`, `src/score_results.py`, `src/confidence_analysis.py`
   — the shared pipeline both setups run through. Each accepts an
   optional filename argument to run against a specific setup's signals,
-  e.g. `python3 src/backtest.py setups_level_sweep.csv`. Run with no
-  argument to use the original ORB setup.
-- `data/` — CSV files of price data (synthetic for now).
+  e.g. `python3 src/backtest.py setups_level_sweep_close_any.csv`. Run
+  with no argument to use the original ORB setup.
+- `data/` — CSV files of price data (real, once you've run `data_fetch.py`
+  on your own Mac; synthetic otherwise).
 - `charts/` — chart images produced by the scripts.
 
 ## Getting set up on your own Mac (so you can pull REAL data)
@@ -203,7 +207,7 @@ and catches bugs early if the logic ever gets changed. To run them:
 pip3 install pytest
 pytest
 ```
-You should see `8 passed`.
+You should see all tests passing (currently `13 passed`).
 
 ## What's next
 

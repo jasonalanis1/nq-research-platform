@@ -42,7 +42,13 @@ from datetime import datetime, timedelta  # for working with dates and times
 
 TICKER = "NQ=F"          # Yahoo Finance's symbol for continuous front-month NQ futures
 INTERVAL = "1m"           # "1m" = 1-minute bars. Other options: "5m", "15m", "1h", "1d"
-LOOKBACK_DAYS = 59        # Yahoo only allows ~60 days of history at 1-minute resolution
+LOOKBACK_DAYS = 30        # Yahoo's REAL limit for 1-minute data: only the last 30 days,
+                          # and only ~8 days per single request (see CHUNK_DAYS below).
+                          # An earlier version of this file assumed 59 days was fine --
+                          # it wasn't. Yahoo returned an error, not silently-wrong data,
+                          # so this was caught before it could produce a bad backtest.
+CHUNK_DAYS = 7             # how many days we ask for in one request to stay under Yahoo's
+                           # per-request cap
 NY_TIMEZONE = "America/New_York"  # we care about NY time because that's when NQ trades on the CME and 8:30 AM ET is the cash market open time we're focused on
 
 # This figures out where to save the file. Path(__file__) means "the file
@@ -63,23 +69,41 @@ def fetch_nq_minute_data() -> pd.DataFrame:
     inside Python: rows and columns, with labels. Every price bar
     (timestamp, open, high, low, close, volume) will be one row.
 
+    Yahoo only allows ~8 days of 1-minute data per single request, and only
+    has 1-minute data at all for the last 30 days. So instead of one big
+    request, we ask for several smaller CHUNK_DAYS-sized windows (a "loop"),
+    covering LOOKBACK_DAYS total, and then glue ("concatenate") the results
+    together into one DataFrame.
+
     Returns:
         A pandas DataFrame with columns: Open, High, Low, Close, Volume,
-        indexed by timestamp (in New York time).
+        indexed by timestamp (in New York time), covering up to the last
+        LOOKBACK_DAYS days.
     """
-    print(f"Downloading {LOOKBACK_DAYS} days of {INTERVAL} bars for {TICKER}...")
+    print(f"Downloading {LOOKBACK_DAYS} days of {INTERVAL} bars for {TICKER} "
+          f"in {CHUNK_DAYS}-day chunks (Yahoo's per-request limit)...")
 
-    # yf.download() is the main function of the yfinance library. We give
-    # it a symbol, an interval, and a period, and it hands back a DataFrame.
-    df = yf.download(
-        tickers=TICKER,
-        period=f"{LOOKBACK_DAYS}d",
-        interval=INTERVAL,
-        progress=False,       # don't print yfinance's own progress bar
-        auto_adjust=False,    # futures don't need dividend/split adjustment
-    )
+    now = datetime.now()
+    chunks = []  # we'll collect each chunk's DataFrame here, then combine them
 
-    if df.empty:
+    # Walk backwards from today in CHUNK_DAYS-sized windows until we've
+    # covered LOOKBACK_DAYS total. range(0, 30, 7) gives 0, 7, 14, 21, 28.
+    for days_back in range(0, LOOKBACK_DAYS, CHUNK_DAYS):
+        window_end = now - timedelta(days=days_back)
+        window_start = window_end - timedelta(days=CHUNK_DAYS)
+
+        chunk = yf.download(
+            tickers=TICKER,
+            start=window_start.strftime("%Y-%m-%d"),
+            end=window_end.strftime("%Y-%m-%d"),
+            interval=INTERVAL,
+            progress=False,       # don't print yfinance's own progress bar
+            auto_adjust=False,    # futures don't need dividend/split adjustment
+        )
+        if not chunk.empty:
+            chunks.append(chunk)
+
+    if not chunks:
         # This is a "guard clause" -- checking for a problem early and
         # failing loudly with a clear message, instead of silently
         # continuing with broken/empty data.
@@ -88,6 +112,12 @@ def fetch_nq_minute_data() -> pd.DataFrame:
             "no internet connection, Yahoo is rate-limiting us, or the "
             "market has been closed long enough that there's nothing new."
         )
+
+    # Glue all the chunks together into one DataFrame, then sort by time and
+    # drop any duplicate timestamps (the windows above overlap slightly at
+    # their edges, so the same bar can come back in two chunks).
+    df = pd.concat(chunks).sort_index()
+    df = df[~df.index.duplicated(keep="first")]
 
     # yfinance sometimes returns "MultiIndex" columns (a fancier table
     # shape) when you pass certain arguments. This line flattens that back

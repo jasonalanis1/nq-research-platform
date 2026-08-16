@@ -180,6 +180,7 @@ def main():
             "pnl_dollars_net": round(pnl_points_net * CONTRACT_MULTIPLIER, 2),
             "r_multiple_gross": round(r_multiple_gross, 3),
             "r_multiple_net": round(r_multiple_net, 3),
+            "is_synthetic": is_synthetic,
         })
 
     results_df = pd.DataFrame(results)

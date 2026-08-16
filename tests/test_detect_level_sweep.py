@@ -6,6 +6,7 @@ sweep + close-back confirmation).
 """
 from datetime import date
 import pandas as pd
+import pytest
 import detect_level_sweep as dls
 
 
@@ -72,7 +73,10 @@ def test_same_bar_sweep_and_reversal_is_detected():
     assert signal["sweep_extreme"] == 98
     assert signal["entry"] == 101.5
     assert signal["stop"] == 98
-    assert signal["target"] == 120.0  # the opposite level
+    # Target is entry + TARGET_R_MULTIPLE * risk (risk = entry - stop = 3.5),
+    # not the opposite level -- see the 2026-08-16 target rule change.
+    expected_target = 101.5 + dls.TARGET_R_MULTIPLE * 3.5
+    assert signal["target"] == pytest.approx(expected_target)
 
 
 def test_sweep_without_reversal_produces_no_signal():
@@ -114,3 +118,42 @@ def test_multi_bar_sweep_tracks_the_worst_extreme_as_the_stop():
 
     assert signal is not None
     assert signal["stop"] == 94
+
+
+def test_close_min_distance_rejects_a_marginal_close():
+    """A close that's barely back over the level shouldn't confirm under
+    close_min_distance, even though it would under close_any."""
+    tz = "America/New_York"
+    day = date(2024, 1, 2)
+    levels = {"support": 100.0, "support_source": "prior_day_low",
+              "resistance": 120.0, "resistance_source": "prior_day_high",
+              "open_ts": pd.Timestamp(day, tz=tz).replace(hour=8, minute=30)}
+
+    day_df = make_bars(day, tz, [
+        (8, 30, 102, 103, 98, 100.5),  # sweeps (low=98), closes only 0.5 above support
+    ])
+
+    assert dls.scan_for_signal(day_df, levels, "close_any") is not None
+    assert dls.scan_for_signal(day_df, levels, "close_min_distance") is None
+
+
+def test_full_bar_range_requires_a_later_bar_not_the_sweep_bar():
+    """Under full_bar_range, the sweep bar itself can never confirm (its
+    low is below support by definition) -- confirmation has to wait for a
+    later bar whose entire range clears the level."""
+    tz = "America/New_York"
+    day = date(2024, 1, 2)
+    levels = {"support": 100.0, "support_source": "prior_day_low",
+              "resistance": 120.0, "resistance_source": "prior_day_high",
+              "open_ts": pd.Timestamp(day, tz=tz).replace(hour=8, minute=30)}
+
+    day_df = make_bars(day, tz, [
+        (8, 30, 102, 103, 98, 101),    # sweeps and closes back above -- but its LOW (98) is still below support
+        (8, 31, 101, 102, 100.5, 101.5),  # this bar's whole range (low=100.5) clears support
+    ])
+
+    signal_close_any = dls.scan_for_signal(day_df, levels, "close_any")
+    assert signal_close_any["signal_time"] == day_df.index[0]  # confirms on the sweep bar itself
+
+    signal_full_bar = dls.scan_for_signal(day_df, levels, "full_bar_range")
+    assert signal_full_bar["signal_time"] == day_df.index[1]  # waits for the later bar

@@ -69,6 +69,15 @@ def main():
     r_values = resolved["r_multiple_net"].to_numpy()
     n = len(r_values)
 
+    # backtest.py records whether the underlying price data was real or
+    # synthetic in an is_synthetic column. Older results files saved before
+    # this column existed are treated as unknown rather than guessed at.
+    if "is_synthetic" in df.columns and len(df) > 0:
+        is_synthetic = bool(df["is_synthetic"].iloc[0])
+        data_label = "SYNTHETIC-data-derived" if is_synthetic else "real-data-derived"
+    else:
+        data_label = "data source unknown -- re-run backtest.py to record it"
+
     if n < 5:
         print(f"Only {n} resolved trades -- not enough to do a meaningful confidence analysis yet.")
         return
@@ -141,7 +150,7 @@ def main():
     ax.axhline(0, color=GRAY, linewidth=1, linestyle="--")
     ax.set_xlabel(f"Trade number (next {n_future} simulated trades)")
     ax.set_ylabel("Cumulative R")
-    ax.set_title(f"Simulated range of outcomes ({N_SIMULATIONS} bootstrap runs, SYNTHETIC-data-derived)",
+    ax.set_title(f"Simulated range of outcomes ({N_SIMULATIONS} bootstrap runs, {data_label})",
                  fontsize=11, loc="left")
     ax.legend(loc="upper left", fontsize=8)
     for spine in ["top", "right"]:
