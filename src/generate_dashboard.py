@@ -55,6 +55,36 @@ SAMPLE_SIZE_PATTERNS = [
     re.compile(r"(\d[\d,]*)\s+actual trade outcomes"),
 ]
 
+# The project's named subagents -- this is short enough, and changes
+# rarely enough, that it's kept here as plain data rather than parsed
+# from anywhere. Tony is deliberately NOT an active subagent yet (no
+# .claude/agents/tony.md exists) -- he's listed here as a documented,
+# paused-on-purpose next step, per the project's safety rule that live
+# automation only gets built with Jason's direct go-ahead at the time.
+TEAM = [
+    {
+        "name": "Greg",
+        "role": "Pulls fresh real price data (Yahoo or Databento).",
+        "status": "active",
+        "status_label": "Active",
+        "detail": "Run anytime you want newer data -- just ask for Greg by name.",
+    },
+    {
+        "name": "Larry",
+        "role": "Runs the full detect → backtest → score → confidence pipeline for a setup/variant and logs it as a new numbered experiment.",
+        "status": "active",
+        "status_label": "Active",
+        "detail": "Run anytime you want to test a setup or variant -- just ask for Larry by name.",
+    },
+    {
+        "name": "Tony",
+        "role": "Would build live TradingView alerts (Pine Script) so Jason's phone buzzes when a setup fires.",
+        "status": "paused",
+        "status_label": "Paused on purpose",
+        "detail": "Not built yet, intentionally -- waiting until a setup is statistically proven before wiring up anything live.",
+    },
+]
+
 EXPECTANCY_R_PATTERN = re.compile(r"([+-]?\d+\.\d+)R")
 NORMAL_COST_R_PATTERN = re.compile(r"([+-]?\d+\.\d+)R at normal costs")
 
@@ -210,6 +240,21 @@ def esc(text) -> str:
     return html.escape(str(text))
 
 
+def render_team_section() -> str:
+    cards = []
+    for member in TEAM:
+        cards.append(f"""
+        <div class="team-card">
+          <div class="team-name-row">
+            <span class="team-name">{esc(member['name'])}</span>
+            <span class="badge team-status-{esc(member['status'])}">{esc(member['status_label'])}</span>
+          </div>
+          <p class="team-role">{esc(member['role'])}</p>
+          <p class="team-detail">{esc(member['detail'])}</p>
+        </div>""")
+    return "".join(cards)
+
+
 def render_html(index_rows, rows_by_group, active_data, all_data_files, most_promising, orb_latest, ls_latest):
     generated_at = datetime.now().strftime("%B %d, %Y at %I:%M %p")
 
@@ -337,6 +382,16 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
   .verdict-keep {{ background: var(--keep-bg); color: var(--keep-text); }}
   .verdict-retest {{ background: var(--retest-bg); color: var(--retest-text); }}
   .table-wrap {{ overflow-x: auto; }}
+  section {{ margin-top: 32px; }}
+  section > h2.section-title {{ font-size: 1.05rem; margin: 0 0 14px; }}
+  .team-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }}
+  .team-card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }}
+  .team-name-row {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }}
+  .team-name {{ font-size: 1.1rem; font-weight: 600; }}
+  .team-role {{ margin: 0 0 8px; font-size: 0.88rem; }}
+  .team-detail {{ margin: 0; font-size: 0.8rem; color: var(--text-muted); }}
+  .team-status-active {{ background: var(--keep-bg); color: var(--keep-text); }}
+  .team-status-paused {{ background: #fbf1e0; color: #966a1a; }}
   footer {{ margin-top: 24px; color: var(--text-muted); font-size: 0.8rem; }}
   code {{ background: #efeeeb; padding: 1px 6px; border-radius: 4px; font-size: 0.85em; }}
 </style>
@@ -380,6 +435,13 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
       </tbody>
     </table>
   </div>
+
+  <section>
+    <h2 class="section-title">Meet the team</h2>
+    <div class="team-grid">
+      {render_team_section()}
+    </div>
+  </section>
 
   <footer>
     Sample size is parsed from each experiment's own write-up file; shows &ldquo;-&rdquo; if the wording couldn't be matched.
