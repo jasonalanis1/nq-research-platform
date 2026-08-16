@@ -38,6 +38,7 @@ HOW TO RUN:
 
 import pandas as pd
 from pathlib import Path
+from data_holdout import apply_holdout_boundary
 
 # ---------------------------------------------------------------------------
 # SETTINGS -- the "knobs" for this specific setup definition. Change these
@@ -68,7 +69,10 @@ def load_latest_data() -> tuple[pd.DataFrame, bool]:
     # handles that correctly regardless of which offset each row was
     # written with, then we convert to NY time for the 8:30-open logic below.
     df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    return df, ("SYNTHETIC" in chosen.name)
+    is_synthetic = "SYNTHETIC" in chosen.name
+    if not is_synthetic:
+        df = apply_holdout_boundary(df, context="detect_setups.py")
+    return df, is_synthetic
 
 
 def detect_orb_for_day(day_df: pd.DataFrame, day) -> dict | None:

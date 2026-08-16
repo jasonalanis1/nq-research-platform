@@ -85,6 +85,7 @@ HOW TO RUN:
 import sys
 import pandas as pd
 from pathlib import Path
+from data_holdout import apply_holdout_boundary
 
 OPEN_HOUR, OPEN_MINUTE = 8, 30
 WATCH_MINUTES = 90  # how long after the open to watch for a sweep + reversal
@@ -110,7 +111,10 @@ def load_latest_data() -> tuple[pd.DataFrame, bool]:
     # plain parse_dates=True -- files spanning a DST change mix UTC
     # offsets, which that silently fails to parse correctly.
     df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    return df, ("SYNTHETIC" in chosen.name)
+    is_synthetic = "SYNTHETIC" in chosen.name
+    if not is_synthetic:
+        df = apply_holdout_boundary(df, context="detect_level_sweep.py")
+    return df, is_synthetic
 
 
 def compute_levels(df: pd.DataFrame, day, prior_day) -> dict | None:

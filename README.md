@@ -43,6 +43,11 @@ where we currently are.
   optional filename argument to run against a specific setup's signals,
   e.g. `python3 src/backtest.py setups_level_sweep_close_any.csv`. Run
   with no argument to use the original ORB setup.
+- `src/data_holdout.py` — draws a fixed line in the real data
+  (2026-04-07 onward is untouched holdout, set aside for a future
+  one-time out-of-sample check — see `docs/RESEARCH_ARCHITECTURE.md`).
+  Every script that loads real price data excludes the holdout portion
+  by default; see that file's header before ever overriding it.
 - `src/generate_dashboard.py` — builds `dashboard.html`, a one-page
   visual summary of the whole project's current state (every logged
   experiment, which setup/variant looks most promising and why, how much

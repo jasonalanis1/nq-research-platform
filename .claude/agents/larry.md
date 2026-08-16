@@ -39,6 +39,18 @@ whatever real data is already in `data/` (these scripts pick real data
 automatically over the synthetic file — don't fetch new data yourself,
 that's Greg's job).
 
+**Holdout data (added 2026-08-16):** the real data now has an untouched
+holdout slice (everything from 2026-04-07 onward — see
+`docs/RESEARCH_ARCHITECTURE.md` and `src/data_holdout.py`). The detect
+and backtest scripts above already exclude it automatically, and you'll
+see a console line confirming that ("Holdout boundary applied... using
+N research trading day(s), excluded M holdout day(s)") — that's normal
+and expected, not an error. **Never set the `ALLOW_HOLDOUT_DATA`
+environment variable or otherwise try to include the holdout data.**
+That's reserved for one deliberate, final validation check that Jason
+decides on explicitly — not something to reach for during normal
+testing, even if asked to "test on all the data."
+
 ## Logging the experiment (CLAUDE.md rules — follow exactly)
 
 1. Read `research/experiments/_index.md` to find the highest existing

@@ -12,6 +12,54 @@ experience. Explain steps clearly, don't assume programming background,
 give exact install/click instructions when relevant. See `README.md` and
 `docs/ROADMAP.md` for full project context and current status.
 
+## Strategic direction — read `docs/RESEARCH_ARCHITECTURE.md`
+
+That file (added 2026-08-16, from strategic guidance Jason got and
+adopted as the project's north star) is the long-term plan and should
+shape decisions automatically, without Jason having to re-explain it
+each session. Read it at the start of substantial work on this project.
+The short version of what it means day to day:
+
+- The goal is a general research platform that can test MANY candidate
+  strategies through the same standardized pipeline — not a platform
+  built around Level Sweep Reversal specifically. Don't special-case
+  code around today's best-performing setup.
+- No backtest result — however positive — gets called "proven" or
+  "profitable" until it's cleared out-of-sample testing, walk-forward
+  testing, and the other validation steps that document lists. Default
+  language for an unvalidated positive result is "candidate" or
+  "promising," never "a strategy that works."
+- Before building more strategy-specific features (including expanding
+  Tony), prioritize fixing architecture gaps the plan depends on —
+  see that doc's "Immediate next steps" questions and the standing
+  architecture-review findings from 2026-08-16 (ask Jason for the
+  current status if picking this up in a new session, or re-run the
+  same review).
+- Tony (the future live-alert layer) stays explicitly experimental —
+  never implies a signal is a proven profitable trade, and does not get
+  built out further without Jason's explicit go-ahead (this is separate
+  from, and in addition to, the Stage 5 safety boundary below).
+
+## Holdout data — do not touch without a very deliberate reason
+
+As of 2026-08-16, `data/NQ_1min_databento_2026-08-16.csv` has a real
+holdout slice carved out: **2026-04-07 onward is untouched holdout
+data**, set aside for a future one-time out-of-sample validation check
+(see `docs/RESEARCH_ARCHITECTURE.md`'s implementation status for the
+full reasoning). Every script that loads real price data
+(`detect_setups.py`, `detect_level_sweep.py`, `backtest.py`,
+`plot_open.py`, `plot_setup_example.py`) calls
+`apply_holdout_boundary()` from `src/data_holdout.py`, which excludes
+holdout data by default and requires the environment variable
+`ALLOW_HOLDOUT_DATA=1` to include it. **Never set that variable, and
+never suggest Jason set it, "just to check something" or as part of
+routine testing** — that would burn the only genuinely unseen data this
+project has. It's for one deliberate, final validation check on a
+candidate strategy that has already cleared everything else in
+`docs/RESEARCH_ARCHITECTURE.md`'s validation checklist, and that
+decision should be made explicitly with Jason, not made quietly by
+running a script with a flag on.
+
 ## The research/ knowledge layer — rules to follow automatically
 
 This project keeps a `research/` folder (see `research/README.md` for the

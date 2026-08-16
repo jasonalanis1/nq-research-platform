@@ -24,6 +24,8 @@ from datetime import datetime
 
 import pandas as pd
 
+from data_holdout import HOLDOUT_START_DATE
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 EXPERIMENTS_DIR = PROJECT_ROOT / "research" / "experiments"
@@ -162,11 +164,15 @@ def load_data_file_stats(path: Path):
     # parse_dates=True silently mis-parses files whose timestamps span a
     # Daylight Saving Time change (mixed UTC offsets).
     idx = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
+    research_days = len(set(idx[idx < HOLDOUT_START_DATE].date))
+    holdout_days = len(set(idx[idx >= HOLDOUT_START_DATE].date))
     return {
         "rows": len(df),
         "start": idx.min(),
         "end": idx.max(),
         "trading_days": len(set(idx.date)),
+        "research_days": research_days,
+        "holdout_days": holdout_days,
     }
 
 
@@ -265,6 +271,10 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
         <div class="stat-detail">{esc(active_data['label'])}</div>
         <div class="stat-detail">{active_data['start'].strftime('%b %d, %Y')} &rarr; {active_data['end'].strftime('%b %d, %Y')}
           &nbsp;(~{active_data['trading_days']} trading days)</div>
+        <div class="stat-detail" style="margin-top:8px;">
+          <strong>{active_data['research_days']} research days</strong> (used for testing) +
+          <strong>{active_data['holdout_days']} holdout days</strong> (untouched, since {HOLDOUT_START_DATE.strftime('%b %d, %Y')})
+        </div>
         """
         if len(all_data_files) > 1:
             others = ", ".join(esc(f["name"]) for f in all_data_files if not f["is_active"])

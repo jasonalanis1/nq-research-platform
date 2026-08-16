@@ -13,6 +13,7 @@ HOW TO RUN:
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from data_holdout import apply_holdout_boundary
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -36,7 +37,10 @@ def load_price_data():
     # plain parse_dates=True -- files spanning a DST change mix UTC
     # offsets, which that silently fails to parse correctly.
     df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    return df, ("SYNTHETIC" in chosen.name)
+    is_synthetic = "SYNTHETIC" in chosen.name
+    if not is_synthetic:
+        df = apply_holdout_boundary(df, context="plot_setup_example.py")
+    return df, is_synthetic
 
 
 def main():
