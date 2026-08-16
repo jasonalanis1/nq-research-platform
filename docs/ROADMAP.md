@@ -207,6 +207,75 @@ real ~24-day data, turned profitable (exp-006/007/008: +0.132R, +0.545R,
 variant is far too small a sample, and no variant has been chosen as "the"
 setup — that comparison stays open until more real data accumulates.
 
+**2026-08-16 — Databento added as a second, better real-data source; all
+setups re-tested on 6 months instead of ~24 days.** Jason signed up for
+Databento (a paid market data vendor) to get past Yahoo's ~30-day 1-minute
+history limit. `src/data_fetch_databento.py` now pulls ~6 months of real
+1-minute NQ futures bars from CME Globex's own feed (`GLBX.MDP3`,
+continuous front-month `NQ.c.0`) — the API key is kept out of chat
+entirely, read from an environment variable or a gitignored local file.
+Every other script automatically prefers this data over the Yahoo file.
+
+Loading this larger dataset surfaced a real bug: `pd.read_csv(...,
+parse_dates=True)`, duplicated across 5 scripts, silently fails to parse
+timestamps correctly when a file's date range crosses a Daylight Saving
+Time change (mixed UTC offsets) — Yahoo's short pulls never crossed DST,
+so this never showed up before. Fixed in all 5 places.
+
+**The headline result: none of the small-sample findings from earlier
+today held up well.** Re-run on ~6 months of Databento data (exp-009
+through exp-012): ORB placeholder went from +0.206R (19 trades) to
+-0.028R (125 trades) — essentially flat. All three Level Sweep Reversal
+confirmation variants compressed sharply too — `close_any` flipped
+negative (-0.052R), while `close_min_distance` and `full_bar_range`
+stayed positive but barely (+0.054R and +0.033R, down from +0.545R and
++0.238R respectively). This is exactly the kind of thing the project's
+confidence-interval/sample-size warnings exist to catch — the earlier
+~15-20 trade results were, in hindsight, optimistic. Nothing here is
+being treated as a final verdict, but it's an honest signal that Level
+Sweep Reversal, as currently defined, may need more than confirmation-rule
+tuning to find a real edge — worth a direct conversation with Jason about
+next direction (rethink levels/watch window/entry timing, or move on to
+a different setup idea).
+
+**2026-08-16 — extended to 2 years of Databento data, after checking the
+cost first.** Jason asked for a cost quote before pulling more data.
+Databento's `metadata.get_cost()` endpoint (a free check, no data pulled)
+priced 2 years of 1-minute NQ bars at ~$2.55 — trivial against his
+reported ~$124 remaining balance. `data_fetch_databento.py`'s
+`LOOKBACK_DAYS` was bumped from 182 to 730 and re-run: 698,873 rows,
+August 2024 through August 2026.
+
+Re-tested everything again (exp-013 through exp-016). ORB's negative
+signal sharpened further (-0.062R at 493 trades, only 6.6% of simulations
+profitable — now treated as settled, not worth further re-testing).
+Level Sweep Reversal's `close_any` variant confirmed negative
+(-0.063R at 237 trades). The notable result: `close_min_distance`
+(+0.043R at 221 trades, was +0.054R at 63) and `full_bar_range` (+0.042R
+at 197 trades, was +0.033R at 60) both **stabilized** instead of
+continuing to shrink toward zero the way the earlier 24-day→6-month jump
+did — the first sign either might reflect something real rather than
+small-sample noise. Still not proof of a tradeable edge (a few
+hundredths of an R per trade is thin, and this backtest doesn't model
+real fills or discretionary judgment), but a more encouraging checkpoint
+than 6 months alone gave.
+
+**2026-08-16 — robustness-checked the two surviving Level Sweep variants
+(exp-017/018).** Two follow-up questions on close_min_distance and
+full_bar_range's 2-year results, before trusting the "stabilized" finding
+above: are they statistically distinguishable from zero expectancy, and
+do they survive higher trading costs? Answers: **not statistically
+significant yet** (a 90% bootstrap confidence interval on total R spans
+solidly negative to strongly positive for both — using
+`confidence_analysis.py`'s existing bootstrap, no new code needed for
+this part), and **survive a 2x cost stress test only barely** (both stay
+positive but drop to roughly a quarter of their normal-cost expectancy).
+`backtest.py` gained a `COST_STRESS_MULTIPLIER` environment variable for
+this (defaults to 1.0/no change; a non-default value writes to a
+separate `_stress<N>x` output file so it can never overwrite a normal
+logged result). Honest read: neither variant has a confirmed edge yet —
+promising enough to keep watching, not solid enough to act on.
+
 ## A note on how tonight's autonomous work was scoped (2026-08-15)
 
 Jason asked me to keep building without him present, including

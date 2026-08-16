@@ -45,10 +45,21 @@ a slippage estimate you trust once you have one:
     we assume you actually get filled at, each side. 1 tick = 0.25
     points for NQ.
 
+STRESS-TESTING COSTS (added 2026-08-16): to check how sensitive a result
+is to the cost assumptions above being too optimistic, set the
+COST_STRESS_MULTIPLIER environment variable to scale BOTH commission and
+slippage by that factor, e.g.:
+    COST_STRESS_MULTIPLIER=2 python3 src/backtest.py setups_level_sweep_close_min_distance.csv
+Defaults to 1.0 (no change) if not set. When a multiplier other than 1.0
+is used, it's appended to the output filename (e.g.
+backtest_results_level_sweep_close_min_distance_stress2x.csv) so a
+stress-test run can never overwrite the normal-cost result.
+
 HOW TO RUN:
     python3 src/backtest.py
 """
 
+import os
 import sys
 import pandas as pd
 from pathlib import Path
@@ -63,10 +74,11 @@ DATA_DIR = PROJECT_ROOT / "data"
 DEFAULT_SIGNALS_FILE = "setups_orb.csv"
 
 # --- Cost assumptions (see COST MODELING note above -- placeholders) ---
+COST_STRESS_MULTIPLIER = float(os.environ.get("COST_STRESS_MULTIPLIER", "1.0"))
 CONTRACT_MULTIPLIER = 20.0     # dollars per index point, full-size NQ (MNQ = 2.0)
 TICK_SIZE = 0.25                # NQ minimum price movement, in points
-COMMISSION_PER_SIDE = 2.50      # dollars, all-in estimate, per contract, per side
-SLIPPAGE_TICKS_PER_SIDE = 1.0   # assumed ticks of slippage, per side
+COMMISSION_PER_SIDE = 2.50 * COST_STRESS_MULTIPLIER      # dollars, all-in estimate, per contract, per side
+SLIPPAGE_TICKS_PER_SIDE = 1.0 * COST_STRESS_MULTIPLIER   # assumed ticks of slippage, per side
 
 ROUND_TRIP_COMMISSION_DOLLARS = COMMISSION_PER_SIDE * 2
 ROUND_TRIP_SLIPPAGE_POINTS = SLIPPAGE_TICKS_PER_SIDE * TICK_SIZE * 2
@@ -77,7 +89,11 @@ def load_price_data():
     candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
     real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
     chosen = real_files[-1] if real_files else candidates[-1]
-    df = pd.read_csv(chosen, index_col="timestamp_ny", parse_dates=True)
+    df = pd.read_csv(chosen, index_col="timestamp_ny")
+    # See detect_setups.py's load_latest_data() for why this can't be a
+    # plain parse_dates=True -- files spanning a DST change mix UTC
+    # offsets, which that silently fails to parse correctly.
+    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
     return df, ("SYNTHETIC" in chosen.name)
 
 
@@ -140,11 +156,12 @@ def main():
     # never overwrite each other: setups_orb.csv -> backtest_results.csv
     # (kept as the original name for backward compatibility), anything
     # else -> backtest_results_<suffix>.csv
+    stress_suffix = "" if COST_STRESS_MULTIPLIER == 1.0 else f"_stress{COST_STRESS_MULTIPLIER:g}x"
     if signals_filename == "setups_orb.csv":
-        out_path = DATA_DIR / "backtest_results.csv"
+        out_path = DATA_DIR / f"backtest_results{stress_suffix}.csv"
     else:
         suffix = signals_filename.replace("setups_", "").replace(".csv", "")
-        out_path = DATA_DIR / f"backtest_results_{suffix}.csv"
+        out_path = DATA_DIR / f"backtest_results_{suffix}{stress_suffix}.csv"
 
     results = []
     for _, sig in signals_df.iterrows():
@@ -192,6 +209,8 @@ def main():
     losses_net = resolved[resolved["r_multiple_net"] <= 0]
 
     print(f"Backtested {len(results_df)} signals.")
+    if COST_STRESS_MULTIPLIER != 1.0:
+        print(f"  COST STRESS TEST: commission/slippage scaled {COST_STRESS_MULTIPLIER:g}x above the normal placeholder assumptions.")
     if is_synthetic:
         print("NOTE: SYNTHETIC data -- these results are for testing the pipeline only, not a real edge.")
     print(f"  Resolved (hit stop or target): {len(resolved)}")

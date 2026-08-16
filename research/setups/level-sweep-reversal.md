@@ -92,16 +92,45 @@ this file against the video reference and the target rule changed to
 1.35x-risk (see above), all three confirmation variants turned
 profitable on the same data:
 
-| Variant | Win rate | Expectancy | Experiment |
-|---|---|---|---|
-| close_any | 50.0% | +0.132R | exp-006 |
-| close_min_distance | 66.7% | +0.545R | exp-007 |
-| full_bar_range | 53.3% | +0.238R | exp-008 |
+| Variant | ~24 days (Yahoo) | ~6 months (Databento) | ~2 years (Databento) | Experiments |
+|---|---|---|---|---|
+| close_any | +0.132R (16 trades) | -0.052R (68 trades) | -0.063R (237 trades) | exp-006 / exp-010 / exp-014 |
+| close_min_distance | +0.545R (15 trades) | +0.054R (63 trades) | +0.043R (221 trades) | exp-007 / exp-011 / exp-015 |
+| full_bar_range | +0.238R (15 trades) | +0.033R (60 trades) | +0.042R (197 trades) | exp-008 / exp-012 / exp-016 |
 
-**No variant has been picked as "the" setup yet** — each result is from
-only 15-16 trades, too small a sample to trust the ranking above. This
-table exists to track the comparison as more real data accumulates, not
-to declare a winner.
+(Expectancy in R, net of estimated costs, at each sample size.)
+
+**Still no variant formally picked as "the" setup, but a clearer picture
+has emerged across three sample sizes:** `close_any` looks settled as the
+weakest — negative at both 6 months and 2 years, essentially the same
+number both times (-0.052R, -0.063R). `close_min_distance` and
+`full_bar_range` both **stabilized** going from 6 months to 2 years
+(+0.054R→+0.043R and +0.033R→+0.042R respectively) rather than continuing
+to shrink toward zero the way the 24-day→6-month jump did — the first
+sign these two might reflect something real rather than pure small-sample
+noise. They're also now close enough to each other (+0.043R vs +0.042R)
+that the gap between them isn't meaningful on expectancy alone anymore.
+
+None of this is proof of a tradeable edge — a few hundredths of an R per
+trade is a thin margin before accounting for anything not modeled here
+(e.g. real fills vs. assumed close-price entries, discretionary
+judgment calls a human would actually make) — but it's a meaningfully
+more encouraging signal than the 6-month checkpoint alone gave.
+
+**Robustness check (exp-017/018, on the 2-year results):** Jason asked
+two follow-up questions before trusting the "stabilized" result above.
+(1) Is either variant's expectancy statistically distinguishable from
+zero? **No** — a 90% bootstrap confidence interval on total R spans
+comfortably negative to strongly positive for both (close_min_distance:
+-18.89R to +37.08R; full_bar_range: -17.98R to +34.56R). (2) Does either
+survive a stress test with double the assumed commission/slippage?
+**Barely** — both stay positive, but drop to roughly a quarter of their
+normal-cost expectancy (close_min_distance: +0.043R → +0.011R;
+full_bar_range: +0.042R → +0.010R). Honest summary: neither variant has
+a confirmed edge yet, and what edge the numbers do show is thin enough
+that it wouldn't take much (real fills, Jason's actual broker costs
+instead of the generic placeholder, a slightly worse stretch of trades)
+to erase it.
 
 ## History
 
@@ -115,3 +144,17 @@ to declare a winner.
   now profitable on the same real-data window — see table above). Levels,
   watch window, and sweep definition all left unchanged — Jason had no
   reason to revise those without evidence.
+- 2026-08-16: re-tested all three variants on ~6 months of real Databento
+  data (exp-009/010/011/012, including the ORB comparison setup) instead
+  of Yahoo's ~24-day window. All three edges compressed sharply;
+  close_any flipped negative. See updated comparison table above.
+- 2026-08-16: re-tested all three variants again on ~2 years of Databento
+  data (exp-013/014/015/016), after Jason confirmed the cost (~$2.55,
+  quoted before running) was trivial against his account balance.
+  close_any confirmed negative; close_min_distance and full_bar_range
+  both stabilized rather than continuing to shrink. See updated
+  comparison table above.
+- 2026-08-16: robustness-checked close_min_distance and full_bar_range's
+  2-year results (exp-017/018) — bootstrap significance test (neither
+  distinguishable from zero expectancy at 90% confidence) and a 2x
+  cost-stress test (both survive, but barely). See notes above.

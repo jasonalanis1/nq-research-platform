@@ -1,8 +1,9 @@
-# Generated data and charts -- these get rebuilt by the scripts, so we
-# don't clutter the repo's history with large CSV/PNG files. Only the
-# CODE that produces them needs to be version-controlled.
+# Generated data, charts, and dashboard -- these get rebuilt by the
+# scripts, so we don't clutter the repo's history with generated files.
+# Only the CODE that produces them needs to be version-controlled.
 data/*.csv
 charts/*.png
+dashboard.html
 
 # Common Python junk files
 __pycache__/
@@ -12,3 +13,7 @@ __pycache__/
 
 # pytest cache
 .pytest_cache/
+
+# Secrets -- API keys/tokens should never be committed. data_fetch_databento.py
+# reads its key from here if the DATABENTO_API_KEY environment variable isn't set.
+.databento_key

@@ -46,7 +46,11 @@ def load_latest_csv() -> pd.DataFrame:
     chosen = real_files[-1] if real_files else candidates[-1]
 
     print(f"Loading: {chosen.name}")
-    df = pd.read_csv(chosen, index_col="timestamp_ny", parse_dates=True)
+    df = pd.read_csv(chosen, index_col="timestamp_ny")
+    # See detect_setups.py's load_latest_data() for why this can't be a
+    # plain parse_dates=True -- files spanning a DST change mix UTC
+    # offsets, which that silently fails to parse correctly.
+    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
     is_synthetic = "SYNTHETIC" in chosen.name
     return df, is_synthetic
 

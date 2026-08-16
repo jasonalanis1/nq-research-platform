@@ -14,11 +14,18 @@ where we currently are.
   follows them automatically.
 - `docs/ROADMAP.md` — the full 5-stage plan in plain English, plus notes
   on data sources and known limitations.
-- `src/data_fetch.py` — pulls REAL NQ minute-bar data from Yahoo Finance.
+- `src/data_fetch.py` — pulls REAL NQ minute-bar data from Yahoo Finance
+  (free, but limited to a rolling ~30-day window of 1-minute history).
   **This requires normal internet access and will NOT run inside the
   cloud sandbox Claude used to build this** (that sandbox blocks access to
   financial data sites). Run this on your own Mac once it's set up (see
   below).
+- `src/data_fetch_databento.py` — pulls REAL NQ minute-bar data from
+  Databento (a paid vendor, CME Globex `GLBX.MDP3` feed), covering a much
+  longer ~6-month window instead of Yahoo's ~30 days. Requires your own
+  Databento API key — the script asks for it locally (env var or a
+  gitignored `.databento_key` file), never via chat. Every other script
+  automatically prefers this data over the Yahoo file once it exists.
 - `src/generate_sample_data.py` — generates FAKE, clearly-labeled
   synthetic NQ data so we can build and test everything else without
   being blocked by the sandbox's network restrictions.
@@ -36,6 +43,13 @@ where we currently are.
   optional filename argument to run against a specific setup's signals,
   e.g. `python3 src/backtest.py setups_level_sweep_close_any.csv`. Run
   with no argument to use the original ORB setup.
+- `src/generate_dashboard.py` — builds `dashboard.html`, a one-page
+  visual summary of the whole project's current state (every logged
+  experiment, which setup/variant looks most promising and why, how much
+  real data is on hand, ORB vs Level Sweep Reversal status) generated
+  entirely from `research/experiments/` and `data/` — nothing hand-typed.
+  Run it, then double-click `dashboard.html` in Finder to view it in a
+  browser. Re-run anytime after new experiments/data land to refresh it.
 - `data/` — CSV files of price data (real, once you've run `data_fetch.py`
   on your own Mac; synthetic otherwise).
 - `charts/` — chart images produced by the scripts.

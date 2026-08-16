@@ -31,7 +31,11 @@ def load_price_data():
     candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
     real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
     chosen = real_files[-1] if real_files else candidates[-1]
-    df = pd.read_csv(chosen, index_col="timestamp_ny", parse_dates=True)
+    df = pd.read_csv(chosen, index_col="timestamp_ny")
+    # See detect_setups.py's load_latest_data() for why this can't be a
+    # plain parse_dates=True -- files spanning a DST change mix UTC
+    # offsets, which that silently fails to parse correctly.
+    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
     return df, ("SYNTHETIC" in chosen.name)
 
 

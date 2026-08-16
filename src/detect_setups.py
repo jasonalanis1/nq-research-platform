@@ -61,7 +61,13 @@ def load_latest_data() -> tuple[pd.DataFrame, bool]:
     real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
     chosen = real_files[-1] if real_files else candidates[-1]
     print(f"Loading: {chosen.name}")
-    df = pd.read_csv(chosen, index_col="timestamp_ny", parse_dates=True)
+    df = pd.read_csv(chosen, index_col="timestamp_ny")
+    # parse_dates=True can silently fail to produce real datetimes when a
+    # file's timestamps span a Daylight Saving Time change (mixed UTC
+    # offsets, e.g. -05:00 in February vs -04:00 in August) -- utc=True
+    # handles that correctly regardless of which offset each row was
+    # written with, then we convert to NY time for the 8:30-open logic below.
+    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
     return df, ("SYNTHETIC" in chosen.name)
 
 
