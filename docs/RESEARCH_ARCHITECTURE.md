@@ -387,12 +387,51 @@ ready for the one-time final validation check described in this
 document's Phase 3 — using it earlier than that, even "just to check,"
 would burn the only genuinely unseen data this project has.
 
+**2026-08-16 — Recommendations #2-4 implemented.**
+
+- **#2, consolidated data loading:** `src/data_loader.py` is now the one
+  place that finds/loads the active real data file (DST-safe timestamp
+  parsing + holdout boundary included). `detect_setups.py`,
+  `detect_level_sweep.py`, `backtest.py`, `plot_open.py`,
+  `plot_setup_example.py`, and `generate_dashboard.py` all call it
+  instead of each carrying its own copy. Verified by re-running every
+  rewired script.
+- **#3, structured experiment registry:** `research/experiments/_index.md`
+  now has real columns — Setup, Variant, Sample Size, Win Rate,
+  Expectancy, Profit Factor, Max Drawdown, Statistically Significant,
+  Verdict — instead of prose that needed regex-scraping. All 18 existing
+  rows were backfilled from each experiment's own write-up file (no
+  values changed, no conclusions altered — this was a format upgrade,
+  not a re-analysis); a couple of early cells are `-` where the original
+  write-up didn't record profit factor/drawdown, rather than guessed.
+  `generate_dashboard.py` was updated to read the new columns directly.
+- **#4, formal significance check:** `confidence_analysis.py` now prints
+  a direct `Statistically distinguishable from zero (90% bootstrap CI):
+  YES/NO` line, computed from the same bootstrap interval it already
+  built. Verified against exp-017's already-known-by-hand result
+  (`close_min_distance`, 221 trades) — the script now independently
+  reproduces "NO, CI -18.89R to +37.08R" without anyone reading
+  percentiles by hand.
+
+**2026-08-16 — the holdout mechanism already caught something real.**
+Greg checked for new data since the last Databento pull (none was
+available yet). Larry then re-tested `close_min_distance` and
+`full_bar_range` — the first time either ran through the
+holdout-respecting pipeline (all prior tests of these variants predate
+`data_holdout.py` and unknowingly included the 112 days now set aside).
+Result: `close_min_distance` flipped from +0.043R to **-0.014R**, and
+`full_bar_range` shrank from +0.042R to **+0.008R** (roughly breakeven).
+Logged as exp-019/020. This is exactly the kind of overfitting/regime-
+dependency signal the holdout boundary exists to catch — a large chunk
+of both variants' apparent "stabilizing" edge was concentrated in the
+most recent ~4 months. Neither variant currently shows a research-only
+edge worth acting on. See `research/setups/level-sweep-reversal.md` for
+full detail.
+
 **Still open from the architecture review** (not yet fixed, in rough
-priority order): the duplicated data-loading code across 6 scripts (no
-shared module yet, `data_holdout.py` is a narrow exception built only
-for the holdout mechanism); `_index.md`'s unstructured prose fields
-(sample size, profit factor, drawdown, significance results all live in
-free text, not real columns); no formal statistical-significance output
-in `confidence_analysis.py` (still read by hand off bootstrap
-percentiles); no feature engine, walk-forward testing, or parameter
-sensitivity sweep capability; Tony does not exist as code yet.
+priority order): no feature engine (Layer 2 of the architecture — reusable
+market-context columns like distance-from-PDH/PDL, ATR, VWAP, day-of-week,
+independent of any one strategy); no walk-forward testing or automated
+parameter-sensitivity sweep capability; no Sharpe/Sortino or regime/
+day-of-week breakdowns in the standard metrics set; Tony does not exist
+as code yet.

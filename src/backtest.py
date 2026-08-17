@@ -63,7 +63,7 @@ import os
 import sys
 import pandas as pd
 from pathlib import Path
-from data_holdout import apply_holdout_boundary
+from data_loader import load_price_data
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
@@ -84,21 +84,6 @@ SLIPPAGE_TICKS_PER_SIDE = 1.0 * COST_STRESS_MULTIPLIER   # assumed ticks of slip
 ROUND_TRIP_COMMISSION_DOLLARS = COMMISSION_PER_SIDE * 2
 ROUND_TRIP_SLIPPAGE_POINTS = SLIPPAGE_TICKS_PER_SIDE * TICK_SIZE * 2
 ROUND_TRIP_COST_POINTS = (ROUND_TRIP_COMMISSION_DOLLARS / CONTRACT_MULTIPLIER) + ROUND_TRIP_SLIPPAGE_POINTS
-
-
-def load_price_data():
-    candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
-    real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
-    chosen = real_files[-1] if real_files else candidates[-1]
-    df = pd.read_csv(chosen, index_col="timestamp_ny")
-    # See detect_setups.py's load_latest_data() for why this can't be a
-    # plain parse_dates=True -- files spanning a DST change mix UTC
-    # offsets, which that silently fails to parse correctly.
-    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    is_synthetic = "SYNTHETIC" in chosen.name
-    if not is_synthetic:
-        df = apply_holdout_boundary(df, context="backtest.py")
-    return df, is_synthetic
 
 
 def simulate_trade(day_df: pd.DataFrame, signal: pd.Series, signal_time_col: str) -> dict:
@@ -149,7 +134,7 @@ def main():
         print(f"Couldn't find a recognized signal-time column in {signals_filename}.")
         return
 
-    price_df, is_synthetic = load_price_data()
+    price_df, is_synthetic = load_price_data(context="backtest.py")
     signals_df = pd.read_csv(signals_path, parse_dates=["date", signal_time_col])
 
     if signals_df.empty:

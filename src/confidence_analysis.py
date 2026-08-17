@@ -26,6 +26,19 @@ history" using the exact same underlying trades, just in different
 combinations. Looking at the spread across all of them tells us how much
 of our one real result was signal versus how much was luck of the draw.
 
+STATISTICAL SIGNIFICANCE (added 2026-08-16, per docs/RESEARCH_ARCHITECTURE.md's
+architecture review, recommendation #4): the reshuffle step below already
+computes a 90% bootstrap confidence interval on the total R across all
+trades -- which is also, mathematically, a 90% confidence interval on
+the average (expectancy) R-multiple, just not divided by n. This script
+now reads that interval directly and prints a plain YES/NO answer to
+"is this distinguishable from a strategy with zero real edge?" instead
+of requiring someone to read the percentile numbers and work it out by
+hand, which is what happened manually for exp-017/018. If the interval
+includes zero, the honest answer is NO -- the data can't rule out "no
+real edge" as an explanation, no matter how positive the point estimate
+looks.
+
 HOW TO RUN:
     python3 src/confidence_analysis.py
 """
@@ -119,12 +132,25 @@ def main():
     print(f"CONFIDENCE ANALYSIS -- based on {n} resolved trades (net of estimated costs)")
     print("=" * 60)
     print(f"\nReshuffling the SAME {n} trades {N_SIMULATIONS} times (sequence-risk check):")
-    print(f"  Final cumulative R:  5th pct {pct(reshuffled_finals, 5):+.2f}R"
+    ci_low_90 = pct(reshuffled_finals, 5)
+    ci_high_90 = pct(reshuffled_finals, 95)
+    print(f"  Final cumulative R:  5th pct {ci_low_90:+.2f}R"
           f"   median {pct(reshuffled_finals, 50):+.2f}R"
-          f"   95th pct {pct(reshuffled_finals, 95):+.2f}R")
+          f"   95th pct {ci_high_90:+.2f}R")
     print(f"  Max drawdown seen:   5th pct {pct(reshuffled_drawdowns, 5):.2f}R"
           f"   median {pct(reshuffled_drawdowns, 50):.2f}R"
           f"   95th pct {pct(reshuffled_drawdowns, 95):.2f}R (this is the WORST-case tail)")
+
+    # --- Formal significance check: does the 90% CI on total R exclude zero? ---
+    is_significant = (ci_low_90 > 0) or (ci_high_90 < 0)
+    print(f"\nStatistically distinguishable from zero (90% bootstrap CI): "
+          f"{'YES' if is_significant else 'NO'}")
+    if is_significant:
+        print(f"  The 90% CI ({ci_low_90:+.2f}R to {ci_high_90:+.2f}R) does NOT include zero --")
+        print(f"  the data is more consistent with a real (positive or negative) edge than with none.")
+    else:
+        print(f"  The 90% CI ({ci_low_90:+.2f}R to {ci_high_90:+.2f}R) INCLUDES zero -- \"no real edge\"")
+        print(f"  is still a plausible explanation for this result, whatever the point estimate shows.")
 
     print(f"\nProjecting {n_future} FUTURE trades forward (assumes the same distribution holds --"
           f" a real assumption, not a guarantee):")

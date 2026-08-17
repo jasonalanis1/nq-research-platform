@@ -92,13 +92,25 @@ this file against the video reference and the target rule changed to
 1.35x-risk (see above), all three confirmation variants turned
 profitable on the same data:
 
-| Variant | ~24 days (Yahoo) | ~6 months (Databento) | ~2 years (Databento) | Experiments |
-|---|---|---|---|---|
-| close_any | +0.132R (16 trades) | -0.052R (68 trades) | -0.063R (237 trades) | exp-006 / exp-010 / exp-014 |
-| close_min_distance | +0.545R (15 trades) | +0.054R (63 trades) | +0.043R (221 trades) | exp-007 / exp-011 / exp-015 |
-| full_bar_range | +0.238R (15 trades) | +0.033R (60 trades) | +0.042R (197 trades) | exp-008 / exp-012 / exp-016 |
+| Variant | ~24 days (Yahoo) | ~6 months (Databento) | ~2 years (Databento, incl. now-holdout period) | **Research-only (holdout excluded)** | Experiments |
+|---|---|---|---|---|---|
+| close_any | +0.132R (16 trades) | -0.052R (68 trades) | -0.063R (237 trades) | not re-tested (already settled negative) | exp-006 / exp-010 / exp-014 |
+| close_min_distance | +0.545R (15 trades) | +0.054R (63 trades) | +0.043R (221 trades) | **-0.014R (173 trades)** | exp-007 / exp-011 / exp-015 / exp-019 |
+| full_bar_range | +0.238R (15 trades) | +0.033R (60 trades) | +0.042R (197 trades) | **+0.008R (151 trades)** | exp-008 / exp-012 / exp-016 / exp-020 |
 
 (Expectancy in R, net of estimated costs, at each sample size.)
+
+**Important correction (2026-08-16, exp-019/020):** the "~2 years"
+column above is now known to have been misleading — it was run BEFORE
+`src/data_holdout.py` existed, so it unknowingly included the 112 most
+recent trading days that are now set aside as holdout. Once a genuinely
+research-only test was run (excluding those 112 days), `close_min_distance`
+**flipped negative** (-0.014R) and `full_bar_range` **shrank to roughly
+breakeven** (+0.008R). This means a meaningful share of both variants'
+apparent "stabilizing" edge was concentrated in the most recent ~4
+months — exactly the kind of pattern that should raise suspicion of
+overfitting/regime-dependency rather than confidence. Neither variant
+currently shows a research-only edge worth acting on.
 
 **Still no variant formally picked as "the" setup, but a clearer picture
 has emerged across three sample sizes:** `close_any` looks settled as the
@@ -158,3 +170,9 @@ to erase it.
   2-year results (exp-017/018) — bootstrap significance test (neither
   distinguishable from zero expectancy at 90% confidence) and a 2x
   cost-stress test (both survive, but barely). See notes above.
+- 2026-08-16: a genuine out-of-sample holdout was carved out
+  (`src/data_holdout.py`, 112 most-recent trading days set aside,
+  untouched). Re-tested close_min_distance and full_bar_range against
+  the research-only portion for the first time (exp-019/020) — both got
+  meaningfully worse: close_min_distance flipped negative, full_bar_range
+  shrank to roughly breakeven. See "Important correction" note above.

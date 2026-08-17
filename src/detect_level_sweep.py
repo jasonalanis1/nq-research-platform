@@ -85,7 +85,7 @@ HOW TO RUN:
 import sys
 import pandas as pd
 from pathlib import Path
-from data_holdout import apply_holdout_boundary
+from data_loader import load_price_data
 
 OPEN_HOUR, OPEN_MINUTE = 8, 30
 WATCH_MINUTES = 90  # how long after the open to watch for a sweep + reversal
@@ -97,24 +97,6 @@ TARGET_R_MULTIPLE = 1.35  # derived from the one video reference trade -- see fi
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
-
-
-def load_latest_data() -> tuple[pd.DataFrame, bool]:
-    candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
-    if not candidates:
-        raise FileNotFoundError("No data file found in data/. Run data_fetch.py or generate_sample_data.py first.")
-    real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
-    chosen = real_files[-1] if real_files else candidates[-1]
-    print(f"Loading: {chosen.name}")
-    df = pd.read_csv(chosen, index_col="timestamp_ny")
-    # See detect_setups.py's load_latest_data() for why this can't be a
-    # plain parse_dates=True -- files spanning a DST change mix UTC
-    # offsets, which that silently fails to parse correctly.
-    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    is_synthetic = "SYNTHETIC" in chosen.name
-    if not is_synthetic:
-        df = apply_holdout_boundary(df, context="detect_level_sweep.py")
-    return df, is_synthetic
 
 
 def compute_levels(df: pd.DataFrame, day, prior_day) -> dict | None:
@@ -251,7 +233,7 @@ def main():
         print(f"Unknown confirmation mode '{confirmation_mode}'. Choose one of: {CONFIRMATION_MODES}")
         return
 
-    df, is_synthetic = load_latest_data()
+    df, is_synthetic = load_price_data(context="detect_level_sweep.py")
     if is_synthetic:
         print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
     print(f"Confirmation mode: {confirmation_mode}")

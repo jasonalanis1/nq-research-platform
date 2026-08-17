@@ -13,7 +13,7 @@ HOW TO RUN:
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from data_holdout import apply_holdout_boundary
+from data_loader import load_price_data
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -28,23 +28,8 @@ AQUA = "#1baf7a"   # long / target
 RED = "#e34948"    # short / stop
 
 
-def load_price_data():
-    candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
-    real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
-    chosen = real_files[-1] if real_files else candidates[-1]
-    df = pd.read_csv(chosen, index_col="timestamp_ny")
-    # See detect_setups.py's load_latest_data() for why this can't be a
-    # plain parse_dates=True -- files spanning a DST change mix UTC
-    # offsets, which that silently fails to parse correctly.
-    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    is_synthetic = "SYNTHETIC" in chosen.name
-    if not is_synthetic:
-        df = apply_holdout_boundary(df, context="plot_setup_example.py")
-    return df, is_synthetic
-
-
 def main():
-    price_df, is_synthetic = load_price_data()
+    price_df, is_synthetic = load_price_data(context="plot_setup_example.py")
     signals_df = pd.read_csv(DATA_DIR / "setups_orb.csv", parse_dates=["date", "breakout_time"])
 
     if signals_df.empty:

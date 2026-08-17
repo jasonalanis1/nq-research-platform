@@ -25,37 +25,13 @@ from datetime import datetime
 import pandas as pd
 
 from data_holdout import HOLDOUT_START_DATE
+from data_loader import list_data_files, find_active_data_file, read_price_csv
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 EXPERIMENTS_DIR = PROJECT_ROOT / "research" / "experiments"
 INDEX_PATH = EXPERIMENTS_DIR / "_index.md"
 OUT_PATH = PROJECT_ROOT / "dashboard.html"
-
-# Variant/setup keywords -- matched against each row's Hypothesis text.
-# Order matters: check the specific Level Sweep variants before the
-# generic "Level Sweep Reversal" catch-all.
-SETUP_KEYWORDS = [
-    ("close_min_distance", "Level Sweep Reversal", "close_min_distance"),
-    ("close_any", "Level Sweep Reversal", "close_any"),
-    ("full_bar_range", "Level Sweep Reversal", "full_bar_range"),
-    ("Level Sweep Reversal", "Level Sweep Reversal", "baseline (pre-variant-split)"),
-    ("Opening Range Breakout", "ORB", "placeholder"),
-    ("ORB placeholder", "ORB", "placeholder"),
-]
-
-# Patterns for pulling a resolved-trade sample size out of an experiment
-# file's free-text prose -- tried in order, first match wins. These were
-# built by checking the actual wording used across every exp-*.md file
-# in this project as of 2026-08-16; if future experiment write-ups use
-# different phrasing, sample size will just show as "-" rather than
-# guessing wrong.
-SAMPLE_SIZE_PATTERNS = [
-    re.compile(r"(\d[\d,]*)\s+of\s+\d[\d,]*\s+resolved"),
-    re.compile(r"signals,\s*(\d[\d,]*)\s+resolved"),
-    re.compile(r"(\d[\d,]*)\s+resolved trades"),
-    re.compile(r"(\d[\d,]*)\s+actual trade outcomes"),
-]
 
 # The project's named subagents -- this is short enough, and changes
 # rarely enough, that it's kept here as plain data rather than parsed
@@ -88,7 +64,7 @@ TEAM = [
 ]
 
 EXPECTANCY_R_PATTERN = re.compile(r"([+-]?\d+\.\d+)R")
-NORMAL_COST_R_PATTERN = re.compile(r"([+-]?\d+\.\d+)R at normal costs")
+NORMAL_COST_R_PATTERN = re.compile(r"was\s+([+-]?\d+\.\d+)R normal")
 
 
 def normal_cost_expectancy_text(expectancy_text: str) -> str:
@@ -102,8 +78,18 @@ def normal_cost_expectancy_text(expectancy_text: str) -> str:
     return expectancy_text.split("(")[0].split(";")[0].strip()
 
 
+# _index.md's structured columns (upgraded 2026-08-16, architecture
+# review recommendation #3) -- in this exact order. Setup, Variant, and
+# Sample Size are now real columns, not text scraped out of prose.
+INDEX_COLUMNS = [
+    "id", "setup", "variant", "date", "sample_size", "win_rate",
+    "expectancy", "profit_factor", "max_drawdown", "significant", "verdict",
+]
+
+
 def parse_index_table():
-    """Reads the markdown table in _index.md into a list of dicts."""
+    """Reads the structured markdown table in _index.md into a list of
+    dicts, one per experiment row."""
     text = INDEX_PATH.read_text()
     rows = []
     for line in text.splitlines():
@@ -111,42 +97,10 @@ def parse_index_table():
         if not line.startswith("| exp-"):
             continue
         cells = [c.strip() for c in line.strip("|").split("|")]
-        if len(cells) != 6:
+        if len(cells) != len(INDEX_COLUMNS):
             continue  # malformed row -- skip rather than guess
-        exp_id, hypothesis, date, win_rate, expectancy, verdict = cells
-        rows.append({
-            "id": exp_id,
-            "hypothesis": hypothesis,
-            "date": date,
-            "win_rate": win_rate,
-            "expectancy": expectancy,
-            "verdict": verdict,
-        })
+        rows.append(dict(zip(INDEX_COLUMNS, cells)))
     return rows
-
-
-def classify(hypothesis: str):
-    """Maps a row's hypothesis text to (setup, variant)."""
-    for keyword, setup, variant in SETUP_KEYWORDS:
-        if keyword in hypothesis:
-            return setup, variant
-    return "Unknown", "-"
-
-
-def find_sample_size(exp_id: str) -> str:
-    """Looks up the experiment's own write-up file and tries to pull a
-    resolved-trade count out of its prose. Returns '-' if none of the
-    known phrasings match, rather than guessing."""
-    num = exp_id.replace("exp-", "")
-    matches = list(EXPERIMENTS_DIR.glob(f"exp-{num}-*.md"))
-    if not matches:
-        return "-"
-    text = matches[0].read_text()
-    for pattern in SAMPLE_SIZE_PATTERNS:
-        m = pattern.search(text)
-        if m:
-            return m.group(1).replace(",", "")
-    return "-"
 
 
 def first_expectancy_value(expectancy_text: str):
@@ -158,12 +112,12 @@ def first_expectancy_value(expectancy_text: str):
 
 
 def load_data_file_stats(path: Path):
-    """Reads row count and NY-time date range for one price data CSV."""
-    df = pd.read_csv(path, index_col="timestamp_ny")
-    # Same DST-safe parsing fix applied throughout src/ -- a plain
-    # parse_dates=True silently mis-parses files whose timestamps span a
-    # Daylight Saving Time change (mixed UTC offsets).
-    idx = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
+    """Reads row count and NY-time date range for one price data CSV.
+    Deliberately reads the FULL file via read_price_csv() (not the
+    holdout-filtering load_price_data()) -- the dashboard's job is to
+    report the research/holdout split as an inventory, not to enforce it."""
+    df = read_price_csv(path)
+    idx = df.index
     research_days = len(set(idx[idx < HOLDOUT_START_DATE].date))
     holdout_days = len(set(idx[idx >= HOLDOUT_START_DATE].date))
     return {
@@ -185,11 +139,10 @@ def source_label(filename: str) -> str:
 
 
 def gather_data_coverage():
-    candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
+    candidates = list_data_files()
     if not candidates:
         return None, []
-    real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
-    active = real_files[-1] if real_files else candidates[-1]
+    active = find_active_data_file()
 
     all_files = []
     for path in candidates:
@@ -314,10 +267,12 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
     # --- Most promising callout ---
     if most_promising:
         row = most_promising["row"]
+        sig_plain = row["significant"].replace("**", "").strip()
         promising_html = f"""
         <h2>Most promising right now: <span class="highlight">Level Sweep Reversal &mdash; {esc(most_promising['variant'])}</span></h2>
         <p>Latest result ({esc(row['id'])}): expectancy leads the other variants at this checkpoint,
-        win rate {esc(row['win_rate'])}.</p>
+        win rate {esc(row['win_rate'])}, sample size {esc(row['sample_size'])} trades.
+        Statistically distinguishable from zero: <strong>{esc(sig_plain)}</strong>.</p>
         <p class="why-label">Why not a stronger claim than that:</p>
         <p class="verdict-quote">&ldquo;{esc(row['verdict'])}&rdquo;</p>
         """
@@ -327,19 +282,27 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
     # --- Full experiments table ---
     table_rows = []
     for row in index_rows:
-        setup, variant = classify(row["hypothesis"])
-        sample_size = find_sample_size(row["id"])
+        variant = row["variant"]
         verdict_word = row["verdict"].split("—")[0].strip().split(" ")[0].lower()
         verdict_class = {"kill": "verdict-kill", "keep": "verdict-keep"}.get(verdict_word, "verdict-retest")
+        sig_plain = row["significant"].replace("**", "").strip()
+        if sig_plain.lower().startswith("yes"):
+            sig_class = "sig-yes"
+        elif sig_plain.lower().startswith("no"):
+            sig_class = "sig-no"
+        else:
+            sig_class = "sig-untested"
         table_rows.append(f"""
         <tr>
           <td class="mono">{esc(row['id'])}</td>
-          <td>{esc(setup)}{' / ' + esc(variant) if variant not in ('-', 'placeholder') else ''}</td>
-          <td class="hypothesis-cell">{esc(row['hypothesis'])}</td>
+          <td>{esc(row['setup'])}{' / ' + esc(variant) if variant not in ('-', 'placeholder') else ''}</td>
           <td class="mono">{esc(row['date'])}</td>
+          <td class="mono">{esc(row['sample_size'])}</td>
           <td class="mono">{esc(row['win_rate'])}</td>
           <td class="mono">{esc(row['expectancy'])}</td>
-          <td class="mono">{esc(sample_size)}</td>
+          <td class="mono">{esc(row['profit_factor'])}</td>
+          <td class="mono">{esc(row['max_drawdown'])}</td>
+          <td><span class="badge {sig_class}">{esc(sig_plain)}</span></td>
           <td><span class="badge {verdict_class}">{esc(row['verdict'])}</span></td>
         </tr>""")
     table_html = "".join(table_rows)
@@ -391,6 +354,9 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
   .verdict-kill {{ background: var(--kill-bg); color: var(--kill-text); }}
   .verdict-keep {{ background: var(--keep-bg); color: var(--keep-text); }}
   .verdict-retest {{ background: var(--retest-bg); color: var(--retest-text); }}
+  .sig-yes {{ background: var(--keep-bg); color: var(--keep-text); }}
+  .sig-no {{ background: var(--kill-bg); color: var(--kill-text); }}
+  .sig-untested {{ background: #f0efec; color: var(--text-muted); }}
   .table-wrap {{ overflow-x: auto; }}
   section {{ margin-top: 32px; }}
   section > h2.section-title {{ font-size: 1.05rem; margin: 0 0 14px; }}
@@ -436,8 +402,9 @@ def render_html(index_rows, rows_by_group, active_data, all_data_files, most_pro
     <table>
       <thead>
         <tr>
-          <th>ID</th><th>Setup</th><th>Hypothesis</th><th>Date</th>
-          <th>Win Rate</th><th>Expectancy</th><th>Sample Size</th><th>Verdict</th>
+          <th>ID</th><th>Setup / Variant</th><th>Date</th><th>Sample Size</th>
+          <th>Win Rate</th><th>Expectancy</th><th>Profit Factor</th><th>Max Drawdown</th>
+          <th>Statistically Significant</th><th>Verdict</th>
         </tr>
       </thead>
       <tbody>
@@ -471,7 +438,7 @@ def main():
 
     rows_by_group = {}
     for row in index_rows:
-        key = classify(row["hypothesis"])
+        key = (row["setup"], row["variant"])
         rows_by_group.setdefault(key, []).append(row)
 
     active_data, all_data_files = gather_data_coverage()

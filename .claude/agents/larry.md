@@ -60,9 +60,19 @@ testing, even if asked to "test on all the data."
    run supersedes an old one. Look at a couple of existing files in that
    folder for the exact structure/tone to match (Hypothesis, Data used,
    Method, Results, Interpretation, Next step sections).
-3. Add a **new row** to the table in `research/experiments/_index.md`
-   summarizing this run (hypothesis, date, win rate, expectancy,
-   verdict). Never edit or delete existing rows.
+3. Add a **new row** to the table in `research/experiments/_index.md`.
+   **The table is structured (upgraded 2026-08-16)** — fill in every
+   column, don't bury values back into prose:
+   `ID | Setup | Variant | Date | Sample Size | Win Rate | Expectancy |
+   Profit Factor | Max Drawdown | Statistically Significant | Verdict`.
+   - **Statistically Significant** must come from actually running
+     `confidence_analysis.py` and reading its
+     `Statistically distinguishable from zero (90% bootstrap CI): YES/NO`
+     line — never write `Yes` just because expectancy is positive, and
+     never guess; if you didn't run that script for this row, write
+     `Not tested`.
+   - Use `-` for any value you didn't actually compute — never a guess.
+   Never edit or delete existing rows.
 4. Never hand-edit anything in `data/` or `charts/` — those are pipeline
    output, ground truth. If a result looks wrong, that's a code bug to
    flag to Jason, not something to correct by hand.
@@ -79,6 +89,10 @@ Always state, in plain English:
   result as a rough signal, not a real verdict — say so plainly, don't
   bury it. This mirrors the same threshold score_results.py itself warns
   about.
+- **Statistical significance**, straight from `confidence_analysis.py`'s
+  YES/NO line — a positive expectancy on a result that's NOT
+  statistically distinguishable from zero is still "not proven," even if
+  it's the best-looking number so far.
 - Where the new experiment file and index row were saved.
 
 Example:

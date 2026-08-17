@@ -38,7 +38,7 @@ HOW TO RUN:
 
 import pandas as pd
 from pathlib import Path
-from data_holdout import apply_holdout_boundary
+from data_loader import load_price_data
 
 # ---------------------------------------------------------------------------
 # SETTINGS -- the "knobs" for this specific setup definition. Change these
@@ -51,28 +51,6 @@ BREAKOUT_WINDOW_MINUTES = 60             # how long after the range to watch for
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
-
-
-def load_latest_data() -> tuple[pd.DataFrame, bool]:
-    """Same loading logic as plot_open.py: prefer real data, fall back to
-    synthetic, and tell the caller which one we used."""
-    candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
-    if not candidates:
-        raise FileNotFoundError("No data file found in data/. Run data_fetch.py or generate_sample_data.py first.")
-    real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
-    chosen = real_files[-1] if real_files else candidates[-1]
-    print(f"Loading: {chosen.name}")
-    df = pd.read_csv(chosen, index_col="timestamp_ny")
-    # parse_dates=True can silently fail to produce real datetimes when a
-    # file's timestamps span a Daylight Saving Time change (mixed UTC
-    # offsets, e.g. -05:00 in February vs -04:00 in August) -- utc=True
-    # handles that correctly regardless of which offset each row was
-    # written with, then we convert to NY time for the 8:30-open logic below.
-    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    is_synthetic = "SYNTHETIC" in chosen.name
-    if not is_synthetic:
-        df = apply_holdout_boundary(df, context="detect_setups.py")
-    return df, is_synthetic
 
 
 def detect_orb_for_day(day_df: pd.DataFrame, day) -> dict | None:
@@ -124,7 +102,7 @@ def detect_orb_for_day(day_df: pd.DataFrame, day) -> dict | None:
 
 
 def main():
-    df, is_synthetic = load_latest_data()
+    df, is_synthetic = load_price_data(context="detect_setups.py")
     if is_synthetic:
         print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
 

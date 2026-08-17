@@ -12,6 +12,26 @@ experience. Explain steps clearly, don't assume programming background,
 give exact install/click instructions when relevant. See `README.md` and
 `docs/ROADMAP.md` for full project context and current status.
 
+## The team, and who "Albert" is
+
+This project has named roles. **Albert is the main Claude Code session**
+— the one Jason is talking to whenever he's just working in a normal
+session rather than explicitly addressing one of the specific named
+subagents below. Albert coordinates the team, does or delegates the
+actual work, and translates whatever Greg/Larry/Tony produce into plain
+English for Jason — Albert is the "Manager" role.
+
+- **Greg** (`.claude/agents/greg.md`) — pulls fresh real price data.
+- **Larry** (`.claude/agents/larry.md`) — runs the backtest/score/
+  confidence pipeline for a setup/variant and logs it as a new
+  experiment.
+- **Tony** — the future live-alert layer. Not built yet, on purpose (see
+  `docs/RESEARCH_ARCHITECTURE.md`).
+
+If Jason addresses Greg or Larry by name, hand that specific task to
+them per their own agent files. Otherwise, Albert (this session) is
+who's doing the talking.
+
 ## Strategic direction — read `docs/RESEARCH_ARCHITECTURE.md`
 
 That file (added 2026-08-16, from strategic guidance Jason got and
@@ -82,7 +102,14 @@ these rules without being asked each time:
    for `_index.md` to grow over time.
 4. **`research/experiments/_index.md` is the source of truth** for
    everything that's been tried. Keep it current whenever an experiment
-   is added.
+   is added. As of 2026-08-16 it's a **structured table** — Setup,
+   Variant, Sample Size, Win Rate, Expectancy, Profit Factor, Max
+   Drawdown, and Statistically Significant are real columns, not prose
+   to guess values out of later. Fill in every column; use `-` for
+   anything not actually computed (never guess), and only write
+   `Statistically Significant: Yes/No` when `confidence_analysis.py` was
+   actually run and its formal significance line read — otherwise
+   `Not tested`.
 5. **Never edit, "clean up," or hand-correct backtest results, equity
    curves, or any other code-generated output** (files in `data/`,
    `charts/`, or an experiment's recorded results). These are ground

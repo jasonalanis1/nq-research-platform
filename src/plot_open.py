@@ -17,7 +17,7 @@ This will save a PNG image into the charts/ folder.
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
-from data_holdout import apply_holdout_boundary
+from data_loader import load_price_data
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
@@ -27,35 +27,6 @@ CHARTS_DIR.mkdir(exist_ok=True)
 N_DAYS_TO_PLOT = 5          # how many recent trading days to show
 MINUTES_BEFORE_OPEN = 30    # how far before 8:30 to show
 MINUTES_AFTER_OPEN = 60     # how far after 8:30 to show
-
-
-def load_latest_csv() -> pd.DataFrame:
-    """
-    Finds the most recently created NQ_1min_*.csv file in data/ and loads
-    it. "glob" here means "find files matching this pattern" -- the *
-    is a wildcard.
-    """
-    candidates = sorted(DATA_DIR.glob("NQ_1min_*.csv"))
-    if not candidates:
-        raise FileNotFoundError(
-            "No data file found in data/. Run data_fetch.py (or "
-            "generate_sample_data.py) first."
-        )
-    # Prefer a real (non-synthetic) file if one exists; otherwise use
-    # whatever's there.
-    real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
-    chosen = real_files[-1] if real_files else candidates[-1]
-
-    print(f"Loading: {chosen.name}")
-    df = pd.read_csv(chosen, index_col="timestamp_ny")
-    # See detect_setups.py's load_latest_data() for why this can't be a
-    # plain parse_dates=True -- files spanning a DST change mix UTC
-    # offsets, which that silently fails to parse correctly.
-    df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
-    is_synthetic = "SYNTHETIC" in chosen.name
-    if not is_synthetic:
-        df = apply_holdout_boundary(df, context="plot_open.py")
-    return df, is_synthetic
 
 
 def plot_open_windows(df: pd.DataFrame, is_synthetic: bool):
@@ -100,7 +71,7 @@ def plot_open_windows(df: pd.DataFrame, is_synthetic: bool):
 
 
 def main():
-    df, is_synthetic = load_latest_csv()
+    df, is_synthetic = load_price_data(context="plot_open.py")
     if is_synthetic:
         print("NOTE: plotting SYNTHETIC data -- this is for testing the pipeline only.")
     plot_open_windows(df, is_synthetic)
