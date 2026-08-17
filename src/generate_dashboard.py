@@ -56,10 +56,10 @@ TEAM = [
     },
     {
         "name": "Tony",
-        "role": "Would build live TradingView alerts (Pine Script) so Jason's phone buzzes when a setup fires.",
+        "role": "Detects Level Sweep Reversal conditions and fires TradingView alerts (Pine Script). Never claims a signal is proven profitable.",
         "status": "paused",
-        "status_label": "Paused on purpose",
-        "detail": "Not built yet, intentionally -- waiting until a setup is statistically proven before wiring up anything live.",
+        "status_label": "Experimental, unvalidated",
+        "detail": "pine/level_sweep_close_min_distance.pine and pine/level_sweep_full_bar_range.pine exist (added 2026-08-16), each alert explicitly labeled 'Experimental Signal Detected -- not a proven edge.' Not yet compiled/tested in TradingView itself, and no setup has cleared validation -- do not trade these signals.",
     },
 ]
 

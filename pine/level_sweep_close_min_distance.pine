@@ -1,0 +1,125 @@
+//@version=5
+indicator("NQ Level Sweep Reversal — close_min_distance [EXPERIMENTAL]", overlay=true, max_labels_count=500)
+
+// =====================================================================
+// EXPERIMENTAL SIGNAL DETECTOR — NOT A PROVEN EDGE
+// =====================================================================
+// Pine Script port of the "close_min_distance" confirmation variant from
+// src/detect_level_sweep.py in the nq_research_platform repo. Tony's job
+// (per docs/RESEARCH_ARCHITECTURE.md) is to DETECT CONDITIONS ONLY — this
+// script never claims a signal is a profitable trade, and this variant
+// specifically has NOT shown a real edge in backtesting:
+//
+//   research/experiments/exp-019-level-sweep-close-min-distance-research-only.md
+//   513 research-period trading days, holdout-respecting (2024-08-15 ->
+//   2026-04-06, the most recent ~4 months excluded as untouched holdout):
+//   173 resolved trades, expectancy -0.014R (net of estimated costs),
+//   NOT statistically distinguishable from zero (90% bootstrap CI on
+//   total R: -26.38R to +21.45R — comfortably spans zero).
+//
+// DO NOT TRADE THIS SIGNAL. It exists to validate the live-alert
+// workflow (data -> signal -> labeled alert), not to generate trades.
+//
+// IMPORTANT — UNTESTED IN TRADINGVIEW: this was written by translating
+// the Python reference logic by hand; there is no Pine Script execution
+// environment available to the author to compile/run it before delivery.
+// Before trusting ANY alert from this script: paste it into TradingView's
+// Pine Editor, confirm it compiles with no errors, and manually check a
+// handful of fired signals on the chart against known dates/prices from
+// the Python backtest results (data/backtest_results_level_sweep_close_min_distance.csv)
+// to confirm the levels/entries/stops line up. TradingView's own NQ data
+// feed and session/bar alignment may also differ subtly from the
+// Databento data the Python backtest used.
+// =====================================================================
+
+// --- Settings (mirrors src/detect_level_sweep.py constants) ---
+minConfirmDistance = input.float(5.0, "Min confirm distance beyond level (points)", group="Rule parameters")
+targetRMultiple    = input.float(1.35, "Target R multiple", group="Rule parameters")
+watchMinutes       = input.int(90, "Watch window (minutes after NY open)", group="Rule parameters")
+nyOpenHour         = input.int(8, "NY open hour (24h)", group="Session")
+nyOpenMinute       = input.int(30, "NY open minute", group="Session")
+
+// --- NY-local time-of-day for the current bar, independent of chart timezone ---
+nyHour           = hour(time, "America/New_York")
+nyMinute         = minute(time, "America/New_York")
+nyMinutesOfDay   = nyHour * 60 + nyMinute
+openMinutesOfDay = nyOpenHour * 60 + nyOpenMinute
+
+isPremarket   = nyMinutesOfDay < openMinutesOfDay
+isWatchWindow = nyMinutesOfDay >= openMinutesOfDay and nyMinutesOfDay < openMinutesOfDay + watchMinutes
+isNewNyDay    = dayofmonth(time, "America/New_York") != dayofmonth(time[1], "America/New_York")
+
+// --- Prior day high/low (previous completed NY trading day) ---
+[priorDayHigh, priorDayLow] = request.security(syminfo.tickerid, "D", [high[1], low[1]], lookahead=barmerge.lookahead_off)
+
+// --- Today's pre-market high/low: bars from NY midnight up to the open, same as
+//     the Python reference's day_bars[day_bars.index < open_ts] ---
+var float premarketHigh = na
+var float premarketLow  = na
+if isNewNyDay
+    premarketHigh := na
+    premarketLow  := na
+if isPremarket
+    premarketHigh := na(premarketHigh) ? high : math.max(premarketHigh, high)
+    premarketLow  := na(premarketLow)  ? low  : math.min(premarketLow, low)
+
+// --- Today's levels: support = lower of {prior day low, premarket low}; resistance = higher of the pair ---
+support    = na(premarketLow)  ? priorDayLow  : math.min(priorDayLow, premarketLow)
+resistance = na(premarketHigh) ? priorDayHigh : math.max(priorDayHigh, premarketHigh)
+
+// --- Per-day sweep/confirmation state (reset each new NY day) ---
+var bool  supportSwept      = false
+var float supportExtreme    = na
+var bool  resistanceSwept   = false
+var float resistanceExtreme = na
+var bool  signalFiredToday  = false
+
+if isNewNyDay
+    supportSwept      := false
+    supportExtreme     := na
+    resistanceSwept    := false
+    resistanceExtreme  := na
+    signalFiredToday   := false
+
+if isWatchWindow and not signalFiredToday
+    if not supportSwept and low < support
+        supportSwept   := true
+        supportExtreme := low
+    else if supportSwept
+        supportExtreme := math.min(supportExtreme, low)
+
+    if not resistanceSwept and high > resistance
+        resistanceSwept   := true
+        resistanceExtreme := high
+    else if resistanceSwept
+        resistanceExtreme := math.max(resistanceExtreme, high)
+
+    // --- CONFIRMATION RULE (close_min_distance): close must clear the level by >= minConfirmDistance ---
+    longConfirmed  = supportSwept    and close > support + minConfirmDistance
+    shortConfirmed = resistanceSwept and close < resistance - minConfirmDistance
+
+    if longConfirmed
+        entryPx = close
+        stopPx  = supportExtreme
+        riskPx  = entryPx - stopPx
+        targetPx = entryPx + targetRMultiple * riskPx
+        signalFiredToday := true
+        label.new(bar_index, low, "Experimental Signal Detected — not a proven edge\nLevel Sweep Reversal (close_min_distance) — LONG\nEntry " + str.tostring(entryPx) + "  Stop " + str.tostring(stopPx) + "  Target " + str.tostring(targetPx), style=label.style_label_up, color=color.new(color.orange, 0), textcolor=color.white, size=size.small)
+        alert("Experimental Signal Detected — not a proven edge | NQ Level Sweep Reversal (close_min_distance) | LONG | Entry " + str.tostring(entryPx) + " Stop " + str.tostring(stopPx) + " Target " + str.tostring(targetPx) + " | See exp-019: -0.014R, not statistically significant", alert.freq_once_per_bar)
+
+    if shortConfirmed
+        entryPx = close
+        stopPx  = resistanceExtreme
+        riskPx  = stopPx - entryPx
+        targetPx = entryPx - targetRMultiple * riskPx
+        signalFiredToday := true
+        label.new(bar_index, high, "Experimental Signal Detected — not a proven edge\nLevel Sweep Reversal (close_min_distance) — SHORT\nEntry " + str.tostring(entryPx) + "  Stop " + str.tostring(stopPx) + "  Target " + str.tostring(targetPx), style=label.style_label_down, color=color.new(color.orange, 0), textcolor=color.white, size=size.small)
+        alert("Experimental Signal Detected — not a proven edge | NQ Level Sweep Reversal (close_min_distance) | SHORT | Entry " + str.tostring(entryPx) + " Stop " + str.tostring(stopPx) + " Target " + str.tostring(targetPx) + " | See exp-019: -0.014R, not statistically significant", alert.freq_once_per_bar)
+
+// --- Plot today's reference levels ---
+plot(support, "Support (today)", color=color.new(color.green, 40), style=plot.style_stepline)
+plot(resistance, "Resistance (today)", color=color.new(color.red, 40), style=plot.style_stepline)
+
+// --- Alert condition entry for TradingView's "Add Alert" dialog ---
+alertcondition(false, title="Experimental Signal Detected — not a proven edge",
+     message="Experimental Signal Detected — not a proven edge (NQ Level Sweep Reversal, close_min_distance). Open the chart for entry/stop/target details.")

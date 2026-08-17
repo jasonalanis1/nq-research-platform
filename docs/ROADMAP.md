@@ -276,6 +276,52 @@ separate `_stress<N>x` output file so it can never overwrite a normal
 logged result). Honest read: neither variant has a confirmed edge yet —
 promising enough to keep watching, not solid enough to act on.
 
+**2026-08-16 — a real out-of-sample holdout was carved out, and it
+changed the verdict on every tested variant.** Following strategic
+guidance Jason adopted (`docs/RESEARCH_ARCHITECTURE.md`), an
+architecture review found this project had never actually done
+out-of-sample testing — every re-test (24 days → 6 months → 2 years)
+re-ran the same variants on a strictly larger but still fully-visible
+window. Fixed via `src/data_holdout.py`: a fixed line at 2026-04-07
+splits the ~2-year Databento dataset into 513 research days (usable for
+normal testing) and 112 holdout days (untouched, reserved for one future
+final validation check). Every script that loads real price data now
+excludes the holdout portion by default.
+
+Re-testing `close_min_distance` and `full_bar_range` against the
+research-only portion for the first time (exp-019/020) — the first time
+either had ever run through a genuinely holdout-respecting pipeline —
+made the picture materially worse: `close_min_distance` flipped negative
+(+0.043R → **-0.014R**, 173 trades) and `full_bar_range` dropped to
+essentially breakeven (+0.042R → **+0.008R**, 151 trades). Neither is
+statistically distinguishable from zero (90% bootstrap CI spans zero for
+both).
+
+**Bottom line: all four tested variants — ORB, close_any,
+close_min_distance, and full_bar_range — now show no statistically real
+edge once tested with a proper holdout.** ORB and close_any were already
+clearly negative before the holdout even mattered; close_min_distance
+and full_bar_range looked encouraging on the full (holdout-contaminated)
+2-year window but did not hold up once genuinely unseen-at-test-time
+data was used. None of this rules out a real edge existing — the holdout
+sample (112 days) is itself still fairly small, and this doesn't test
+whether the underlying pattern needs a different definition entirely —
+but nothing tested so far has cleared even the first real bar of
+evidence.
+
+**Also this session:** Tony's first Pine Script deliverables were built
+(`pine/level_sweep_close_min_distance.pine`,
+`pine/level_sweep_full_bar_range.pine`) — TradingView alert scripts that
+detect the same conditions as the two Level Sweep variants, each firing
+an alert explicitly labeled "Experimental Signal Detected — not a proven
+edge" per the strategic doc's requirement that Tony detect conditions
+without ever implying a signal is a proven profitable trade. These are
+first-draft, hand-translated Pine Script that has not been run/compiled
+in an actual TradingView environment yet (no Pine execution environment
+is available to Claude) — verify in TradingView's Pine Editor and
+sanity-check fired signals against the Python backtest results before
+trusting any alert.
+
 ## A note on how tonight's autonomous work was scoped (2026-08-15)
 
 Jason asked me to keep building without him present, including
