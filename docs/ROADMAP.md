@@ -358,3 +358,11 @@ unbroken price series instead of having to track contract expirations
 yourself. This is convenient but introduces small price jumps at contract
 rollover dates — something to be aware of later when we look closely at
 edge cases.
+
+## Promotion bar (added 2026-08-18)
+
+A setup only becomes eligible for the sealed holdout check once it has, on
+research-only data: (1) expectancy > 0 after realistic cost assumptions,
+(2) at least 150 trades, and (3) a 90% bootstrap confidence interval on
+expectancy that stays entirely above zero. This is the formal bar going
+forward — no setup gets promoted to a holdout check without clearing it.
