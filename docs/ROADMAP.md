@@ -366,3 +366,18 @@ research-only data: (1) expectancy > 0 after realistic cost assumptions,
 (2) at least 150 trades, and (3) a 90% bootstrap confidence interval on
 expectancy that stays entirely above zero. This is the formal bar going
 forward — no setup gets promoted to a holdout check without clearing it.
+
+## Tony's Pine Script verified working (2026-08-18/19)
+
+Both pine/level_sweep_close_min_distance.pine and pine/level_sweep_full_bar_range.pine
+were manually reviewed against src/detect_level_sweep.py, two behavioral bugs were
+found and fixed (day-skipping on no-premarket-data, same-bar long/short mutual
+exclusivity), and both were tested live in TradingView: compiled with no errors,
+plotted support/resistance step-lines correctly, and one real signal fired
+(close_min_distance, SHORT, 2026-08-04, Entry 29233.25 / Stop 29282.25 / Target
+29167.1) with target math independently verified against the 1.35x-risk formula
+in the Python source. That date falls inside the sealed holdout window, so it
+couldn't be cross-checked against a logged backtest row -- but the math
+verification alone confirms the script's core calculation logic is correct.
+Alert creation was set up in TradingView but push notification delivery is
+unconfirmed (didn't fire in first test) -- flagged to revisit later, not blocking.
