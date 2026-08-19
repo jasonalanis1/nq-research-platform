@@ -23,16 +23,25 @@ indicator("NQ Level Sweep Reversal — full_bar_range [EXPERIMENTAL]", overlay=t
 // DO NOT TRADE THIS SIGNAL. It exists to validate the live-alert
 // workflow (data -> signal -> labeled alert), not to generate trades.
 //
-// IMPORTANT — UNTESTED IN TRADINGVIEW: this was written by translating
-// the Python reference logic by hand; there is no Pine Script execution
-// environment available to the author to compile/run it before delivery.
-// Before trusting ANY alert from this script: paste it into TradingView's
-// Pine Editor, confirm it compiles with no errors, and manually check a
-// handful of fired signals on the chart against known dates/prices from
-// the Python backtest results (data/backtest_results_level_sweep_full_bar_range.csv)
-// to confirm the levels/entries/stops line up. TradingView's own NQ data
-// feed and session/bar alignment may also differ subtly from the
-// Databento data the Python backtest used.
+// 2026-08-18 REVISION — manually reviewed against the Python reference
+// (no Pine execution environment was available to compile/test either
+// version). Two behavioral bugs found and fixed in this revision:
+//   1. Days with no pre-market data now correctly produce NO signal,
+//      matching the Python reference (which skips such days entirely)
+//      instead of silently falling back to prior-day-only levels.
+//   2. Long and short confirmation are now mutually exclusive on the
+//      same bar (long checked first, matching the Python loop's order),
+//      so a same-bar double-fire can no longer happen. (Low real-world
+//      impact for this specific variant, since full_bar_range structurally
+//      can't confirm on the same bar it swept — but fixed for exactness.)
+// This is still UNTESTED IN TRADINGVIEW — before trusting ANY alert:
+// paste it into TradingView's Pine Editor, confirm it compiles with no
+// errors, and manually check a handful of fired signals on the chart
+// against known dates/prices from the Python backtest results
+// (data/backtest_results_level_sweep_full_bar_range.csv) to confirm the
+// levels/entries/stops line up. TradingView's own NQ data feed and
+// session/bar alignment may also differ subtly from the Databento data
+// the Python backtest used.
 // =====================================================================
 
 // --- Settings (mirrors src/detect_level_sweep.py constants) ---
@@ -56,16 +65,22 @@ isNewNyDay    = dayofmonth(time, "America/New_York") != dayofmonth(time[1], "Ame
 
 // --- Today's pre-market high/low: bars from NY midnight up to the open, same as
 //     the Python reference's day_bars[day_bars.index < open_ts] ---
-var float premarketHigh = na
-var float premarketLow  = na
+var float premarketHigh    = na
+var float premarketLow     = na
+var bool  hadPremarketData = false   // FIX 1: tracks whether we ever saw a pre-market bar today
 if isNewNyDay
-    premarketHigh := na
-    premarketLow  := na
+    premarketHigh    := na
+    premarketLow     := na
+    hadPremarketData := false
 if isPremarket
-    premarketHigh := na(premarketHigh) ? high : math.max(premarketHigh, high)
-    premarketLow  := na(premarketLow)  ? low  : math.min(premarketLow, low)
+    premarketHigh    := na(premarketHigh) ? high : math.max(premarketHigh, high)
+    premarketLow     := na(premarketLow)  ? low  : math.min(premarketLow, low)
+    hadPremarketData := true
 
-// --- Today's levels: support = lower of {prior day low, premarket low}; resistance = higher of the pair ---
+// --- Today's levels: support = lower of {prior day low, premarket low}; resistance = higher of the pair.
+//     FIX 1: if there was no pre-market data today, the Python reference skips the whole day
+//     rather than falling back to prior-day-only levels — hadPremarketData gates signal
+//     generation below to match that. ---
 support    = na(premarketLow)  ? priorDayLow  : math.min(priorDayLow, premarketLow)
 resistance = na(premarketHigh) ? priorDayHigh : math.max(priorDayHigh, premarketHigh)
 
@@ -83,7 +98,9 @@ if isNewNyDay
     resistanceExtreme  := na
     signalFiredToday   := false
 
-if isWatchWindow and not signalFiredToday
+// FIX 1: added "and hadPremarketData" so a day with no pre-market bars produces no signal,
+// matching Python's compute_levels() returning None (day skipped) for that case.
+if isWatchWindow and not signalFiredToday and hadPremarketData
     if not supportSwept and low < support
         supportSwept   := true
         supportExtreme := low
@@ -104,6 +121,8 @@ if isWatchWindow and not signalFiredToday
     longConfirmed  = supportSwept    and low > support
     shortConfirmed = resistanceSwept and high < resistance
 
+    // FIX 2: "else if" for consistency with the Python loop's long-checked-first
+    // priority (structurally this variant can't dual-fire on one bar anyway).
     if longConfirmed
         entryPx = close
         stopPx  = supportExtreme
@@ -112,8 +131,7 @@ if isWatchWindow and not signalFiredToday
         signalFiredToday := true
         label.new(bar_index, low, "Experimental Signal Detected — not a proven edge\nLevel Sweep Reversal (full_bar_range) — LONG\nEntry " + str.tostring(entryPx) + "  Stop " + str.tostring(stopPx) + "  Target " + str.tostring(targetPx), style=label.style_label_up, color=color.new(color.orange, 0), textcolor=color.white, size=size.small)
         alert("Experimental Signal Detected — not a proven edge | NQ Level Sweep Reversal (full_bar_range) | LONG | Entry " + str.tostring(entryPx) + " Stop " + str.tostring(stopPx) + " Target " + str.tostring(targetPx) + " | See exp-020: +0.008R, not statistically significant", alert.freq_once_per_bar)
-
-    if shortConfirmed
+    else if shortConfirmed
         entryPx = close
         stopPx  = resistanceExtreme
         riskPx  = stopPx - entryPx
