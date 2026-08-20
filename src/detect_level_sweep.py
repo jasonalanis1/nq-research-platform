@@ -227,17 +227,15 @@ def scan_for_signal(day_df: pd.DataFrame, levels: dict, confirmation_mode: str =
     return None
 
 
-def main():
-    confirmation_mode = sys.argv[1] if len(sys.argv) > 1 else "close_any"
-    if confirmation_mode not in CONFIRMATION_MODES:
-        print(f"Unknown confirmation mode '{confirmation_mode}'. Choose one of: {CONFIRMATION_MODES}")
-        return
-
-    df, is_synthetic = load_price_data(context="detect_level_sweep.py")
-    if is_synthetic:
-        print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
-    print(f"Confirmation mode: {confirmation_mode}")
-
+def scan_all_days(df: pd.DataFrame, confirmation_mode: str = "close_any") -> tuple[list[dict], dict]:
+    """
+    Walks every day in df and returns (raw signal dicts, stats). This is
+    the exact day-by-day loop main() used to run inline -- extracted
+    2026-08-20 so main() and generate_signals() (the Signal-contract
+    adapter, below) share one implementation instead of two copies that
+    could silently drift apart. The detection math itself
+    (compute_levels, scan_for_signal) is untouched.
+    """
     all_days = sorted(set(df.index.date))
     signals = []
     skipped_no_levels = 0
@@ -261,6 +259,65 @@ def main():
         else:
             no_signal_days += 1
 
+    stats = {
+        "total_days": len(all_days) - 1,
+        "skipped_no_levels": skipped_no_levels,
+        "no_signal_days": no_signal_days,
+    }
+    return signals, stats
+
+
+STRATEGY_NAME = "level_sweep_reversal"
+STRATEGY_VERSION = "1.0"
+
+
+def generate_signals(df: pd.DataFrame, confirmation_mode: str = "close_any",
+                      validation_status: str = "research") -> list:
+    """
+    Signal-contract adapter (docs/AUTOMATION_ARCHITECTURE.md's approved
+    Signal schema) around the existing, unchanged scan_all_days() logic.
+    Returns a list of strategy_contract.Signal objects instead of the
+    raw dicts scan_all_days() produces internally.
+
+    Verified 2026-08-20 to reproduce byte-identical entry/stop/target/
+    direction/date values against the CSV output for both
+    close_min_distance and full_bar_range before being trusted.
+    """
+    from strategy_contract import Signal, risk_multiple as _risk_multiple
+
+    raw_signals, _stats = scan_all_days(df, confirmation_mode)
+    out = []
+    for s in raw_signals:
+        out.append(Signal(
+            strategy_name=STRATEGY_NAME,
+            strategy_version=f"{STRATEGY_VERSION}-{confirmation_mode}",
+            timestamp=s["signal_time"],
+            instrument="NQ",
+            timeframe="1m",
+            direction=s["direction"],
+            entry=s["entry"],
+            stop=s["stop"],
+            target=s["target"],
+            risk_multiple=_risk_multiple(s["entry"], s["stop"], s["target"]),
+            validation_status=validation_status,
+            market_context={"level_source": s["level_source"], "date": str(s["date"])},
+        ))
+    return out
+
+
+def main():
+    confirmation_mode = sys.argv[1] if len(sys.argv) > 1 else "close_any"
+    if confirmation_mode not in CONFIRMATION_MODES:
+        print(f"Unknown confirmation mode '{confirmation_mode}'. Choose one of: {CONFIRMATION_MODES}")
+        return
+
+    df, is_synthetic = load_price_data(context="detect_level_sweep.py")
+    if is_synthetic:
+        print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
+    print(f"Confirmation mode: {confirmation_mode}")
+
+    signals, stats = scan_all_days(df, confirmation_mode)
+
     signals_df = pd.DataFrame(signals)
     if not signals_df.empty:
         signals_df = signals_df[["date", "direction", "level_source", "level_swept", "sweep_extreme",
@@ -271,13 +328,13 @@ def main():
     out_path = DATA_DIR / f"setups_level_sweep_{confirmation_mode}.csv"
     signals_df.to_csv(out_path, index=False)
 
-    print(f"\nScanned {len(all_days) - 1} days (excluding the first, which has no prior day).")
+    print(f"\nScanned {stats['total_days']} days (excluding the first, which has no prior day).")
     print(f"  Signals found: {len(signals_df)}")
     if not signals_df.empty:
         print(f"    Long:  {(signals_df['direction'] == 'long').sum()}")
         print(f"    Short: {(signals_df['direction'] == 'short').sum()}")
-    print(f"  Days skipped (missing prior-day or pre-market data): {skipped_no_levels}")
-    print(f"  Days with no sweep+reversal in the watch window: {no_signal_days}")
+    print(f"  Days skipped (missing prior-day or pre-market data): {stats['skipped_no_levels']}")
+    print(f"  Days with no sweep+reversal in the watch window: {stats['no_signal_days']}")
     print(f"\nSaved signal log to: {out_path}")
     if not signals_df.empty:
         print("\nFirst few signals:")

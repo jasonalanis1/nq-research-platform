@@ -101,11 +101,14 @@ def detect_orb_for_day(day_df: pd.DataFrame, day) -> dict | None:
     return None  # price stayed inside the range the whole watch window -- no signal today
 
 
-def main():
-    df, is_synthetic = load_price_data(context="detect_setups.py")
-    if is_synthetic:
-        print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
-
+def scan_all_days(df: pd.DataFrame) -> tuple[list[dict], dict]:
+    """
+    Walks every day in df and returns (raw signal dicts, stats). This is
+    the exact day-by-day loop main() used to run inline -- extracted
+    2026-08-20 so main() and generate_signals() (the Signal-contract
+    adapter, below) share one implementation instead of two copies that
+    could silently drift apart. detect_orb_for_day() itself is untouched.
+    """
     all_days = sorted(set(df.index.date))
     signals = []
     no_signal_days = 0
@@ -118,16 +121,60 @@ def main():
         else:
             no_signal_days += 1
 
+    stats = {"total_days": len(all_days), "no_signal_days": no_signal_days}
+    return signals, stats
+
+
+STRATEGY_NAME = "orb_placeholder"
+STRATEGY_VERSION = "1.0"
+
+
+def generate_signals(df: pd.DataFrame, validation_status: str = "research") -> list:
+    """
+    Signal-contract adapter (docs/AUTOMATION_ARCHITECTURE.md's approved
+    Signal schema) around the existing, unchanged scan_all_days() logic.
+    Returns a list of strategy_contract.Signal objects instead of the
+    raw dicts scan_all_days() produces internally.
+    """
+    from strategy_contract import Signal, risk_multiple as _risk_multiple
+
+    raw_signals, _stats = scan_all_days(df)
+    out = []
+    for s in raw_signals:
+        out.append(Signal(
+            strategy_name=STRATEGY_NAME,
+            strategy_version=STRATEGY_VERSION,
+            timestamp=s["breakout_time"],
+            instrument="NQ",
+            timeframe="1m",
+            direction=s["direction"],
+            entry=s["entry"],
+            stop=s["stop"],
+            target=s["target"],
+            risk_multiple=_risk_multiple(s["entry"], s["stop"], s["target"]),
+            validation_status=validation_status,
+            market_context={"range_high": s["range_high"], "range_low": s["range_low"], "date": str(s["date"])},
+        ))
+    return out
+
+
+def main():
+    df, is_synthetic = load_price_data(context="detect_setups.py")
+    if is_synthetic:
+        print("NOTE: using SYNTHETIC data -- signal counts below are for testing the pipeline only.")
+
+    signals, stats = scan_all_days(df)
+
     signals_df = pd.DataFrame(signals)
     out_path = DATA_DIR / "setups_orb.csv"
     signals_df.to_csv(out_path, index=False)
 
-    print(f"\nScanned {len(all_days)} days.")
+    print(f"\nScanned {stats['total_days']} days.")
     print(f"  Signals found: {len(signals_df)}")
     if not signals_df.empty:
         print(f"    Long:  {(signals_df['direction'] == 'long').sum()}")
         print(f"    Short: {(signals_df['direction'] == 'short').sum()}")
-    print(f"  Days with no breakout in the watch window: {no_signal_days}")
+    print(f"  Days with no breakout in the watch window: {stats['no_signal_days']}")
     print(f"\nSaved signal log to: {out_path}")
     if not signals_df.empty:
         print("\nFirst few signals:")
