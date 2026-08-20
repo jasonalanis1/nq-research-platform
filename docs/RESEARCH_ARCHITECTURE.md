@@ -258,6 +258,8 @@ Any future execution layer must have explicit safeguards including:
 
 The project should never silently transition from alerts into autonomous real-money trading.
 
+See `docs/AUTOMATION_ARCHITECTURE.md` for the full phase-by-phase breakdown of this execution layer (Phases 6-11).
+
 Trading strategy research
 
 Jason does not have enough trading experience to independently generate a large library of high-quality strategy hypotheses.
