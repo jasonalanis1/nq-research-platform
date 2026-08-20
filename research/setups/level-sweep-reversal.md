@@ -92,11 +92,11 @@ this file against the video reference and the target rule changed to
 1.35x-risk (see above), all three confirmation variants turned
 profitable on the same data:
 
-| Variant | ~24 days (Yahoo) | ~6 months (Databento) | ~2 years (Databento, incl. now-holdout period) | **Research-only (holdout excluded)** | Experiments |
-|---|---|---|---|---|---|
-| close_any | +0.132R (16 trades) | -0.052R (68 trades) | -0.063R (237 trades) | not re-tested (already settled negative) | exp-006 / exp-010 / exp-014 |
-| close_min_distance | +0.545R (15 trades) | +0.054R (63 trades) | +0.043R (221 trades) | **-0.014R (173 trades)** | exp-007 / exp-011 / exp-015 / exp-019 |
-| full_bar_range | +0.238R (15 trades) | +0.033R (60 trades) | +0.042R (197 trades) | **+0.008R (151 trades)** | exp-008 / exp-012 / exp-016 / exp-020 |
+| Variant | ~24 days (Yahoo) | ~6 months (Databento) | ~2 years (Databento, incl. now-holdout period) | Research-only, 513 days | **Research-only, 514 days (2026-08-20)** | Experiments |
+|---|---|---|---|---|---|---|
+| close_any | +0.132R (16 trades) | -0.052R (68 trades) | -0.063R (237 trades) | not re-tested (already settled negative) | not re-tested | exp-006 / exp-010 / exp-014 |
+| close_min_distance | +0.545R (15 trades) | +0.054R (63 trades) | +0.043R (221 trades) | -0.014R (173 trades) | **-0.021R (172 trades)** | exp-007 / exp-011 / exp-015 / exp-019 / exp-021 |
+| full_bar_range | +0.238R (15 trades) | +0.033R (60 trades) | +0.042R (197 trades) | +0.008R (151 trades) | **-0.001R (150 trades)** | exp-008 / exp-012 / exp-016 / exp-020 / exp-022 |
 
 (Expectancy in R, net of estimated costs, at each sample size.)
 
@@ -176,3 +176,12 @@ to erase it.
   the research-only portion for the first time (exp-019/020) — both got
   meaningfully worse: close_min_distance flipped negative, full_bar_range
   shrank to roughly breakeven. See "Important correction" note above.
+- 2026-08-20: `data_fetch_databento.py`'s rolling-window bug was fixed
+  (anchored to a fixed 2024-08-15 start instead of a rolling window),
+  adding one research day (513 -> 514). Re-tested both variants
+  (exp-021/022) to confirm exp-019/020 weren't artifacts of the old,
+  buggy window — both essentially unchanged: close_min_distance -0.014R
+  -> -0.021R, full_bar_range +0.008R -> -0.001R (now dead flat). Neither
+  shows a research-only edge worth acting on; the earlier
+  "close_min_distance is the stronger of the two" read no longer clearly
+  holds now that both are at or below breakeven.
