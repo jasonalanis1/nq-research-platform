@@ -3,15 +3,30 @@ data_fetch_databento.py
 =========================
 
 WHAT THIS FILE DOES (plain English):
-Downloads 2 years of REAL 1-minute NQ futures bars from Databento (a
-paid market data vendor) and saves them to data/, in the same format the
-rest of the pipeline (detect_setups.py, detect_level_sweep.py,
-backtest.py, ...) already expects. This is a step up from
-data_fetch.py (Yahoo Finance), which only gives ~30 days of 1-minute
-history -- Databento gives us a much longer, better-quality window to
-backtest against. (Cost check, 2026-08-16: a 2-year pull of this data
-quotes at ~$2.55 via Databento's own cost-estimation endpoint -- cheap
-relative to Jason's remaining account balance.)
+Downloads REAL 1-minute NQ futures bars from Databento (a paid market
+data vendor), from a FIXED start date (2026-08-20 fix -- see below)
+through today, and saves them to data/, in the same format the rest of
+the pipeline (detect_setups.py, detect_level_sweep.py, backtest.py, ...)
+already expects. This is a step up from data_fetch.py (Yahoo Finance),
+which only gives ~30 days of 1-minute history -- Databento gives us a
+much longer, better-quality window to backtest against. (Cost check,
+2026-08-16: a 2-year pull of this data quotes at ~$2.55 via Databento's
+own cost-estimation endpoint -- cheap relative to Jason's remaining
+account balance.)
+
+FIXED START DATE, NOT A ROLLING WINDOW (fixed 2026-08-20): this used to
+request a rolling "LOOKBACK_DAYS back from today" window. That silently
+eroded the research portion of the data every time this script was
+re-run: as "today" advanced, the window's start date rolled forward
+too, dropping the oldest days entirely (they never come back, since the
+holdout boundary in data_holdout.py absorbs every new day going forward
+instead). A real-world re-run on 2026-08-20 caught this: research days
+dropped from 513 to 510 in one pull. Fixed by anchoring HISTORY_START_DATE
+at a fixed calendar date (2024-08-15 -- the date this project's entire
+history, every logged experiment, and data_holdout.py's research-period
+boundary are already built on) instead of computing it from "today."
+Every future re-run now requests 2024-08-15 through today, growing
+forward over time, never dropping days off the front.
 
 WHERE THE DATA COMES FROM: dataset "GLBX.MDP3" is CME Globex's own
 market data feed (the exchange NQ futures actually trade on) -- this is
@@ -47,14 +62,16 @@ import getpass
 import pandas as pd
 import databento as db
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 
 DATASET = "GLBX.MDP3"        # CME Globex MDP 3.0 -- the exchange feed NQ futures trade on
 SYMBOL = "NQ.c.0"             # continuous front-month NQ futures (Databento's equivalent of Yahoo's NQ=F)
 SCHEMA = "ohlcv-1m"           # 1-minute OHLCV bars
-LOOKBACK_DAYS = 730           # ~2 years. Databento's trial/plan limits may cap this further --
-                               # if so, the error message from the API will say so plainly.
-                               # ohlcv-1m for GLBX.MDP3 goes back to 2010, so this is well within range.
+HISTORY_START_DATE = datetime(2024, 8, 15)  # FIXED anchor, not a rolling lookback -- see file header.
+                                              # This is the date the whole project's history, every
+                                              # logged experiment, and data_holdout.py's research-period
+                                              # boundary are already built on. Never derive this from
+                                              # "today" -- that's exactly the bug this constant fixes.
 NY_TIMEZONE = "America/New_York"
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -95,8 +112,8 @@ def get_api_key() -> str:
 
 def fetch_databento_minute_data(api_key: str) -> pd.DataFrame:
     """
-    Downloads ~LOOKBACK_DAYS days of 1-minute NQ futures bars from
-    Databento's historical API.
+    Downloads 1-minute NQ futures bars from Databento's historical API,
+    from the fixed HISTORY_START_DATE through today.
 
     Returns a DataFrame with columns Open, High, Low, Close, Volume,
     indexed by timestamp in New York time -- matching the exact shape
@@ -105,10 +122,10 @@ def fetch_databento_minute_data(api_key: str) -> pd.DataFrame:
     this data without any changes.
     """
     end = datetime.now()
-    start = end - timedelta(days=LOOKBACK_DAYS)
+    start = HISTORY_START_DATE
 
-    print(f"Requesting {LOOKBACK_DAYS} days of {SCHEMA} bars for {SYMBOL} "
-          f"({DATASET}) from {start.date()} to {end.date()}...")
+    print(f"Requesting {SCHEMA} bars for {SYMBOL} ({DATASET}) from "
+          f"{start.date()} (fixed) to {end.date()} (today)...")
     print("(This calls Databento's paid historical API and will use credits/"
           "billing on your account.)")
 
