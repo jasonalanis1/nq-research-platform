@@ -35,15 +35,25 @@ plausible-looking from its GitHub page.
 STATUS AS OF 2026-08-23: this file is a SKETCH, not a finished module.
 It shows the wiring -- how a hypothesis's return series + trial count
 becomes a DSR/PBO result, and how that result becomes a
-research_ledger.update_status() call -- but the actual PASS/FAIL
-THRESHOLDS below (what DSR/PBO values count as "good enough" to move a
-hypothesis to VALIDATION CANDIDATE) are PLACEHOLDERS, clearly marked.
-Per this project's whole pattern so far (fixed calendar dates instead of
-rolling percentages, an explicit 5-slot holdout budget instead of an
-implicit one, an explicit three-field model instead of one conflated
-status), those thresholds should be a decision YOU make deliberately,
-not a default I pick quietly. Nothing in this file should run against a
-real hypothesis until that decision is made and this file is reviewed.
+research_ledger.update_status() call.
+
+DSR/PBO THRESHOLDS -- DECIDED, 2026-08-23 (not placeholders): Jason and
+Claude worked through what DSR and PBO actually measure -- DSR is the
+trial-adjusted probability the strategy's true Sharpe is really above
+zero (catches "this looks good only because I tried a lot of things");
+PBO is the fraction of in-sample/out-of-sample combinations where the
+in-sample winner loses out-of-sample (catches "this specific winner was
+picked by luck, independent of how many trials there were"). Since they
+catch different failure modes, a candidate must pass BOTH (AND logic,
+not either/or) -- confirmed to stay as-is, not simplified to one metric.
+DSR_PASS_THRESHOLD is set to 0.90 to match the project's existing 90%
+bootstrap-CI confidence bar used everywhere else (see
+confidence_analysis.py, ROADMAP.md's promotion bar) rather than
+introducing a second, different confidence standard. PBO_FAIL_THRESHOLD
+is set to 0.25 -- well below the 0.50 coin-flip line (at 0.50, an
+in-sample winner is no better than random at holding up out-of-sample),
+leaving deliberate room so a candidate isn't just barely-not-a-coin-flip
+before being trusted.
 """
 
 from dataclasses import dataclass
@@ -54,11 +64,10 @@ from purgedcv import deflated_sharpe_ratio, probability_of_backtest_overfitting
 
 import research_ledger as rl
 
-# PLACEHOLDER THRESHOLDS -- NOT YET DECIDED. Filled in with reasonable-
-# sounding starting points only so this file is runnable; treat these as
-# a first draft to react to, not a recommendation to accept as-is.
-DSR_PASS_THRESHOLD = 0.95   # DSR = probability true Sharpe > 0, trial-adjusted
-PBO_FAIL_THRESHOLD = 0.50   # PBO >= this means "more likely overfit than not"
+# DECIDED THRESHOLDS, 2026-08-23 -- see module docstring for the
+# reasoning (why these values, why AND not OR between DSR and PBO).
+DSR_PASS_THRESHOLD = 0.90   # DSR = probability true Sharpe > 0, trial-adjusted; matches the project's existing 90% confidence bar
+PBO_FAIL_THRESHOLD = 0.25   # PBO >= this means overfit risk is too high; well below the 0.50 coin-flip line, deliberately
 
 
 @dataclass
@@ -117,13 +126,13 @@ def evaluate_candidate(
         pbo_result = probability_of_backtest_overfitting(sibling_returns, n_splits=16)
         pbo = pbo_result.pbo
 
-    # PLACEHOLDER decision logic -- see module docstring.
+    # Decided decision logic (2026-08-23) -- see module docstring.
     if dsr < DSR_PASS_THRESHOLD:
-        status, reason = "REJECTED", f"DSR {dsr:.3f} below placeholder threshold {DSR_PASS_THRESHOLD}"
+        status, reason = "REJECTED", f"DSR {dsr:.3f} below threshold {DSR_PASS_THRESHOLD}"
     elif pbo is not None and pbo >= PBO_FAIL_THRESHOLD:
-        status, reason = "REJECTED", f"PBO {pbo:.3f} at/above placeholder threshold {PBO_FAIL_THRESHOLD}"
+        status, reason = "REJECTED", f"PBO {pbo:.3f} at/above threshold {PBO_FAIL_THRESHOLD}"
     else:
-        status, reason = "VALIDATION CANDIDATE", f"DSR {dsr:.3f}, PBO {pbo}, both cleared placeholder thresholds"
+        status, reason = "VALIDATION CANDIDATE", f"DSR {dsr:.3f}, PBO {pbo}, both cleared thresholds"
 
     return LarryVerdict(
         hypothesis_id=hypothesis_id,
