@@ -47,6 +47,20 @@ has been fully verified (data pull + reproducibility check in progress
 as of this writing). This file being drafted is not the same as that
 gate being cleared -- don't use get_discovery_data() for anything until
 that verification is confirmed complete.
+
+UPDATE 2026-08-23: both gating conditions above are now met. The
+expanded 2015-2026 dataset was pulled and quality-checked (committed as
+c16a105), the full test suite (15 tests) passes against it, and ORB /
+Level Sweep spot-checks both ran successfully on it. get_discovery_data()
+is safe to use for manual hypothesis testing (e.g. re-running an
+already-defined variant like close_min_distance or full_bar_range) as
+of this date. This does NOT by itself green-light autonomous Strategy
+R&D or formal Larry candidate validation -- decision #1 also requires
+the Research Ledger and Larry's DSR/PBO module to exist as real,
+reviewed infrastructure (research_ledger.py and larry_validate.py are
+drafted as of 2026-08-23 but larry_validate.py's pass/fail thresholds
+are still explicit placeholders, not a decided policy) before that
+broader gate counts as cleared.
 """
 
 import pandas as pd
