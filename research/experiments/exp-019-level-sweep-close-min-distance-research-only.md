@@ -74,3 +74,15 @@ exp-015/016/017/018 was real or was mostly concentrated in that
 excluded window. Continue tracking `close_min_distance` and
 `full_bar_range` (exp-020) as real data accumulates, but treat both as
 weaker candidates than they looked in earlier sessions, not stronger.
+
+## Note on multiple-testing history
+
+This run (and exp-020) is the fifth round of testing on this
+close_min_distance / full_bar_range comparison, following four earlier
+rounds (exp-006-008, exp-010-012, exp-014-016, exp-017-018) on
+substantially overlapping data, during which a third variant
+(close_any) was dropped as weakest. The "not statistically significant"
+bootstrap CI reported above treats this as an isolated test and does
+not account for that prior selection history. The practical verdict is
+unchanged either way (both were already not significant) — this note
+exists for the record's honesty, not because it changes the conclusion.

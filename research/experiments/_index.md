@@ -53,3 +53,13 @@ real test of the ORB pattern. A random dataset showing no edge is the
 it means "the code correctly found no edge in data that has none." Real
 verdict pending: real data + (likely) Jason's actual setup definition
 rather than this placeholder.
+
+**Note on exp-019/exp-020:** these were the fifth round of testing on
+this close_min_distance / full_bar_range comparison, following four
+earlier rounds (exp-006-008, exp-010-012, exp-014-016, exp-017-018) on
+substantially overlapping data, during which a third variant (close_any)
+was dropped as weakest. The "not statistically significant" bootstrap
+CI reported for both treats each as an isolated test and does not
+account for this prior selection history. The practical verdict is
+unchanged either way (both were already not significant) — this note
+exists for the record's honesty, not because it changes the conclusion.

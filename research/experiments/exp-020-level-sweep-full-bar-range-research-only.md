@@ -58,3 +58,15 @@ negative here, `full_bar_range` is roughly breakeven. Continue
 accumulating real research-period data (new trading days will land
 before the holdout boundary moves, since it's fixed) before drawing
 firmer conclusions.
+
+## Note on multiple-testing history
+
+This run (and exp-019) is the fifth round of testing on this
+close_min_distance / full_bar_range comparison, following four earlier
+rounds (exp-006-008, exp-010-012, exp-014-016, exp-017-018) on
+substantially overlapping data, during which a third variant
+(close_any) was dropped as weakest. The "not statistically significant"
+bootstrap CI reported above treats this as an isolated test and does
+not account for that prior selection history. The practical verdict is
+unchanged either way (both were already not significant) — this note
+exists for the record's honesty, not because it changes the conclusion.
