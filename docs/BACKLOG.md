@@ -16,6 +16,8 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 - **research_ledger.py hypothesis ID gaps** — found 2026-08-24, while logging exp-023/024. Hypothesis IDs are assigned by total-lines-appended, not total-distinct-hypotheses -- so ID numbers have gaps whenever a hypothesis has multiple lines (e.g. hyp-000001 spans lines 1-2, so the next fresh hypothesis is hyp-000003, not hyp-000002). Not a data-integrity bug -- lineage and uniqueness are correct -- but worth fixing eventually so ID gaps don't get mistaken for deleted records in what's meant to be a tamper-evident ledger.
 
+- **score_results.py's profit_factor unit mismatch** — found 2026-08-24, while reviewing exp-025. score_results.py's profit_factor is computed from raw price points, not risk-normalized R-multiples -- can diverge from (and even contradict the sign of) R-based expectancy when winning and losing trades have systematically different risk sizes, as seen in exp-025. Consider adding an R-normalized profit factor (sum of winning R / sum of losing R) alongside the existing raw-points version in future score_results.py output, so this kind of divergence is visible by default instead of discovered by accident.
+
 ## Rejected
 
 *(considered and ruled out, with why — nothing here yet)*
