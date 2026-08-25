@@ -30,6 +30,12 @@ other setup doc in this folder.
    rejection/reversal confirmation exactly as-is — none of that logic is
    being retested here. The only thing this document changes is what
    happens AFTER rejection is confirmed.
+   - **Which confirmation mode gates "rejection confirmed":** `close_any`
+     — the loosest of the three existing confirmation modes. Reasoning:
+     this keeps the comparison clean against the original close-back-
+     beyond-level entry it's replacing (which also defaults to
+     `close_any`), rather than compounding a stricter rejection
+     definition with a different entry mechanism in the same test.
 
 2. **New entry trigger — 3-candle Fair Value Gap (FVG) on 1-minute
    bars**, replacing Level Sweep Reversal's "close back beyond the
@@ -40,6 +46,10 @@ other setup doc in this folder.
      image of the bullish case).
    - The gap is confirmed at candle 3's close — a partially-formed gap
      (only 1 or 2 candles in) doesn't count yet.
+   - **"3-candle" means 3 consecutive rows in the minute-bar data**, not
+     3 minutes of wall-clock time — matches how the pattern is actually
+     read on a chart, since illiquid-stretch gaps in the underlying data
+     don't show up as visual gaps when reading candles.
 
 3. **Timing — when the FVG sequence is allowed to start and run:**
    - The rejection-confirming candle can never double as FVG candle 1.
@@ -100,6 +110,15 @@ clip:
 - **"First gap only" rule** — the source never addressed what happens
   if multiple FVGs form in the window; picking the first is a
   simplifying default, not a confirmed rule.
+- **Confirmation mode used to gate "rejection confirmed"** — `close_any`
+  was picked to keep the comparison clean against the original entry
+  rule it's replacing, not because the source specified (or even
+  distinguished between) confirmation strictness at all.
+- **"3-candle" = 3 consecutive rows, not 3 wall-clock minutes** — the
+  source showed a chart, not underlying tick/bar data, so it never
+  addressed how to handle illiquid-stretch gaps in the data itself; this
+  interpretation is our own, chosen to match what a chart reader would
+  actually see.
 
 All of these should be treated as parameters worth sensitivity-testing
 later (the same way Level Sweep Reversal's three confirmation-rule
