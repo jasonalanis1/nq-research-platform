@@ -159,6 +159,20 @@ def scan_day_for_fvg_entry(df: pd.DataFrame, day, prior_day, confirmation_mode: 
         risk = stop - entry
         target = entry - TARGET_R_MULTIPLE * risk
 
+    if risk <= 0:
+        # DISCOVERED 2026-08-24, on real Discovery-slice data: because this
+        # variant's entry (candle3's close) is no longer tied to the swept
+        # level the way the original close-back-beyond-level rule was, it's
+        # possible -- rare, but real -- for candle3 to close at EXACTLY the
+        # same price as the earlier sweep extreme (the stop), or even beyond
+        # it. That's a zero-or-negative-risk "trade": no R-multiple can be
+        # computed, and no real position could be sized this way. Treated as
+        # a no-trade outcome, not emitted as a signal -- letting it through
+        # produced NaN r_multiple rows that silently poisoned every
+        # downstream aggregate (win rate denominator, cumulative R, the
+        # bootstrap CI) rather than raising an error.
+        return None
+
     return {
         "date": day,
         "direction": rejection["direction"],
@@ -178,16 +192,17 @@ def scan_all_days(df: pd.DataFrame, confirmation_mode: str = "close_any") -> tup
     """
     Same day-iteration shape as detect_level_sweep.py's scan_all_days(),
     so this file plugs into the rest of the pipeline the same way --
-    but with three no-trade outcomes tracked separately (skipped for
-    missing levels, no rejection at all, rejection but no FVG in time)
-    instead of two, since this variant has an extra way for a day to
-    produce no trade.
+    but with four no-trade outcomes tracked separately (skipped for
+    missing levels, no rejection at all, rejection but no FVG in time,
+    or a degenerate zero-risk FVG -- see the guard below) instead of
+    two, since this variant has more ways for a day to produce no trade.
     """
     all_days = sorted(set(df.index.date))
     signals = []
     skipped_no_levels = 0
     no_rejection_days = 0
     no_fvg_days = 0
+    degenerate_zero_risk_days = 0
 
     for i, day in enumerate(all_days):
         if i == 0:
@@ -219,6 +234,12 @@ def scan_all_days(df: pd.DataFrame, confirmation_mode: str = "close_any") -> tup
             risk = stop - entry
             target = entry - TARGET_R_MULTIPLE * risk
 
+        if risk <= 0:
+            # See the matching guard + comment in scan_day_for_fvg_entry()
+            # for why this is a no-trade outcome, not a signal.
+            degenerate_zero_risk_days += 1
+            continue
+
         signals.append({
             "date": day,
             "direction": rejection["direction"],
@@ -238,6 +259,7 @@ def scan_all_days(df: pd.DataFrame, confirmation_mode: str = "close_any") -> tup
         "skipped_no_levels": skipped_no_levels,
         "no_rejection_days": no_rejection_days,
         "no_fvg_days": no_fvg_days,
+        "degenerate_zero_risk_days": degenerate_zero_risk_days,
     }
     return signals, stats
 
@@ -312,6 +334,7 @@ def main():
     print(f"  Days skipped (missing prior-day or pre-market data): {stats['skipped_no_levels']}")
     print(f"  Days with no sweep+rejection in the watch window: {stats['no_rejection_days']}")
     print(f"  Days with rejection but no FVG within {FVG_WINDOW_MINUTES} min: {stats['no_fvg_days']}")
+    print(f"  Days with a degenerate zero-risk FVG (entry == stop, discarded): {stats['degenerate_zero_risk_days']}")
     print(f"\nSaved signal log to: {out_path}")
     if not signals_df.empty:
         print("\nFirst few signals:")

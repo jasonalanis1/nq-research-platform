@@ -148,6 +148,38 @@ def test_earlier_of_two_fvgs_in_window_is_returned():
     assert result["fvg_candle3_time"] == day_df.index[3]
 
 
+def test_zero_risk_fvg_is_discarded_not_emitted():
+    """DISCOVERED 2026-08-24 on real data: candle3's close can, rarely,
+    exactly match the sweep extreme (stop) -- a zero-risk 'trade' that
+    can't be sized or scored (NaN r_multiple). scan_day_for_fvg_entry()
+    must treat this as a no-trade outcome, not return a degenerate
+    signal.
+
+    scan_day_for_fvg_entry() computes levels itself from the full
+    multi-day df (unlike find_fvg_after_rejection(), tested in
+    isolation above), so this needs a real prior day + pre-market bar
+    to get a valid support level, not just a hand-built levels dict."""
+    tz = "America/New_York"
+    prior_day = date(2024, 1, 1)
+    today = date(2024, 1, 2)
+
+    prior_day_bars = make_bars(prior_day, tz, [(10, 0, 105, 110, 100, 105)])  # prior day low=100, high=110
+    today_bars = make_bars(today, tz, [
+        (7, 0, 100, 105, 102, 103),      # pre-market: low=102 (>=100, so support stays prior-day-low=100)
+        (8, 30, 102, 103, 98, 99),       # sweeps support, low=98 -- this becomes the stop
+        (8, 31, 99, 99, 98.5, 100.5),    # closes back above support (100) -- rejection confirms here
+        (8, 32, 90, 90, 90, 90),         # candle1 -- flat at 90
+        (8, 33, 95, 95, 95, 95),         # candle2 -- flat at 95, irrelevant to the gap check
+        (8, 34, 98, 98, 98, 98),         # candle3 -- flat at 98: gap vs candle1 (90 < 98), but closes at
+                                          # EXACTLY 98 -- the same price as the stop (the sweep extreme)
+    ])
+    df = pd.concat([prior_day_bars, today_bars])
+
+    result = dfe.scan_day_for_fvg_entry(df, today, prior_day, "close_any")
+
+    assert result is None
+
+
 def test_search_continues_past_first_non_matching_candle_one():
     """The first several candle1 candidates in the window do NOT form a
     gap -- the search must keep walking forward rather than stopping
