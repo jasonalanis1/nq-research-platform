@@ -202,6 +202,19 @@ explain a result like this. `docs/BACKLOG.md`'s liquidity-filter idea
 can be considered tested, in the same sense exp-025 closed out the FVG
 entry trigger idea.
 
+**Closed, 2026-09-01.** Jason reviewed the protected-vs-interior
+definition (see "Where this came from" above) against his memory of the
+source video, confirmed it matches (the definition was drafted from his
+own already-logged `docs/BACKLOG.md` summary, not reconstructed from the
+video itself), and explicitly directed that this line of investigation
+be closed rather than revisited or re-tuned -- no compelling reason to
+keep chasing an inconsistent, non-significant result. The ledger entries
+(`hyp-000007`/`hyp-000008`) were corrected from an initial logging
+error (mistakenly marked `PROMISING`) to `REJECTED`, matching this
+project's convention for a null/negative Discovery-slice result (see
+`hyp-000001`/`hyp-000003`). `research/experiments/_index.md`'s verdict
+for exp-026/exp-027 updated from `retest` to `kill` accordingly.
+
 ## History
 
 - 2026-08-18: idea logged to `docs/BACKLOG.md`, sourced from a YouTube
