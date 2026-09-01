@@ -69,3 +69,12 @@ CI reported for both treats each as an isolated test and does not
 account for this prior selection history. The practical verdict is
 unchanged either way (both were already not significant) — this note
 exists for the record's honesty, not because it changes the conclusion.
+
+**Note on exp-029:** not a row in the table above — it's a
+characterization study (`research/studies/open-return-persistence.md`),
+not a strategy backtest with trades/entry/stop/target, so it doesn't fit
+this table's columns. Result: a clean null across five time horizons on
+whether the Initial Balance's own direction predicts anything about what
+follows (see the study doc and exp-029's write-up for full numbers) —
+relevant context for reading exp-028's rejection, not a strategy verdict
+of its own.
