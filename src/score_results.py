@@ -114,6 +114,21 @@ def main():
     loss_points = abs(losses["pnl_points_net"].sum())
     profit_factor = (win_points / loss_points) if loss_points else float("inf")
 
+    # R-normalized profit factor (added 2026-09-01, per docs/BACKLOG.md's
+    # "score_results.py's profit_factor unit mismatch" item, found while
+    # reviewing exp-025): the profit_factor above sums raw price POINTS,
+    # with no per-trade risk normalization. That can diverge from -- and
+    # even contradict the sign of -- R-based expectancy whenever winning
+    # and losing trades carry systematically different risk sizes (a
+    # setup with variable per-trade stop distances). This version sums
+    # R-MULTIPLES instead, so it can never disagree with expectancy about
+    # which side of breakeven a result is on. Both are printed below;
+    # neither replaces the other -- they answer different questions
+    # (points actually made/lost vs. risk-adjusted edge).
+    win_r_total = wins["r_multiple_net"].sum()
+    loss_r_total = abs(losses["r_multiple_net"].sum())
+    profit_factor_r = (win_r_total / loss_r_total) if loss_r_total else float("inf")
+
     # --- Confidence interval on the win rate (normal approximation) ---
     # Standard error of a proportion: sqrt(p*(1-p)/n). 1.96x that gives a
     # rough 95% confidence interval -- "we're 95% confident the TRUE win
@@ -140,7 +155,8 @@ def main():
     print(f"Average win:          +{avg_win_r:.2f}R")
     print(f"Average loss:         {avg_loss_r:.2f}R")
     print(f"Expectancy per trade: {expectancy_r:+.3f}R")
-    print(f"Profit factor:        {profit_factor:.2f}")
+    print(f"Profit factor:        {profit_factor:.2f}   (raw price points, not risk-normalized)")
+    print(f"Profit factor (R):    {profit_factor_r:.2f}   (R-multiple-normalized -- prefer this one; see docs/BACKLOG.md)")
     print(f"Max drawdown:         {max_drawdown_r:.2f}R")
     print(f"Total R (sum):        {resolved['r_multiple_net'].sum():+.2f}R")
     print("=" * 60)
