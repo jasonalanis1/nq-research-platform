@@ -87,3 +87,11 @@ trades) was correctly never run. No strategy variant exists to log a
 row or a ledger entry for. See the write-up for the honest limitation
 found in the baseline used (doesn't control for intraday volume
 seasonality) before concluding volume adds nothing here.
+
+**Note on exp-031:** also not rows in the table above, same reasoning as
+exp-029/030 — this breaks down the SAME already-logged Initial Balance
+Breakout trades from exp-028 by day-of-week rather than testing a new
+mechanical variant, so it produces no new strategy to log a row or
+ledger entry for. Result: a clean, notably uniform null across all five
+weekdays (expectancy -0.056R to -0.092R on every single day) — see the
+write-up.
