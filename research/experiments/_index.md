@@ -95,3 +95,14 @@ mechanical variant, so it produces no new strategy to log a row or
 ledger entry for. Result: a clean, notably uniform null across all five
 weekdays (expectancy -0.056R to -0.092R on every single day) — see the
 write-up.
+
+**Note on exp-032:** not a row in the table above (characterization
+study, no trades — same reasoning as exp-029/030/031), but flagged
+specially: this is the first study in the project to find something
+other than a clean null. Gap-fill rate significantly above 50% in both
+directions (~58%), and a significant negative correlation between gap
+size and the +90-minute forward return. Triggered this study's own
+Step 3 rule — see exp-033 for the resulting mechanical-rule test, and
+read exp-032's own write-up for why this is being treated cautiously
+(multiple-testing exposure, and same-slice circularity) rather than as
+a confirmed edge.
