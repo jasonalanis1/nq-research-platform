@@ -336,6 +336,10 @@ The historical dataset was then extended back to 2015-01-01 (up from the ~2 year
 
 **Current status: zero setups have cleared the promotion bar. Deciding what to test next.**
 
+**2026-09-01 -- trend-structure liquidity filter built and unit-tested, but blocked on missing data.** During an unattended overnight session (Jason's explicit go-ahead to push forward without him present), the last untested `docs/BACKLOG.md` idea was given a frozen, precise definition (`research/setups/trend-structure-liquidity-filter.md`) and implemented (`src/trend_structure.py`, 11 new tests, full suite 34/34 passing) as a post-hoc filter that classifies each existing Level Sweep Reversal signal as sweeping a "protected" trend-structure point vs. an "interior" level -- built with an explicit no-lookahead confirmation lag so a swing point can never leak future price information into an earlier signal's classification.
+
+**The actual Discovery-slice backtest could not be run tonight: the real Databento price data file was not reachable.** This connected folder has no `data/` directory at all (it's gitignored, so a plain copy of the repo doesn't necessarily bring it along), and no Databento API key is available on this machine to pull a fresh copy. The driver script that would run the real test (`src/_run_liquidity_filter_discovery_backtest.py`) is written and had its mechanics verified end-to-end against throwaway synthetic data (immediately deleted, never logged as a result). **No hypothesis was logged to the ledger and no experiment file was created** -- per this project's own rules, nothing gets logged without a real computed number, and there isn't one yet. Next step: get the real data file (or the Databento key) into this connected folder, then run that one script.
+
 ## A note on how tonight's autonomous work was scoped (2026-08-15)
 
 Jason asked me to keep building without him present, including

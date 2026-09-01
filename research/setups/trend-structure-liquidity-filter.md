@@ -170,9 +170,32 @@ by the time anyone reads the result.
 
 ## Status
 
-Frozen definition only as of first writing. Detection/classification
-code: `src/trend_structure.py`. See `research/experiments/_index.md` for
-whether and how this has since been tested.
+Frozen definition and detection/classification code
+(`src/trend_structure.py`, 11 passing tests in
+`tests/test_trend_structure.py`) are done. A temporary driver script
+(`src/_run_liquidity_filter_discovery_backtest.py`) that runs this
+filter against Level Sweep Reversal's close_min_distance and
+full_bar_range variants on the Discovery slice is written and had its
+mechanics verified end-to-end against synthetic data (signal generation
+-> classification -> backtest -> score_results.py -> confidence_analysis.py
+all ran cleanly; that synthetic run was deleted immediately after, it is
+NOT a real result and was never logged anywhere).
+
+**Blocked, 2026-09-01: no real price data was reachable to actually run
+this.** The real Databento 1-minute NQ file this project depends on
+(`data/NQ_1min_databento_*.csv`, gitignored, not in git) is not present
+in either of Jason's currently-connected local folders, and no
+Databento API key (env var or `.databento_key` file) is available on
+this machine either, so Greg's data-fetch script can't pull a fresh
+copy. **No hypothesis was logged to the ledger and no experiment file
+was created** -- there is no real result yet, and this project's rules
+are explicit that nothing gets logged without an actually-computed
+number. Next step: Jason needs to either copy the existing
+`data/NQ_1min_databento_*.csv` file into this connected folder, or make
+the Databento key available here, and then
+`python3 src/_run_liquidity_filter_discovery_backtest.py` is a single
+command away from producing the real result. See
+`research/experiments/_index.md` for whether that's happened yet.
 
 ## History
 
