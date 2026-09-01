@@ -187,3 +187,56 @@ def test_scan_all_days_counts_degenerate_days_separately():
     assert stats["degenerate_or_missing_ib_days"] == 1
     assert stats["no_signal_days"] == 1
     assert stats["total_days"] == 2
+
+
+def make_bars_with_volume(day, tz, bars):
+    """Same as make_bars, but each tuple carries its own volume:
+    (hour, minute, open, high, low, close, volume)."""
+    rows = []
+    index = []
+    for hour, minute, o, h, l, c, v in bars:
+        ts = pd.Timestamp(day, tz=tz).replace(hour=hour, minute=minute)
+        index.append(ts)
+        rows.append({"Open": o, "High": h, "Low": l, "Close": c, "Volume": v})
+    return pd.DataFrame(rows, index=index)
+
+
+def test_signal_carries_ib_avg_volume_and_breakout_volume():
+    """The new volume-context fields (added for
+    research/setups/volume-confirmed-ib-breakout.md) must reflect the
+    real IB-window average and the actual breakout bar's own volume --
+    not a placeholder -- without changing any existing detection/entry
+    behavior."""
+    day = date(2024, 1, 2)
+    tz = "America/New_York"
+    ib_bars = []
+    # 30 IB bars (8:30-8:59) with volumes 10, 20, 30, ..., 300 -> mean = 155
+    for i, minute in enumerate(range(30, 60)):
+        v = (i + 1) * 10
+        ib_bars.append((8, minute, 101, 102.0, 100.0, 101, v))
+    df_ib = make_bars_with_volume(day, tz, ib_bars)
+    breakout = make_bars_with_volume(day, tz, [(9, 0, 102, 103.5, 102, 103.2, 999)])
+    day_df = pd.concat([df_ib, breakout])
+
+    signal = ib.detect_ib_breakout_for_day(day_df, day)
+
+    assert signal is not None
+    assert signal["ib_avg_volume"] == 155.0
+    assert signal["breakout_volume"] == 999.0
+
+
+def test_volume_fields_do_not_affect_which_signal_fires():
+    """Sanity check: wildly different volume on the breakout bar must not
+    change direction/entry/stop/target -- volume is context only, per
+    the frozen filter doc's 'What this is NOT' guarantee."""
+    day = date(2024, 1, 2)
+    tz = "America/New_York"
+    df = ib_bars(day, tz, low=100.0, high=102.0)  # existing helper, Volume=100 for every bar
+    low_vol_breakout = make_bars_with_volume(day, tz, [(9, 0, 102, 103.5, 102, 103.2, 1)])
+    day_df = pd.concat([df, low_vol_breakout])
+
+    signal = ib.detect_ib_breakout_for_day(day_df, day)
+
+    assert signal["direction"] == "long"
+    assert signal["entry"] == 103.2
+    assert signal["stop"] == 100.0

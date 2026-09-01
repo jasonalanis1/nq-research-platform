@@ -78,3 +78,12 @@ whether the Initial Balance's own direction predicts anything about what
 follows (see the study doc and exp-029's write-up for full numbers) —
 relevant context for reading exp-028's rejection, not a strategy verdict
 of its own.
+
+**Note on exp-030:** also not a row in the table above, same reasoning
+as exp-029 — Step 1 (the raw correlation check,
+`research/setups/volume-confirmed-ib-breakout.md`) came back null, so
+Step 2 (the actual bucket-split backtest that would have produced
+trades) was correctly never run. No strategy variant exists to log a
+row or a ledger entry for. See the write-up for the honest limitation
+found in the baseline used (doesn't control for intraday volume
+seasonality) before concluding volume adds nothing here.

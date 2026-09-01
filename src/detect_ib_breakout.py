@@ -86,6 +86,15 @@ def detect_ib_breakout_for_day(day_df: pd.DataFrame, day) -> dict | None:
     if ib_range <= 0:
         return None  # degenerate/zero-width IB range -- not a real signal, see module docstring
 
+    # Volume context (added 2026-09-01 for research/setups/volume-confirmed-
+    # ib-breakout.md) -- NOT used by the detection/entry logic above, which
+    # is completely unchanged. ib_avg_volume is this day's own IB-window
+    # average, so any later "was the breakout bar's volume unusual"
+    # comparison is self-normalizing against that same day (avoids both the
+    # multi-year drift in NQ's overall traded volume and any lookahead --
+    # the IB window is fully known before the breakout window even starts).
+    ib_avg_volume = ib_bars["Volume"].mean()
+
     watch_bars = day_df[(day_df.index >= ib_end_ts) & (day_df.index < breakout_end_ts)]
 
     for ts, bar in watch_bars.iterrows():
@@ -102,6 +111,8 @@ def detect_ib_breakout_for_day(day_df: pd.DataFrame, day) -> dict | None:
                 "entry": round(entry, 2),
                 "stop": round(stop, 2),
                 "target": round(entry + TARGET_R_MULTIPLE * risk, 2),
+                "ib_avg_volume": round(float(ib_avg_volume), 2),
+                "breakout_volume": float(bar["Volume"]),
             }
         if bar["Close"] < ib_low:
             entry = bar["Close"]
@@ -116,6 +127,8 @@ def detect_ib_breakout_for_day(day_df: pd.DataFrame, day) -> dict | None:
                 "entry": round(entry, 2),
                 "stop": round(stop, 2),
                 "target": round(entry - TARGET_R_MULTIPLE * risk, 2),
+                "ib_avg_volume": round(float(ib_avg_volume), 2),
+                "breakout_volume": float(bar["Volume"]),
             }
 
     return None  # price stayed inside the IB range through noon -- no signal today
@@ -178,7 +191,10 @@ def generate_signals(df: pd.DataFrame, validation_status: str = "research") -> l
             target=s["target"],
             risk_multiple=_risk_multiple(s["entry"], s["stop"], s["target"]),
             validation_status=validation_status,
-            market_context={"ib_high": s["ib_high"], "ib_low": s["ib_low"], "date": str(s["date"])},
+            market_context={
+                "ib_high": s["ib_high"], "ib_low": s["ib_low"], "date": str(s["date"]),
+                "ib_avg_volume": s["ib_avg_volume"], "breakout_volume": s["breakout_volume"],
+            },
         ))
     return out
 
