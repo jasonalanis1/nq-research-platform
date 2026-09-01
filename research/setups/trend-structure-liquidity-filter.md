@@ -170,32 +170,37 @@ by the time anyone reads the result.
 
 ## Status
 
-Frozen definition and detection/classification code
-(`src/trend_structure.py`, 11 passing tests in
-`tests/test_trend_structure.py`) are done. A temporary driver script
-(`src/_run_liquidity_filter_discovery_backtest.py`) that runs this
-filter against Level Sweep Reversal's close_min_distance and
-full_bar_range variants on the Discovery slice is written and had its
-mechanics verified end-to-end against synthetic data (signal generation
--> classification -> backtest -> score_results.py -> confidence_analysis.py
-all ran cleanly; that synthetic run was deleted immediately after, it is
-NOT a real result and was never logged anywhere).
+**Tested, 2026-09-01, against real Discovery-slice data.** Once a
+connected folder with the real data (`data/NQ_1min_databento_2026-08-20.csv`)
+was found, `src/_run_liquidity_filter_discovery_backtest.py` ran for
+real (its fast day-scan reimplementation was verified byte-identical to
+detect_level_sweep.py's own unmodified `scan_all_days()` on a 200-day
+check slice first). Results, logged as `hyp-000007`/`hyp-000008` in the
+ledger and written up in full in
+`research/experiments/exp-026-level-sweep-close-min-distance-liquidity-filter.md`
+and `research/experiments/exp-027-level-sweep-full-bar-range-liquidity-filter.md`:
 
-**Blocked, 2026-09-01: no real price data was reachable to actually run
-this.** The real Databento 1-minute NQ file this project depends on
-(`data/NQ_1min_databento_*.csv`, gitignored, not in git) is not present
-in either of Jason's currently-connected local folders, and no
-Databento API key (env var or `.databento_key` file) is available on
-this machine either, so Greg's data-fetch script can't pull a fresh
-copy. **No hypothesis was logged to the ledger and no experiment file
-was created** -- there is no real result yet, and this project's rules
-are explicit that nothing gets logged without an actually-computed
-number. Next step: Jason needs to either copy the existing
-`data/NQ_1min_databento_*.csv` file into this connected folder, or make
-the Databento key available here, and then
-`python3 src/_run_liquidity_filter_discovery_backtest.py` is a single
-command away from producing the real result. See
-`research/experiments/_index.md` for whether that's happened yet.
+- **close_min_distance, protected sweeps:** +0.118R over 44 trades, NOT
+  statistically significant (90% CI -6.78R to +17.16R). Directionally
+  consistent with the filter's thesis (vs. -0.055R for interior sweeps)
+  but far too small a sample to mean anything on its own.
+- **full_bar_range, protected sweeps:** -0.076R over 59 trades, NOT
+  statistically significant (90% CI -19.33R to +11.41R), and barely
+  different from interior sweeps (-0.084R) -- no evidence the filter
+  separates anything for this variant.
+
+**Overall read: inconsistent evidence, does not clear the promotion
+bar for either variant.** One variant shows a weak hint in the
+hypothesized direction, the other shows nothing at all -- that
+inconsistency between two variants already being compared side by side
+argues against a real, filter-driven effect, on top of both results
+individually being non-significant and well under the 150-trade
+minimum. This is now the sixth distinct hypothesis tested against the
+Level Sweep Reversal base thesis without `purgedcv`'s multiple-testing
+correction available to check whether that search history alone could
+explain a result like this. `docs/BACKLOG.md`'s liquidity-filter idea
+can be considered tested, in the same sense exp-025 closed out the FVG
+entry trigger idea.
 
 ## History
 
