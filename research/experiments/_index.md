@@ -47,6 +47,7 @@ alone does NOT mean `Yes`.
 | exp-027 | Level Sweep Reversal (Trend-Structure Liquidity Filter) | full_bar_range, protected-level sweeps only | 2026-09-01 | 59 | 44.1% (31.4%-56.7%) | -0.076R (net of costs) | 0.88 | -12.15R | **No** (90% bootstrap CI on total R: -19.33R to +11.41R, spans zero) | kill — negative point estimate, no separation from the interior-sweep comparison bucket; Jason directed this line closed 2026-09-01, see notes |
 | exp-028 | Initial Balance Breakout (Continuation) | ib_minutes=30, breakout window 9:00am-noon ET | 2026-09-01 | 1654 | 42.6% (40.2%-44.9%) | -0.077R (net of costs) | 0.80 | -130.53R | **Yes** (90% bootstrap CI on total R: -202.05R to -48.21R, entirely below zero) | kill — first continuation-thesis test, largest sample of any setup tested so far, statistically decisive; reinforces exp-013's earlier ORB placeholder finding, see notes |
 | exp-033 | Fade the Gap | target=prior_close, 1:1 R:R, noon ET exit window | 2026-09-02 | 1061 | 52.1% (49.1%-55.1%) | -0.079R (net of costs) | 0.86 | -102.84R | **Yes** (90% bootstrap CI on total R: -138.82R to -28.75R, entirely below zero) | kill — direct mechanical test of exp-032's gap-fill/correlation finding; win rate above 50% but not enough to overcome costs under this setup's forced 1:1 R:R, statistically decisive rejection, see notes |
+| exp-034 | VWAP Mean Reversion | 2σ entry band, stop=entry±1σ, target=VWAP, open-ended resolution | 2026-09-02 | 2066 | 28.7% (26.7%-30.6%) | -0.628R (net of costs) | 0.47 | -1297.78R | **Yes** (90% bootstrap CI on total R: -1450.38R to -1134.35R, entirely below zero) | kill — first setup sourced from external day-trading-technique research rather than this project's own findings; largest sample and most decisive rejection of any setup tested here, see notes |
 
 **Verdict key:** `keep` (worth pursuing further) · `kill` (edge not
 supported, drop it) · `retest` (inconclusive as tested — data, sample
@@ -121,3 +122,22 @@ See exp-033's write-up for the full interpretation, including a real
 data edge case (Sunday's continuous-trading bars) found and fixed during
 this test, and confirmation that exp-032's own results are unaffected by
 it.
+
+**exp-034** (a full table row above) is the first setup this project has
+tested that came from outside its own findings: per Jason's explicit
+request for research into widely-used day-trading techniques, VWAP Mean
+Reversion (fading a close beyond the session VWAP's 2σ band back toward
+VWAP) was chosen as the one genuinely new, institutionally-grounded idea
+surfaced by that research (see `research/setups/vwap-mean-reversion.md`'s
+"Where this came from" for the full filtering pass against everything
+already tested). Result: REJECTED, decisively — the largest sample
+(2066 resolved trades) and most statistically decisive rejection in the
+project's history (90% CI -1450.38R to -1134.35R, entirely below zero,
+0% of bootstrap sims profitable). An important honest finding surfaced
+along the way: the setup's open-ended intraday watch window means a
+2σ excursion off session VWAP happens on nearly every trading day
+(2081 of 2101), not the rare, selective event the source material's
+framing implied. Two real implementation bugs were found and fixed
+during testing (a stop that could land on the wrong side of entry, and
+a small number of zero-risk signals after rounding); both are covered
+by new regression tests and documented in the write-up.
