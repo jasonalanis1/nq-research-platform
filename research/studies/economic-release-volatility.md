@@ -185,10 +185,17 @@ environment -- flagged consistently, as on every experiment to date.
 
 ## Status
 
-**Frozen specification. Not yet tested.** Drafted 2026-09-02. No code
-has been written. Awaiting Jason's explicit sign-off on this exact
-specification before implementation begins -- the same gate already
-used for every prior study.
+**Tested. Primary test result: POSITIVE** -- the first non-null result
+in this project's history. Mean |return| difference (30-min horizon,
+CPI+NFP pooled vs normal) = +11.333 pts, 90% CI [+8.103, +14.939],
+n_release=157, n_normal=1558. Survives both robustness checks and both
+descriptive sub-group splits. See `research/experiments/exp-039-scheduled-macro-release-volatility.md`
+for full results. Gate conditions 1-4 (statistically credible,
+economically meaningful, plausible mechanism, not an artifact) are all
+satisfied; condition 5 (a simple mechanical rule specifiable without
+fitting to the result) is the one flagged in advance as unresolved --
+this is a magnitude finding, not a directional one. No ledger entry
+yet.
 
 ## History
 
@@ -205,3 +212,11 @@ used for every prior study.
   scoped to CPI/NFP per that decision, framed around magnitude rather
   than direction for the reasons in "What this is NOT" above.
   Presented to Jason for sign-off before any implementation.
+
+- 2026-09-02 (same day): Implemented and run against real Discovery
+  data. Primary test POSITIVE -- the first non-null result across all
+  fourteen hypotheses tested in this project. Full results in
+  `research/experiments/exp-039-scheduled-macro-release-volatility.md`.
+  Per the mandatory Advisor-consultation rule, both Claude's and the
+  Advisor's independent reads on what this means and what to do next
+  are being presented to Jason before any direction is proposed.

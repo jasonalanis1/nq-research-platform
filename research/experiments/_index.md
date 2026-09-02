@@ -235,3 +235,33 @@ before the result was trusted. No mechanical rule proposed, no ledger
 entry. See `research/studies/nq-daily-trend-following.md` and
 `research/experiments/exp-038-nq-daily-trend-following.md` for the
 full specification, reasoning, and results.
+
+## exp-039: Scheduled Macro-Release Volatility (CPI/NFP)
+
+Fourteenth hypothesis, fifth mechanism family (scheduled information),
+following the economic-calendar feasibility check and a Jason decision
+(against the Advisor's specific recommendation) to scope this to
+CPI/NFP only, deferring FOMC. Tests whether NQ's 30-minute post-8:30
+**absolute** (magnitude, not signed) return is larger on CPI/NFP
+release days than on normal days -- the announcement-volatility-
+clustering effect, not a directional-edge claim.
+
+**Result: POSITIVE -- the first non-null result in this project's
+history.** Mean |return| difference +11.333 pts, 90% bootstrap CI
+[+8.103, +14.939] -- entirely above zero and well past the 1.5-point
+economic threshold. Survives dropping the single largest-|return| day
+and a first-half/second-half split (both halves independently
+significant, though the effect roughly doubles in size in the second
+half). Both CPI-only and NFP-only sub-groups independently clear the
+same bars. All four secondary horizons (60/90/120/180 min) also agree
+in direction, reported descriptively only. Gate conditions 1-4
+(statistical credibility, economic meaningfulness, plausible
+mechanism, not an artifact) are all satisfied for the first time in
+this project; condition 5 (a simple mechanical rule specifiable
+without fitting to the result) was flagged in the frozen spec as
+unlikely to resolve the usual way, since this is a magnitude finding,
+not a directional one -- a volatility-capture structure, not a
+long/short signal, would be the natural next design question. No
+ledger entry yet. See `research/studies/economic-release-volatility.md`
+and `research/experiments/exp-039-scheduled-macro-release-volatility.md`
+for the full specification and results.
