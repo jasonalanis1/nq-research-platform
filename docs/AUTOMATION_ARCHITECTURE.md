@@ -86,3 +86,24 @@ Phase 10, not before.
 A strategy becomes eligible for Phase 6+ only by clearing Phases 1-5 on their
 existing merits, never because of a high win rate, a trader's claim, a short hot
 streak, or recency. This matches the existing promotion bar in `ROADMAP.md` exactly.
+
+
+## Known gap: Phase 8's "a broker's paper API" was never verified against a real broker
+
+Added 2026-09-02, per a Path-to-Profitability Advisor review (see
+docs/PATH_TO_PROFITABILITY_ADVISOR.md) that found "Robinhood" -- the
+broker Jason has discussed using -- appeared nowhere in this document,
+and Phase 8's "a broker's paper API" was never checked against any
+specific broker's actual capabilities. A factual check
+(docs/EXECUTION_BROKER_FEASIBILITY.md, full sources there) found:
+Robinhood does support real NQ futures trading, but only for a human
+tapping the mobile app -- its programmatic "Agentic Trading" API
+(equities, options, crypto as of 2026-07) does not currently support
+futures. Phases 8 and 10 cannot be built against Robinhood for NQ
+specifically as things stand. Tradovate and NinjaTrader are the
+established alternative with real futures APIs and existing
+TradingView-webhook bridge tooling -- Phase 6's TradingView design
+already fits that path unchanged. No phase, threshold, or promotion
+criterion above has been changed by this finding -- it's recorded here
+so Phase 8 isn't built later against a broker that can't do it, not as
+a decision about which broker to actually use.
