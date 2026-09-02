@@ -1,66 +1,46 @@
 # ES Cross-Market Feasibility Report
 
-**Status: feasibility study only. No experiment created, no ledger
-entry, no ES data purchased or downloaded, no ES-vs-NQ test run,
-Validation/Holdout untouched.** Produced per Jason's explicit
-instruction following the Phase 2 review's acceptance and the closure
-of Family C (volatility regime, exp-036, null).
+**Status: feasibility CONFIRMED (live quote obtained 2026-09-02). No
+experiment created, no ledger entry, no ES data purchased or
+downloaded, no ES-vs-NQ test run, Validation/Holdout untouched.**
+Produced per Jason's explicit instruction following the Phase 2
+review's acceptance and the closure of Family C (volatility regime,
+exp-036, null).
 
 ## 1. Data cost
 
-**I could not obtain a live, authoritative cost quote.** Databento's
-API host (`hist.databento.com`) is blocked by network egress policy in
-both of my execution environments this session -- the sandboxed shell
-bridged to your machine and the cloud container both returned a 403
-from the proxy on `metadata.get_cost()` and `metadata.get_billable_size()`.
-This is an infrastructure limitation of my own access, not a finding
-about Databento or your account. The `databento` Python package
-installs and imports fine; the API key file (`.databento_key`) is
-present and readable; only the outbound network call itself is blocked.
+**CONFIRMED with a live quote, run by Jason directly from his own Mac
+(2026-09-02), after this session's environments were both blocked from
+reaching Databento's API by network egress policy.** Exact quote:
 
-**What I can give you instead: a grounded estimate from your own
-prior, already-paid quote**, not a guess. `src/data_fetch_databento.py`'s
-own history records that on 2026-08-20 you were quoted and paid $14.42
-for the full NQ history pull, 2015-01-01 through that day (~11.64
-years), at `ohlcv-1m` / `GLBX.MDP3` / `NQ.c.0`. That's ~$1.24/year.
-Scaled to exactly the Discovery-period date range (2015-01-01 ->
-2021-10-03, ~6.76 years), the NQ-equivalent cost over that window would
-have been roughly **$8.40**. ES is a comparably liquid CME product at
-the same `ohlcv-1m` schema (one row per traded minute, not per tick, so
-bar count -- and therefore likely cost, since Databento's historical
-pricing scales with data volume -- should be the same order of
-magnitude as NQ's, not tick-volume-driven). My estimate for ES over the
-same Discovery-period range: **roughly $7-12**, not a quote.
+- Dataset: `GLBX.MDP3`
+- Symbol: `ES.c.0` (continuous front-month, calendar roll -- same
+  convention as `NQ.c.0`)
+- Schema: `ohlcv-1m`
+- Date range: `2015-01-01` -> `2021-10-04` (end exclusive, covering the
+  Discovery slice through 2021-10-03 inclusive -- identical range used
+  for NQ)
+- **Cost: $8.351282700896 USD (~$8.35)**
+- This was a free metadata check (`metadata.get_cost()`) -- nothing was
+  purchased or downloaded.
 
-**The authoritative number is one command away, but has to be run from
-somewhere that can reach Databento.** This exact call, run from your
-own Mac Terminal (where the original NQ pulls succeeded) or anywhere
-with working egress to `hist.databento.com`, returns the real number in
-under a second and purchases nothing:
+The call succeeded without any entitlement/permissions error, which
+answers the access question too: **the existing account already has
+whatever's needed to pull ES from `GLBX.MDP3` -- no additional
+subscription required.**
 
-```python
-import sys; sys.path.insert(0, "src")
-from data_fetch_databento import get_api_key, DATASET, SCHEMA
-import databento as db
+For reference, this session's own estimate (Section 1's earlier
+extrapolation from the project's prior NQ cost precedent) was ~$8.40 --
+within 6 cents of the real number. Noted not to pat ourselves on the
+back, but because it's a useful data point: the "scale from a known
+precedent" method held up well here, which is worth remembering if a
+live quote is ever unavailable again for some other instrument.
 
-client = db.Historical(key=get_api_key())
-cost = client.metadata.get_cost(
-    dataset=DATASET, symbols=["ES.c.0"], schema=SCHEMA,
-    stype_in="continuous", start="2015-01-01", end="2021-10-04",
-)
-print("ES Discovery-period cost estimate (USD):", cost)
-```
-
-**Current account balance: unknown, not stale-assumed.** The only
-balance figure in this project's history is "~$124" from 2026-08-16 --
-before the $14.42 history-extension purchase and anything since, and
-now over two weeks old. I'm not treating that as current. Databento's
-Python client doesn't appear to expose a balance/account endpoint (the
-prior cost checks were always compared against a balance you read off
-the web portal yourself, not fetched programmatically) -- so "current
-account/balance information... if the existing tooling exposes it" is
-answered honestly as: it doesn't, as far as I can find. You'd need to
-check the portal directly.
+**Current account balance: still unknown.** Databento's Python client
+does not expose a balance/account endpoint -- confirmed again by this
+call, which returned only the cost figure. If you want a current
+balance, that's a separate check against the web portal, not something
+this call (or any Databento API call) surfaces.
 
 ## 2. Data availability
 
@@ -290,20 +270,19 @@ for all three candidate mechanisms. None is a level-interaction bet;
 all condition on or compare against an external instrument rather than
 NQ's own price levels.
 
-Given A is not yet confirmed (only estimated), I'm not calling this
-fully cleared yet -- one real number is still missing.
+All four questions are now answered with a real number, not an
+estimate: A is confirmed at ~$8.35 (trivial), B/C/D stand as assessed
+above.
 
-STATUS: **FEASIBLE, PENDING ONE CONFIRMATION** (the live cost/access
-check in Section 1 -- everything else checked out or is a known,
-name-able design decision, not an open unknown).
+STATUS: **FEASIBLE** (all four framing questions cleared -- cost
+confirmed live, access confirmed by the same successful call, technical
+integration is a small well-scoped change, and the research design and
+candidate mechanisms are scientifically defensible as specified).
 
-NEXT ACTION: Run the `metadata.get_cost()` call in Section 1 from
-somewhere with working network access to `hist.databento.com` (your own
-Mac Terminal is the known-working path, per the original NQ pulls) and
-report back the real number and whether it returned successfully
-(confirming entitlement) or errored (revealing a gap). No data should
-be purchased or downloaded yet -- that call only prices it. Once that
-number is in hand, the next decision after this report is choosing and
-freezing Mechanism 3 (or overriding that choice) as the one hypothesis
-to specify in full, the same way volatility regime was frozen before
-any code was written.
+NEXT ACTION: This report's job is done -- it does not choose or freeze
+a hypothesis on its own. The next decision is Jason's: whether to
+proceed to a full frozen specification of Mechanism 3 (ES overnight gap
+as incremental information beyond NQ's own overnight gap, recommended
+in Section 9 above), a different one of the three candidates, or to
+hold here. No hypothesis is frozen and no code beyond this feasibility
+check has been written.
