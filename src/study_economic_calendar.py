@@ -49,12 +49,21 @@ ECONOMIC_THRESHOLD_POINTS = 2 * ROUND_TRIP_COST_POINTS  # frozen Step-2-gate #2,
 
 # Frozen, sourced reference calendar -- compiled from bls.gov's own
 # year-by-year "Schedule of Releases" archive pages
-# (bls.gov/schedule/{year}/home.htm, 2015-2021), cross-validated
-# against each date's published day-of-week. Release time confirmed
-# 8:30 AM ET for both series via bls.gov/schedule/news_release/cpi.htm
-# and .../empsit.htm. See research/studies/economic-release-volatility.md
+# (bls.gov/schedule/{year}/home.htm), cross-validated against each
+# date's published day-of-week. Release time confirmed 8:30 AM ET for
+# both series via bls.gov/schedule/news_release/cpi.htm and
+# .../empsit.htm. See research/studies/economic-release-volatility.md
 # item 1 for the full provenance. Verified zero same-day overlap
 # between the two lists (asserted below, not just claimed).
+#
+# Compiled in two phases: the original 2015-2021 dates (Discovery
+# window) drafted alongside the frozen spec, and a 2021-2023 extension
+# (Validation window) added 2026-09-02 when the first Validation-slice
+# out-of-sample check on exp-039 found zero release days classified --
+# the original list simply hadn't been extended past Discovery's end.
+# Same sourcing and verification discipline applied to both phases;
+# see docs/ROADMAP.md's 2026-09-02 Validation-check entry for the full
+# account of why the extension was needed.
 CPI_DATES = [
     date(2015, 1, 16), date(2015, 2, 26), date(2015, 3, 24), date(2015, 4, 17),
     date(2015, 5, 22), date(2015, 6, 18), date(2015, 7, 17), date(2015, 8, 19),
@@ -77,6 +86,19 @@ CPI_DATES = [
     date(2021, 1, 13), date(2021, 2, 10), date(2021, 3, 10), date(2021, 4, 13),
     date(2021, 5, 12), date(2021, 6, 10), date(2021, 7, 13), date(2021, 8, 11),
     date(2021, 9, 14),
+
+    # Extension for the Validation slice (2021-10-04 -> 2024-01-03),
+    # compiled 2026-09-02 -- same bls.gov sourcing and verification
+    # discipline as the dates above.
+    date(2021, 10, 13), date(2021, 11, 10), date(2021, 12, 10),
+    date(2022, 1, 12), date(2022, 2, 10), date(2022, 3, 10),
+    date(2022, 4, 12), date(2022, 5, 11), date(2022, 6, 10),
+    date(2022, 7, 13), date(2022, 8, 10), date(2022, 9, 13),
+    date(2022, 10, 13), date(2022, 11, 10), date(2022, 12, 13),
+    date(2023, 1, 12), date(2023, 2, 14), date(2023, 3, 14),
+    date(2023, 4, 12), date(2023, 5, 10), date(2023, 6, 13),
+    date(2023, 7, 12), date(2023, 8, 10), date(2023, 9, 13),
+    date(2023, 10, 12), date(2023, 11, 14), date(2023, 12, 12),
 ]
 
 NFP_DATES = [
@@ -101,10 +123,22 @@ NFP_DATES = [
     date(2021, 1, 8), date(2021, 2, 5), date(2021, 3, 5), date(2021, 4, 2),
     date(2021, 5, 7), date(2021, 6, 4), date(2021, 7, 2), date(2021, 8, 6),
     date(2021, 9, 3),
+
+    # Extension for the Validation slice, same provenance as the CPI
+    # extension above.
+    date(2021, 10, 8), date(2021, 11, 5), date(2021, 12, 3),
+    date(2022, 1, 7), date(2022, 2, 4), date(2022, 3, 4),
+    date(2022, 4, 1), date(2022, 5, 6), date(2022, 6, 3),
+    date(2022, 7, 8), date(2022, 8, 5), date(2022, 9, 2),
+    date(2022, 10, 7), date(2022, 11, 4), date(2022, 12, 2),
+    date(2023, 1, 6), date(2023, 2, 3), date(2023, 3, 10),
+    date(2023, 4, 7), date(2023, 5, 5), date(2023, 6, 2),
+    date(2023, 7, 7), date(2023, 8, 4), date(2023, 9, 1),
+    date(2023, 10, 6), date(2023, 11, 3), date(2023, 12, 8),
 ]
 
-assert len(CPI_DATES) == 81, f"expected 81 CPI dates, got {len(CPI_DATES)}"
-assert len(NFP_DATES) == 81, f"expected 81 NFP dates, got {len(NFP_DATES)}"
+assert len(CPI_DATES) == 108, f"expected 108 CPI dates, got {len(CPI_DATES)}"
+assert len(NFP_DATES) == 108, f"expected 108 NFP dates, got {len(NFP_DATES)}"
 assert set(CPI_DATES).isdisjoint(NFP_DATES), "CPI and NFP dates must not overlap (frozen spec item 1)"
 
 CPI_SET = set(CPI_DATES)

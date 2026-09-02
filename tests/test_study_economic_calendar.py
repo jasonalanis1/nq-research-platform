@@ -41,25 +41,47 @@ def make_bars(day, times_prices, tz="America/New_York"):
 # ---------------------------------------------------------------------------
 
 def test_cpi_dates_count():
-    assert len(CPI_DATES) == 81
+    # 81 original (Discovery, 2015-2021) + 27 extension (Validation,
+    # 2021-2023), added 2026-09-02 when the first out-of-sample check
+    # found the original list didn't cover the Validation window.
+    assert len(CPI_DATES) == 108
 
 
 def test_nfp_dates_count():
-    assert len(NFP_DATES) == 81
+    assert len(NFP_DATES) == 108
 
 
 def test_cpi_nfp_disjoint():
     assert CPI_SET.isdisjoint(NFP_SET)
 
 
-def test_cpi_dates_within_discovery_range():
+def test_cpi_dates_within_discovery_plus_validation_range():
     for d in CPI_DATES:
-        assert date(2015, 1, 1) <= d <= date(2021, 10, 3)
+        assert date(2015, 1, 1) <= d <= date(2024, 1, 3)
 
 
-def test_nfp_dates_within_discovery_range():
+def test_nfp_dates_within_discovery_plus_validation_range():
     for d in NFP_DATES:
-        assert date(2015, 1, 1) <= d <= date(2021, 10, 3)
+        assert date(2015, 1, 1) <= d <= date(2024, 1, 3)
+
+
+def test_cpi_dates_cover_validation_window():
+    # The whole point of the 2026-09-02 extension: at least one CPI date
+    # must fall inside the Validation slice, or the out-of-sample check
+    # silently finds nothing again.
+    validation_cpi = [d for d in CPI_DATES if date(2021, 10, 4) <= d <= date(2024, 1, 3)]
+    assert len(validation_cpi) == 27
+
+
+def test_nfp_dates_cover_validation_window():
+    validation_nfp = [d for d in NFP_DATES if date(2021, 10, 4) <= d <= date(2024, 1, 3)]
+    assert len(validation_nfp) == 27
+
+
+def test_nfp_validation_dates_all_fridays():
+    for d in NFP_DATES:
+        if date(2021, 10, 4) <= d <= date(2024, 1, 3):
+            assert d.weekday() == 4, f"{d} is not a Friday"
 
 
 def test_cpi_dates_sorted_and_unique():

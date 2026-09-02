@@ -194,8 +194,12 @@ for full results. Gate conditions 1-4 (statistically credible,
 economically meaningful, plausible mechanism, not an artifact) are all
 satisfied; condition 5 (a simple mechanical rule specifiable without
 fitting to the result) is the one flagged in advance as unresolved --
-this is a magnitude finding, not a directional one. No ledger entry
-yet.
+this is a magnitude finding, not a directional one. **Replicated
+out-of-sample on the Validation slice (2026-09-02)** -- the first
+result in this project's history to survive an out-of-sample check:
++101.925 pts diff, 90% CI [+77.676, +128.011], and the release/normal
+volatility ratio actually grew (2.44x Discovery -> 5.54x Validation).
+No ledger entry yet.
 
 ## History
 
@@ -220,3 +224,14 @@ yet.
   Per the mandatory Advisor-consultation rule, both Claude's and the
   Advisor's independent reads on what this means and what to do next
   are being presented to Jason before any direction is proposed.
+
+- 2026-09-02 (same day): Out-of-sample check run on the Validation
+  slice, per Jason's approval (a one-time, disclosed exception to
+  Validation normally being reserved for formally-promoted candidates
+  -- see docs/ROADMAP.md). REPLICATED: +101.925 pts diff, 90% CI
+  [+77.676, +128.011], both robustness checks and both CPI/NFP
+  sub-groups confirming. A coverage gap (the frozen calendar didn't
+  extend past Discovery's end) was caught and fixed with a
+  fresh, independently-verified 27+27 date extension before any
+  conclusion was drawn. Full account in
+  `research/experiments/exp-039-scheduled-macro-release-volatility.md`.

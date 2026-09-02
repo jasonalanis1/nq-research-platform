@@ -178,10 +178,97 @@ result changes the shape of the project's overall finding: fourteen
 hypotheses have now been tested across five structurally distinct
 mechanism families, and for the first time one of them is not a null.
 
+## Out-of-sample Validation check (2026-09-02, same day)
+
+Because this is the first result this project has ever considered
+acting on, and because 1 hit out of 14 hypotheses tested at a 90% CI
+is within the ~1.4 false positives expected by chance, both Claude and
+the Path-to-Profitability Advisor recommended -- and Jason approved --
+an out-of-sample check on the Validation slice (2021-10-04 to
+2024-01-03) before any further Discovery-only testing or structure
+design. **This is the first time any result in this project has ever
+touched Validation data.** Per `docs/RESEARCH_INTEGRITY_PROTOCOL.md`,
+Validation is normally reserved for a candidate already formally
+promoted out of Discovery (a trade-count-based bar this
+characterization study never went through, since it isn't a trading
+setup); Jason explicitly approved this as a one-time, disclosed
+exception given the unusual circumstances. See `docs/ROADMAP.md`'s
+2026-09-02 entries for the full record.
+
+**Method: zero new fitting.** `src/validate_exp039_economic_calendar.py`
+reuses `study_economic_calendar.py`'s `CPI_DATES`/`NFP_DATES`,
+`classify_day()`, `scan_all_days()`, and `analyze_horizon()` completely
+unmodified, applied to `data_split.get_validation_data()` instead of
+`get_discovery_data()`. No parameter, threshold, or horizon was
+touched.
+
+**A coverage gap was caught before any conclusion was drawn.** The
+first run classified zero release days in the Validation window --
+not a null result, but a bug: the original 81+81 CPI/NFP dates were
+compiled only through Discovery's end (September 2021) and had never
+been extended into the Validation period. This was flagged
+immediately rather than reported as "did not replicate." A fresh,
+independently-verified 27-date CPI extension and 27-date NFP extension
+covering 2021-10-04 through 2024-01-03 were compiled from the same
+bls.gov primary-source archive pages, with the same day-of-week /
+overlap / release-time verification discipline as the original 81+81
+(all 27 NFP dates confirmed Fridays, all 27 CPI dates confirmed
+weekdays, zero overlap, 8:30 AM ET confirmed with no exceptions found
+across the full 2015-2024 range now covered). Appending these dates to
+`CPI_DATES`/`NFP_DATES` changed nothing about the already-committed
+Discovery result above (re-run and confirmed byte-for-byte identical
+after the extension, since none of the new dates fall inside
+Discovery's window) -- confirmed, not assumed.
+
+### Result: REPLICATED
+
+| | Discovery (n=1715) | Validation (n=576) |
+|---|---|---|
+| n release days | 157 | 54 |
+| n normal days | 1,558 | 522 |
+| mean \|return\| release | 19.201 pts | 124.398 pts |
+| mean \|return\| normal | 7.868 pts | 22.473 pts |
+| mean diff | +11.333 pts | +101.925 pts |
+| 90% CI | [+8.103, +14.939] | [+77.676, +128.011] |
+| Release/normal ratio | 2.44x | 5.54x |
+
+The Validation-slice CI is entirely above zero and the effect clears
+the economic threshold by a wide margin -- the primary, pre-committed
+comparison **replicates** on data the effect was never found on.
+
+**Honest context on the much larger raw point-differences in
+Validation, disclosed rather than left unexplained:** the Validation
+window (Oct 2021 - Jan 2024) includes the 2022 rate-hike cycle, a
+period of substantially higher NQ volatility overall -- normal-day
+mean \|return\| is itself ~2.9x higher in Validation than in Discovery
+(22.47 vs 7.87 pts), so the raw point-difference is not directly
+comparable across the two periods. The **relative** effect (release-day
+volatility as a multiple of normal-day volatility) is a fairer
+cross-regime comparison, and it did not shrink -- it grew, from 2.44x
+in Discovery to 5.54x in Validation. This is a plausible, coherent
+story (scheduled releases plausibly carry more information content
+during a period of unusual macro uncertainty) rather than a
+result-fitting explanation invented after the fact -- the ratio
+comparison was checked as an obvious next question the moment the
+raw-point-difference gap was noticed, not selected from several tried.
+
+Both robustness checks and both CPI-only/NFP-only sub-group splits
+replicate as well: dropping the single largest-|return| day barely
+moves the estimate (CI [+71.772, +118.500]); the first-half/second-half
+split shows the effect present and significant in both halves (though,
+consistent with the pattern above, larger in the first half, which
+sits closer to the most volatile part of 2022); CPI-only (+142.120 pts,
+CI [+101.205, +185.875]) and NFP-only (+61.731 pts, CI [+41.209,
++82.195]) both independently clear the bar. All four secondary
+horizons remain significant and same-direction. Full results:
+`data/validate_exp039_economic_calendar_results.json` (gitignored,
+regenerable via `python3 src/validate_exp039_economic_calendar.py`).
+
 ## Next step
 
-Per the project's now-mandatory Advisor-consultation rule
-(`docs/PATH_TO_PROFITABILITY_ADVISOR.md`, guardrail 3), both Claude's
-own read of what this result means and the Advisor's independent read
-are being obtained and presented to Jason side by side, before any
-question about next steps is asked or any direction is proposed.
+This is the first result in this project's history to survive an
+out-of-sample check. Per the project's mandatory Advisor-consultation
+rule (`docs/PATH_TO_PROFITABILITY_ADVISOR.md`, guardrail 3), both
+Claude's own read of what this replication means and the Advisor's
+independent, fresh read are being obtained and presented to Jason side
+by side, before any direction is proposed.
