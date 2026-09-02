@@ -2,6 +2,7 @@
 # scripts, so we don't clutter the repo's history with generated files.
 # Only the CODE that produces them needs to be version-controlled.
 data/*.csv
+data/*.json
 data/_databento_yearly_chunks/
 charts/*.png
 dashboard.html

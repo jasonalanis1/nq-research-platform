@@ -141,3 +141,23 @@ framing implied. Two real implementation bugs were found and fixed
 during testing (a stop that could land on the wrong side of entry, and
 a small number of zero-risk signals after rounding); both are covered
 by new regression tests and documented in the write-up.
+
+**exp-035** is a characterization study, not a strategy row: does
+proximity to NQ's public quarterly futures expiration date (3rd Friday
+of Mar/Jun/Sep/Dec) explain anything about Initial Balance Breakout's
+trades, or about the overnight gap's size -- a direct test of
+`docs/ROADMAP.md`'s longstanding, previously untested claim that a
+continuous futures contract series shows "small price jumps at
+rollover dates." Result: clean null on both checks. IB Breakout's
+Expiration Week (n=131, -0.086R) and Normal Week (n=1578, -0.067R)
+trades are statistically indistinguishable; the overnight gap runs
+somewhat larger near expiration (37.03 vs 32.84 points) but the 90%
+bootstrap CI on that difference ([-4.12, +13.70] pts) spans zero. No
+mechanical rule triggered, no ledger entry (same characterization-study
+convention as exp-029/030/031). Honestly flagged limitation: the public
+expiration date is a proxy for this data's actual, unknown roll
+date(s), so this null cannot rule out a splice effect on a different
+date -- only around this specific proxy. See
+`research/studies/futures-expiration-effects.md` and
+`research/experiments/exp-035-futures-expiration-effects.md` for the
+full reasoning and results.
