@@ -46,6 +46,7 @@ alone does NOT mean `Yes`.
 | exp-026 | Level Sweep Reversal (Trend-Structure Liquidity Filter) | close_min_distance, protected-level sweeps only | 2026-09-01 | 44 | 50.0% (35.2%-64.8%) | +0.118R (net of costs) | 1.22 | -5.41R | **No** (90% bootstrap CI on total R: -6.78R to +17.16R, spans zero) | kill — FIRST test of the liquidity filter; positive but far below the 150-trade promotion bar, not significant; Jason directed this line closed 2026-09-01, see notes |
 | exp-027 | Level Sweep Reversal (Trend-Structure Liquidity Filter) | full_bar_range, protected-level sweeps only | 2026-09-01 | 59 | 44.1% (31.4%-56.7%) | -0.076R (net of costs) | 0.88 | -12.15R | **No** (90% bootstrap CI on total R: -19.33R to +11.41R, spans zero) | kill — negative point estimate, no separation from the interior-sweep comparison bucket; Jason directed this line closed 2026-09-01, see notes |
 | exp-028 | Initial Balance Breakout (Continuation) | ib_minutes=30, breakout window 9:00am-noon ET | 2026-09-01 | 1654 | 42.6% (40.2%-44.9%) | -0.077R (net of costs) | 0.80 | -130.53R | **Yes** (90% bootstrap CI on total R: -202.05R to -48.21R, entirely below zero) | kill — first continuation-thesis test, largest sample of any setup tested so far, statistically decisive; reinforces exp-013's earlier ORB placeholder finding, see notes |
+| exp-033 | Fade the Gap | target=prior_close, 1:1 R:R, noon ET exit window | 2026-09-02 | 1061 | 52.1% (49.1%-55.1%) | -0.079R (net of costs) | 0.86 | -102.84R | **Yes** (90% bootstrap CI on total R: -138.82R to -28.75R, entirely below zero) | kill — direct mechanical test of exp-032's gap-fill/correlation finding; win rate above 50% but not enough to overcome costs under this setup's forced 1:1 R:R, statistically decisive rejection, see notes |
 
 **Verdict key:** `keep` (worth pursuing further) · `kill` (edge not
 supported, drop it) · `retest` (inconclusive as tested — data, sample
@@ -106,3 +107,17 @@ Step 3 rule — see exp-033 for the resulting mechanical-rule test, and
 read exp-032's own write-up for why this is being treated cautiously
 (multiple-testing exposure, and same-slice circularity) rather than as
 a confirmed edge.
+
+**exp-033** (a full table row above) is that mechanical-rule test:
+"fade the gap" at 1:1 R:R with a noon exit, entry=today's 8:30 open,
+target=prior_close literally. REJECTED, statistically decisively (90%
+CI -138.82R to -28.75R, entirely below zero) despite a win rate above
+50% — the forced 1:1 structure needed comfortably more than a bare
+majority to clear realistic costs. Does not contradict exp-032's
+underlying characterization finding, which remains a real, statistically
+supported result on its own terms; it shows this specific honest
+translation of that finding into a costed trade doesn't survive intact.
+See exp-033's write-up for the full interpretation, including a real
+data edge case (Sunday's continuous-trading bars) found and fixed during
+this test, and confirmation that exp-032's own results are unaffected by
+it.
