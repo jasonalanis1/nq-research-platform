@@ -443,6 +443,18 @@ research-only data: (1) expectancy > 0 after realistic cost assumptions,
 expectancy that stays entirely above zero. This is the formal bar going
 forward — no setup gets promoted to a holdout check without clearing it.
 
+**One-time, explicitly scoped exception (2026-09-02):** this bar
+assumes a discrete, frequently-repeating trade shape. For the NQ Daily
+Time-Series Momentum study, whose signal flips only a handful of times
+across the whole Discovery window by construction, Jason approved
+adapting the mechanics (a bootstrap CI on the daily P&L series, and an
+economic threshold measured against this strategy's own realized cost
+drag, in place of trade-counting) while keeping every underlying
+principle intact. See "Why the promotion bar is adapted for this
+study" in `research/studies/nq-daily-trend-following.md` for the full
+reasoning. This does not change the 150-trades bar above for any
+other setup, past or future.
+
 ## Tony's Pine Script verified working (2026-08-18/19)
 
 Both pine/level_sweep_close_min_distance.pine and pine/level_sweep_full_bar_range.pine
