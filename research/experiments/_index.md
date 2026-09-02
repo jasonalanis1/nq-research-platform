@@ -161,3 +161,29 @@ date -- only around this specific proxy. See
 `research/studies/futures-expiration-effects.md` and
 `research/experiments/exp-035-futures-expiration-effects.md` for the
 full reasoning and results.
+**exp-036** is a characterization study, not a strategy row: does
+realized-volatility regime itself (high vs. low tercile, 20-trading-day
+causal trailing lookback, expanding percentile-rank classification)
+carry information about the post-8:30 directional return, independent
+of any specific price level -- the first hypothesis this project has
+tested whose mechanism isn't level-interaction. Went through the most
+deliberate freeze process in the project's history: a formal Phase 2
+Research Direction Report, then a Frozen Study Specification reviewed
+line-by-line by Jason before any code was written, with one approved
+change (an originally-proposed minimum prior-history floor was removed
+as an unjustified free parameter). Result: clean null on the primary,
+pre-committed test. Mean 30-minute return difference between high- and
+low-vol days was +1.241 points, 90% bootstrap CI [-0.252, +2.862] --
+spans zero -- and below the pre-committed 1.5-point economic threshold
+even before considering the sign. Both robustness checks were reported
+as-is per the frozen spec: dropping the single largest-magnitude day
+barely moved the estimate; a first-half/second-half split showed the
+point estimate was unstable across the sample (further reinforcing the
+null rather than suggesting a sub-period worth chasing). One secondary
+horizon (120 minutes, reported descriptively only per the frozen
+no-fishing rule) happened to show a CI excluding zero -- explicitly not
+treated as a finding, exactly as the spec pre-committed to avoid. No
+mechanical rule proposed, no ledger entry. See
+`research/studies/volatility-regime-post-open-behavior.md` and
+`research/experiments/exp-036-volatility-regime-post-open-behavior.md`
+for the full specification, reasoning, and results.
