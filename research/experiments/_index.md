@@ -265,3 +265,38 @@ long/short signal, would be the natural next design question. No
 ledger entry yet. See `research/studies/economic-release-volatility.md`
 and `research/experiments/exp-039-scheduled-macro-release-volatility.md`
 for the full specification and results.
+
+## exp-040: Scheduled Macro-Release Volatility (FOMC)
+
+Sixteenth hypothesis, second test within the scheduled-information
+family (after exp-039's Validation-confirmed CPI/NFP result). Tests
+whether NQ's 30-minute post-2:00-PM-ET **absolute** return is larger
+on FOMC policy decision days than on normal days. Required one new
+piece of machinery (`compute_forward_return_at()`, a parameterized
+generalization of the existing 8:30-AM-anchored forward-return
+function, since FOMC releases at 2:00 PM ET) and a calendar-overlap
+check the Advisor caught was missing from the first spec draft before
+sign-off: 6 FOMC/CPI same-day overlaps found and excluded from the
+primary classification (47 dates remain), 0 FOMC/NFP overlaps, and 14
+of the 47 primary dates found to also fall in an expiration week
+(disclosed, not excluded, since exp-035 found that variable null on
+its own).
+
+**Result: POSITIVE -- the second non-null result in this project's
+history.** Mean |return| difference +13.759 pts, 90% bootstrap CI
+[+8.263, +19.831] -- entirely above zero, well past the 1.5-point
+economic threshold. Survives dropping the single largest-|return| day
+and a first-half/second-half split (both halves independently
+significant, effect roughly triples in the second half, same pattern
+already seen in exp-039). All four secondary horizons agree in
+direction. Release/normal ratio 2.22x, closely matching exp-039's
+2.44x Discovery ratio -- strengthening the case that the
+announcement-volatility-clustering mechanism is real and general
+across release types, not specific to how CPI/NFP was tested. Gate
+conditions 1-4 satisfied; condition 5 (a directional mechanical rule)
+remains the disclosed limitation. Scoped to Discovery only, matching
+how exp-039 was first tested -- Validation replication is a separate
+future decision, not automatic. No ledger entry. See
+`research/studies/fomc-release-volatility.md` and
+`research/experiments/exp-040-fomc-release-volatility.md` for the full
+specification and results.
