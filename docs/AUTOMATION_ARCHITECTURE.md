@@ -107,3 +107,11 @@ already fits that path unchanged. No phase, threshold, or promotion
 criterion above has been changed by this finding -- it's recorded here
 so Phase 8 isn't built later against a broker that can't do it, not as
 a decision about which broker to actually use.
+
+**Decided 2026-09-02** (both Claude and the Path-to-Profitability
+Advisor agreed independently): Robinhood for Phase 9 (human-approved
+live execution -- a person is clicking it either way); Tradovate or
+NinjaTrader for Phase 8 (automated paper execution) and Phase 10+
+(automated live execution). No further work on this now -- zero
+strategies have cleared the promotion bar and Phases 6-11 aren't being
+built yet, so this is a one-line assumption on record, not a task.
