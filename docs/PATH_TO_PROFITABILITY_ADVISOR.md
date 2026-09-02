@@ -55,11 +55,15 @@ authorization to act. Nothing changes because this advisor said so.
    status narrative -- the same discipline this project already applies to
    distrusting any AI's retained conversational summary over the real
    state on disk (see the 2026-09-02 incident below).
-3. **Invoked at real forks, not every tactical step.** A new hypothesis
-   about to be frozen, a Phase-direction decision, a "should we proceed"
-   moment, a build-vs-buy-data call -- yes. Routine implementation
-   choices, test-writing, formatting -- no. The point is added signal at
-   the moments that matter, not standing overhead on everything.
+3. **Mandatory before every approval-or-direction ask, not left to
+   Claude's judgment (revised 2026-09-02, per Jason's explicit standing
+   instruction -- see History).** Whenever Claude is about to ask Jason
+   to approve something or choose a direction, the Advisor's independent
+   take must be obtained and shown side by side with Claude's own first
+   -- always, not only when Claude judges it a "real fork." Routine
+   implementation choices, test-writing, and formatting that never reach
+   Jason as a decision still don't require it -- the trigger is "about to
+   ask Jason to approve or decide," not every tactical step.
 
 ## What it should weigh in on
 
@@ -109,7 +113,9 @@ a short, structured take: its own recommendation, its reasoning, and an
 explicit note on where it agrees or disagrees with the path already
 proposed -- framed toward moving the project forward, not toward
 maximizing disagreement. Both perspectives get shown to Jason side by
-side; Jason decides.
+side, before Jason is asked to approve or decide anything -- per
+guardrail 3 above, this is now the standing default, not something
+Claude decides to do on a case-by-case basis.
 
 ## How this document changes
 
@@ -156,3 +162,11 @@ its output is inconvenient isn't a rule.
   factor (not just abstract "fastest path" reasoning), and added the
   governance rule above requiring deliberate, documented changes to this
   document itself.
+
+- 2026-09-02 (same day): After exp-038, Jason instructed that the
+  Advisor's take must ALWAYS be pulled and shown alongside Claude's own
+  before Claude asks Jason for approval or direction -- not only when
+  Claude judges the moment to be a "real fork." Guardrail 3 and "How it
+  runs" above were revised accordingly: invocation is now mandatory at
+  every approval-or-direction ask, removing Claude's prior discretion
+  over when to invoke it.
