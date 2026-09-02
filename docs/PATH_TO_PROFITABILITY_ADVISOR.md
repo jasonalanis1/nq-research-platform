@@ -73,13 +73,31 @@ authorization to act. Nothing changes because this advisor said so.
 - **Scope discipline** -- is what's being built right-sized for the
   question actually being asked right now, versus building for a later
   stage prematurely (or under-building and creating rework later)?
-- **Practical, build-the-actual-bot concerns** -- things the
-  research-integrity lens doesn't naturally cover because they aren't
-  statistical questions at all: execution mechanics, order types, latency,
-  the realities of the intended eventual platforms (TradingView alerts,
-  Robinhood execution), risk management once real money and real
-  slippage are involved, operational failure modes. These matter for
-  "does this become a working bot," not just "is this backtest honest."
+- **The execution path -- mandatory on every review, not incidental.**
+  Added 2026-09-02 after the first real run of this role surfaced it
+  organically (see History): every review must explicitly state whether
+  it checked how the thing under discussion would actually turn into a
+  real, placed trade through the project's intended real platforms
+  (TradingView alerts, Robinhood execution) -- not just whether the
+  research behind it is sound. "I didn't check this" is an acceptable
+  answer to report; silently skipping the question is not. This is
+  exactly the "boring but necessary" category of concern that's easy for
+  a research-integrity-focused thread to never get around to, precisely
+  because nothing about it is statistically interesting.
+- **Claude's own real constraints, not abstract speed.** Added
+  2026-09-02, per Jason's explicit instruction. "Fastest path" reasoning
+  that ignores the real, finite time, context, and attention available in
+  an actual working session -- and the real cost of spawning and reading
+  many agent reviews -- isn't actually useful to Jason. A recommendation
+  has to be evaluated against what's realistically sustainable to execute
+  across real sessions with a real person reviewing the output, not
+  against a theoretical unlimited-effort optimum.
+- **Practical, build-the-actual-bot concerns generally** -- order
+  mechanics, latency, risk management once real money and real slippage
+  are involved, operational failure modes -- everything else in this
+  category beyond the execution-path check called out above. These
+  matter for "does this become a working bot," not just "is this
+  backtest honest."
 
 ## How it runs
 
@@ -92,6 +110,18 @@ explicit note on where it agrees or disagrees with the path already
 proposed -- framed toward moving the project forward, not toward
 maximizing disagreement. Both perspectives get shown to Jason side by
 side; Jason decides.
+
+## How this document changes
+
+This document may only be amended through an explicit, deliberate
+decision -- never quietly, and never as a reaction to not liking what a
+review it produced said on a given day. Any change requires: a stated
+reason, Jason's explicit sign-off, and a new dated entry in the History
+section below recording what changed and why. This is the same
+discipline this project already applies to other frozen boundaries
+(data_split.py's DISCOVERY_END_DATE, data_holdout.py's
+HOLDOUT_START_DATE) -- a rule that can be silently redefined the moment
+its output is inconvenient isn't a rule.
 
 ## History
 
@@ -114,3 +144,15 @@ side; Jason decides.
   underscoring guardrail #2 above: an AI's retained account of project
   state, whether Claude's or another product's, is not a substitute for
   reading the real repository.
+- 2026-09-02 (same day): First live run, reviewing whether to freeze
+  the ES cross-market Mechanism 3 hypothesis. The review agreed with the
+  proposed path, but also independently surfaced that the entire repo
+  contains no confirmation Robinhood actually supports programmatic
+  futures order placement -- a real gap in the eventual build that the
+  research-integrity lens had never had reason to check. Jason then
+  amended this document based on that outcome: made the execution-path
+  check mandatory on every future review instead of incidental, added
+  Claude's own real session/time/attention constraints as an explicit
+  factor (not just abstract "fastest path" reasoning), and added the
+  governance rule above requiring deliberate, documented changes to this
+  document itself.
