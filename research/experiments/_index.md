@@ -211,3 +211,27 @@ across the sample. No mechanical rule proposed, no ledger entry. See
 `research/studies/es-overnight-gap-incremental-information.md` and
 `research/experiments/exp-037-es-gap-incremental-information.md` for
 the full specification, reasoning, and results.
+**exp-038** is a characterization-and-promotion study, the first at
+daily resolution in this project's history: after exp-037's null, the
+Path-to-Profitability Advisor recommended testing whether the entire
+project's premise held at a different timeframe before spending on new
+data, using a classic 252-trading-day time-series-momentum signal
+(Moskowitz/Ooi/Pedersen convention) -- long/short NQ based on the sign
+of the trailing ~12-month log return, daily rebalanced, fully causal.
+Required a disclosed, one-time adaptation of the standing 150-trades
+promotion bar (a daily-P&L bootstrap CI and a cost-drag-relative
+economic threshold, since this signal flips only a handful of times by
+construction) -- approved by Jason and logged in
+`docs/ROADMAP.md`'s "Promotion bar" section. Result: clean null -- mean
+daily net P&L +0.772 points across 1,463 days, 90% CI [-4.075, +5.501]
+-- spans zero. 44 flips across the sample (~6.5/year), so not a thin
+1-2-trend bet. Both robustness checks reported as-is: dropping the
+largest-magnitude day barely moved the estimate, and a
+first-half/second-half split showed the sign itself was unstable. A
+real implementation bug (a day-pairing error that dropped two days of
+P&L per single missing reference-close day instead of skipping over
+it) was caught via a sanity check on the usable-sample size and fixed
+before the result was trusted. No mechanical rule proposed, no ledger
+entry. See `research/studies/nq-daily-trend-following.md` and
+`research/experiments/exp-038-nq-daily-trend-following.md` for the
+full specification, reasoning, and results.

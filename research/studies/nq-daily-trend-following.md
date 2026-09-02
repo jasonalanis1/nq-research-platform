@@ -1,13 +1,14 @@
 # NQ Daily Time-Series Momentum (Trend-Following)
 
-**Status: frozen specification, not yet tested** -- drafted 2026-09-02,
+**Status: Tested. Primary test result: NULL.** Frozen 2026-09-02,
 following the pivot recorded in `docs/ROADMAP.md` (2026-09-02, PIVOT
 entry): after twelve straight null hypotheses across three mechanism
 families, the Path-to-Profitability Advisor recommended, and Jason
 approved, testing whether the entire project's premise held at a
 different timeframe before spending on new data types. This is the
 first study in this project's history to test a signal at daily
-resolution rather than intraday.
+resolution rather than intraday -- implemented and run against the
+Discovery slice the same day. See Status section below for the result.
 
 ## Where this came from
 
@@ -236,11 +237,27 @@ experiment to date.
 
 ## Status
 
-**Frozen specification. Not yet tested.** Drafted 2026-09-02. No code
-has been written. Awaiting Jason's explicit sign-off on this exact
-specification, including the adapted promotion-bar mechanics above,
-before implementation begins -- the same gate already used for
-exp-036 and exp-037.
+**Tested. Primary test result: NULL.** Run against the Discovery
+slice on 2026-09-02. Mean daily net P&L was +0.772 points across 1,463
+usable days, 90% bootstrap CI [-4.075, +5.501] -- spans zero.
+Step-2-gate check 1 (statistically credible) failed, so per this
+spec's own rule the study stops there; check 2 (economically
+meaningful under the adapted threshold) technically passed but is
+disclosed as an easy bar to clear at this low a flip count, and does
+not change the outcome since check 1 already failed. Mandatory
+disclosure: 44 position flips across 1,463 days (~6.5/year) -- an
+actively updating signal, not a thin 1-2-trend bet. Both robustness
+checks reported as-is per the frozen spec: dropping the single
+largest-magnitude day barely moved the estimate, and a
+first-half/second-half split showed the sign itself was unstable
+across the sample (positive vs. negative). A real bug in the initial
+implementation (day-pairing that dropped two days of P&L per single
+missing reference-close day, instead of skipping over it) was caught
+via a sanity check on the usable-sample count and fixed before this
+result was trusted -- see
+`research/experiments/exp-038-nq-daily-trend-following.md` for the
+full account. No mechanical rule was proposed or built. No ledger
+entry, consistent with a null result.
 
 ## History
 
@@ -254,3 +271,11 @@ exp-036 and exp-037.
   unchanged, after the tradeoffs were presented explicitly.
 - 2026-09-02 (same day): This Frozen Study Specification drafted.
   Presented to Jason for sign-off before any implementation.
+- 2026-09-02 (same day): Jason approved implementation. Study
+  implemented (`src/study_nq_trend_following.py`), a real day-pairing
+  bug caught via a sanity check and fixed before trusting the result,
+  and run against Discovery data. Primary test came back null (CI
+  spans zero). Both robustness checks reported as-is; neither rescues
+  the primary result. Written up as
+  `research/experiments/exp-038-nq-daily-trend-following.md`. No
+  ledger entry, no mechanical rule proposed.
