@@ -187,3 +187,27 @@ mechanical rule proposed, no ledger entry. See
 `research/studies/volatility-regime-post-open-behavior.md` and
 `research/experiments/exp-036-volatility-regime-post-open-behavior.md`
 for the full specification, reasoning, and results.
+**exp-037** is a characterization study, not a strategy row -- the
+project's first two-instrument analysis: does ES's overnight gap (its
+own 8:30 AM ET open minus its own prior-day 4:00 PM ET reference
+close, computed identically to NQ's) carry information about NQ's
+90-minute post-8:30 forward return, beyond what NQ's own
+already-characterized overnight gap (exp-032) already captures? Came
+out of a strict, Jason-instructed data-feasibility-only study
+(`research/studies/es-cross-market-feasibility.md`) that confirmed a
+live Databento cost quote ($8.351282700896) before any hypothesis was
+chosen, followed by a Frozen Study Specification reviewed before any
+code was written (`research/studies/es-overnight-gap-incremental-information.md`).
+Primary test: a joint OLS regression of NQ's forward return on both
+NQ's and ES's overnight gaps, with the 90% bootstrap CI on ES's
+coefficient (b2) as the pre-committed statistic. Result: clean null --
+b2 = -0.0816, 90% CI [-0.432, +0.262] -- spans zero, and the translated
+economic effect (1.081 points) fell short of the 1.5-point threshold.
+The inner join with NQ's data dropped zero days on either side. Both
+robustness checks were reported as-is per the frozen spec: dropping
+the single largest-|ES_gap| day barely moved the estimate, and a
+first-half/second-half split showed the point estimate was unstable
+across the sample. No mechanical rule proposed, no ledger entry. See
+`research/studies/es-overnight-gap-incremental-information.md` and
+`research/experiments/exp-037-es-gap-incremental-information.md` for
+the full specification, reasoning, and results.

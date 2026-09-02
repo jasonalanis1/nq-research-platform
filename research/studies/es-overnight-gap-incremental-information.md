@@ -1,10 +1,11 @@
 # ES Overnight Gap as Incremental Information Beyond NQ's Own Overnight Gap
 
-**Status: frozen specification, not yet tested** -- drafted 2026-09-02,
+**Status: Tested. Primary test result: NULL.** Frozen 2026-09-02,
 following the ES Cross-Market Feasibility Report
 (`research/studies/es-cross-market-feasibility.md`), Mechanism 3 as
-recommended in that report's Section 9. Awaiting Jason's explicit
-sign-off before implementation, per this project's established gate.
+recommended in that report's Section 9. Implemented and run against the
+Discovery slice the same day -- see Status section below for the
+result.
 
 ## Where this came from
 
@@ -186,11 +187,19 @@ search across trial configurations.
 
 ## Status
 
-**Frozen specification. Not yet tested.** Drafted 2026-09-02. No code
-has been written. Awaiting Jason's explicit sign-off on this exact
-specification before implementation begins, per the same gate already
-used for exp-036 (Frozen Study Specification reviewed before any code
-is written).
+**Tested. Primary test result: NULL.** Run against the Discovery
+slice on 2026-09-02. The 90-minute primary-horizon regression's ES_gap
+coefficient (b2) was -0.0816, 90% bootstrap CI [-0.432, +0.262] --
+spans zero. Translated economic effect (|b2| times ES_gap's
+interquartile range): 1.081 points, below the 1.5-point threshold.
+Step-2-gate checks 1 (statistically credible) and 2 (economically
+meaningful) both failed, so per this spec's own rule the study stops
+there -- the remaining three gate conditions were not evaluated. No
+mechanical rule was proposed or built. The inner join with NQ's data
+dropped zero days on either side. Full results, both robustness
+checks, and the secondary-horizon table are in
+`research/experiments/exp-037-es-gap-incremental-information.md`. No
+ledger entry, consistent with a null characterization result.
 
 ## History
 
@@ -207,3 +216,13 @@ is written).
   horizon, re-checked against the actual experiment file rather than
   relying on memory, per project discipline) rather than a fresh
   design. Presented to Jason for sign-off before any implementation.
+- 2026-09-02 (same day): Jason approved implementation. Study
+  implemented (`src/study_es_gap_incremental_info.py`, plus a small
+  backward-compatible `symbol` parameter added to the shared
+  `data_loader.py` so ES's data could be found through the same
+  existing loader rather than duplicating that logic) and run against
+  Discovery data. Primary test came back null (CI spans zero, effect
+  below the economic threshold). Both robustness checks reported
+  as-is; neither rescues the primary result. Written up as
+  `research/experiments/exp-037-es-gap-incremental-information.md`. No
+  ledger entry, no mechanical rule proposed.

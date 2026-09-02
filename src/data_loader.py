@@ -32,20 +32,24 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 
 
-def list_data_files() -> list[Path]:
-    """All NQ_1min_*.csv files currently on disk, sorted by filename."""
-    return sorted(DATA_DIR.glob("NQ_1min_*.csv"))
+def list_data_files(symbol: str = "NQ") -> list[Path]:
+    """All {symbol}_1min_*.csv files currently on disk, sorted by
+    filename. `symbol` defaults to "NQ" -- every existing caller keeps
+    working unchanged. Added 2026-09-02 so a second instrument (ES, this
+    project's first) can reuse this same find-the-current-file logic
+    instead of duplicating it -- see study_es_gap_incremental_info.py."""
+    return sorted(DATA_DIR.glob(f"{symbol}_1min_*.csv"))
 
 
-def find_active_data_file() -> Path:
-    """The file the pipeline actually uses: the most recent REAL
-    (non-synthetic) file if one exists, otherwise the most recent
+def find_active_data_file(symbol: str = "NQ") -> Path:
+    """The file the pipeline actually uses for `symbol`: the most recent
+    REAL (non-synthetic) file if one exists, otherwise the most recent
     synthetic one. Every script in this project that uses "the current
-    data" means whatever this function picks."""
-    candidates = list_data_files()
+    data" for a given symbol means whatever this function picks."""
+    candidates = list_data_files(symbol)
     if not candidates:
         raise FileNotFoundError(
-            "No data file found in data/. Run data_fetch.py, "
+            f"No {symbol} data file found in data/. Run data_fetch.py, "
             "data_fetch_databento.py, or generate_sample_data.py first."
         )
     real_files = [c for c in candidates if "SYNTHETIC" not in c.name]
@@ -64,15 +68,18 @@ def read_price_csv(path: Path) -> pd.DataFrame:
     return df
 
 
-def load_price_data(context: str = "", apply_holdout: bool = True) -> tuple[pd.DataFrame, bool]:
-    """Finds the active data file, loads it, and -- for real data, unless
-    apply_holdout=False is explicitly passed -- restricts it to the
-    research portion via data_holdout.py's fixed boundary. This is what
-    every script that needs price data should call.
+def load_price_data(context: str = "", apply_holdout: bool = True,
+                     symbol: str = "NQ") -> tuple[pd.DataFrame, bool]:
+    """Finds the active data file for `symbol` (default "NQ", preserving
+    every existing caller's behavior unchanged), loads it, and -- for
+    real data, unless apply_holdout=False is explicitly passed --
+    restricts it to the research portion via data_holdout.py's fixed
+    boundary. This is what every script that needs price data should
+    call.
 
     Returns (df, is_synthetic).
     """
-    chosen = find_active_data_file()
+    chosen = find_active_data_file(symbol)
     print(f"Loading: {chosen.name}")
     df = read_price_csv(chosen)
     is_synthetic = "SYNTHETIC" in chosen.name
