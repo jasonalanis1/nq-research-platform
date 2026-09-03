@@ -53,16 +53,19 @@ distribution-license fee schedule (~$34k/year) is visible but is
 clearly not the relevant retail/self-service price, so it's not a
 usable cost signal here.
 
-**VXN (CBOE Nasdaq-100 Volatility Index) -- likely free, but not
-directly confirmed.** VXN is the Nasdaq-100 analog to VIX. It is
-notably **absent** from CBOE's own free historical-volatility-index
-download page and from FRED (both list VIX-family series but not
-VXN). Third-party aggregators (Yahoo Finance, Investing.com, Barchart)
-each have a VXN historical-data page with coverage back to 2001, which
-would comfortably cover this project's full Discovery/Validation
-window -- but a working free CSV export wasn't directly verified in
-this pass (one fetch attempt 404'd) and would need a direct spot-check
-before being relied on.
+**VXN (CBOE Nasdaq-100 Volatility Index) -- confirmed free, and now
+actually used.** VXN is the Nasdaq-100 analog to VIX. It is absent
+from CBOE's own free historical-volatility-index download page, but
+**correction (2026-09-03): it IS available for free directly on FRED**
+(series `VXNCLS`, https://fred.stlouisfed.org/series/VXNCLS), back to
+2001-02-02 -- this document's original claim only checked FRED's own
+listing page and missed the actual series. Jason downloaded the full
+history directly from FRED and this project ran its own check against
+it (`src/study_vxn_pricing_check.py`, written up in
+`docs/OPTIONS_VOLATILITY_RISK_PREMIUM_CHECK.md`). Result: VXN turned
+out to be too blunt an instrument (a smoothed 30-day average) to see
+single-day event pricing, so the check came back honestly inconclusive
+rather than either confirming or ruling out an edge.
 
 **CBOE DataShop and `historicaloptiondata.com` -- real, priced, but
 the wrong underlying product.** Both offer real historical options
