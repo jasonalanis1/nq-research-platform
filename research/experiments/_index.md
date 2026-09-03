@@ -300,3 +300,27 @@ future decision, not automatic. No ledger entry. See
 `research/studies/fomc-release-volatility.md` and
 `research/experiments/exp-040-fomc-release-volatility.md` for the full
 specification and results.
+
+## exp-041: Post-Release Directional Continuation
+
+Seventeenth hypothesis, third test within the scheduled-information
+family, first to test DIRECTION rather than magnitude: does NQ's
+initial 30-minute post-release move (CPI/NFP/FOMC, pooled) tend to
+continue over the following 150 minutes? Unlike exp-039/040, a
+positive result here would have been directly a specifiable mechanical
+rule, not a disclosed limitation.
+
+**Result: NULL.** Mean directional continuation -2.947 pts, 90% CI
+[-11.328, +4.361] -- spans zero. Both robustness checks (drop-largest,
+split-half) stay null; the effect's sign is not even stable across the
+chronological split. Fourteenth null hypothesis (of seventeen tested,
+counting distinct hypotheses). One disclosed, unplanned
+side-observation: the cpi-only descriptive breakdown shows a
+statistically credible (CI entirely below zero) REVERSAL tendency, not
+pre-registered and not promoted -- recorded as a lead requiring its
+own fresh frozen spec, not treated as a finding. Does not undermine
+exp-039/040's own magnitude findings (a different question about the
+same event days). No ledger entry. See
+`research/studies/post-release-directional-continuation.md` and
+`research/experiments/exp-041-post-release-directional-continuation.md`
+for the full specification and results.
