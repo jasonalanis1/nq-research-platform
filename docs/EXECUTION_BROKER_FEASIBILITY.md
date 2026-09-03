@@ -104,3 +104,36 @@ is a factual finding only, same spirit as the ES cost-feasibility check.
 - [Genfinity: Robinhood Agentic Trading Opens to Crypto](https://genfinity.io/2026/07/21/robinhood-agentic-trading-crypto-ai-agents/) -- 2026-07-21, most recent asset-class expansion found (crypto spot + perpetuals), no futures mention or roadmap.
 - [CrossTrade: Complete Automation Suite for NinjaTrader 8 & Tradovate](https://crosstrade.io/) -- example of an established TradingView-to-futures-broker bridge product.
 - [PickMyTrade: TradingView Webhook Alerts Documentation](https://blog.pickmytrade.io/tradingview-webhook-automation-trading-alerts/) -- example documentation of the standard TradingView-webhook-to-futures-broker automation pattern.
+
+## Addendum, 2026-09-03: minimum-useful confirmation, not a new lead
+
+The Path-to-Profitability Advisor's 2026-09-03 consultation was explicit
+that broker research is not a new hypothesis or trading "lead" -- it is
+infrastructure work that only matters once a candidate has actually been
+promoted, and doing it now is premature relative to where this project's
+hypothesis search stands. Its recommendation was a cheap, one-time
+confirmation only, done in parallel with hypothesis work rather than in
+place of it. This addendum is that confirmation, nothing more.
+
+**Confirmed**: both Tradovate and NinjaTrader support NQ and MNQ
+(E-mini and Micro E-mini NASDAQ-100) directly, and both have a mature,
+multi-vendor ecosystem of TradingView-webhook-to-broker automation
+products beyond the two already cited above -- QuantOTC and ClearEdge
+were also found offering the same TradingView-alert-to-Tradovate/
+NinjaTrader bridge pattern, and flowbots.ninja documents the same
+approach. This is consistent with, not a change to, the three options
+already laid out above: it confirms the *mechanism* (webhook-driven
+automation into either broker) is real and commercially mature, not
+a one-off or unmaintained tool. It does not rank Tradovate against
+NinjaTrader, does not estimate cost, and does not decide anything --
+that decision was already, correctly, left open above, and stays open
+here.
+
+No code, no account created, no integration attempted. This remains a
+factual finding only.
+
+### Additional sources (2026-09-03)
+
+- [QuantOTC: TradingView to Tradovate & NinjaTrader Bridge](https://www.quantotc.com/works/tv-tradovate-ninja) -- another TradingView-webhook-to-futures-broker bridge product, same automation pattern as CrossTrade/PickMyTrade.
+- [ClearEdge: TradingView Automation -- Webhooks to Futures Broker Setup](https://clearedge.trading/post/tradingview-automation-futures) -- same pattern, third independent vendor found.
+- [flowbots.ninja support: differences between TradingView (Tradovate accounts) and NinjaTrader OCO exit orders](https://support.flowbots.ninja/hc/en-us/articles/35329571844244-Differences-between-TradingView-Tradovate-accounts-and-NinjaTrader-OCO-exit-orders) -- vendor documentation confirming both brokers are live, supported automation targets, not just marketing claims.

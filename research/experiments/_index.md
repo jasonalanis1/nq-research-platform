@@ -372,3 +372,81 @@ strategy). See `research/studies/cpi-reversal-followup.md` and
 `src/study_cpi_reversal_followup.py` for the full specification and
 results.
 
+## exp-043: Turn-of-the-Month Effect -- Cheap Side-Check
+
+Nineteenth hypothesis. A deliberately narrow, nearly-free check run in
+parallel with exp-044 below, per Jason's explicit request to move on
+several small checks at once rather than one at a time. Frozen spec at
+`research/studies/turn-of-month-check.md`. Tests a real, published
+calendar anomaly (Lakonishok & Smidt 1988; McConnell & Xu 2008
+specifically flagged it as significant for S&P 500 futures) that this
+project had not directly tested itself, though an earlier Advisor
+consultation in this project's own history had already once considered
+and set it aside in favor of what became exp-041.
+
+Two-step gated design: Step 1 (free, descriptive) compares mean daily
+NQ point-return on turn-of-month days (last trading day of the month
+plus the first three of the next) against all other days, using a
+difference-focused reading rather than trusting either group's CI
+against zero in isolation -- the same control this project's own VXN
+check needed earlier the same day, after an ungated CI-against-zero
+read produced a false positive there.
+
+**Result: clean kill at Step 1, Step 2 never run.** Turn-of-month days:
+n=322, mean +7.35 pts, 90% CI **[-2.90, +17.44]** -- spans zero, not
+statistically credible on its own. Other days: n=1,394, mean +5.87 pts,
+90% CI [+0.87, +10.54] -- itself statistically credible, i.e. ordinary
+NQ drift over the Discovery window is significant on its own, and
+turn-of-month days are not meaningfully different from that baseline.
+This is now the THIRD calendar-timing hypothesis tested in this
+project (after day-of-week, exp-031, and options-expiration week,
+exp-035) and the third clean null in that family. See
+`research/studies/turn-of-month-check.md` and
+`src/study_turn_of_month.py` for the full specification and results.
+
+## exp-044: CFTC Commitment-of-Traders Positioning -- Cheap Check
+
+Twentieth hypothesis. First test in this project's history to use a
+data source other than NQ price action itself -- CFTC "Traders in
+Financial Futures" weekly positioning reports for the NASDAQ-100
+E-mini contract, Leveraged Money category only (pre-registered as the
+single tested category, to avoid an undisclosed multiple-comparisons
+search across the other three reportable categories). Frozen spec at
+`research/studies/cot-positioning-check.md`.
+
+Data was sourced via a GitHub mirror of the CFTC's own published
+historical files after direct network access to cftc.gov proved
+blocked from both this project's cloud sandbox and the local device (a
+network egress restriction, confirmed via the proxy's own status
+endpoint, not a data-availability problem). The mirrored data covers
+2015-01-06 through 2018-12-31 only -- a real limitation, disclosed in
+the frozen spec: this is a partial-Discovery check (209 of the ~355
+weeks the full 2015-2021 Discovery window would offer), not the full
+window. Point-in-time alignment was handled explicitly: each report's
+signal is only treated as available on the actual CFTC publication
+Friday (report date + 3 calendar days, rolled forward to the next
+classifiable trading day), never on the Tuesday the report describes.
+
+Step 1 (free, descriptive): weeks are split by the sign of the
+week-over-week change in net Leveraged Money positioning, and the
+DIFFERENCE in mean forward one-week NQ return between the two groups
+is tested with a 90% bootstrap CI -- the same drift-controlled design
+used in exp-043 above, for the same reason.
+
+**Result: clean kill at Step 1, Step 2 never run.** Signal-positive
+weeks (n=115): mean forward return +5.18 pts. Signal-negative weeks
+(n=92): mean forward return +15.71 pts. Difference of means: -10.54
+pts, 90% CI **[-39.29, +19.09]** -- wide and spans zero by a large
+margin. No usable signal found in this partial sample. See
+`research/studies/cot-positioning-check.md` and
+`src/study_cot_positioning.py` for the full specification and results.
+
+**Honest bottom line for both exp-043 and exp-044:** both were run
+exactly as the Path-to-Profitability Advisor recommended -- cheap,
+gated, Step-1-only checks that were not expected to succeed and did
+not need to, in order to still be worth the (small) time spent. Both
+came back honest, clean nulls. Neither is being extended (turn-of-month
+has now failed in this project three separate ways; COT's partial
+sample could in principle be extended to the full 2015-2021 window if
+a way around the cftc.gov network block is found, but nothing in this
+first look justifies spending that effort).
