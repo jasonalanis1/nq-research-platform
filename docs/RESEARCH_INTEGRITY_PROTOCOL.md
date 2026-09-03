@@ -80,7 +80,23 @@ Forward Generation:   live future data -> ongoing, never exhausted
 Forward paper trading (Phase 7) becomes the long-run sustainable confirmation
 mechanism once historical holdout budgets are spent.
 
-## What Larry implements (future work, not today)
+## What Larry implements
+
+**Status update, 2026-09-03: no longer future work for the DSR/PBO piece.**
+`src/larry_validate.py` wires the real `purgedcv` library
+(https://github.com/eslazarev/purged-cross-validation, MIT licensed,
+Bailey & Lopez de Prado 2014) to `research_ledger.py`. Verified against a
+synthetic scenario (planted-edge config correctly deflated from DSR 0.988
+naive to 0.548 honest at n_trials=50; PBO 0.42-0.61 across runs, correctly
+flagging a data-mined pick as overfit) and then applied for real to the
+Level Sweep Reversal liquidity-filter family (hyp-000007, hyp-000008 --
+both REJECTED: DSR 0.366 and 0.068 respectively, both below the 0.90
+threshold; PBO 0.278 for both, above the 0.25 threshold too). The other
+items below it (parameter sensitivity, out-of-sample performance as a
+Larry-issued classification rather than this project's existing
+Discovery/Validation/Holdout split, and the full REJECTED/PROMISING/
+VALIDATION CANDIDATE/HOLDOUT PASSED/FORWARD VALIDATION/PAPER VERIFIED
+classification ladder) remain future work, not today.
 
 Full statistical bundle per candidate: observed Sharpe, number of trials, effective
 number of trials, correlation between trials, expected maximum Sharpe under
@@ -127,3 +143,33 @@ tested. 37 candidates reached validation. 4 received holdout access. 1 survived.
 3. Build the Research Ledger, chronological split logic, and Larry's DSR/PBO
    implementation — pure infrastructure, once (2) is settled — not today.
 4. Only then build the Strategy R&D Agent itself, scoped to Discovery data only.
+
+## Search stopping point -- checkpoint policy (added 2026-09-03)
+
+Raised by Jason after exp-041's null result: at what point does this
+project stop hunting for new hypotheses? No answer to this existed
+anywhere in the project's docs before this entry -- `AUTOMATION_ARCHITECTURE.md`'s
+"kill switch" only covers live-trading safety controls, a different
+question entirely.
+
+Decided (per the Path-to-Profitability Advisor's recommendation, adopted
+as-is): review every 5 newly-tested hypotheses whether genuinely distinct
+*mechanism families* are still being found, versus thin variants of
+families already tested and rejected. This is a deliberate, logged
+checkpoint, not a felt sense of "we've tried a lot of things" -- log the
+review explicitly in `docs/ROADMAP.md` each time it happens: which
+mechanism families have been tried, whether the newest 5 opened a new one
+or just varied an old one, and an explicit go/no-go call on continuing
+the search versus shifting effort elsewhere (e.g. building out execution
+infrastructure for a setup that does eventually clear the promotion bar,
+or re-examining whether the promotion bar itself is calibrated correctly
+given how many honest nulls it has now produced). This is a checkpoint to
+force an explicit decision, not a hard cap -- the search does not
+automatically stop at any fixed hypothesis count.
+
+As of 2026-09-03: seventeen hypotheses tested across five mechanism
+families (level-sweep liquidity reversal, opening-range/volatility
+regime, calendar/seasonal, scheduled-macro-release magnitude, and now
+scheduled-macro-release direction), zero cleared the promotion bar. This
+checkpoint is retroactively due (17 > 15) -- next hypothesis work should
+open with this review rather than jumping straight to a new candidate.
