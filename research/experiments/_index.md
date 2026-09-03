@@ -324,3 +324,51 @@ same event days). No ledger entry. See
 `research/studies/post-release-directional-continuation.md` and
 `research/experiments/exp-041-post-release-directional-continuation.md`
 for the full specification and results.
+## exp-042: CPI-Only Reversal Follow-Up (Costed)
+
+Eighteenth hypothesis, fourth test in the scheduled-information
+family. Direct follow-up to exp-041's disclosed-but-unregistered
+CPI-only reversal side-observation (n=75, mean -11.023 pts, 90% CI
+[-22.560, -0.436] on raw directional continuation) -- frozen spec at
+`research/studies/cpi-reversal-followup.md`, per Jason's explicit
+direction to close this lead out quickly rather than leave it hanging.
+
+Reuses exp-041's own scan/compute functions and
+`directional_continuation` statistic unmodified -- same Discovery CPI
+days, same underlying numbers, explicitly NOT independent confirmation
+(disclosed plainly in the frozen spec, since
+`data_split.get_validation_data()` is reserved for testing candidates
+already promoted out of Discovery, not for searching new leads). The
+one new question asked: does the reversal survive being priced as an
+actual cost-inclusive trade, which exp-041's raw point-to-point
+statistic never tested.
+
+**Result: kill, but a close one -- worth recording precisely.** Betting
+on the reversal (opposite side of exp-041's continuation trade), net
+of the standard round-trip cost (0.750 pts): mean +10.273 pts
+(+$205.47/contract), 90% bootstrap CI **[-0.314, +21.810]**. The point
+estimate clears the economic-meaningfulness bar, but the confidence
+interval no longer excludes zero once real trading costs are
+subtracted -- the lower bound sits just barely below zero (-0.314),
+where it was entirely above zero pre-cost ([+0.436, +22.560]). Both
+robustness checks stay directionally consistent (drop-largest: mean
++7.872 pts, CI still spans zero; first/second-half split: both halves
+positive, second half larger, neither individually significant). n=75
+in every cut -- far under this project's 150-trade promotion-bar
+minimum, so no outcome here could have reached "promote" regardless.
+
+**Honest bottom line:** this is the closest near-miss the
+scheduled-information family has produced on a directional idea, but
+it is a near-miss on the SAME data already used to find it, priced
+with zero new researcher-chosen parameters (no invented stop/target --
+just the standard round-trip cost applied once). Closing this thread
+for now rather than tuning it further, per Jason's explicit direction
+not to go down this particular rabbit hole. Revisit only if either
+more CPI dates accumulate naturally (a future Discovery-window
+extension) or this ever earns Validation-stage testing through the
+normal promotion path -- not by re-slicing this same sample again. No
+ledger entry (still a characterization-stage check, not a full
+strategy). See `research/studies/cpi-reversal-followup.md` and
+`src/study_cpi_reversal_followup.py` for the full specification and
+results.
+

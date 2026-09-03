@@ -173,3 +173,32 @@ regime, calendar/seasonal, scheduled-macro-release magnitude, and now
 scheduled-macro-release direction), zero cleared the promotion bar. This
 checkpoint is retroactively due (17 > 15) -- next hypothesis work should
 open with this review rather than jumping straight to a new candidate.
+
+**Checkpoint review completed 2026-09-03, same day, after exp-042.**
+Eighteen hypotheses now tested. Four of the five families are dead
+(clean nulls or statistically decisive kills, no live leads remaining
+in any of them). The fifth (scheduled-macro-release) is the only one
+that has produced a real, replicated finding -- but only on magnitude
+(the market moves more on CPI/NFP/FOMC days), never on direction: the
+one directional lead it produced (exp-041's CPI-only reversal
+side-observation) was closed out by exp-042 as a near-miss kill once
+priced with real costs. Two independent Path-to-Profitability Advisor
+consultations this same day (one on the options/volatility-structure
+thread, one on this checkpoint question directly) both landed on the
+same practical read: continuing to deepen the scheduled-macro-release
+thread with paid options data is not warranted by the evidence so far,
+and the project has now covered most of the realistic ground for pure
+same-morning price-pattern reading on NQ specifically.
+
+**Go/no-go decision, made with Jason:** do not deepen the current
+options/volatility-structure thread further for now. Do not move to
+individual stocks (multiplies the number of things being searched,
+which multiplies the risk of a false-positive "edge" found by chance --
+the exact failure mode this project's discipline exists to prevent --
+and throws away everything already learned about NQ specifically). Do
+explore one genuinely different, not-yet-tried style within NQ futures:
+order-flow / buying-vs-selling-pressure signals, distinct from the
+trade-size volume test already run and killed -- pending a real data
+cost check first (see `docs/BACKLOG.md`). Logged here so the next
+checkpoint (due at hypothesis 23) has this one's reasoning to build on,
+not just a hypothesis count.
