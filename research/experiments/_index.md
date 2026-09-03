@@ -450,3 +450,43 @@ has now failed in this project three separate ways; COT's partial
 sample could in principle be extended to the full 2015-2021 window if
 a way around the cftc.gov network block is found, but nothing in this
 first look justifies spending that effort).
+## exp-045: Pooled CPI+NFP Reversal Follow-Up
+
+Twenty-first hypothesis (and the final chapter of the scheduled-macro-
+release direction thread). Per Jason's explicit direction to run this
+in parallel with drafting the multi-factor model plan below, and per
+the Path-to-Profitability Advisor's recommendation earlier the same
+day. Frozen spec at
+`research/studies/cpi-nfp-pooled-reversal-followup.md`, written and
+verified against exp-041's own original design (NFP was already
+treated as part of the same population back when exp-041 was first
+specified, before any result existed) before this was run -- not a
+new idea reached for because the CPI-only number looked promising.
+
+The frozen spec disclosed a real risk up front: exp-041's own
+descriptive breakdown already showed CPI-only (-11.023 pts) and
+NFP-only (+1.805 pts) pointing in OPPOSITE directions, meaning pooling
+them could dilute exp-042's near-miss result rather than rescue it
+with a bigger sample. That is exactly what happened.
+
+**Result: clean kill, and this lead is now closed for good.** Pooled
+n=152 (75 cpi + 77 nfp) -- for the first time in this lead's history,
+at or above the 150-trade promotion-bar minimum. Net reversal mean
++3.775 pts, 90% CI **[-4.963, +12.939]** -- clearly spans zero, wider
+and less credible than exp-042's CPI-only near-miss ([-0.314,
++21.810]). Within the pool: CPI-only stayed the same near-miss number
+as exp-042 (+10.273 pts), but NFP-only came back negative (-2.555
+pts, i.e. NFP release days show no reversal edge at all), dragging the
+pooled result down. Split-half check shows real instability too (first
+half -0.845 pts, second half +8.395 pts). Verdict: kill.
+
+**Honest bottom line:** the scheduled-macro-release direction thread
+(exp-041, exp-042, exp-045) is now fully closed out. Three honest
+tests, three non-promotions, the largest and most decisive of the
+three landing squarely on "no real edge." The only surviving finding
+from this entire mechanism family is the magnitude-only result
+(exp-039/040: NQ moves more on these days, but not predictably in
+either direction) -- not itself tradeable. See
+`research/studies/cpi-nfp-pooled-reversal-followup.md` and
+`src/study_cpi_nfp_reversal_followup.py` for the full specification and
+results.
