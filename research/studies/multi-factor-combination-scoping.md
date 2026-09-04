@@ -13,6 +13,29 @@ real gaps. See the six numbered items below, each addressed inline
 where it applies, plus a new "Stability check" step and a new
 "Accounting" section.
 
+## Data assembled (2026-09-04, pure prep -- not a test)
+
+Per Jason's go-ahead to start pulling the ingredients together while
+this draft is still under review: `src/build_multi_factor_features.py`
+now exists and has been run. It joins every candidate feature listed
+below into one table, one row per Discovery-slice trading day
+(1,717 rows, 2015-01-02 to 2021-10-01), saved to
+`data/multi_factor_features_discovery.csv` (gitignored, like every
+other data file in this project). It also includes both candidate
+target-variable columns (next-day return in points, and its sign) as
+descriptive data only -- building this table did not decide between
+them.
+
+This is pure data assembly: no model was fit, no statistic was tested,
+and nothing here is a result. One real bug was caught and fixed while
+building it: NQ's Sunday-evening reopen bars get grouped under
+Sunday's own calendar date, which has no valid session close -- left
+unhandled, this silently broke the Monday/Friday day-pairing for the
+overnight-gap and target columns (a very similar edge case to one
+already fixed once before in this project's fade-the-gap study). Fixed
+by filtering to only valid trading days before pairing consecutive
+days, the same convention already used elsewhere in this codebase.
+
 ## Where this came from
 
 After twenty-one hypotheses (single-factor, single-mechanism tests,
