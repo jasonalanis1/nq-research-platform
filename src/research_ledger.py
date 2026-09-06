@@ -93,8 +93,32 @@ VALID_AUTHORIZATIONS = {"not_authorized", "human_approved", "automated_approved"
 
 # Which data slice a test ran against. "discovery" should be the vast
 # majority of rows -- validation/holdout_gen2/holdout_gen1 rows are the
-# rare, budgeted, should-be-logged-with-extra-care ones.
-VALID_DATA_SLICES = {"discovery", "validation", "holdout_gen1", "holdout_gen2"}
+# rare, budgeted, should-be-logged-with-extra-care ones. "prospective" was
+# added 2026-09-06 (exp-050, per the Path-to-Profitability Advisor's
+# recommendation and Jason's authorization) for a genuinely different
+# situation: a hypothesis that never earned a Validation/Holdout slot,
+# tracked instead on real data that did not exist yet at the freeze
+# time of its frozen spec. See
+# research/studies/prospective-validation-exp047-scoping.md.
+VALID_DATA_SLICES = {"discovery", "validation", "holdout_gen1", "holdout_gen2", "prospective"}
+
+# Which slices count as this project's two finite, budgeted out-of-sample
+# reserves. "prospective" is deliberately excluded -- Advisor-required
+# code-level guard (2026-09-06): a "prospective" record must never be
+# treated as satisfying a Validation or Holdout requirement for any other
+# hypothesis. It is a third, separate thing -- data that did not exist at
+# freeze time -- not a substitute for either budgeted reserve.
+BUDGETED_HOLDOUT_SLICES = {"validation", "holdout_gen1", "holdout_gen2"}
+
+
+def is_budgeted_holdout_slice(data_slice_used: str) -> bool:
+    """True only for the two finite, budgeted out-of-sample reserves
+    (Validation, Holdout Gen 1, Holdout Gen 2). Always False for
+    "prospective" and "discovery" -- neither can be spent in place of a
+    real holdout evaluation. Use this instead of checking
+    data_slice_used != "discovery", which would incorrectly treat a
+    prospective-validation record as if it had consumed holdout budget."""
+    return data_slice_used in BUDGETED_HOLDOUT_SLICES
 
 
 @dataclass

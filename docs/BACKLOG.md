@@ -14,6 +14,23 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 *(nothing currently open)*
 
+## Ongoing / Prospective Tracking
+
+- **exp-050: Prospective validation of exp-047 (weekly trend-following
+  signal)** -- built 2026-09-06, per the Path-to-Profitability Advisor's
+  recommendation and Jason's authorization ("let's run it"), directly
+  following the exp-047/048/049 family's shelving below. Tracks the raw
+  exp-047 signal forward on data that did not exist yet at freeze time
+  (2026-08-19 19:59:00 America/New_York, the exact last on-disk bar at
+  sign-off) rather than re-mining anything already on disk. Pre-registered
+  checkpoints at 104/156/208 weeks, hard 260-week maximum horizon, a
+  one-sided early-kill rule (Monte-Carlo-justified ~5% false-kill rate),
+  no early-pass rule. Zero prospective weeks logged yet -- waiting on new
+  NQ data to be fetched forward (cadence/cost of that ongoing paid pull
+  is Jason's call, not yet decided). See
+  `research/studies/prospective-validation-exp047-scoping.md`,
+  `src/study_prospective_exp047.py`, ledger hyp-000020.
+
 ## Parked
 
 - **Order-flow / buying-vs-selling-pressure signals** -- added 2026-09-03, per the Path-to-Profitability Advisor's recommendation during the post-"step back" checkpoint review, as the one genuinely untried style within NQ futures. Real pricing obtained 2026-09-03 directly from Databento's own live pricing calculator (no account needed -- their "Preview your usage fees" tool is usable unauthenticated): CME Globex MBO (market-by-order, L3) is **$1.80/GB**, MBP-10 (market-by-price, 10 levels, L2) is **$0.50/GB** -- real, confirmed rates, not estimates.

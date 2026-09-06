@@ -685,3 +685,46 @@ future. Logged to the research ledger as hyp-000019 (REJECTED). See
 `research/studies/trailing-stop-overlay-scoping.md` and
 `src/study_trailing_stop_overlay.py` for the full specification and
 results.
+
+## exp-050: Prospective Validation of exp-047 (Weekly Trend-Following Signal)
+
+Per the Path-to-Profitability Advisor's own recommendation during a
+2026-09-06 "what's next for the whole project" consultation, which Jason
+authorized ("let's run it"): the entire exp-047 signal family (raw +
+both risk-management overlays) was shelved after two follow-on kills.
+Rather than re-mine any data already on disk -- which would spend this
+project's budgeted Validation/Holdout Gen 2 reserves on a hypothesis
+that was never promoted -- exp-050 tracks the RAW exp-047 signal forward
+on data that did not exist yet at freeze time.
+
+Freeze anchor: 2026-08-19 19:59:00 America/New_York -- the exact last
+bar on disk at v2 sign-off, not a calendar date (Advisor-required
+change from v1, since a calendar date does not guarantee no data
+existed yet). Only weeks entirely after this instant are eligible to be
+logged; `src/study_prospective_exp047.py` hard-asserts if this is ever
+violated.
+
+Pre-committed interim-look discipline: the cumulative (from the freeze
+anchor) 90% bootstrap CI, using the exact same `bootstrap_mean_ci()`
+exp-047 used. The only permitted interim action is an early kill if
+that CI is entirely below zero (both bounds negative) for 26
+consecutive logged weeks -- a threshold whose ~5% false-kill rate under
+a null signal was confirmed via a 20,000-path Monte Carlo simulation
+(documented in the frozen spec). No equivalent early-pass rule.
+
+Pre-registered checkpoints: 104 / 156 / 208 weeks from the freeze
+anchor, with a hard 260-week (~5yr) maximum tracking horizon after
+which this mechanism formally closes regardless of outcome -- closing
+the "decide after seeing the result" gap the Advisor flagged in v1.
+
+As of 2026-09-06: built and verified end-to-end (confirms 0 prospective
+weeks logged, as expected -- nothing past the freeze anchor is on disk
+yet). Will log automatically, one row per newly-closed week, once new
+NQ data is fetched forward via `data_fetch_databento.py`. The cadence
+and cost of that ongoing paid data fetch is Jason's call, not decided in
+the frozen spec. Ledger: hyp-000020, status `FORWARD VALIDATION`, a new
+`data_slice_used` value ("prospective") added to `research_ledger.py`
+with an explicit code-level guard that it can never substitute for a
+Validation/Holdout requirement. Full design:
+`research/studies/prospective-validation-exp047-scoping.md`,
+`src/study_prospective_exp047.py`.
