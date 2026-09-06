@@ -1,6 +1,6 @@
-# Asymmetric Stop-Loss/Take-Profit Overlay on the Weekly Trend Signal -- Scoping Proposal (DRAFT v2, not yet approved)
+# Asymmetric Stop-Loss/Take-Profit Overlay on the Weekly Trend Signal -- exp-048
 
-## Status: draft scoping proposal only. No model code written. Not authorized.
+## Status: v2 APPROVED by Jason (2026-09-06, via explicit delegation to the Advisor's recommendation on the final open design question) and TESTED. Result: kill.
 
 Candidate ID (if approved): exp-048. Written per the Research Scoping Agent
 process (`docs/RESEARCH_SCOPING_AGENT.md`), directly implementing Jason's own
@@ -231,3 +231,70 @@ changes... with those... this is a reasonable, disciplined test of a
 genuinely different question... and is worth building. As currently
 scoped [v1], it has the right instincts... but under-discloses its own
 selection bias and glosses over a real design flaw (tail-capping)."
+
+
+## Result (2026-09-06, exp-048)
+
+Built and run exactly as scoped in v2, hard-cap design per the Advisor's
+explicit recommendation (Section "Advisor review" above). Reused exp-047's
+signal/position machinery completely unmodified; new code limited to the
+20-day ATR risk-unit calculation and the intraday path-dependent stop/target
+exit resolution.
+
+**Exit-path breakdown** (matches the pre-registered pilot tabulation in
+Section 4a exactly, confirming the path logic was not altered between the
+pilot and the full run): stop hit first 136 weeks (45.5%), target hit first
+42 weeks (14.0%), neither touched 121 weeks (40.5%).
+
+**Primary result: mean weekly net P&L +10.53 points, 90% bootstrap CI
+[-6.37, +28.38]** -- spans zero, not statistically credible. Economically
+meaningful on the mean alone (threshold was 0.22 pts), but per Section 4's
+stricter follow-on-test bar, an economic pass alone does not clear this.
+
+**Direct comparison to exp-047 (the same signal, no overlay):** exp-047's
+mean was +19.38 pts/week with CI [-1.165, +40.414]. The overlay's mean is
+roughly HALF of the raw signal's, and its CI is WIDER on both ends, not
+narrower -- despite adding defined risk management.
+
+**Robustness:** dropping the single largest week (2020-W16) reduces the
+mean further to +8.60 (CI [-7.85, +25.09], still spans zero). A first-
+half/second-half split shows both halves individually span zero, with the
+second half's CI ([-16.63, +48.82]) much wider than the first's.
+
+**Verdict: kill.** Per this document's pre-committed interpretation
+caveat: this rejects the SPECIFIC 1R-stop/hard-2R-cap/20-day-ATR design --
+not Jason's underlying risk-management intuition in general.
+
+**Advisor's independent sanity check (2026-09-06), confirmed:** the
+implementation is sound (no leakage, refit, or scope creep -- the exit-
+path counts matching the pilot exactly is expected and confirms
+consistency). The "kill" classification is not a close call -- both
+robustness cuts still span zero, one very widely. The result is the
+expected signature of a hard take-profit cap on a fat-tailed trend-
+following return distribution, not a new or surprising finding: trend-
+following P&L is driven by a small number of large winning weeks, and a
+hard cap at +2R systematically amputates exactly those weeks -- which is
+why the mean roughly halved AND the confidence interval widened rather
+than tightened (removing the large wins removes the observations that
+were both raising the mean and narrowing the bootstrap distribution
+around it).
+
+**Honest bottom line, stated plainly per the Advisor's own words:** "this
+result undercuts the original idea... The data says the opposite [of
+improving the signal]: the overlay did not improve the risk/reward
+profile, it degraded it... Weekly trend-following on NQ appears to derive
+its edge from a small number of outsized trending moves, and a hard
+take-profit is structurally the wrong tool to apply to that kind of return
+distribution." This is a structural mismatch between the overlay design
+and the signal's own source of edge, not evidence that the ATR window or
+the R:R ratio needs adjusting.
+
+**Per the pre-committed rule in Section 4: this line of inquiry is now
+closed.** The ATR window and R:R ratio will not be retuned on this same
+Discovery data. If Jason wants defined-risk management tested on this
+signal in the future, the Advisor's recommended path is a genuinely
+different, freshly pre-registered design (e.g., a trailing exit that
+participates in the tail rather than capping it) -- a new hypothesis, not
+a retune of exp-048. Logged to the research ledger as hyp-000018
+(REJECTED). See `src/study_asymmetric_stop_target_overlay.py` for the
+full implementation.

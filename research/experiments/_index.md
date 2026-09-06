@@ -575,3 +575,63 @@ ledger as hyp-000017 (REJECTED). See
 `research/studies/weekly-trend-following-scoping.md` and
 `src/study_nq_weekly_trend_following.py` for the full specification and
 results.
+
+## exp-048: Asymmetric Stop-Loss/Take-Profit Overlay on the Weekly Trend Signal
+
+Twenty-fifth hypothesis. Directly implements Jason's own risk-management
+idea (stop out at a defined loss, hold until at least doubling winnings),
+applied concretely to exp-047's weekly trend-following signal -- this
+project's closest-ever near-miss. Scoped via the Research Scoping Agent
+process, revised to v2 after Advisor review (six required changes,
+including an explicit disclosure that testing this overlay specifically on
+exp-047 is itself a selection-risk choice, and a pre-registered, purely
+descriptive pilot tabulation run before parameters were locked). A second,
+final Advisor consultation settled the one remaining open design question
+(a hard take-profit cap vs. a trailing exit) in favor of the hard cap, to
+avoid grafting a new cross-week position-state architecture onto exp-047's
+weekly-reset design. Jason signed off by explicitly delegating this last
+design decision to the Advisor's recommendation. Frozen spec at
+`research/studies/asymmetric-stop-target-overlay-scoping.md` (v2);
+implementation at `src/study_asymmetric_stop_target_overlay.py`.
+
+Direction is 100% inherited from exp-047, unchanged. New mechanism: a
+20-day-ATR-sized risk unit (1R), -1R stop-loss and a HARD +2R take-profit
+cap, both checked against real 1-minute intraday price data during the
+entry week; if neither is touched, exits at the normal weekly rebalance
+point exactly as exp-047 does.
+
+**Result: kill, and not a close one.** n=299 weeks. Exit-path breakdown
+(matching the pre-registered pilot tabulation exactly): stop hit first 136
+weeks (45.5%), target hit first 42 weeks (14.0%), neither touched 121
+weeks (40.5%). Mean weekly net P&L **+10.53 points, 90% CI [-6.37,
++28.38]** -- spans zero, not statistically credible; economically
+meaningful on the mean alone, which does not clear this project's
+stricter bar for a follow-on test of a near-miss. Both robustness checks
+(drop-largest-week, first/second-half split) still span zero, one very
+widely.
+
+**Directly undercuts the original idea, not just an inconclusive result.**
+Compared to exp-047 (the same signal with no overlay: mean +19.38 pts/wk,
+CI [-1.165, +40.414]), the overlay's mean is roughly HALF, and its
+confidence interval is WIDER on both ends rather than narrower. The
+Path-to-Profitability Advisor's independent sanity check confirmed this is
+the expected signature of a hard take-profit cap on a fat-tailed trend-
+following return distribution: this signal's edge is driven by a small
+number of outsized trending weeks, and a hard cap at +2R systematically
+removes exactly those weeks -- both lowering the mean and widening the CI
+by cutting out the observations that were both raising it and narrowing
+it. A structural mismatch between the overlay design and the signal's own
+source of edge, not a sign that the ATR window or R:R ratio needs
+adjusting.
+
+**Honest bottom line:** per the frozen spec's pre-committed rule, this
+line of inquiry (this specific 1R-stop/hard-2R-cap/20-day-ATR design) is
+now closed -- no retuning on this same Discovery data. This rejects the
+specific capped parameterization, not Jason's underlying risk-management
+intuition in general; a genuinely different design (e.g., a trailing exit
+that participates in the tail rather than capping it) would need its own
+fresh, independently pre-registered hypothesis. Logged to the research
+ledger as hyp-000018 (REJECTED). See
+`research/studies/asymmetric-stop-target-overlay-scoping.md` and
+`src/study_asymmetric_stop_target_overlay.py` for the full specification
+and results.
