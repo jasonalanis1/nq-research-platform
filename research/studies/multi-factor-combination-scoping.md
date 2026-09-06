@@ -1,6 +1,6 @@
-# Multi-Factor Combination Model -- Scoping Proposal (DRAFT v3, not yet approved)
+# Multi-Factor Combination Model -- Scoping Proposal (v3, APPROVED and TESTED -- exp-046)
 
-## Status: draft scoping proposal only. No code written. Not authorized.
+## Status: APPROVED by Jason 2026-09-06, line-by-line, as-is. Built and tested the same day as exp-046. Result: REJECTED (clean kill). See "Result (2026-09-06, exp-046)" section below for the full outcome; the rest of this document is kept as the frozen record of what was authorized and why.
 
 This document exists to be reviewed and revised -- by the
 Path-to-Profitability Advisor and by Jason, line-by-line, the same
@@ -64,6 +64,44 @@ target variable is no longer an open, undecided column pair --
 `target_next_day_return_sign` (daily close-to-close) is now the
 locked target; `target_next_day_return_pts` remains in the table only
 as supporting/descriptive data, not a second candidate.
+
+## Result (2026-09-06, exp-046)
+
+Built and run the same day Jason approved this draft as-is. Implementation:
+`src/study_multi_factor_combination.py`. Full results:
+`data/study_multi_factor_combination_results.json`. Logged to the research
+ledger as hyp-000016 (REJECTED). Path-to-Profitability Advisor independently
+reviewed the implementation against this frozen spec and the saved result
+before this was reported -- confirmed no spec deviation and no methodological
+red flag.
+
+**Modeling population**: 1,457 of 1,717 Discovery rows (260 excluded: 254 for
+a missing feature during a warmup window, 6 for an exact-zero target with no
+sign), 2016-02-02 to 2021-09-30. Class balance 58.3% up / 41.7% down.
+
+**Step 1 (statistical, no cost): FAILED.** Best out-of-fold AUC (purged
+5-fold CV, regularization strength C=0.01, the strongest tried) was 0.4936,
+90% bootstrap CI [0.4750, 0.5110] -- squarely straddling 0.5, not
+distinguishable from a coin flip. Weaker regularization (larger C) performed
+worse, not better (AUC fell to 0.4580 at C=10) -- the textbook signature of
+noise, not signal, being fit. Step 2 (costed translation rule) was never
+run, correctly gated on Step 1 failing.
+
+**Stability check**: also flagged instability, though for a mechanical
+reason consistent with the above rather than a separate concern -- at
+C=0.01, every one of the 15 design-matrix columns was zeroed by L1
+regularization, both on the full-Discovery fit and independently within
+each chronological half. A model with every coefficient at zero predicts a
+constant probability, which produces an AUC of exactly 0.5 by convention --
+both halves showed exactly 0.5, at the 0.53 instability floor.
+
+**Bottom line**: none of the 8 candidate features -- individually already
+null or near-null across exp-020 through exp-045 -- carry joint predictive
+information when combined, at least not of the specific kind this model
+(linear combination via logistic regression) could find. This closes out
+the multi-factor combination idea as scoped; no Validation-slice test was
+authorized or warranted, since the frozen gate for reaching Validation was
+never cleared.
 
 ## Where this came from
 

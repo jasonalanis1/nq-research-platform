@@ -559,3 +559,16 @@ couldn't be cross-checked against a logged backtest row -- but the math
 verification alone confirms the script's core calculation logic is correct.
 Alert creation was set up in TradingView but push notification delivery is
 unconfirmed (didn't fire in first test) -- flagged to revisit later, not blocking.
+
+## Multi-factor combination model: built, tested, killed (2026-09-06)
+
+Jason approved the v3 scoping draft as-is and asked for it to be built
+immediately. Built, run, independently sanity-checked by the Advisor,
+and closed out the same day: exp-046, a clean kill (Step 1's
+statistical gate failed -- best out-of-fold AUC 0.4936, CI straddling
+0.5; L1 zeroed every one of 15 candidate features at the chosen
+regularization strength). Full result in
+`research/studies/multi-factor-combination-scoping.md` and
+`research/experiments/_index.md`. The "combine many small things"
+idea got a fair, disciplined test; it did not pan out with this
+feature set and this way of combining them.

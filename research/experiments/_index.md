@@ -490,3 +490,48 @@ either direction) -- not itself tradeable. See
 `research/studies/cpi-nfp-pooled-reversal-followup.md` and
 `src/study_cpi_nfp_reversal_followup.py` for the full specification and
 results.
+
+## exp-046: Multi-Factor Combination Model
+
+Twenty-third hypothesis, and the first that combines multiple
+already-tested features into one model rather than testing a single
+mechanism alone. Followed Jason's explicit "combine several small
+things" instinct (discussed after exp-045 closed out the last
+single-factor thread), scoped via the new Research Scoping Agent
+process, revised twice after two rounds of Advisor review (v1 -> v2
+for six structural gaps, v2 -> v3 for a real coding bug plus two
+loose ends), then approved by Jason line-by-line, as-is, on
+2026-09-06.
+
+L1-regularized logistic regression combining 8 already-computed
+features (event-day type, volatility regime, overnight gap, day of
+week, turn-of-month, momentum sign, expiration week, CFTC positioning)
+to predict the sign of NQ's next daily close-to-close return.
+Regularization strength chosen via purged/embargoed 5-fold
+cross-validation within Discovery only. Frozen spec at
+`research/studies/multi-factor-combination-scoping.md` (v3);
+implementation at `src/study_multi_factor_combination.py`.
+
+**Result: clean kill.** Step 1 (statistical, no cost) failed --
+best out-of-fold AUC 0.4936, 90% CI **[0.4750, 0.5110]**, straddling
+0.5. At the selected regularization strength, L1 zeroed out all 15
+design-matrix columns -- none of the 8 features carried any joint
+predictive information, individually or combined. Step 2 (costed
+rule) never ran, correctly gated on Step 1's failure. The stability
+check independently confirmed the same picture in both
+chronologically-split halves. Path-to-Profitability Advisor
+independently verified the implementation against the frozen spec and
+the saved result before this was reported to Jason -- no spec
+deviation, no methodological red flag, genuine null. Logged to the
+research ledger as hyp-000016 (REJECTED).
+
+**Honest bottom line:** the "combine many small things" idea was a
+legitimate one, grounded in real quant-industry practice (Grinold's
+Fundamental Law of Active Management), and got a fair, disciplined
+test rather than being waved through or dismissed. It did not work
+with this specific feature set and this specific (linear) way of
+combining them. This does not prove no combination could ever work --
+only that this one, honestly tested, did not. See
+`research/studies/multi-factor-combination-scoping.md` and
+`src/study_multi_factor_combination.py` for the full specification and
+results.
