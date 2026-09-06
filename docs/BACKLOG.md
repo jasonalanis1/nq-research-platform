@@ -10,6 +10,10 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 *(move items here from Parked when they're picked up)*
 
+## In Scoping
+
+- **Asymmetric stop-loss/take-profit overlay on the weekly trend signal (candidate exp-048)** -- Jason's own risk-management idea (paraphrased 2026-09-06: "if I put in $100, I'm willing to lose up to $75 before I sell, but if it's going up, I hold until I've at least doubled my winnings"), applied concretely to exp-047 (the weekly trend-following near-miss). Scoping draft v2 at `research/studies/asymmetric-stop-target-overlay-scoping.md`, already through one round of Path-to-Profitability Advisor review (six required changes, all incorporated into v2). A purely descriptive pilot tabulation has been run (not a promotion-relevant result): of exp-047's 299 weeks, a 1R-stop/2R-target/20-day-ATR rule would stop out 45.5% of weeks, hit the target 14.0% of weeks, and resolve neither 40.5% of the time. Awaiting Jason's explicit line-by-line sign-off on the pinned parameters (especially the 20-day ATR window and the hard 2:1 reward:risk cap) before any model code is written -- not authorized to build yet.
+
 ## Parked
 
 - **Order-flow / buying-vs-selling-pressure signals** -- added 2026-09-03, per the Path-to-Profitability Advisor's recommendation during the post-"step back" checkpoint review, as the one genuinely untried style within NQ futures. Real pricing obtained 2026-09-03 directly from Databento's own live pricing calculator (no account needed -- their "Preview your usage fees" tool is usable unauthenticated): CME Globex MBO (market-by-order, L3) is **$1.80/GB**, MBP-10 (market-by-price, 10 levels, L2) is **$0.50/GB** -- real, confirmed rates, not estimates.
