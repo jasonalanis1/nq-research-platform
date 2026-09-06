@@ -1,6 +1,6 @@
-# Weekly-Resolution Trend Following -- Scoping Proposal (DRAFT v1, not yet approved)
+# Weekly-Resolution Trend Following -- Scoping Proposal (v1, APPROVED and TESTED -- exp-047)
 
-## Status: draft scoping proposal only. No code written. Not authorized.
+## Status: APPROVED by Jason 2026-09-06, as-is. Built and tested the same day as exp-047. Result: NULL -- a genuine, disclosed near-miss, not promoted. See "Result (2026-09-06, exp-047)" below; the rest of this document is kept as the frozen record of what was authorized and why.
 
 Written per the Research Scoping Agent process (`docs/RESEARCH_SCOPING_AGENT.md`),
 after Jason asked, following exp-046's kill, whether this project needs a
@@ -8,6 +8,53 @@ structural pivot rather than another single-mechanism search, and the
 Path-to-Profitability Advisor's direct recommendation: stop testing new
 signals at daily/intraday resolution (both now heavily tested, mostly
 null) and test the one resolution never tried -- weekly.
+
+## Result (2026-09-06, exp-047)
+
+Built and run the same day Jason approved this draft as-is. Implementation:
+`src/study_nq_weekly_trend_following.py`. Full results:
+`data/study_nq_weekly_trend_following_results.json`. Path-to-Profitability
+Advisor independently reviewed the implementation and this result before it
+was reported -- confirmed the implementation matches the frozen spec, no
+lookahead, no parameter search, and that "kill" is the technically correct
+call per Section 5's binary gate (both statistical and economic checks
+must clear; this spec does not include a "retest" tier).
+
+**Modeling population**: 353 weekly bars resampled from the daily Discovery
+series, 300 classifiable (52+ prior weekly returns), 299 with a computed
+weekly P&L.
+
+**Result: a genuine, honest near-miss -- NOT statistically credible, so a
+NULL per the frozen gate, but the closest any hypothesis in this project
+has come.** Mean weekly net P&L +19.38 points, 90% bootstrap CI
+[-1.165, +40.414] -- the lower bound sits just barely below zero. Clearly
+economically meaningful (far above the 2x-cost-drag threshold: threshold
+was 0.221 points, actual mean was 19.38). 22 position flips across 299
+weeks -- not a thin 1-2-trend bet.
+
+**Robustness**: dropping the single largest-magnitude week reduces the
+mean to +16.06 (CI still spans zero) -- not driven by one outlier week.
+Chronological split-half: first half mean +9.93 (CI [-5.75, +25.77]),
+second half mean +28.76 (CI [-8.49, +66.40]) -- both halves directionally
+positive, no sign flip, though both individually still span zero.
+
+**Why this is NOT promoted, retested, or re-parametrized, even though it's
+close**: Section 5 above is explicit -- both the statistical and economic
+checks must clear, with no softer tier for a promising-but-underpowered
+result, unlike the disclosed escalation path some other studies in this
+project have used. Trying a different lookback window or pulling in more
+historical data now would be post-hoc parameter mining against the exact
+data that produced this near-miss -- the Advisor was explicit that this is
+not a legitimate path forward. The only defensible follow-up, if ever
+pursued, would be a NEW, separately pre-registered spec testing this exact
+signal and lookback on genuinely new future weekly data as it accrues (a
+true prospective check) -- not a re-mine of Discovery history. No such
+follow-up is authorized at this time.
+
+**Honest bottom line**: weekly-resolution trend following is the most
+economically striking result this project has produced (23+ hypotheses
+in), but it is still, honestly, a null by this project's own pre-committed
+statistical bar. Logged as such -- not oversold, not quietly softened.
 
 ## 1. Provenance
 

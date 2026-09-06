@@ -535,3 +535,43 @@ only that this one, honestly tested, did not. See
 `research/studies/multi-factor-combination-scoping.md` and
 `src/study_multi_factor_combination.py` for the full specification and
 results.
+
+## exp-047: Weekly-Resolution Trend Following
+
+Twenty-fourth hypothesis. Direct weekly resample of exp-038 (daily
+trend following, null), per the Path-to-Profitability Advisor's
+explicit recommendation during a 2026-09-06 strategic-direction
+consultation with Jason: stop testing new signals at daily/intraday
+resolution -- both now heavily tested, mostly null -- and test the one
+timeframe never tried in this project's history. Frozen spec at
+`research/studies/weekly-trend-following-scoping.md` (v1); Advisor-
+reviewed before Jason's sign-off and again after the result, per this
+project's standing mandatory-consultation rule. Implementation:
+`src/study_nq_weekly_trend_following.py`.
+
+**Result: a genuine, honest near-miss -- NULL per the frozen gate, the
+closest this project has come.** n=299 classifiable weeks, mean net
+P&L +19.38 points, 90% bootstrap CI **[-1.165, +40.414]** -- the lower
+bound sits just barely below zero, so NOT statistically credible by
+the pre-committed bar, but clearly economically meaningful (far above
+the 2x-cost-drag threshold). 22 position flips across 299 weeks.
+Robustness held up clean: dropping the single largest week only
+softened the mean to +16.06 (still spanning zero, so not one lucky
+week driving it), and a chronological split-half showed both halves
+directionally positive with no sign flip (first half +9.93, second
+half +28.76 -- though both individually still span zero).
+
+**Honest bottom line:** this is the most economically striking result
+in the project's 24-hypothesis history, but it is still, honestly, a
+null by this project's own pre-committed statistical bar -- the frozen
+spec's binary gate requires both checks to clear, with no softer
+"retest" tier, and this doesn't clear. It is NOT being promoted,
+retested, or re-parametrized on this data -- doing so now would be
+post-hoc mining against the exact data that produced the near-miss.
+The only defensible future follow-up would be a separately
+pre-registered prospective test against new, not-yet-existing weekly
+data as it accrues -- not currently authorized. Logged to the research
+ledger as hyp-000017 (REJECTED). See
+`research/studies/weekly-trend-following-scoping.md` and
+`src/study_nq_weekly_trend_following.py` for the full specification and
+results.
