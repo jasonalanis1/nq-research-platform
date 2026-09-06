@@ -36,6 +36,24 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03, while fixing a real bug in `larry_validate.py`'s trial-counting (it was silently returning n_trials=1 for nearly every real hypothesis, because it matched on `strategy_name`, which is always distinct per variant -- fixed by walking `parent_hypothesis_id` lineage instead). The lineage-walking fix is a real improvement but still can't fully solve trial-counting on its own: hyp-000007 and hyp-000008 were both born from ONE joint script run (`src/_run_liquidity_filter_discovery_backtest.py`, testing 4 variant x protection-bucket configs together) but have DIFFERENT immediate parents (hyp-000001 and hyp-000003 respectively), so lineage alone undercounts each as a 2-hypothesis family instead of the true 4. Worked around for now with `evaluate_candidate()`'s explicit `n_trials_override` parameter (used in `src/apply_larry_liquidity_filter_family.py`, documented inline). A `search_batch_id` field on `HypothesisRecord`, set whenever multiple hypotheses are logged from one script run, would let this be inferred automatically going forward instead of relying on the calling script to state it by hand each time. Not built now -- kept tonight's change scoped to the trial-counting bug itself.
 
+## Shelved
+
+- **Weekly trend-following signal family on NQ (exp-047, exp-048, exp-049)** -- shelved
+  2026-09-06 per a pre-committed rule. exp-047 (raw weekly momentum sign) was this
+  project's closest-ever near-miss (mean +19.38 pts/week, 90% CI [-1.165, +40.414]).
+  Two follow-on risk-management overlays were tested at Jason's request: exp-048 (a
+  hard +2R take-profit cap) and exp-049 (a 1R trailing stop activated at +2R) --
+  both came back kills with nearly identical means (~+10.2-10.5 pts/week, both CIs
+  spanning zero), roughly half the raw signal's mean, because both overlay designs
+  remove the small number of large trending weeks that drive this signal's edge.
+  Per the frozen spec's pre-commitment (named before either follow-on result
+  existed), two follow-on attempts on the same near-miss without a clear,
+  comfortable pass is the stopping point -- not followed by further parameter
+  variants (e.g. a wider trail distance), which would be a post-hoc search for the
+  variant that clears the bar. Revisit only via an entirely new, independently
+  pre-registered hypothesis (a materially different design, or a prospective test
+  on new future data) -- not a continuation of this family.
+
 ## Rejected
 
 *(considered and ruled out, with why — nothing here yet)*

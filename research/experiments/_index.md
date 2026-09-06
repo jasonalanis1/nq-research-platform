@@ -635,3 +635,53 @@ ledger as hyp-000018 (REJECTED). See
 `research/studies/asymmetric-stop-target-overlay-scoping.md` and
 `src/study_asymmetric_stop_target_overlay.py` for the full specification
 and results.
+
+## exp-049: Trailing-Stop Variant of the Weekly Trend Overlay
+
+Twenty-sixth hypothesis, and the second (final, per pre-commitment)
+follow-on attempt on exp-047's weekly trend-following near-miss, after
+exp-048's hard-cap kill. Directly followed the Advisor's own suggested
+next step: a trailing exit that participates in the tail rather than
+capping it. Same -1R initial stop and 20-day-ATR risk unit as exp-048;
+new mechanism: once favorable excursion reaches +2R, a trailing stop
+activates and ratchets at the same 1R distance behind the running
+peak/trough for the rest of that entry week only (no cross-week position
+state -- resolved via an explicit, Advisor-required, causal per-bar
+algorithm with no same-bar lookahead). Frozen spec at
+`research/studies/trailing-stop-overlay-scoping.md`; implementation at
+`src/study_trailing_stop_overlay.py`.
+
+**Result: kill, and a genuinely informative one.** n=299 weeks. Mean
+weekly net P&L **+10.20 points, 90% CI [-6.88, +27.87]** -- spans zero,
+not statistically credible. Nearly IDENTICAL to exp-048's hard-cap result
+(mean +10.53, CI [-6.37, +28.38]), despite the trail giving the position
+room to run past +2R rather than capping it there -- not the going-in
+expectation. A diagnostic on the exit R-multiple distribution (run on
+already-generated data, not a new test) explained why: of the 148 weeks
+that stopped or trailed out, 91.9% exited at almost exactly -1R (the
+plain stop, trail never activated); only 12 weeks ever reached the +2R
+trail-activation level, and most of those trailed out shortly after
+activating. A 1x-ATR retracement from an intra-week peak is a fast,
+common event on NQ's weekly volatility, so this specific trail distance
+behaves almost exactly like a hard cap in practice -- confirming the
+implementation is correct, not evidence of a bug.
+
+**Honest bottom line, and the family's closure:** the near-identical
+means of exp-048 and exp-049 is stronger evidence than either alone that
+exp-047's marginal edge is concentrated in a small number of large
+trending weeks, and any overlay that limits how far a winning week can
+run -- hard cap or trail alike -- removes enough of that tail to keep
+the confidence interval spanning zero. Per the frozen spec's
+pre-commitment (named before this result existed, specifically to
+prevent a search for the variant that happens to pass): this is the
+second follow-on attempt on the exp-047 signal without a clear,
+comfortable pass, so **the exp-047 weekly trend-following signal family
+(raw and all overlay variants) is now shelved.** A wider trail distance
+is a real, obvious next idea but is explicitly NOT pursued here -- doing
+so would be a third attempt and exactly the post-hoc parameter search
+this project's rules exist to prevent. A materially different design
+would need its own fresh, independently pre-registered hypothesis in the
+future. Logged to the research ledger as hyp-000019 (REJECTED). See
+`research/studies/trailing-stop-overlay-scoping.md` and
+`src/study_trailing_stop_overlay.py` for the full specification and
+results.
