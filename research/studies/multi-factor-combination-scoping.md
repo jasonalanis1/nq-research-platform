@@ -1,4 +1,4 @@
-# Multi-Factor Combination Model -- Scoping Proposal (DRAFT v2, not yet approved)
+# Multi-Factor Combination Model -- Scoping Proposal (DRAFT v3, not yet approved)
 
 ## Status: draft scoping proposal only. No code written. Not authorized.
 
@@ -12,6 +12,19 @@ the proposal for what WOULD get frozen, if approved.
 real gaps. See the six numbered items below, each addressed inline
 where it applies, plus a new "Stability check" step and a new
 "Accounting" section.
+
+**v3 changelog**: revised after a second Advisor review of v2 (and
+Jason's instruction to close out routine fixes like this one without a
+separate follow-up round, per his 2026-09-06 note, to keep this
+project's day-to-day usage efficient). Four changes: (1) fixed a real
+bug the Advisor caught in `src/build_multi_factor_features.py` -- the
+momentum column was silently populated with a continuous magnitude
+instead of the +1/-1 sign it claimed to be; fixed and the CSV
+regenerated (see updated "Data assembled" section below); (2) pinned
+the Step 1 evaluation metric, previously left as an open blank; (3)
+quantified the stability-check's disqualifying threshold, previously a
+subjective judgment call; (4) formally locked the target variable to
+(b), previously phrased as "for discussion."
 
 ## Data assembled (2026-09-04, pure prep -- not a test)
 
@@ -35,6 +48,22 @@ overnight-gap and target columns (a very similar edge case to one
 already fixed once before in this project's fade-the-gap study). Fixed
 by filtering to only valid trading days before pairing consecutive
 days, the same convention already used elsewhere in this codebase.
+
+**Update (2026-09-06, v3): a second real bug was caught, this time by
+the Advisor's review, and fixed the same day.** The `momentum_sign`
+column was populated by calling
+`study_nq_trend_following.compute_momentum_signal()`, which returns a
+continuous trailing return (a magnitude), not the +1/-1 sign the
+column name and this document both promised -- `compute_positions()`
+is the function in that file that actually produces the sign, and it
+had not been called. Fixed by calling `compute_positions()` on the
+magnitude output, and the CSV has been regenerated; spot-checked
+afterward (values are now exactly +1.0/-1.0/missing, 1,337 / 127 / 253
+respectively). Also, per this document's v3 changelog above, the
+target variable is no longer an open, undecided column pair --
+`target_next_day_return_sign` (daily close-to-close) is now the
+locked target; `target_next_day_return_pts` remains in the table only
+as supporting/descriptive data, not a second candidate.
 
 ## Where this came from
 
@@ -123,11 +152,18 @@ Two candidates, not both -- pick one before freezing:
     (matching the daily resolution `study_nq_trend_following.py`
     already uses).
 
-Recommendation for discussion, not a decision: (b), since roughly half
-the candidate features above (COT, turn-of-month, momentum) are
-themselves daily/weekly-resolution by nature -- mixing daily-resolution
-features with an intraday target would need an extra, disclosed
-assumption about how a daily signal applies to an intraday bet.
+**Decided (v3): (b), daily close-to-close sign.** Roughly half the
+candidate features above (COT, turn-of-month, momentum) are themselves
+daily/weekly-resolution by nature, and -- confirmed when
+`build_multi_factor_features.py` was actually written -- only the
+daily target was ever built; no 90-minute intraday target exists
+anywhere in this project's code or data. Choosing (a) now would mean
+writing new, untested intraday-alignment code from scratch, on top of
+mixing daily-resolution features with an intraday target (an extra,
+disclosed assumption this project has never needed to make elsewhere).
+(b) is not just preferred, it is the only candidate with real
+supporting code and data already in hand. Locked; not open for further
+discussion absent a new, disclosed reason to revisit it.
 
 **Gap 3 (Advisor, addressed): daily resolution needs its own cost
 model and trade definition, spelled out now, not decided while
@@ -176,9 +212,12 @@ structure already used in exp-043/exp-044:
 
 - **Step 1 (statistical, no cost)**: fit the frozen model on Discovery
   via purged/embargoed cross-validation (below), and check whether its
-  out-of-fold classification accuracy (or AUC, whichever this
-  document's revision settles on before freezing) is credibly above
-  50/50 -- no coin-flip model is worth costing out.
+  out-of-fold **ROC-AUC (decided in v3; not accuracy)** is credibly
+  above 0.5 -- no coin-flip model is worth costing out. AUC over raw
+  accuracy specifically because it evaluates the model's predicted
+  probabilities directly, without needing to first pick a
+  classification threshold -- keeping Step 1 a pure statistical check,
+  fully separate from Step 2's threshold decision below.
 - **Step 2 (costed rule, gated on Step 1)**: only if Step 1 clears, the
   simplest possible, deliberately un-tuned translation rule: go long
   if the model's predicted probability of a positive next-day return
@@ -206,11 +245,15 @@ structure already used in exp-043/exp-044:
    any move to Validation, the same diagnostic that is what actually
    caught exp-045's problem today.** Split Discovery chronologically in
    half; refit the identical frozen model on each half independently;
-   compare coefficient signs and cross-validated accuracy between the
-   two halves. Meaningful disagreement (a feature flipping sign, or
-   accuracy collapsing to coin-flip in either half) is disclosed as an
-   instability flag and is grounds to NOT proceed to Validation, even
-   if the full-Discovery fit alone looked clean.
+   compare coefficient signs and cross-validated AUC between the two
+   halves. **Quantified threshold (decided in v3, not a judgment call
+   made after the fact):** disclosed as an instability flag, and
+   grounds to NOT proceed to Validation even if the full-Discovery fit
+   looked clean, if EITHER of the following holds: (i) any feature
+   that is non-zero (not L1-zeroed) in BOTH halves has opposite-sign
+   coefficients between the two halves; or (ii) either half's
+   out-of-fold AUC falls to <= 0.53 (a fixed, pre-registered near-
+   coin-flip band, not tuned after seeing the result).
 5. If the Discovery-slice fit clears Step 1, the stability check, AND
    shows real joint predictive power, the frozen model (coefficients
    fixed, no more tuning) is tested once on Validation data -- the

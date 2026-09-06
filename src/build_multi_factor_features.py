@@ -40,7 +40,7 @@ from study_economic_calendar import classify_day as classify_cpi_nfp_day
 from study_fomc_volatility import classify_day as classify_fomc_day
 from study_futures_expiration import make_is_expiration_week
 from study_overnight_gap import compute_day_gap_and_returns
-from study_nq_trend_following import compute_momentum_signal
+from study_nq_trend_following import compute_momentum_signal, compute_positions
 from study_turn_of_month import classify_turn_of_month
 from study_volatility_regime import (
     classify_regimes,
@@ -88,7 +88,15 @@ def main():
     returns = compute_daily_log_returns(ref_closes)                    # study_volatility_regime
     vol_by_day = compute_trailing_volatility(returns, all_days)        # study_volatility_regime
     regime_by_day = classify_regimes(vol_by_day)                       # study_volatility_regime
-    mom_by_day = compute_momentum_signal(returns, all_days)            # study_nq_trend_following
+    mom_magnitude_by_day = compute_momentum_signal(returns, all_days)  # study_nq_trend_following
+    # BUGFIX (2026-09-06, caught by Advisor review of the multi-factor scoping
+    # draft): compute_momentum_signal() returns the trailing cumulative log
+    # return -- a continuous MAGNITUDE -- not a +1/-1 sign. The scoping
+    # document and this column's own name promise a sign. compute_positions()
+    # is the actual sign-producing function in that file; call it here on top
+    # of the magnitude dict, unmodified, per this project's "reuse an existing
+    # function" convention.
+    mom_by_day = compute_positions(mom_magnitude_by_day)                # study_nq_trend_following
     turn_flags = classify_turn_of_month(all_days)                      # study_turn_of_month
     is_exp_week = make_is_expiration_week(all_days[0].year, all_days[-1].year)  # study_futures_expiration
 
