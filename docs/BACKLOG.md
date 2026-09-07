@@ -51,6 +51,33 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **exp-055/056: Collective-evidence pilot (trend family) + prospective
+  validation** -- exp-055 (2026-09-07, hyp-000025) piloted the new
+  cross-strategy, week-first aggregation machinery Jason proposed
+  (strategies as lenses, conditions pre-registered, aggregate by week
+  before by lens) on the trend family's 4 correlated variants
+  (exp-047/048/049/051) -- explicitly a dry run of the machinery, not a
+  test of independent corroboration, since all 4 lenses share one
+  underlying signal. Of 11 pre-registered (condition, value) buckets,
+  one stood out: `distance_from_52wk_ma = low` (near-MA / weak-trend
+  weeks), n=42 distinct weeks, mean fraction of lenses beating their
+  own baseline = 0.268, 90% CI [0.185, 0.357] -- entirely below 0.5.
+  Logged as PROMISING (exploratory only, per the pilot's own frozen
+  promotion rule) and immediately taken to a single pre-registered
+  prospective test, exp-056 (2026-09-07, hyp-000026): does excluding
+  weak-trend weeks improve exp-047's own raw signal, evaluated ONLY on
+  the Validation slice (2021-10-04 -> 2024-01-03), signal computed
+  continuously across Discovery+Validation for warm-up continuity.
+  Result: FAIL. n=54 weeks, mean +76.21 pts/week, but 90% CI
+  [-6.32, +156.20] still crosses zero -- does not clear the
+  statistical-credibility bar. exp-055's finding does not replicate
+  out of sample; treated as noise from the correlated-lens pilot, not
+  a real effect. This filtered-signal line is closed per the
+  pre-registered rule: no retuning of the distance threshold or
+  lookback window. See
+  `research/studies/collective-evidence-pilot-scoping.md` and the
+  ledger (hyp-000025, hyp-000026) for full detail.
+
 - **exp-051: Cross-asset diversified test of the weekly trend signal**
   -- tested 2026-09-07, once ZN/6E/CL data was purchased ($19.14
   total). Result: kill (hyp-000021). Mean weekly portfolio net return
