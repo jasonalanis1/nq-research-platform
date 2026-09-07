@@ -144,6 +144,55 @@ tested. 37 candidates reached validation. 4 received holdout access. 1 survived.
    implementation — pure infrastructure, once (2) is settled — not today.
 4. Only then build the Strategy R&D Agent itself, scoped to Discovery data only.
 
+## Risk-management loss thresholds -- separate from the promotion bar (added 2026-09-07)
+
+Raised by Jason after exp-051's kill: he's fine with never finding a
+strategy that wins every day, and wants that acknowledged plainly --
+the goal is being profitable on balance (mostly-winning periods, an
+occasional controlled loss, positive over time), not perfection. The
+question was whether the project's promotion bar (90% CI entirely
+above zero, economically meaningful) should be loosened to reflect
+that.
+
+Decided (per the Path-to-Profitability Advisor's recommendation,
+adopted as-is): NO -- the statistical promotion bar is not loosened.
+What Jason described (mostly winning, occasional small loss, positive
+overall) is not a different, looser goal than what the CI test already
+checks for -- it's the same goal in plain language. With only a few
+hundred data points, a strategy with NO real edge can also produce a
+backtest that looks like "mostly winning with occasional small
+losses," purely by chance. The confidence interval is what
+distinguishes a real edge from a lucky-looking coincidence; loosening
+it doesn't get closer to Jason's actual goal, it just removes the
+check that tells the two apart. Given this project has already killed
+27 hypotheses this way, loosening the bar now specifically because the
+28th produced a positive-but-not-credible average would be exactly the
+kind of post-hoc standard-shifting the promotion bar exists to prevent.
+
+Instead, a SEPARATE, additive layer is adopted: explicit
+risk-management loss thresholds -- a hard maximum loss per day and per
+week -- that would apply to any strategy once it clears the
+statistical bar and moves toward paper/live trading. This directly
+delivers what Jason actually asked for ("thresholds to keep the losses
+not major losses") without weakening the test for whether a strategy's
+edge is real in the first place. The statistical bar answers "is this
+edge real"; the loss thresholds answer "how bad can one day/week get
+even if it is."
+
+Concrete thresholds are NOT set here -- they depend on account size and
+risk tolerance figures not yet decided, and setting a placeholder
+number now would just be another form of the "decide it later, but
+write something down now" pattern this project avoids elsewhere. This
+entry exists to lock the PRINCIPLE (a separate risk layer, added once
+there is a real candidate strategy to apply it to, never a substitute
+for the statistical bar) so it isn't re-litigated from scratch the next
+time a near-miss kill prompts the same question. Concrete per-day/
+per-week dollar or R-multiple limits get set as part of whatever
+strategy's live-authorization discussion first reaches that stage --
+see docs/AUTOMATION_ARCHITECTURE.md's "kill switch" section for the
+existing live-trading safety-control framework this would extend, not
+replace.
+
 ## Search stopping point -- checkpoint policy (added 2026-09-03)
 
 Raised by Jason after exp-041's null result: at what point does this
