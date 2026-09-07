@@ -51,6 +51,20 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **exp-059: VXN level as a standalone predictive signal -- REJECTED**
+  -- 2026-09-07, hyp-000029. First test of the strategic pivot agreed
+  after the 2026-09-07 assessment (58 experiments in, mostly price/
+  time patterns, both Claude and the Advisor recommended trying a
+  genuinely different kind of data). VXN (the Nasdaq options market's
+  own fear gauge) was already on hand for free but had only ever been
+  used to check whether OTHER findings were priced in, never tested as
+  its own signal. Step 1 (statistical only, no costs): does NQ's
+  next-day return differ after an unusually calm vs unusually fearful
+  prior VXN close? Result: n=301 calm days, n=629 fearful days, 90% CI
+  on the difference (-0.002132, 0.000292) -- spans zero. VXN's raw
+  level alone carries no next-day directional signal. Closed; no
+  costed rule was built. See the ledger (hyp-000029) for full detail.
+
 - **exp-058: Prospective validation of exp-057's high-volatility candidate --
   REJECTED** -- 2026-09-07, hyp-000028. Pre-registered single test of exp-057's
   one candidate (Initial Balance Breakout doing worse than its own average on
