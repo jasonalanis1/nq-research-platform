@@ -51,6 +51,17 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **exp-058: Prospective validation of exp-057's high-volatility candidate --
+  REJECTED** -- 2026-09-07, hyp-000028. Pre-registered single test of exp-057's
+  one candidate (Initial Balance Breakout doing worse than its own average on
+  high-volatility days), on the Validation slice only. Result: n=259 trades,
+  mean R-multiple -0.0746 (still negative), 90% CI [-0.1910, 0.0433] spans zero
+  -- fails both the statistical-credibility and economic-meaningfulness legs.
+  exp-057's finding does not replicate out of sample; treated as noise from the
+  pilot, not a real effect. Line closed per the pre-registered rule: no
+  retuning of the volatility threshold. See the ledger (hyp-000027,
+  hyp-000028) for full detail.
+
 - **exp-057: Intraday collective-evidence pilot (Level Sweep x2, IB
   Breakout, Fade the Gap)** -- 2026-09-07, hyp-000027. Follow-on to
   exp-055/056 after Jason asked what's next and Claude/Advisor agreed
