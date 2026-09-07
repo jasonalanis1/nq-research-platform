@@ -12,7 +12,22 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## In Scoping
 
-*(nothing currently open)*
+- **exp-051: Cross-asset diversified test of the weekly trend signal**
+  -- scoped and Advisor-cleared (v2) 2026-09-07, following a "big
+  picture" strategy conversation where Jason asked whether this
+  project has been stuck in an unproductive single-instrument sandbox.
+  Both Claude and the Advisor independently concluded yes -- 26 tests,
+  zero clearing the promotion bar, on one of the most heavily-searched
+  instruments in the world, using only public price data. Rather than
+  invent hypothesis #27 on NQ alone, this tests whether the one
+  near-miss signal (exp-047's weekly trend momentum) holds up spread
+  across 4 instruments in different asset classes (NQ equity index,
+  ZN rates, 6E currency, CL commodity) -- how real diversified
+  trend-following actually works. **Blocked**: ZN/6E/CL Discovery-
+  period data not yet purchased -- next step is Jason getting real
+  Databento cost quotes (expected ~$10-30 total based on ES's own
+  $8.35 for the identical date range) before anything is bought. See
+  `research/studies/cross-asset-weekly-trend-scoping.md`.
 
 ## Ongoing / Prospective Tracking
 
