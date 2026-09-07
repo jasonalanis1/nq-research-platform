@@ -12,22 +12,7 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## In Scoping
 
-- **exp-051: Cross-asset diversified test of the weekly trend signal**
-  -- scoped and Advisor-cleared (v2) 2026-09-07, following a "big
-  picture" strategy conversation where Jason asked whether this
-  project has been stuck in an unproductive single-instrument sandbox.
-  Both Claude and the Advisor independently concluded yes -- 26 tests,
-  zero clearing the promotion bar, on one of the most heavily-searched
-  instruments in the world, using only public price data. Rather than
-  invent hypothesis #27 on NQ alone, this tests whether the one
-  near-miss signal (exp-047's weekly trend momentum) holds up spread
-  across 4 instruments in different asset classes (NQ equity index,
-  ZN rates, 6E currency, CL commodity) -- how real diversified
-  trend-following actually works. **Blocked**: ZN/6E/CL Discovery-
-  period data not yet purchased -- next step is Jason getting real
-  Databento cost quotes (expected ~$10-30 total based on ES's own
-  $8.35 for the identical date range) before anything is bought. See
-  `research/studies/cross-asset-weekly-trend-scoping.md`.
+*(nothing currently open)*
 
 ## Ongoing / Prospective Tracking
 
@@ -63,6 +48,24 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 - **score_results.py's profit_factor unit mismatch** — found 2026-08-24, while reviewing exp-025. **Already closed 2026-09-01** (this backlog entry was stale): `score_results.py` now prints both the original raw-points profit factor and an R-multiple-normalized version side by side, with the R version called out as the one to prefer. Confirmed still present and correct on 2026-09-07.
 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03. **Closed 2026-09-07**: `HypothesisRecord` gained a `search_batch_id` field (optional, set by the calling script when multiple hypotheses come from one joint run); `larry_validate.py`'s `evaluate_candidate()` now tries an exact batch-based sibling count first and only falls back to lineage-walking when no batch id is set. `n_trials_override` still exists as a manual escape hatch. Verified with a scratch-ledger test: a 2-hypothesis batch with different immediate parents was correctly counted as 2, and a hypothesis with no batch id correctly fell through to the old lineage logic. Existing ledger rows (hyp-000007/hyp-000008 included) are untouched and keep using their documented `n_trials_override` -- this is additive, not a retroactive rewrite.
+
+## Tested / Closed
+
+- **exp-051: Cross-asset diversified test of the weekly trend signal**
+  -- tested 2026-09-07, once ZN/6E/CL data was purchased ($19.14
+  total). Result: kill (hyp-000021). Mean weekly portfolio net return
+  was positive (+0.0003/week, inverse-vol-weighted across NQ/ZN/6E/CL)
+  but the 90% confidence interval crossed zero, so it doesn't clear
+  the statistical-credibility gate. Per the pre-registered follow-up
+  plan (frozen spec Section 11), this is a clean kill, not followed by
+  parameter variants on this same construction. A real bug was found
+  and fixed during this run: WTI crude legitimately traded negative on
+  2020-04-20/21 (the well-known May-2020 contract expiry event), which
+  broke the log-return math and silently produced a NaN "kill" on the
+  first pass -- fixed as a general validity guard (non-positive
+  reference close treated as no usable close), re-run once, real
+  result recorded. See `research/studies/cross-asset-weekly-trend-scoping.md`
+  and the ledger (hyp-000021) for full detail.
 
 ## Shelved
 

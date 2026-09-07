@@ -49,14 +49,33 @@ ECONOMIC_THRESHOLD_POINTS = 2 * ROUND_TRIP_COST_POINTS  # frozen Step-2-gate #2,
 
 def compute_daily_ref_closes(day_groups: dict) -> dict:
     """day -> reference close (study_overnight_gap.get_reference_close(),
-    unmodified) or None if that day has no usable bar at/before 4pm ET."""
+    unmodified) or None if that day has no usable bar at/before 4pm ET.
+
+    FIXED 2026-09-07 (found while running exp-051 on real CL/WTI crude
+    oil data): a reference close of zero or negative is also treated as
+    "no usable close" (None), same as a day with no bars at all. This
+    is not a data error -- WTI crude futures actually traded negative
+    on 2020-04-20/21 (the well-known May-2020 contract expiry storage
+    crunch), a real, one-time market event. But log(price) is undefined
+    for a non-positive price, so compute_daily_log_returns() silently
+    produced NaN for that day and every downstream calculation (trailing
+    volatility, portfolio weights, the whole exp-051 result) inherited
+    the NaN. Guarding here means those 2 days are excluded exactly the
+    way a day with no data at all already was -- a general validity
+    precondition for log-return math, applied identically regardless of
+    which instrument or which direction a result would come out. NQ/ZN/
+    6E/ES have never hit this (checked: no non-positive closes in any
+    of them), so this is a no-op for every result already on record."""
     tz = None
     out = {}
     for day in sorted(day_groups.keys()):
         day_df = day_groups[day]
         if tz is None and len(day_df):
             tz = day_df.index.tz
-        out[day] = get_reference_close(day_df, day, tz) if len(day_df) else None
+        ref_close = get_reference_close(day_df, day, tz) if len(day_df) else None
+        if ref_close is not None and ref_close <= 0:
+            ref_close = None
+        out[day] = ref_close
     return out
 
 
