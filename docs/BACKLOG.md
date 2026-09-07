@@ -33,10 +33,6 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Parked
 
-- **Order-flow / buying-vs-selling-pressure signals** -- added 2026-09-03, per the Path-to-Profitability Advisor's recommendation during the post-"step back" checkpoint review, as the one genuinely untried style within NQ futures. Real pricing obtained 2026-09-03 directly from Databento's own live pricing calculator (no account needed -- their "Preview your usage fees" tool is usable unauthenticated): CME Globex MBO (market-by-order, L3) is **$1.80/GB**, MBP-10 (market-by-price, 10 levels, L2) is **$0.50/GB** -- real, confirmed rates, not estimates.
-
-  **The decisive blocker isn't the per-GB rate, it's access to history.** Databento's own plan comparison table shows L2 (MBP-10) and L3 (MBO) historical data is capped at **"last 1 month"** on both the free pay-as-you-go plan and the $199/month Standard plan. Full multi-year history -- which this project's whole Discovery/Validation methodology depends on (Discovery alone is 2015-01-01 to 2021-10-03) -- is only available on the **Unlimited plan: $4,500/month, annual contract required** (i.e. $54,000/year just for data access, before any $/GB usage charges on top). This is a materially different, and much more decisive, finding than the options-data cost check: this is not a "get a quote and decide" situation, it's a clean no at retail-research budget. **Recommendation: do not pursue order-flow signals against historical Discovery-period data under this project's current budget.** The only thing realistically testable at the free/Standard tier is the trailing 1 month of live/recent data, which cannot be tested against this project's existing Discovery/Validation framework and would mean building a wholly new, much slower (wait-for-data-to-accumulate) research process. Parked, not deleted -- revisit only if the project's budget or goals change materially.
-
 - **Individual stocks as an alternative to NQ futures** -- raised by Jason 2026-09-03 during the post-"step back" conversation, considered and set aside (not rejected outright, parked). Both Claude's own assessment and the Path-to-Profitability Advisor's independent take agreed: moving to individual stocks multiplies the number of things being searched from one instrument to thousands of tickers, which multiplies the risk of "finding" a fake edge purely by chance -- the exact failure mode this project's promotion bar and Discovery/Validation split exist to prevent. It would also mean new data cost and none of what's been learned about NQ (calendar effects, gap behavior, reversal patterns) carries over. Revisit only if the NQ-specific search genuinely runs dry across multiple future checkpoints, not as a first resort.
 
 
@@ -73,4 +69,10 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Rejected
 
-*(considered and ruled out, with why — nothing here yet)*
+- **Order-flow / buying-vs-selling-pressure signals** -- closed out 2026-09-07
+  at Jason's explicit request (drop it entirely, don't keep bringing it up).
+  Previously parked 2026-09-03 after being priced out at ~$54,000/year for the
+  historical depth this project's methodology needs (see git history / prior
+  versions of this file for the full pricing detail). Moved from Parked to
+  here, not just left sitting -- Jason wants this off the list of things that
+  keep resurfacing as an option, not merely deprioritized.
