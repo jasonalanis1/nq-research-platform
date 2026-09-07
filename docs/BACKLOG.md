@@ -67,6 +67,26 @@ A single place to capture every idea the moment it comes up, so nothing said in 
   result recorded. See `research/studies/cross-asset-weekly-trend-scoping.md`
   and the ledger (hyp-000021) for full detail.
 
+- **exp-052: Cross-asset short-term weekly reversal (Step 1, raw
+  unfiltered)** -- tested 2026-09-07, first genuinely new signal
+  family in this project (distinct from exp-047/051's 52-week trend
+  family and from exp-034's intraday VWAP-reversion family). Signal:
+  bet against last week's own return, same NQ/ZN/6E/CL basket and
+  portfolio construction as exp-051. Result: kill (hyp-000022). Mean
+  weekly portfolio net return was essentially flat (+0.0000356/week),
+  90% CI [-0.000612, +0.000652] spans zero and also fails the
+  economic-meaningfulness gate outright -- not a near-miss like
+  exp-047, no signal at all. First/second-half split flips sign
+  (+0.000457 vs -0.000383), confirming genuine instability rather than
+  a borderline case. Step 2 (calm-week volatility-percentile filter)
+  was pre-specified but gated behind a Step 1 pass, per the frozen
+  spec -- since Step 1 did not clear the bar, Step 2 was not run. Part
+  of the 2026-09-07 multi-signal-family round Jason asked for (test
+  several different signal types across the same basket); this is the
+  first installment. See
+  `research/studies/cross-asset-short-term-reversal-scoping.md` and
+  the ledger (hyp-000022) for full detail.
+
 ## Shelved
 
 - **Weekly trend-following signal family on NQ (exp-047, exp-048, exp-049)** -- shelved
