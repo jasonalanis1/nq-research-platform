@@ -51,6 +51,28 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **exp-057: Intraday collective-evidence pilot (Level Sweep x2, IB
+  Breakout, Fade the Gap)** -- 2026-09-07, hyp-000027. Follow-on to
+  exp-055/056 after Jason asked what's next and Claude/Advisor agreed
+  to point the collective-evidence machinery at the deferred intraday
+  condition variables instead of expanding to the full 49-strategy
+  library. Ran on 4 intraday lenses -- 2 correlated Level Sweep exit
+  variants plus 2 genuinely independent setups (Initial Balance
+  Breakout, Fade the Gap), all reporting net R-multiples. 3 of 4
+  conditions from the original brainstorm were testable (volatility
+  regime, prior-day direction, opening-range width); time-of-day was
+  dropped when the data couldn't honestly support it across all 4
+  lenses (disclosed in the run notes, not silently dropped). All 8
+  buckets cleared the pre-registered eligibility floor (>=30 distinct
+  days, >=3 of 4 lenses with >=10 trades). One mechanically-selected
+  candidate: high-volatility days show lenses collectively
+  underperforming their own baseline (n=701 days, 90% CI [0.4372,
+  0.4848], entirely below the 0.5 no-effect line). Exploratory only,
+  same rule as exp-055 -- next step is a single pre-registered
+  prospective test on the Validation slice before this is trusted.
+  See `research/studies/intraday-collective-evidence-pilot-scoping.md`
+  and the ledger (hyp-000027) for full detail.
+
 - **exp-055/056: Collective-evidence pilot (trend family) + prospective
   validation** -- exp-055 (2026-09-07, hyp-000025) piloted the new
   cross-strategy, week-first aggregation machinery Jason proposed
