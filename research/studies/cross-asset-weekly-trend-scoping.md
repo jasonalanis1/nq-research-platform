@@ -161,6 +161,55 @@ standard (a pass here is an eligibility result, not a promotion).
 
 Confirmed.
 
+## 11. Pre-registered follow-up plan (added 2026-09-07)
+
+Per the Path-to-Profitability Advisor's recommendation (2026-09-07
+"what's genuinely useful while data is blocked" consultation): this
+section states, BEFORE the Discovery-slice result exists, exactly what
+happens next under each outcome. Writing this after seeing the result
+would silently reopen the same post-hoc-decision problem exp-050's v1
+was cleared for -- deciding what counts as a pass, and what happens
+next, only after already knowing whether it passed.
+
+**If the portfolio clears the promotion bar (Section 8):** per Section
+3's lineage-aware standard, this earns ELIGIBILITY for out-of-sample
+corroboration -- never a promotion, live-authorization conversation, or
+Validation-slice sign-off by default. The next step is one of:
+  (a) a Validation-slice test on the same 4-instrument portfolio,
+      spending part of this project's finite Validation reserve --
+      requires a fresh, dated sign-off from Jason before running,
+      exactly like any other Validation-slice spend; or
+  (b) a prospective-tracking mechanism in the same spirit as exp-050
+      (track the portfolio forward on data that doesn't exist yet,
+      rather than spending Validation budget immediately).
+  Which of (a) or (b) is used is Jason's call at that time, not
+  pre-decided here -- what IS pre-decided is that EITHER path requires
+  a new frozen spec of its own (checkpoints, early-kill rule, etc.,
+  matching exp-050's discipline) before anything runs. A clean
+  Discovery pass alone is never sufficient to spend Validation budget
+  without that additional frozen spec.
+
+**If the portfolio misses the promotion bar:** kill, logged to the
+ledger same as any other result. Per this project's own established
+pattern (the exp-047 family's shelving rule), a miss here is NOT
+followed by parameter variants on this same 4-instrument construction
+(different lookback, different vol window, different weighting scheme)
+in search of one that clears the bar -- that would be exactly the
+post-hoc search this project's rules exist to prevent. A genuinely
+different design (e.g. a different signal entirely, tested across the
+same diversified basket) would need its own fresh, independently
+pre-registered spec, not a tweak of this one.
+
+**If the per-instrument disclosure (Section 6) shows the portfolio
+result is being driven by one instrument alone** (e.g. only NQ or only
+ZN is doing the work, the other three contributing near-zero or
+negative): this is disclosed in the writeup regardless of the
+portfolio-level verdict, and is treated as materially weakening a pass
+-- a genuine cross-asset effect should show up as a broadly shared,
+not single-instrument-concentrated, contribution. Noted here so this
+judgment call isn't made for the first time while looking at a result
+that (dis)favors a particular conclusion.
+
 ## Advisor review (2026-09-07)
 
 v1 returned "cleared with changes, not cleared as-is." Required
