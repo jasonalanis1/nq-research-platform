@@ -81,7 +81,18 @@ two ways:
    Logged in docs/BACKLOG.md as a real schema gap worth closing later
    (a `search_batch_id` field on HypothesisRecord would let this be
    inferred automatically going forward) -- not fixed retroactively
-   tonight, to keep this change scoped to what was actually needed.
+   that night, to keep that change scoped to what was actually needed.
+
+CLOSED 2026-09-07: the schema gap above is now closed.
+research_ledger.py's HypothesisRecord gained a `search_batch_id` field,
+and `evaluate_candidate()` now tries `_family_via_search_batch()` first
+(exact sibling count from the batch id, when the calling script set
+one) before falling back to `_family_via_lineage()`. Existing ledger
+rows logged before this change have no search_batch_id and correctly
+fall back to lineage-walking, unchanged -- this is additive, not a
+retroactive rewrite of history. n_trials_override still exists for a
+caller who wants to state a count directly regardless of either
+automatic method.
 
 DSR/PBO THRESHOLDS -- DECIDED, 2026-08-23 (not placeholders): Jason and
 Claude worked through what DSR and PBO actually measure -- DSR is the
@@ -126,6 +137,27 @@ class LarryVerdict:
     reasoning: str
 
 
+def _family_via_search_batch(hypothesis_id: str, current_state: list) -> Optional[int]:
+    """ADDED 2026-09-07, closing the schema gap this module's own
+    docstring flagged on 2026-09-03: research_ledger.py's
+    HypothesisRecord now carries a search_batch_id field, so a joint
+    search's true sibling count can be read directly instead of only
+    approximated by lineage-walking. Returns None (not 1) when this
+    hypothesis has no search_batch_id set, so the caller knows to fall
+    back to lineage-walking rather than wrongly treating "no batch id"
+    as "batch of one" -- most hypotheses (tested one at a time) will
+    correctly fall back."""
+    by_id = {r["hypothesis_id"]: r for r in current_state}
+    record = by_id.get(hypothesis_id)
+    if record is None:
+        return None
+    batch_id = record.get("search_batch_id")
+    if not batch_id:
+        return None
+    family = [hid for hid, r in by_id.items() if r.get("search_batch_id") == batch_id]
+    return max(1, len(family))
+
+
 def _family_via_lineage(hypothesis_id: str, current_state: list) -> int:
     """Fixed 2026-09-03 -- see module docstring's TRIAL-COUNTING FIX
     note. Walks parent_hypothesis_id up to the root ancestor, then
@@ -134,8 +166,9 @@ def _family_via_lineage(hypothesis_id: str, current_state: list) -> int:
     siblings) if the hypothesis isn't found or has no traceable family.
     This is an improvement over the original same-strategy_name
     matching, but does NOT capture siblings born under different
-    immediate parents from one joint search -- use
-    evaluate_candidate()'s n_trials_override for that case."""
+    immediate parents from one joint search on its own -- see
+    _family_via_search_batch() above and evaluate_candidate()'s
+    n_trials_override for that case."""
     by_id = {r["hypothesis_id"]: r for r in current_state}
     if hypothesis_id not in by_id:
         return 1
@@ -186,7 +219,10 @@ def evaluate_candidate(
     if n_trials_override is not None:
         n_trials_considered = n_trials_override
     else:
-        n_trials_considered = _family_via_lineage(hypothesis_id, current)
+        n_trials_considered = (
+            _family_via_search_batch(hypothesis_id, current)
+            or _family_via_lineage(hypothesis_id, current)
+        )
 
     var_sharpe = float(np.var(
         [np.mean(winner_returns) / np.std(winner_returns)], ddof=0

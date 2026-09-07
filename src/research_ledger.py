@@ -58,6 +58,7 @@ research data -- delete/ignore that output.
 
 import json
 import os
+import re
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from pathlib import Path
@@ -145,6 +146,19 @@ class HypothesisRecord:
       1 ledger table in docs/RESEARCH_INTEGRITY_PROTOCOL.md). None for
       the overwhelming majority of rows, by design -- holdout access is
       rare and budgeted.
+    search_batch_id: ADDED 2026-09-07, per docs/BACKLOG.md's "no
+      search_batch_id field" item (found 2026-09-03 while fixing
+      larry_validate.py's trial-counting). Set when multiple hypotheses
+      are logged from ONE joint script run (e.g. a script that tests 4
+      variant x bucket configs together) -- every hypothesis born from
+      that run gets the SAME search_batch_id, stated explicitly by the
+      calling script. This is what parent_hypothesis_id lineage alone
+      cannot capture: two hypotheses can be siblings from one real
+      search (hyp-000007 and hyp-000008, both born from one run of
+      apply_larry_liquidity_filter_family.py) while having DIFFERENT
+      immediate parents, which lineage-walking undercounts. None for
+      the overwhelming majority of rows -- most hypotheses are tested
+      one at a time, not in a joint batch.
     """
     hypothesis_id: str
     logged_at: str
@@ -161,6 +175,7 @@ class HypothesisRecord:
     parent_hypothesis_id: Optional[str] = None
     experiment_doc_id: Optional[str] = None
     holdout_slot_id: Optional[str] = None
+    search_batch_id: Optional[str] = None
     notes: str = ""
 
     def as_dict(self) -> dict:
@@ -168,15 +183,37 @@ class HypothesisRecord:
 
 
 def _next_hypothesis_id(ledger_path: Path = LEDGER_PATH) -> str:
-    """Counts existing lines to determine the next ID. Deliberately not a
-    stored counter variable -- the ledger file itself is the only source
-    of truth, so the count can never drift out of sync with it."""
+    """FIXED 2026-09-07 (see docs/BACKLOG.md's "research_ledger.py
+    hypothesis ID gaps" item, found 2026-08-24): the original version
+    counted total LINES appended, not distinct hypotheses. Since
+    update_status() appends a new line reusing the SAME hypothesis_id
+    (that's the whole point -- it's a status update, not a new
+    hypothesis), a hypothesis with N status updates was counted N times,
+    so every fresh hypothesis logged afterward skipped that many IDs.
+    Not a data-integrity bug (lineage/uniqueness were always correct),
+    but it made gaps in the ID sequence look like deleted/tampered
+    records in what's meant to be a tamper-evident ledger.
+
+    Fixed by reading the highest numeric suffix among DISTINCT
+    hypothesis_id values already used (fresh IDs are only ever assigned
+    by log_hypothesis(), never by update_status()) and using max + 1.
+    Still derived entirely from the ledger file itself -- no separate
+    counter to keep in sync or let drift."""
     if not ledger_path.exists():
-        n = 0
-    else:
-        with open(ledger_path, "r") as f:
-            n = sum(1 for line in f if line.strip())
-    return f"hyp-{n + 1:06d}"
+        return "hyp-000001"
+    seen_ids = set()
+    with open(ledger_path, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            seen_ids.add(json.loads(line)["hypothesis_id"])
+    max_n = 0
+    for hid in seen_ids:
+        m = re.match(r"^hyp-(\d+)$", hid)
+        if m:
+            max_n = max(max_n, int(m.group(1)))
+    return f"hyp-{max_n + 1:06d}"
 
 
 def log_hypothesis(
@@ -190,11 +227,17 @@ def log_hypothesis(
     max_drawdown_r: Optional[float] = None,
     strategy_status: str = "PROMISING",
     parent_hypothesis_id: Optional[str] = None,
+    search_batch_id: Optional[str] = None,
     notes: str = "",
     ledger_path: Path = LEDGER_PATH,
 ) -> HypothesisRecord:
     """Appends one new hypothesis test to the ledger. This is the ONLY
-    way new rows get created -- always a fresh append, never an edit."""
+    way new rows get created -- always a fresh append, never an edit.
+
+    search_batch_id: pass the SAME value for every hypothesis logged
+    from one joint script run (see HypothesisRecord's docstring). Left
+    as None (the default) for the ordinary one-at-a-time case -- callers
+    must opt in explicitly, this is never inferred automatically."""
     if strategy_origin not in VALID_ORIGINS:
         raise ValueError(f"strategy_origin must be one of {VALID_ORIGINS}, got {strategy_origin!r}")
     if strategy_status not in VALID_STATUSES:
@@ -219,6 +262,7 @@ def log_hypothesis(
         max_drawdown_r=max_drawdown_r,
         strategy_status=strategy_status,
         parent_hypothesis_id=parent_hypothesis_id,
+        search_batch_id=search_batch_id,
         notes=notes,
     )
     ledger_path.parent.mkdir(parents=True, exist_ok=True)
@@ -262,6 +306,7 @@ def update_status(
         parent_hypothesis_id=original.get("parent_hypothesis_id"),
         experiment_doc_id=experiment_doc_id or original.get("experiment_doc_id"),
         holdout_slot_id=holdout_slot_id or original.get("holdout_slot_id"),
+        search_batch_id=original.get("search_batch_id"),
         notes=notes,
     )
     with open(ledger_path, "a") as f:
