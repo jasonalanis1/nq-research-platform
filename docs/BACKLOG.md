@@ -131,6 +131,28 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: Volatility-conditioned position sizing added
+  (position_size_multiplier() in src/volatility_conditioning.py) --
+  not a hypothesis test, a usable tool.** Per the staff-meeting
+  conclusion (Claude, Path-to-Profitability Advisor, and Market Behavior
+  Advisor all converged): stop hunting new directional bar patterns for
+  now (confirmed exhausted at both daily and 60-min resolution this
+  session -- 65+ hypotheses, 0 directional survivors), and make the two
+  confirmed volatility facts usable instead. Pure risk-management
+  transform (inverse volatility sizing): bigger size on days expected
+  quieter, smaller size on days expected wider, so expected dollar risk
+  per trade stays roughly constant. Fed directly from the existing
+  get_volatility_conditioning() output, clipped to [0.5x, 1.5x] so a
+  stacked condition can't push size to an extreme. NOT a return claim,
+  not subject to the 90%-CI promotion bar -- only answers "how many
+  contracts," never "should I take this trade." Its real economic value
+  is untested (no promoted directional signal exists yet to size).
+  Wiring this into real order sizing needs the execution-infrastructure
+  decision (Tradovate account/webhook, a $-spend track) -- parked,
+  separate from this. Full detail:
+  research/studies/volatility-position-sizing-spec.md.
+
+
 - **2026-09-08: exp-094 through exp-099, bar-behavior batches 1+2 re-tested
   at 60-minute intraday resolution -- ALL 6 REJECTED.** Same 6 mechanisms
   (bearish/bullish rejection wick, failed breakout continuation, bullish/

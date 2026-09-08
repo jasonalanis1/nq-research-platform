@@ -168,3 +168,29 @@ if __name__ == "__main__":
         if len(example_normal):
             print(f"\nExample normal day (nothing fired, {example_normal.index[0]}):")
             print(f"  {get_volatility_conditioning(example_normal.index[0], frame)}")
+
+
+# ---------------------------------------------------------------------------
+# Position sizing -- see research/studies/volatility-position-sizing-spec.md.
+# A pure risk-management transform (inverse volatility sizing), not a new
+# strategy and not subject to the 90%-CI promotion bar: it makes no return
+# claim, only a size recommendation conditional on the already-confirmed
+# range prediction above.
+# ---------------------------------------------------------------------------
+MIN_SIZE_MULT = 0.5
+MAX_SIZE_MULT = 1.5
+
+
+def position_size_multiplier(expected_range_multiplier):
+    """Inverse-volatility size multiplier: bigger size on days expected to
+    be quieter, smaller size on days expected to be wider, so expected
+    dollar risk per trade stays roughly constant. Clipped to
+    [MIN_SIZE_MULT, MAX_SIZE_MULT] so a stacked condition can't push size
+    to an extreme on facts whose Validation CIs, while credible, aren't
+    perfectly tight. NOT a return claim -- only answers "how many
+    contracts," never "should I take this trade."
+    """
+    if expected_range_multiplier <= 0:
+        return 1.0
+    raw = 1.0 / expected_range_multiplier
+    return max(MIN_SIZE_MULT, min(MAX_SIZE_MULT, round(raw, 4)))
