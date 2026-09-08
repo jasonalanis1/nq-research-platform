@@ -131,6 +131,16 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-113/hyp-000084, VWAP Narrow-Regime Open Fade (H84)
+  -- REJECTED, closes Observatory pilot round 1 (3 candidates).** Parent
+  finding OBS-FINDING-003. n=314, mean_r=-0.027, ci_90=(-0.130,0.081) --
+  not credible. All three pilot candidates (H81/H82 open-bucket cluster,
+  H83 mid-morning cluster, H84 narrow-regime VWAP) have now failed
+  Step 1+2. Pilot evaluation against historical intuition-sourced
+  hypotheses (hyp-001 through hyp-080) written up separately -- see
+  research/studies/observatory-pilot-evaluation-round1.md.
+
+
 - **2026-09-08: exp-112/hyp-000083, Mid-Morning Reference-Level Fade
   (H83) -- REJECTED, closes Observatory candidate #2.** Parent finding
   OBS-FINDING-002 (mid-morning touches of overnight-high/prior-day-high,
