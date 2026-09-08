@@ -131,6 +131,31 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-110/hyp-000081, Opening-Hour Reference-Level Fade
+  -- REJECTED, but an important distinction from most prior nulls.**
+  Hypothesis #81, the FIRST generated from the Observatory (v1) rather
+  than intuition: fades opening-hour (09:30-10:30) touches of prior-day
+  high / overnight high / VWAP short, and overnight-low touches long --
+  the exact behavior the Observatory measured as credibly below/above
+  baseline. Short leg: n=1138, mean_r=-0.065, ci_90=(-0.122,-0.009).
+  Long leg: n=385, mean_r=0.024, ci_90=(-0.075,0.120). Combined: n=1523,
+  ci_90=(-0.091,0.004). None credible/economically meaningful. BUT: the
+  underlying behavioral effect the Observatory found (below/above-
+  baseline forward returns after these touches) is itself real and
+  credible per its own baseline-relative measurement -- this specific
+  trade-mechanics design (entry at touch-bar close, buffer-stop, 1.35R
+  target) simply failed to convert that measured behavior into a
+  profitable rule. Different conclusion from the 7 same-day-trigger
+  nulls earlier today (which had ~zero GROSS edge) -- here there IS a
+  real conditional-return effect, just not one this particular
+  entry/stop/target shape captures. Closes this specific setup design
+  per the decision rule; a genuinely different entry/stop/target
+  mechanic (e.g. sized off the Observatory's own measured MFE/MAE
+  rather than an arbitrary buffer) would be a new, separately motivated
+  hypothesis. Full detail:
+  research/studies/opening-hour-reference-level-fade-spec.md.
+
+
 - **2026-09-08: Observatory v1 built and run (first pass) --
   EXPLORATORY, not a finding.** New research-architecture layer per
   external professional review (relayed by Jason): measures conditional
