@@ -55,12 +55,18 @@ A single place to capture every idea the moment it comes up, so nothing said in 
   far, consider a stricter promotion bar for this batch rather than reusing
   the one that has passed 43 and validated none.
 
-  STATUS: queued, to be picked up after the current in-flight work (cheap
-  ledger/effect-size diagnostic) finishes. Next concrete step when picked up:
-  write a frozen scoping spec naming the specific behaviors, measurement
-  definitions, and pre-registered batch (matching the discipline used for the
-  bar-behavior batch, `research/studies/bar-behavior-batch1-spec.md`) --
-  before any implementation code is written.
+  STATUS UPDATE 2026-09-08 (overnight autonomous run): batch 1 completed --
+  see "Intraday Behavior Batch 1" under Tested/Closed. One finding
+  (range-contraction/volatility-persistence) became the first-ever
+  Validation-slice survivor in the project's history, but is not yet a
+  costed rule. Remaining candidate behaviors not yet tried at intraday
+  resolution: none from the Advisor's original 5-item list (all were
+  either tested in batch 1 or excluded as already-covered ground). Next
+  step, awaiting Jason: (1) decide on a concrete costed overlay design for
+  the range-contraction finding (Advisor recommends a sizing/stop-width
+  overlay on an existing signal over a standalone rule), and (2) decide
+  whether to generate a fresh round of intraday candidate behaviors or
+  shift effort elsewhere.
 
 *(nothing else currently open)*
 
@@ -100,6 +106,46 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03. **Closed 2026-09-07**: `HypothesisRecord` gained a `search_batch_id` field (optional, set by the calling script when multiple hypotheses come from one joint run); `larry_validate.py`'s `evaluate_candidate()` now tries an exact batch-based sibling count first and only falls back to lineage-walking when no batch id is set. `n_trials_override` still exists as a manual escape hatch. Verified with a scratch-ledger test: a 2-hypothesis batch with different immediate parents was correctly counted as 2, and a hypothesis with no batch id correctly fell through to the old lineage logic. Existing ledger rows (hyp-000007/hyp-000008 included) are untouched and keep using their documented `n_trials_override` -- this is additive, not a retroactive rewrite.
 
 ## Tested / Closed
+
+- **2026-09-08: Intraday Behavior Batch 1 (exp-072/073/074) + prospective
+  tests (exp-075/076).** First genuinely intraday-resolution (1-min bar)
+  characterization batch, per Jason's "professional systematic trader"
+  framing. 3 pre-registered conditions (search_batch_id
+  batch-2026-09-08-intraday-behavior-1), checked against the ledger first
+  to avoid re-mining already-tested ground (opening-range/IB breakout,
+  VWAP mean reversion, and gap-fill were all excluded as already tested).
+  RESULTS: exp-072 (volume-profile skew, front/back-loaded volume days)
+  Step 1 PASS on Discovery (hyp-000044) but FAILED its Validation-slice
+  prospective test with both buckets flipping sign (hyp-000047) --
+  closed, was noise. exp-073 (momentum-burst bars, 15-min continuation)
+  Step 1 FAIL (hyp-000045) -- closed. exp-074 (range-contraction cycle --
+  narrow/wide-range days vs. next-day range ratio) Step 1 PASS on
+  Discovery in the PERSISTENCE direction, not the originally-predicted
+  mean-reversion direction (hyp-000046), AND PASSED its Validation-slice
+  prospective test, same direction both times though effect size shrank
+  ~3-5x (hyp-000048). **This is the first hypothesis in the project's
+  48-hypothesis history to survive a Validation-slice prospective test.**
+  Advisor's independent read (obtained same day): almost certainly
+  ordinary, well-documented volatility clustering/GARCH-type
+  autocorrelation, not a proprietary NQ discovery -- real and replicated,
+  but the shrinkage from Discovery to Validation should temper
+  expectations heavily for whether it survives costs. This is a
+  range/volatility-level characterization, NOT a costed P&L rule --
+  economic-meaningfulness leg of the promotion bar has not been tested.
+  Advisor's recommended next step: a position-sizing/stop-target-width
+  overlay on an existing directional signal (lower complexity, doesn't
+  require inventing a new directional edge) rather than a standalone
+  breakout-width rule. STATUS: flagged to Jason as a real statistical
+  milestone worth knowing about, explicitly NOT framed as a found edge --
+  next step (designing the concrete costed overlay) is a scoping
+  judgment call awaiting his sign-off before any implementation.
+  Effect-size-inflation diagnostic (research/studies/effect-size-inflation-diagnostic-2026-09-08.md,
+  process artifact, no ledger entry) also completed same day per Jason's
+  decision to continue it -- found all 4 prior Discovery-PROMISING ->
+  Validation-REJECTED pairs showed the same shape (narrow Discovery CI
+  that didn't hold precision out of sample), supporting the Advisor's
+  "methodology, not just data ceiling" read of the original 0/43 result.
+
 - **exp-071 (2026-09-08): Daily volume level as a standalone next-day signal -- REJECTED.** First test of TOTAL daily volume (distinct from the earlier breakout-bar volume check, exp-030, already closed) against next-day return, testing both directions honestly with no predicted sign pinned in advance. No credible effect either way (hyp-000043). Consistent with the meta-review's pattern -- every standalone daily-resolution dimension tried so far (price, volatility, cross-market, options, bar-behavior, volume) has come back null or failed to replicate.
 - **exp-070 (2026-09-08): Ensemble v2, real-move-magnitude feature -- REJECTED, closed.** Second attempt at combining features into one model (v1 = exp-046). Swapped the coarse CPI/NFP flag for an actual magnitude feature (built free, from existing price data), per the Advisor's fix to v1's sparse-dummy issue. Landed in an almost identical dead spot as v1: AUC 0.4936, everything zeroed by regularization, both halves exactly a coin flip (hyp-000042). Confirms exp-063's direct finding that this magnitude effect isn't real. Closes the ensemble idea for a second time -- no further variants without a genuinely new ingredient.
 - **exp-069 (2026-09-08): Momentum-continuation prospective test -- FAIL, closed.** Since exp-066/068's opposite-direction finding was only visible after looking at Discovery results, re-testing it honestly required fresh (Validation-slice) data rather than re-signing the same Discovery numbers (which would have been a guaranteed, meaningless pass). Neither condition replicated out of sample (hyp-000040/041) -- both CIs span zero. Closes the entire bar-behavior batch 1 line for good, no retuning. Confirms the original Discovery-stage finding was very likely noise.
