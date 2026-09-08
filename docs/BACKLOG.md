@@ -131,6 +131,20 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-093, IB Breakout conditioned on "wide prior day" (Market
+  Behavior Advisor's purpose-built pairing) -- REJECTED.** Mechanistically
+  motivated (unlike the 3 earlier mean-reversion overlay screens): IB
+  Breakout is a continuation setup that needs room to run, paired with the
+  volatility-conditioning module's confirmed "above-average range expected"
+  flag. 1709 IB Breakout signals on Discovery (of 2101 days scanned).
+  Wide-prior-day trades: n=386, mean r_multiple_net=-0.0543. Rest: n=1323,
+  mean=-0.0724. Diff=+0.0181, ci_90=(-0.0883, 0.1281), NOT credible -- no
+  effect. Closes this specific pairing for good; IB Breakout itself was
+  already closed standalone (hyp-000011). Ledger: parent_hypothesis_id
+  hyp-000011. Full detail:
+  research/studies/ib-breakout-volatility-conditioned-spec.md.
+
+
 - **2026-09-08: Volatility Conditioning Module built (src/volatility_conditioning.py)
   -- not a hypothesis test, a usable tool.** Per Jason's direction after
   the COT-positioning line closed: stop generating new directional
