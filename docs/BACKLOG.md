@@ -131,6 +131,22 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: Bar behavior batch 2 -- engulfing + three-bar sequence,
+  all REJECTED (exp-088/089/090). Candle-pattern family now closed.**
+  Second and final batch of the daily-bar candle patterns Jason asked
+  for. Bullish engulfing (n=69) and bearish engulfing (n=71) both
+  spanned zero; three-bar directional sequence tested as momentum-
+  continuation (n=428, well-powered, genuinely different mechanism
+  from the reversal-style conditions) also spanned zero. Combined with
+  batch 1 (rejection wick, failed breakout -- both REJECTED), this
+  closes out 5 distinct daily/bar-level directional mechanisms with 0
+  survivors. Per the pre-committed trigger (Path-to-Profitability
+  Advisor, agreed before this batch ran): this is the signal for a
+  real "is NQ too efficient at this timeframe" conversation with
+  Jason, not another quiet pivot to a 6th candidate family. Full
+  detail: research/studies/bar-behavior-batch2-spec.md.
+
+
 - **2026-09-08: Overlay screen 2 -- overnight coil + release-day
   magnitude on the 4 Level Sweep variants (exp-086/087) -- no
   credible effect, confirms structural blocker.** Same quick-screen
