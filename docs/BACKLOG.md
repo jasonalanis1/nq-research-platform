@@ -131,6 +131,26 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-108, multi-day 20-MA pullback continuation --
+  CREDIBLE result but only n=15, too thin to trust or act on (NOT a
+  finding).** First multi-day SWING setup tested (every prior setup
+  today was a same-day reactive trigger, all null) -- established
+  50-day trend, first pullback re-cross of the 20-day MA in trend
+  direction, 1.5xATR14 stop, 1.35R target, 20-day max hold. n=15 (of
+  1717 Discovery daily bars, ~8.5 years -- one signal per trend segment
+  by design), mean_r_multiple_net=0.561, ci_90=(0.091,1.031).
+  Technically clears the credibility/economic-meaning bar, but n=15 is
+  far below this project's 40-trade minimum for even considering a
+  prospective test -- exactly the kind of small sample the effect-size-
+  inflation diagnostic warns can look clean by chance alone. Not
+  running a prospective test until signal frequency increases (a
+  scoping decision -- e.g. relax "first re-cross only," shorten the
+  trend/pullback windows) or more history becomes available. Flagged to
+  Jason as an interesting lead requiring his input on how to proceed,
+  not something to act on as-is. Full detail:
+  research/studies/multiday-pullback-continuation-spec.md.
+
+
 - **2026-09-08: exp-107, volume-imbalance x trend-alignment confluence
   -- REJECTED, closes the single-day reactive-trigger direction.**
   Tested whether agreement between two mechanistically distinct,
