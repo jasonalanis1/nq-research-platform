@@ -68,21 +68,29 @@ A single place to capture every idea the moment it comes up, so nothing said in 
   whether to generate a fresh round of intraday candidate behaviors or
   shift effort elsewhere.
 
-- **Overnight coil -> tradeable translation (hyp-000057).** The one
-  Market-Behavior-Advisor-sourced finding to survive Validation
-  (2026-09-08, batch 3) is a volatility-persistence characterization,
-  not a return rule. Needs scoping: could serve as a conditioning
-  filter/overlay on other setups (e.g. size down or skip mean-reversion
-  setups on coiled days; the opposite for breakout-style setups), or be
-  evaluated for options-flavored uses. Not yet scoped into a frozen
-  spec.
+- **REAL FORK, needs Jason's decision:** this project now has 3
+  confirmed, Validation-survived volatility-conditioning facts
+  (range-contraction, overnight-coil, release-day-magnitude) and 0
+  surviving directional signals to attach any of them to. Overlay-
+  screening them onto already-dead signals (exp-077, exp-086, exp-087)
+  has been tried 3 times and found nothing, which is expected -- a
+  conditioning variable can't resurrect a signal that has no edge to
+  condition. Two real paths forward: (a) design a brand-new
+  directional signal specifically meant to pair with one of these
+  volatility facts (e.g. a breakout-style entry sized/timed around
+  release-day or post-coil expansion, since those predict WIDER range
+  -- opposite structure from a mean-reversion entry); or (b) accept
+  these are non-directional characterizations, stop trying to overlay
+  them onto dead signals, and look for the next new directional idea
+  independently. Not decided -- surfaced for Jason, not resolved
+  autonomously, since it's a real scoping/direction call, not a
+  mechanical fix.
 - **Next Market Behavior Advisor consultation.** All 5 of its first-
   round candidates are now tested (1 of 5 survived Validation). Next
-  natural checkpoint: consult it again for a fresh round, or first
-  weigh whether the intraday-behavior-batch approach itself is nearing
-  its own informational ceiling (2 batches, 1/8 total candidates
-  surviving Validation) before generating more candidates in the same
-  vein.
+  natural checkpoint: consult it again for a fresh round -- likely
+  after the fork above is resolved, so new candidates are built with
+  the "needs to pair with a real directional signal" lesson in mind
+  rather than repeating another volatility-only characterization.
 
 *(nothing else currently open)*
 
@@ -122,6 +130,27 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03. **Closed 2026-09-07**: `HypothesisRecord` gained a `search_batch_id` field (optional, set by the calling script when multiple hypotheses come from one joint run); `larry_validate.py`'s `evaluate_candidate()` now tries an exact batch-based sibling count first and only falls back to lineage-walking when no batch id is set. `n_trials_override` still exists as a manual escape hatch. Verified with a scratch-ledger test: a 2-hypothesis batch with different immediate parents was correctly counted as 2, and a hypothesis with no batch id correctly fell through to the old lineage logic. Existing ledger rows (hyp-000007/hyp-000008 included) are untouched and keep using their documented `n_trials_override` -- this is additive, not a retroactive rewrite.
 
 ## Tested / Closed
+
+- **2026-09-08: Overlay screen 2 -- overnight coil + release-day
+  magnitude on the 4 Level Sweep variants (exp-086/087) -- no
+  credible effect, confirms structural blocker.** Same quick-screen
+  technique as exp-077 (range-contraction), applied to the two newer
+  confirmed volatility-conditioning facts: the overnight-coil finding
+  (hyp-000056/057) and the long-standing CPI/NFP/FOMC release-day
+  "moves more" magnitude finding (exp-039/040, confirmed years ago,
+  never converted into a rule). Neither conditions the 4 already-
+  closed Level Sweep Reversal variants' economics (all CIs span
+  zero; the 2 "protected" variants skipped, too few trades). This is
+  the THIRD overlay-screen attempt (range-contraction, coil,
+  release-day) to come back empty. Conclusion: the real limitation
+  isn't the conditioning facts -- it's that this project currently
+  has no live/future directional signal for any of them to attach
+  to. Converting a confirmed volatility fact into money requires a
+  directional signal to condition, which the project doesn't
+  currently have. Flagged as a real scoping decision for Jason
+  (see "In Scoping" below), not resolved here. Full detail:
+  research/studies/overlay-screen2-spec.md.
+
 
 - **2026-09-08 (overnight, unattended): Intraday Behavior Batch 3 +
   prospective test (exp-083/084, exp-085) -- SURVIVED VALIDATION.**
