@@ -131,6 +131,23 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-102/103, fade variants of volume vacuum and trend
+  alignment -- both REJECTED, also credibly LOSING.** Same detection,
+  same stop/target distances as exp-100/101, direction reversed.
+  exp-102 (vacuum fade): n=4898, mean_r_multiple_net=-0.152,
+  ci_90=(-0.180,-0.125). exp-103 (alignment fade): n=1610,
+  mean_r_multiple_net=-0.139, ci_90=(-0.186,-0.091). Both directions of
+  both mechanisms now tested (4 tests total) and ALL FOUR lose money --
+  the losses aren't a directional mispricing, they indicate the entry
+  TIMING itself is the problem: these signal moments are apparently
+  noisy/choppy conditions where a 1.35R target gets hit less often than
+  the stop regardless of which way you trade it. Closes both mechanisms
+  per the pre-commitment in
+  research/studies/pre-move-behavior-batch2-spec.md -- next fresh-
+  behavior candidates should look for genuinely different behaviors,
+  not more direction flips of these two. Ledger: hyp-000074, hyp-000075.
+
+
 - **2026-09-08: exp-100/101, fresh pre-move-behavior setups (volume
   vacuum continuation, multi-timeframe trend alignment) -- both
   REJECTED, credibly LOSING.** First round of a new direction: build
