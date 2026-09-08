@@ -12,7 +12,57 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## In Scoping
 
-*(nothing currently open)*
+- **NEW RESEARCH PHASE (queued, not yet started): intraday market-behavior
+  characterization, professional-systematic-trader framing** -- proposed by
+  Jason 2026-09-08, as a mission refinement layered on top of the
+  2026-09-08 "market behavior -> condition -> strategy -> trade -> outcome"
+  redefinition (same underlying approach, sharper verbiage). Jason's framing,
+  verbatim intent: stop asking "what strategy should I try next?" and instead
+  ask, in sequence -- "What is the market doing when it gives us an
+  opportunity?" -> "Can we recognize that behavior in real time?" -> "When we
+  recognize it, is there a statistically meaningful advantage to taking a
+  particular trade?" Pipeline: observe market behavior -> identify recurring
+  condition -> measure what happens next -> determine whether the behavior is
+  exploitable -> match/design a strategy -> validate.
+
+  Context: after 43 hypotheses at daily-bar resolution with 0% Validation-stage
+  survival (including both portfolio-bundling and two ensemble attempts also
+  failing), Jason's explicit decision was: continue the cheap Discovery-vs-
+  Validation effect-size/ledger diagnostic; abandon daily-bar hypothesis-
+  hunting for now (not permanently); pivot toward intraday behavior
+  characterization; keep the execution-infrastructure track running in
+  parallel. Explicitly do NOT purchase any intraday/order-flow data yet --
+  first define exactly what information/behaviors are being sought using the
+  1-min OHLCV data already on hand (no order-book/tick data available).
+
+  Path-to-Profitability Advisor's independent read on this pivot (obtained
+  2026-09-08): directionally sound, but only if treated as a genuinely new
+  mechanism class (intraday structure/liquidity rhythm), not "daily research
+  run at finer resolution" -- otherwise the much larger candidate space (many
+  more possible windows/anchors/lookbacks at 1-min resolution) just relocates
+  the same replication-failure problem with worse multiple-testing risk.
+  Candidate behaviors it suggested scoping from (all derivable from existing
+  1-min OHLCV, no new data needed): opening-range structure (first 30/60-min
+  range vs. ATR, close inside/outside), intraday VWAP reversion/trend
+  persistence, volume-profile skew across the session (U-shape strength,
+  midday lull depth), momentum-burst bars (range+volume spike vs. trailing
+  norm, continuation vs. exhaustion), overnight-gap first-hour fill/no-fill
+  dynamics. Process cautions: pre-register exact windows/anchors/thresholds
+  before looking at results (finer resolution = more researcher-degrees-of-
+  freedom than the daily-bar batches); watch for look-ahead bias specific to
+  intraday features (e.g. VWAP not yet fully formed within the bar); keep the
+  same Discovery/Validation split and frozen-spec discipline; given 0/43 so
+  far, consider a stricter promotion bar for this batch rather than reusing
+  the one that has passed 43 and validated none.
+
+  STATUS: queued, to be picked up after the current in-flight work (cheap
+  ledger/effect-size diagnostic) finishes. Next concrete step when picked up:
+  write a frozen scoping spec naming the specific behaviors, measurement
+  definitions, and pre-registered batch (matching the discipline used for the
+  bar-behavior batch, `research/studies/bar-behavior-batch1-spec.md`) --
+  before any implementation code is written.
+
+*(nothing else currently open)*
 
 ## Ongoing / Prospective Tracking
 
