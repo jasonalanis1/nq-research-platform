@@ -131,6 +131,26 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-107, volume-imbalance x trend-alignment confluence
+  -- REJECTED, closes the single-day reactive-trigger direction.**
+  Tested whether agreement between two mechanistically distinct,
+  individually edge-less signals (exp-104 volume imbalance, exp-101
+  trend alignment) carries information neither has alone. n=1100 (of
+  1607 days where both fired, 1100 agreed on direction),
+  mean_r_multiple_net=-0.065, ci_90=(-0.125,-0.009) -- also credibly
+  losing. This is the 7th and final pre-registered test in the "fresh
+  pre-move behavior" line started earlier today: 7 of 7 (volume vacuum
+  x2 directions, trend alignment x2 directions, volume imbalance,
+  prior-close rejection, and this confluence) found no gross predictive
+  edge, all cost-dominated. Per the batch's own pre-commitment, this
+  closes single-day, short-horizon, reactive-trigger search as a
+  direction for now -- further work here would need either a genuinely
+  new data source (order flow was already priced out at ~$54k/yr) or a
+  longer holding-period structure, which is a different research
+  direction, not a variant of today's approach. Ledger: hyp-000078.
+  Full detail: research/studies/pre-move-behavior-confluence-spec.md.
+
+
 - **2026-09-08: exp-106, target-sensitivity check on all 6 fresh-behavior
   signals -- closes the "target-mismatch" theory.** Re-simulated
   vacuum/alignment (both directions) and volume-imbalance/prior-close-
