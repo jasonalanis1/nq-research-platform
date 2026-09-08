@@ -131,6 +131,22 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-100/101, fresh pre-move-behavior setups (volume
+  vacuum continuation, multi-timeframe trend alignment) -- both
+  REJECTED, credibly LOSING.** First round of a new direction: build
+  detection + entry/exit fresh around a "something is about to happen"
+  behavior, rather than conditioning already-dead setups (per staff
+  meeting, 2026-09-08). exp-100 (thin-volume window breaking its own
+  range): n=4898, mean_r_multiple_net=-0.162, ci_90=(-0.188,-0.134) --
+  CI entirely below zero, not just non-credible. exp-101 (15-min/60-min/
+  day-so-far trend alignment): n=1610, mean_r_multiple_net=-0.078,
+  ci_90=(-0.126,-0.029) -- also credibly losing. Both well-powered, no
+  thin-sample caveat. Per Jason's explicit instruction, a null result
+  here is not a reason to abandon the direction -- next candidates in
+  the same family are being designed. Ledger: hyp-000072, hyp-000073.
+  Full detail: research/studies/pre-move-behavior-batch1-spec.md.
+
+
 - **2026-09-08: Volatility-conditioned position sizing added
   (position_size_multiplier() in src/volatility_conditioning.py) --
   not a hypothesis test, a usable tool.** Per the staff-meeting
