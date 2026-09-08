@@ -131,6 +131,33 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: Observatory v1 built and run (first pass) --
+  EXPLORATORY, not a finding.** New research-architecture layer per
+  external professional review (relayed by Jason): measures conditional
+  NQ behavior after 5 reference-level events (prior-day high/low,
+  overnight high/low, VWAP) across volatility regime x time-of-day x 6
+  outcome horizons, against a matched baseline, ranked without p-value
+  gating (effect size, CI, cross-period consistency, concentration).
+  Frozen design: research/studies/observatory-v1-design-spec.md. First
+  run on Discovery data: 3811 events, 25899 baseline bars, 348
+  combinations scanned with usable baseline. Label breakdown: 18
+  Promising, 25 Interesting, 282 Weak, 5 No meaningful difference.
+  STANDOUT PATTERN (not yet a hypothesis): nearly all 18 "Promising"
+  combinations cluster in the 09:30-10:30 "open" time bucket, and show
+  a consistent shape -- touching an UPPER reference level (VWAP,
+  prior-day high, overnight high) during the open tends to be followed
+  by BELOW-baseline (i.e. downward-biased) forward returns, while
+  touching the overnight LOW during the open shows the mirror
+  (above-baseline / upward-biased). Read literally: a same-session
+  rejection/fade tendency at upper reference levels specifically during
+  the opening hour, not seen in later time buckets. This is a CANDIDATE
+  for a frozen hypothesis, not itself a validated result -- per the
+  Observatory's own rule, it has not been converted into a
+  strategy-shaped spec or tested on its own dedicated pipeline yet.
+  Full candidate list: data/observatory_v1_results.json (gitignored,
+  regenerable by re-running src/observatory_v1.py).
+
+
 - **2026-09-08: exp-109, frequency-increased follow-up to the multi-day
   pullback setup -- closes it for good; effect vanished at real
   sample size.** exp-108/hyp-000079 was credible but n=15 (too thin to
