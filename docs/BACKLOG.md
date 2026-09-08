@@ -107,6 +107,20 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: Volatility-regime overlay quick screen (exp-077,
+  hyp-000049).** Per Jason's direction ("try all the strategies, quick
+  easy tests, don't over-exhaust it") -- reused the 4 Level Sweep
+  Reversal variants' already-saved per-trade backtest files (only
+  strategies with per-trade dated data on disk; others only have
+  aggregate results and would need a real rerun, flagged not done) and
+  joined trade dates to the range-contraction/volatility-persistence
+  regime (hyp-000046/048). No credible conditioning effect in any of the
+  3 testable variants (all CIs span zero). Does not reopen the 4 closed
+  Level Sweep lines, and does not itself resolve whether the
+  volatility-persistence finding has real economic value -- that still
+  needs a proper costed overlay design on a live/future signal.
+
+
 - **2026-09-08: Intraday Behavior Batch 1 (exp-072/073/074) + prospective
   tests (exp-075/076).** First genuinely intraday-resolution (1-min bar)
   characterization batch, per Jason's "professional systematic trader"
