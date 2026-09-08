@@ -131,6 +131,19 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-115/hyp-000086, Round-Number Open Continuation
+  (H86) -- REJECTED.** First Observatory v2 candidate and first
+  continuation-style (not fade) hypothesis tried in this project.
+  Directional test (long on up-momentum, short on down-momentum
+  through a round level) per the finding's own drift-artifact caveat:
+  long n=245 mean_r=+0.058 (meaningful but ci_90=(-0.068,0.180) not
+  credible); short n=314 mean_r=-0.088 (not credible, not meaningful);
+  combined n=559 mean_r=-0.024. The long/short asymmetry supports the
+  drift-artifact explanation rather than a genuine round-number effect.
+  STEP_1+2_FAIL on all legs. Full detail:
+  research/studies/round-number-open-continuation-h86-spec.md.
+
+
 - **2026-09-08: exp-114/hyp-000085, Overnight-High Wide-Regime Open
   Fade (H85) -- REJECTED, closes Observatory pilot round 1 (final,
   4 findings / 5 hypotheses).** Parent finding OBS-FINDING-004, mirror
