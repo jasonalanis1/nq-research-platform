@@ -131,6 +131,29 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: Methodology audit (Option C) + ledger hygiene pass.**
+  Power analysis across this session's results
+  (research/studies/promotion-bar-methodology-audit.md): the gap-fade
+  near-miss (H87/H89) was only ~1.5x short of the sample size it would
+  need to clear the bar; most other near-misses needed 5-16x more data
+  -- the bar is working as intended, not miscalibrated. Cost
+  assumptions checked and are realistic. Real constraint is Discovery-
+  window sample size, capped by the frozen chronological split --
+  flagged, not changed, without Jason's sign-off. Separately, found and
+  corrected two stale ledger entries left as PROMISING after their own
+  later results (hyp-000079 multiday pullback, hyp-000063 COT
+  positioning) actually failed -- both now correctly REJECTED. Also
+  found 6 older ledger entries (hyp-000044, 046, 048, 050, 051, 052 --
+  volume-profile skew, range-contraction cycle, effort-vs-result
+  absorption, multi-day base breakout, trend-day-shape) logged
+  PROMISING with NO backing script or data file in the repo -- these
+  were never actually tested, not "unfinished," and finishing them
+  properly means building and running 6 new hypotheses from scratch
+  (comparable scope to this session's Observatory work), not a quick
+  wrap-up. Flagging as a known gap rather than starting six fresh
+  builds unprompted, given this session's already-large scope.
+
+
 - **2026-09-08: exp-120/hyp-000091, Gap-Down Fade Multi-Day Hold (H91)
   -- REJECTED, closes the gap-fade behavior for good (3 attempts).**
   Different-angle pivot: same signal as H89, but a multi-day
