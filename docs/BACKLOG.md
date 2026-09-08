@@ -131,6 +131,31 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-106, target-sensitivity check on all 6 fresh-behavior
+  signals -- closes the "target-mismatch" theory.** Re-simulated
+  vacuum/alignment (both directions) and volume-imbalance/prior-close-
+  rejection at 0.5R and 0.75R targets instead of the 1.35R default,
+  holding detection/stop unchanged. All 12 combinations still FAIL,
+  losses barely move across targets (e.g. vacuum: -0.165R at 0.5R vs.
+  -0.162R at 1.35R baseline) -- ruling out "wrong target size" as the
+  explanation. Diagnostic-only, not a new hypothesis search (no new
+  detection logic). Follow-up cost decomposition: computed each stream's
+  average stop distance and cost/risk ratio (ROUND_TRIP_COST_POINTS=0.75
+  fixed). Cost/risk alone accounts for most of the observed net loss
+  (vacuum: 0.15R cost drag vs. -0.16R observed net; alignment: 0.12R vs.
+  -0.14R; volume imbalance: 0.08R vs. -0.06 to -0.08R; prior-close-
+  rejection: 0.06R vs. -0.05 to -0.09R) -- meaning the GROSS (pre-cost)
+  edge on all 6 signals is close to ZERO, not actually negative. Real
+  conclusion: these 6 fresh behaviors show no detectable predictive edge
+  at all (consistent with market efficiency at this timeframe for these
+  specific triggers), and transaction cost against tight, short-horizon
+  stops accounts for essentially all of the net loss. This is a cleaner,
+  more informative result than "these ideas are wrong" -- worth
+  surfacing to Jason as its own checkpoint before generating further
+  variants. Full detail:
+  research/studies/pre-move-behavior-target-sensitivity-spec.md.
+
+
 - **2026-09-08: exp-104/105, opening volume imbalance and prior-close
   rejection -- both REJECTED, also credibly LOSING.** Two more fresh
   mechanisms (different data dimension: signed volume; different
