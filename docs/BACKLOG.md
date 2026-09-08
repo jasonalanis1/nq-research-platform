@@ -131,6 +131,19 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-112/hyp-000083, Mid-Morning Reference-Level Fade
+  (H83) -- REJECTED, closes Observatory candidate #2.** Parent finding
+  OBS-FINDING-002 (mid-morning touches of overnight-high/prior-day-high,
+  normal regime). Same H81-style generic buffer-stop/1.35R convention.
+  n=283, mean_r=-0.0018, ci_90=(-0.114,0.113) -- genuine null (CI wide,
+  centered near zero), not a thin-sample result. STEP_1+2_FAIL. A
+  regime-classification bug was caught and fixed BEFORE this result was
+  seen (script referenced a nonexistent column, initially treating every
+  day as "normal"). Second of the 3-5-candidate Observatory pilot;
+  moving to candidate #3 next regardless of outcome. Full detail:
+  research/studies/midmorning-reference-level-fade-h83-spec.md.
+
+
 - **2026-09-08: exp-111/hyp-000082, Opening-Hour Reference-Level Fade --
   Excursion-Derived Exits (H82) -- REJECTED, closes the behavior line.**
   Second and final monetization attempt for the same behavior as H81:

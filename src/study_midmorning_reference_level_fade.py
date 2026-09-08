@@ -65,9 +65,9 @@ def main():
     idx = discovery.index
     daily_bars = build_daily_bars(discovery)
     cond = build_conditioning_frame(discovery)
-    normal_days = set(cond.index[cond["regime"] == "normal"]) if "regime" in cond.columns else None
-    if normal_days is None:
-        print(f"NOTE: conditioning frame columns = {list(cond.columns)}; regime col not found, treating all days as normal.")
+    # "normal" regime = neither prior_day_narrow nor prior_day_wide (matches observatory_v1.py's regime_for()).
+    is_normal = ~(cond["prior_day_narrow"].astype(bool) | cond["prior_day_wide"].astype(bool))
+    normal_days = set(cond.index[is_normal])
     day_groups = {d: g for d, g in discovery.groupby(idx.date)}
     days_sorted = sorted(day_groups.keys())
     print(f"Discovery days: {len(days_sorted)}")
