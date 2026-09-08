@@ -131,6 +131,25 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-111/hyp-000082, Opening-Hour Reference-Level Fade --
+  Excursion-Derived Exits (H82) -- REJECTED, closes the behavior line.**
+  Second and final monetization attempt for the same behavior as H81:
+  fixed-point stop/target sized off the Discovery sample's own median
+  15-min MAE/MFE (frozen before result, per protocol) instead of H81's
+  generic buffer/1.35R convention. Short: n=1282, mean_r=-0.042,
+  ci_90=(-0.089,0.007) -- spans zero. Long: n=474, mean_r=-0.090,
+  ci_90=(-0.165,-0.015) -- credibly losing. Combined: n=1756,
+  mean_r=-0.055, ci_90=(-0.093,-0.016) -- credibly losing. Both
+  monetization designs for this behavior (H81 generic, H82
+  excursion-derived) have now failed. Per pre-commitment, no further
+  variant is attempted -- this closes the opening-hour reference-level
+  fade line entirely. Conclusion: a real, Observatory-measured
+  baseline-relative behavior that has not (yet) proven monetizable with
+  either exit convention tried. First of the planned 3-5-candidate
+  Observatory pilot. Full detail:
+  research/studies/opening-hour-reference-level-fade-h82-spec.md.
+
+
 - **2026-09-08: exp-110/hyp-000081, Opening-Hour Reference-Level Fade
   -- REJECTED, but an important distinction from most prior nulls.**
   Hypothesis #81, the FIRST generated from the Observatory (v1) rather
