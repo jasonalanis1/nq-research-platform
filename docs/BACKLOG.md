@@ -131,6 +131,19 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-120/hyp-000091, Gap-Down Fade Multi-Day Hold (H91)
+  -- REJECTED, closes the gap-fade behavior for good (3 attempts).**
+  Different-angle pivot: same signal as H89, but a multi-day
+  walk-forward exit instead of same-day-only, testing whether the
+  behavior needs more time to develop. n=71, mean_r=+0.109 (best
+  point-estimate of any gap-fade variant, economically meaningful) but
+  ci_90=(-0.117,0.335) -- wider, less credible than the same-day
+  version. STEP_1+2_FAIL. H87 (combined), H89 (long-only same-day), H91
+  (long-only multi-day) now exhaust this behavior's reasonable
+  variants -- closed. 11 hypotheses (81-91) this session, all rejected.
+  Full detail: research/studies/gap-fade-multiday-h91-spec.md.
+
+
 - **2026-09-08: exp-119/hyp-000090, Swing-High Wide-Regime Open Fade
   (H90) -- REJECTED, tight genuine null.** First candidate chosen via
   the new point-effect pre-screening rule (largest raw effect and n of
