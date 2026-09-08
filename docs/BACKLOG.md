@@ -131,6 +131,18 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-118/hyp-000089, Gap-Down Fade Long-Only (H89) --
+  REJECTED, closes the gap-fade behavior entirely.** Reshaped
+  reattempt of H87 (same precedent as H81->H82): a stability check
+  confirmed the long leg's edge holds across both Discovery-period
+  halves (not effect-size inflation), so it was isolated and tested
+  alone. Still n=128, mean_r=+0.068, economically meaningful, but
+  ci_90=(-0.015,0.152) narrowly fails the entirely-above-zero bar.
+  Two attempts (H87, H89) now exhausted per pre-commitment -- closes
+  this behavior. Remains the closest near-miss in this project's
+  history. Full detail: research/studies/gap-fade-longonly-h89-spec.md.
+
+
 - **2026-09-08: exp-117/hyp-000088, Session-Open Retest (H88) --
   REJECTED, closes this session's Observatory effort at 8 hypotheses.**
   Second test of the ATR-scaled-stop convention (from H87). Long
