@@ -131,6 +131,18 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-117/hyp-000088, Session-Open Retest (H88) --
+  REJECTED, closes this session's Observatory effort at 8 hypotheses.**
+  Second test of the ATR-scaled-stop convention (from H87). Long
+  n=104 mean_r=+0.046 (just under the meaningful-effect bar), short
+  n=84 mean_r=-0.016, combined n=188 mean_r=+0.018 -- all CIs span
+  zero and center near it (a genuine null, not a clear loser, unlike
+  most prior candidates). STEP_1+2_FAIL on all legs. 8 hypotheses
+  (81-88) across 3 Observatory scans (v1/v2/v3), all rejected; H87's
+  near-miss remains the closest result. Full detail:
+  research/studies/session-open-retest-h88-spec.md.
+
+
 - **2026-09-08: exp-116/hyp-000087, Overnight Gap Fade (H87) --
   REJECTED, but the closest near-miss yet.** First hypothesis using an
   ATR-scaled (wide) stop instead of the tight 1-minute-buffer
