@@ -131,6 +131,28 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: CFTC COT positioning, full Discovery + Validation
+  prospective test -- strongest-ever Discovery result FAILED
+  Validation (exp-091/092, hyp-000063). Closed.** Follow-up to exp-044
+  (COT positioning, Step1 fail on a thin 2015-2018-only partial
+  window). Jason manually downloaded the CFTC's own official 2019-2023
+  TFF archive files (network-blocked from both sandbox and device) to
+  extend the same frozen method to the full Discovery window.
+  DISCOVERY RESULT (exp-091): n=350 weeks, both Step 1 and Step 2
+  (costed) passed cleanly -- mean net pnl +20.10 pts/week, ci_90=(1.48,
+  39.83), economically meaningful. The best Discovery-stage result in
+  the project's history. VALIDATION PROSPECTIVE TEST (exp-092, single
+  pre-registered test, unmodified method): n=118 weeks (2021-10-04 to
+  2023-12-22), mean net pnl FLIPPED to -48.95 pts/week, ci_90=(-116.02,
+  16.82) -- not credible, not economically meaningful. FAILED. Per the
+  no-retuning rule, closes the COT/Leveraged-Money-positioning line for
+  good. This is the clearest illustration yet of the project's
+  effect-size-inflation pattern: even the strongest, most well-powered
+  Discovery pass on record did not survive out-of-sample testing.
+  Full detail: research/studies/cot-positioning-full-discovery-spec.md,
+  research/studies/cot-positioning-prospective-spec.md.
+
+
 - **2026-09-08: Bar behavior batch 2 -- engulfing + three-bar sequence,
   all REJECTED (exp-088/089/090). Candle-pattern family now closed.**
   Second and final batch of the daily-bar candle patterns Jason asked
