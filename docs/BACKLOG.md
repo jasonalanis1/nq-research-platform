@@ -131,6 +131,37 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-094 through exp-099, bar-behavior batches 1+2 re-tested
+  at 60-minute intraday resolution -- ALL 6 REJECTED.** Same 6 mechanisms
+  (bearish/bullish rejection wick, failed breakout continuation, bullish/
+  bearish engulfing, three-bar directional sequence) that failed at daily
+  resolution in batches 1 and 2, re-run unmodified except for the bar unit
+  (60-min RTH bars instead of daily), to isolate whether the DAILY
+  timeframe itself -- not the pattern ideas -- was why nothing survived.
+  All 6 came back null, well-powered (n=797 to 2802, all far above the
+  40-trade prospective-test threshold, no thin-sample caveats):
+  exp-094 n=1211 ci_90=(-0.00034,0.00011); exp-095 n=1217
+  ci_90=(-0.00020,0.00022); exp-096 n=985 ci_90=(-0.00004,0.00046);
+  exp-097 n=884 ci_90=(-0.00039,0.00024); exp-098 n=797
+  ci_90=(-0.00015,0.00043); exp-099 n=2802 ci_90=(-0.00009,0.00022).
+  Per the pre-committed interpretation in
+  research/studies/bar-behavior-intraday-batch-spec.md: this is the
+  daily-timeframe-efficiency checkpoint resolving in the "it's not just
+  the daily timeframe" direction -- the same 6 candle/bar-pattern shapes
+  fail identically at both daily and hourly resolution, on a 6.5x more
+  granular dataset with no lookback-window handicap. Combined with the 8
+  prior directional bar/candle hypotheses (batches 1+2, wicks, breakout,
+  engulfing, sequences) and the COT-positioning line's Discovery-to-
+  Validation reversal, the project now stands at roughly 65+ tested
+  hypotheses with 0 directional signals surviving to Validation, and the
+  bar-pattern search specifically (not just at daily granularity) appears
+  exhausted. The 2 confirmed facts (range-contraction, overnight coil)
+  remain volatility-conditioning facts, not directional edges. Ledger:
+  hyp-000066 through hyp-000071, search_batch_id
+  batch-2026-09-08-bar-behavior-intraday. Full detail:
+  research/studies/bar-behavior-intraday-batch-spec.md.
+
+
 - **2026-09-08: exp-093, IB Breakout conditioned on "wide prior day" (Market
   Behavior Advisor's purpose-built pairing) -- REJECTED.** Mechanistically
   motivated (unlike the 3 earlier mean-reversion overlay screens): IB
