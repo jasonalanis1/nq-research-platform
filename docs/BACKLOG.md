@@ -131,6 +131,15 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-114/hyp-000085, Overnight-High Wide-Regime Open
+  Fade (H85) -- REJECTED, closes Observatory pilot round 1 (final,
+  4 findings / 5 hypotheses).** Parent finding OBS-FINDING-004, mirror
+  of H84's narrow-regime test. n=113, mean_r=-0.098, ci_90=(-0.266,0.079)
+  -- not credible. Pilot round 1 complete: hyp-81 through hyp-85, 4
+  distinct Observatory findings, all failed Step 1+2. Full methodology
+  verdict: research/studies/observatory-pilot-evaluation-round1.md.
+
+
 - **2026-09-08: exp-113/hyp-000084, VWAP Narrow-Regime Open Fade (H84)
   -- REJECTED, closes Observatory pilot round 1 (3 candidates).** Parent
   finding OBS-FINDING-003. n=314, mean_r=-0.027, ci_90=(-0.130,0.081) --
