@@ -68,6 +68,15 @@ A single place to capture every idea the moment it comes up, so nothing said in 
   whether to generate a fresh round of intraday candidate behaviors or
   shift effort elsewhere.
 
+- **Market Behavior Advisor candidates not yet tried (from the
+  2026-09-08 batch-2 sourcing round):** (1) time-of-day lull/
+  re-engagement transition -- does the character of price action during
+  the low-liquidity midday lull predict the higher-liquidity afternoon
+  session; (2) overnight/globex range compression ("pre-open coiling")
+  relative to the prior day's RTH range. Both proposed by the Market
+  Behavior Advisor, not yet scoped into a frozen spec. Available for a
+  future batch.
+
 *(nothing else currently open)*
 
 ## Ongoing / Prospective Tracking
@@ -106,6 +115,33 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03. **Closed 2026-09-07**: `HypothesisRecord` gained a `search_batch_id` field (optional, set by the calling script when multiple hypotheses come from one joint run); `larry_validate.py`'s `evaluate_candidate()` now tries an exact batch-based sibling count first and only falls back to lineage-walking when no batch id is set. `n_trials_override` still exists as a manual escape hatch. Verified with a scratch-ledger test: a 2-hypothesis batch with different immediate parents was correctly counted as 2, and a hypothesis with no batch id correctly fell through to the old lineage logic. Existing ledger rows (hyp-000007/hyp-000008 included) are untouched and keep using their documented `n_trials_override` -- this is additive, not a retroactive rewrite.
 
 ## Tested / Closed
+
+- **2026-09-08 (overnight, unattended): Intraday Behavior Batch 2 +
+  prospective tests (exp-078/079/080, exp-081/082).** First batch
+  sourced from the new Market Behavior Advisor role rather than Claude's
+  own reasoning -- it proposed 5 trading-craft-reasoned candidates
+  (effort-vs-result absorption, multi-day base-building, time-of-day
+  lull/re-engagement, overnight-range coiling, trend-day first-hour
+  shape), checked against the ledger for overlap; 3 were selected for
+  this batch (the other 2 queued below, not dropped). RESULTS: exp-078
+  (effort/absorption) found a real Step-1 differentiation -- absorbed
+  ("stalled") effort bars showed a small credible reversal (hyp-000050),
+  but FAILED its Validation-slice prospective test (n=15, too few
+  instances in the smaller slice, hyp-000053) -- closed. exp-079
+  (multi-day base breakout) technically cleared its CI but on n=9
+  (hyp-000051) -- flagged as too thin to trust or even prospective-test,
+  same caution as the project's exp-054 precedent; not tested further as
+  designed. exp-080 (trend-day first-hour shape) found a real, well-
+  powered (n=421) Step-1 effect in the "choppy" group -- opposite of
+  what the trend-like group was expected to show (hyp-000052) -- but
+  FAILED its Validation-slice prospective test with a sign flip
+  (hyp-000054) -- closed. Net: 0 of 3 candidates survived out-of-sample
+  confirmation, extending the project's pattern (now 2/2 intraday
+  batches with a Discovery-PROMISING rate but 0% sustained Validation
+  survival except the still-standing range-contraction finding from
+  batch 1). Full detail: research/studies/intraday-behavior-batch2-spec.md,
+  research/studies/intraday-behavior-batch2-prospective-spec.md.
+
 
 - **2026-09-08: Volatility-regime overlay quick screen (exp-077,
   hyp-000049).** Per Jason's direction ("try all the strategies, quick
