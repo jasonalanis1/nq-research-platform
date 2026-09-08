@@ -131,6 +131,28 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: Volatility Conditioning Module built (src/volatility_conditioning.py)
+  -- not a hypothesis test, a usable tool.** Per Jason's direction after
+  the COT-positioning line closed: stop generating new directional
+  hypotheses for now, turn what's already confirmed into something
+  usable, and keep the Market Behavior Advisor integrated with current
+  work (its charter was extended accordingly -- see
+  docs/MARKET_BEHAVIOR_ADVISOR.md's "Extension" section). Combines the
+  project's only two Validation-confirmed findings (range-contraction,
+  hyp-000046/048; overnight coil, hyp-000056/057) into one reusable
+  `get_volatility_conditioning(date, frame)` function that returns an
+  expected-range multiplier for any given day, using the honest
+  Validation-slice numbers (not the larger Discovery-slice ones). Not
+  itself a strategy and not subject to the 90%-CI promotion bar --
+  it makes no P&L claim. Explicitly disclosed in its own docstring:
+  predicts range, never direction; its economic value as a real
+  sizing/stop-width input hasn't been demonstrated (the earlier
+  overlay screens found no effect on the specific dead signals they
+  tested); any future strategy that wants to use this as a real input
+  needs its own frozen spec and its own test. Full detail:
+  research/studies/volatility-conditioning-module-spec.md.
+
+
 - **2026-09-08: CFTC COT positioning, full Discovery + Validation
   prospective test -- strongest-ever Discovery result FAILED
   Validation (exp-091/092, hyp-000063). Closed.** Follow-up to exp-044

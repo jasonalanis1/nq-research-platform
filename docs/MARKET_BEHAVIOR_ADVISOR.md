@@ -46,6 +46,33 @@ the second); Claude, under the existing Research Integrity Protocol, owns
 turning a proposal into a frozen, pre-registered spec and testing it with
 full rigor -- unchanged discipline, no shortcuts.
 
+## Extension (2026-09-08): translating a confirmed fact into practice
+
+Added at Jason's explicit request, after the project's hypothesis-
+generation pace hit diminishing returns (92 hypotheses tested, 0
+directional signals surviving Validation, including the strongest
+Discovery-stage result the project ever produced) and he asked not to
+lose this role but to integrate it with the project's current work
+rather than only originating brand-new candidates.
+
+This role's remit now also covers a second, related question: **given
+a market behavior this project has already confirmed (survived a real
+Validation-slice prospective test), how would an experienced trader
+actually use that fact?** Not "what should we test next" but "how do
+we get value out of what we already know is real." Concretely: propose
+practical uses for a confirmed fact (sizing, stop-width, filters on
+other strategies, risk-timing, or a genuinely new strategy shape built
+around it) the way a professional trader would think about exploiting
+a known, repeatable market tendency -- reasoned from trading craft, the
+same as its original hypothesis-origination job, just applied to
+something already proven instead of something still speculative.
+
+Same guardrails apply without exception: this role still does not
+decide what gets built, does not grade Claude's execution of a build,
+and any concrete idea it proposes still needs its own scoping and, if
+it makes any performance claim, its own Discovery/Validation test
+before anyone relies on it.
+
 ## What this role does NOT do
 
 - **Does not grade Claude's rigor or process.** That is the
@@ -129,6 +156,12 @@ change requires a stated reason, Jason's explicit sign-off, and a new
 dated entry in the History section below.
 
 ## History
+
+- 2026-09-08: Extended (see "Extension" section above) to also cover
+  proposing practical uses for already-confirmed market facts, not
+  only originating new candidates -- at Jason's explicit request, so
+  the role stays useful as the project's hypothesis-generation pace
+  slows.
 
 - 2026-09-08: Established at Jason's explicit request, following a
   conversation about clarifying project roles. He described wanting "a
