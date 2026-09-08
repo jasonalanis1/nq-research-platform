@@ -131,6 +131,21 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-116/hyp-000087, Overnight Gap Fade (H87) --
+  REJECTED, but the closest near-miss yet.** First hypothesis using an
+  ATR-scaled (wide) stop instead of the tight 1-minute-buffer
+  convention, built specifically around the same-day monetization
+  diagnostic (research/studies/monetization-diagnostic-round1.md).
+  Long (gap-down fade) leg: n=128, mean_r=+0.068, economically
+  meaningful, ci_90=(-0.015,0.152) -- narrowly spans zero, closest any
+  hypothesis has come to passing. Short (gap-up fade) leg: n=146,
+  mean_r=-0.085, credibly losing. Combined: not credible. STEP_1+2_FAIL
+  on all legs. 7 hypotheses (81-87) run total across 3 Observatory
+  scans, all failed, but the ATR-scaling idea measurably helped the
+  cost-ratio problem the diagnostic identified. Full detail:
+  research/studies/gap-fade-h87-spec.md.
+
+
 - **2026-09-08: exp-115/hyp-000086, Round-Number Open Continuation
   (H86) -- REJECTED.** First Observatory v2 candidate and first
   continuation-style (not fade) hypothesis tried in this project.
