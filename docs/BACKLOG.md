@@ -131,6 +131,23 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-109, frequency-increased follow-up to the multi-day
+  pullback setup -- closes it for good; effect vanished at real
+  sample size.** exp-108/hyp-000079 was credible but n=15 (too thin to
+  trust). This version allowed repeat signals per trend segment and
+  shortened the trend/pullback windows (30/10 vs 50/20) to get a real
+  sample: n=85 across 50 trend segments. Result: mean_r_multiple_net=
+  -0.015, ci_90=(-0.218,0.187) -- NOT credible. A block-bootstrap-by-
+  trend-segment check (accounting for correlated trades within the same
+  trend) agrees: ci_90=(-0.291,0.240), also not credible. The apparent
+  edge essentially disappeared once the sample grew from 15 to 85 --
+  the classic effect-size-inflation pattern this project's own
+  diagnostics were built to catch. Closes the multi-day pullback-
+  continuation idea for good, per its own pre-commitment. Ledger:
+  hyp-000080, parent hyp-000079. Full detail:
+  research/studies/multiday-pullback-continuation-v2-spec.md.
+
+
 - **2026-09-08: exp-108, multi-day 20-MA pullback continuation --
   CREDIBLE result but only n=15, too thin to trust or act on (NOT a
   finding).** First multi-day SWING setup tested (every prior setup
