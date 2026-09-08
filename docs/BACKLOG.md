@@ -131,6 +131,19 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-119/hyp-000090, Swing-High Wide-Regime Open Fade
+  (H90) -- REJECTED, tight genuine null.** First candidate chosen via
+  the new point-effect pre-screening rule (largest raw effect and n of
+  any candidate this session) -- but n=293, mean_r=-0.006,
+  ci_90=(-0.059,0.045), a tighter null than most prior candidates.
+  Disproves the rule's simple form: raw point-effect size on
+  wide-volatility days likely reflects regime-scaled noise, not a
+  real edge, without normalizing by the regime's own typical range.
+  10 hypotheses (81-90) across 3 scans, all rejected; H87/H89 gap-fade
+  remains the only near-miss. Full detail:
+  research/studies/swing-high-wide-open-fade-h90-spec.md.
+
+
 - **2026-09-08: exp-118/hyp-000089, Gap-Down Fade Long-Only (H89) --
   REJECTED, closes the gap-fade behavior entirely.** Reshaped
   reattempt of H87 (same precedent as H81->H82): a stability check
