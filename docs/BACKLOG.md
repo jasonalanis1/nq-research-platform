@@ -131,6 +131,26 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-08: exp-104/105, opening volume imbalance and prior-close
+  rejection -- both REJECTED, also credibly LOSING.** Two more fresh
+  mechanisms (different data dimension: signed volume; different
+  reference type: a fixed prior-day level, not a rolling window).
+  exp-104 (sign(Close-Open)*Volume over the 09:30-10:00 open, traded in
+  that direction): n=1684, mean_r_multiple_net=-0.061,
+  ci_90=(-0.105,-0.017). exp-105 (fade of a rejected touch of prior
+  RTH close): n=673, mean_r_multiple_net=-0.087,
+  ci_90=(-0.157,-0.009). Both credibly losing, well-powered. This makes
+  6 of 6 fresh pre-move-behavior tests (volume vacuum x2 directions,
+  trend alignment x2 directions, volume imbalance, prior-close
+  rejection) come back credibly LOSING money net of cost -- a
+  consistent pattern now, not scattered noise. Worth surfacing to Jason
+  as its own finding before spinning further variants: NQ's 1-minute
+  bars, at a fixed 1.35R target with real transaction cost, appear to
+  systematically punish reactive/rules-based entries at these kinds of
+  short-term trigger moments, in either direction. Ledger: hyp-000076,
+  hyp-000077. Full detail: research/studies/pre-move-behavior-batch3-spec.md.
+
+
 - **2026-09-08: exp-102/103, fade variants of volume vacuum and trend
   alignment -- both REJECTED, also credibly LOSING.** Same detection,
   same stop/target distances as exp-100/101, direction reversed.
