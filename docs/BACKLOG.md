@@ -131,6 +131,23 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-09: Canonical two-layer methodology documented + four legacy
+  leads classified (ABANDON, all four).** Jason corrected two overstated
+  phrases in the project's working vision summary and required the
+  methodology be formally set in stone before any further work on the
+  four previously-flagged unresolved leads (hyp-000023, hyp-000025,
+  hyp-000027, hyp-000031). research/studies/two-layer-methodology.md now
+  the canonical spec: Observatory (Layer 1) discovers/characterizes only,
+  never confirms; monetization (Layer 2) is always a separate frozen
+  hypothesis through Discovery/Validation; Observatory is now the default
+  hypothesis-generation mechanism. Classification
+  (research/studies/legacy-leads-classification-2026-09-09.md) found all
+  four legacy leads already had a completed prospective test on record
+  that did not clear (ledger-hygiene gap, same class as the earlier
+  hyp-063/079/044/050/052 fix) -- all four classified ABANDON, none need
+  further work. Ledger corrected: hyp-000097 through hyp-000100.
+
+
 - **2026-09-08: Methodology audit (Option C) + ledger hygiene pass.**
   Power analysis across this session's results
   (research/studies/promotion-bar-methodology-audit.md): the gap-fade
