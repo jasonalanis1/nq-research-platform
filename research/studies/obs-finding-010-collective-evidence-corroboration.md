@@ -51,3 +51,21 @@ ready for a hypothesis spec -- the direction-assignment follow-up
 above is required first, per the honesty standard this project holds
 every other candidate to (no hypothesis is written from an ambiguous
 or underspecified signal).
+
+## Direction-conditioned follow-up (exp-124) -- CLOSED
+
+Restricting to days where all fired conditions imply the same trade
+direction (n=148 of the 397 "2+ conditions" days) does not show a
+credible effect: signed return vs. zero is +0.59pts, ci_90=(-1.73,
+3.19) -- spans zero. Same-direction is also not credibly stronger than
+mixed-direction days (ci_90_diff spans zero, and the raw mixed mean is
+actually numerically larger, though not directly comparable since it's
+unsigned). Per this study's own pre-commitment, this closes the
+collective-evidence v2 line without a hypothesis spec: the pooled
+mixed-direction corroboration effect in OBS-FINDING-010's original
+measurement is real as a pooled statistical curiosity, but does not
+resolve into a usable single-direction trading signal. Consistent with
+the project's broader pattern: a real, measurable market regularity
+(more agreement among independent signals coincides with less negative
+opening-hour drift) that has not yet translated into anything
+tradeable.
