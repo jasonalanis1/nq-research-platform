@@ -1702,3 +1702,40 @@ limitation of catching this late, not something this session could
 retroactively fix) and this pass's changes; future appends should each
 get their own commit per the frozen spec.
 
+## Triage Sweep complete: all 20 stale-looking PROMISING ledger rows resolved (2026-09-09)
+
+NEXT_UP.md queue item 1. Found in progress: an earlier, apparently concurrent/
+overlapping run of this same automated work session had already appended
+hyp-000124/125/126 (uncommitted, no active process found when this session
+checked) -- verified each against primary sources (correct) and committed them
+along with this session's own continuation work rather than duplicating.
+
+Full result across all 20 hypotheses whose most-recent-by-id row read
+PROMISING: hyp-000023/025/027/031 (legacy leads, already resolved via
+hyp-000097-100), hyp-000044/050/052/063 (already resolved via
+hyp-000093-096), hyp-000079 (already resolved via hyp-000091) -- all
+pre-existing corrections, verified, not stale. Newly added this sweep:
+hyp-000124 (H93/OBS-FINDING-009, stale FORWARD VALIDATION label -> REJECTED,
+2-attempt limit exhausted), hyp-000125 (hyp-000051 tight-base n=9 -> MODIFY,
+textbook thin-sample case, re-enters only as a fresh properly-powered
+Observatory candidate), hyp-000126 (hyp-000121/H118 Discovery row -> pointer
+to hyp-000123 HOLDOUT PASSED, not an abandonment), hyp-000127 (hyp-000117/H116
+Discovery row -> REJECTED, its own Validation prospective already failed,
+hyp-000118), hyp-000128 (hyp-000119/H117 Discovery row -> REJECTED, its own
+Validation prospective already failed, hyp-000120), hyp-000129 (hyp-000056
+overnight-coil Discovery row -> pointer to hyp-000057 VALIDATION CANDIDATE,
+not an abandonment). hyp-000046/048 (range-contraction, Discovery +
+Validation-passed) checked and left untouched -- correctly still PROMISING,
+not stale: both legs of the promotion bar require economic meaningfulness,
+which is explicitly not-yet-assessed for either (range/volatility
+characterizations, not yet costed trading rules), same as their sibling
+overnight-coil pair before hyp-000129's pointer.
+
+Net effect: strategy_status==PROMISING, filtered to each hypothesis's latest
+ledger row, now correctly reflects only genuinely open, unresolved candidates
+(hyp-000046/048, the two already-validated non-directional volatility facts
+awaiting a costed-rule translation) -- every directional candidate that ever
+reached PROMISING and was later superseded now has a same-session-findable
+correction or progression pointer. Ledger: hyp-000124 through hyp-000129 (all
+today).
+
