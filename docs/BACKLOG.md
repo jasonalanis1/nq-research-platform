@@ -131,6 +131,24 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-09: Both new-starting-point threads closed -- no open leads
+  remain.** (1) Overlay screen 3 (exp-119/hyp-000101): the project's 2
+  validated volatility findings (range-contraction, overnight coil)
+  overlaid on H89 gap-fade, the closest-ever near-miss -- both null,
+  CIs span zero. Closes the gap-fade line's last untried angle for
+  good. (2) Observatory v4 (multi-day reference-level touches:
+  prior-week/prior-month high/low), with a new ATR-normalized
+  cost-aware screen applied to candidate ranking -- 1 statistically
+  Promising candidate found but correctly flagged LOW_PRIORITY_COST_
+  DOMINATED (effect ~1% of typical daily range, smaller than H87/H89's
+  near-miss which itself narrowly failed on cost); 3 Interesting
+  candidates too thin (n=15-20) to trust. No Behavioral Finding
+  written -- nothing cleared both the statistical and cost bars at
+  adequate sample size. Full detail:
+  research/studies/observatory-v4-evaluation.md. Next default step:
+  scope a new Observatory event family (v5) -- not yet done.
+
+
 - **2026-09-09: Canonical two-layer methodology documented + four legacy
   leads classified (ABANDON, all four).** Jason corrected two overstated
   phrases in the project's working vision summary and required the
