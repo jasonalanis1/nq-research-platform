@@ -131,6 +131,24 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-09: Observatory v7 (mechanism-first selection) -- third-ever
+  Validation-confirmed finding, OBS-FINDING-011.** Applied the
+  mechanism-first event-family selection principle from the staff
+  meeting (liquidity/participation story required, not just novelty).
+  Tested midday-session-range vs afternoon-session-range persistence --
+  my hypothesized mechanism (pent-up energy releasing) was WRONG in
+  direction; actual result is range PERSISTENCE (narrow midday ->
+  narrow afternoon), same family as the project's other 2 successes,
+  strongest effect size yet (0.71 vs 1.16 on Discovery). PASSED its
+  required prospective test cleanly (0.816 vs 1.091 on Validation,
+  not marginal) -- third finding ever to survive out-of-sample testing.
+  Volatility/range characterization, not directional. Integrated into
+  src/volatility_conditioning.py as get_afternoon_conditioning() (kept
+  separate from the pre-open function -- only usable from 14:00 ET
+  onward). Full detail:
+  research/studies/obs-finding-011-midday-afternoon-range-persistence.md.
+
+
 - **2026-09-09: Collective-evidence pilot v2 -- real pooled
   corroboration signal (OBS-FINDING-010), closed after direction
   follow-up.** Fixed pilot v1's disclosed correlated-variant

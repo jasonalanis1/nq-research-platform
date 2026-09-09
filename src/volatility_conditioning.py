@@ -194,3 +194,58 @@ def position_size_multiplier(expected_range_multiplier):
         return 1.0
     raw = 1.0 / expected_range_multiplier
     return max(MIN_SIZE_MULT, min(MAX_SIZE_MULT, round(raw, 4)))
+
+
+# ---------------------------------------------------------------------------
+# Midday-to-afternoon range persistence -- OBS-FINDING-011
+# (research/studies/obs-finding-011-midday-afternoon-range-persistence.md),
+# Validation-confirmed 2026-09-09 (exp-126). SEPARATE from the two functions
+# above: this signal is only known INTRADAY, once the midday session
+# (12:00-14:00 ET) has completed -- it cannot inform a same-morning or
+# pre-open sizing decision the way the other two facts can. Kept as its own
+# function rather than folded into get_volatility_conditioning() so its
+# different information-availability timing is never accidentally conflated
+# with a pre-open estimate.
+# ---------------------------------------------------------------------------
+NARROW_MIDDAY_AFTERNOON_RATIO = 0.8161   # OBS-FINDING-011, Validation n=142, ci_90=(0.7615, 0.8784)
+NOT_NARROW_MIDDAY_AFTERNOON_RATIO = 1.0910   # OBS-FINDING-011, Validation n=404, ci_90=(1.0372, 1.1473)
+MIDDAY_NARROW_PCTL = 20
+MIDDAY_LOOKBACK_DAYS = 20
+
+
+def build_midday_afternoon_frame(df: pd.DataFrame) -> pd.DataFrame:
+    """One row per day: midday (12:00-14:00) range, and whether it's
+    'narrow' by its own trailing-20-day percentile -- unmodified
+    definition from study_midday_lull_afternoon_expansion.py."""
+    rows = []
+    for day, day_df in df.groupby(df.index.date):
+        midday = day_df.between_time("12:00", "14:00")
+        if midday.empty:
+            continue
+        rows.append({"date": day, "midday_range": float(midday["High"].max() - midday["Low"].min())})
+    daily = pd.DataFrame(rows).set_index("date").sort_index()
+    narrow_thresh = daily["midday_range"].rolling(MIDDAY_LOOKBACK_DAYS, min_periods=MIDDAY_LOOKBACK_DAYS).apply(
+        lambda w: np.percentile(w, MIDDAY_NARROW_PCTL), raw=True)
+    daily["narrow_midday"] = daily["midday_range"] <= narrow_thresh
+    return daily
+
+
+def get_afternoon_conditioning(date, midday_afternoon_frame: pd.DataFrame) -> dict:
+    """Look up one day's midday classification and the confirmed
+    afternoon-range multiplier. Only meaningful from 14:00 ET onward
+    (after the midday session this classification depends on has
+    completed) -- do not use this for a pre-open or morning decision.
+    Returns a dict, never raises (defaults to 'no information', 1.0)."""
+    narrow = bool(midday_afternoon_frame.loc[date, "narrow_midday"]) if date in midday_afternoon_frame.index and pd.notna(midday_afternoon_frame.loc[date, "narrow_midday"]) else False
+    if narrow:
+        multiplier = NARROW_MIDDAY_AFTERNOON_RATIO
+        basis = f"narrow_midday (OBS-FINDING-011, x{NARROW_MIDDAY_AFTERNOON_RATIO})"
+    else:
+        multiplier = NOT_NARROW_MIDDAY_AFTERNOON_RATIO
+        basis = f"not_narrow_midday (OBS-FINDING-011, x{NOT_NARROW_MIDDAY_AFTERNOON_RATIO})"
+    return {
+        "date": str(date), "narrow_midday": narrow,
+        "expected_afternoon_range_multiplier": round(float(multiplier), 4),
+        "usable_from": "14:00 ET (after midday session completes)",
+        "basis": basis,
+    }
