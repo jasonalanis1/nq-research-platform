@@ -1319,3 +1319,56 @@ NEXT: evaluate whether a genuinely differently-motivated second attempt
 is warranted, or close this candidate to LEARN; separately,
 location_in_range/low/10d's trend-dependent (dip-buying) mechanism
 remains an open, not-yet-pursued thread from the same Scan 001 cohort.
+
+## H117 monetization attempt: location-in-range-low, uptrend-conditioned, 10-day drift (2026-09-09)
+
+Second live Scan 001 candidate (distinct from H116). Two-variable
+conditioned spec per Mechanism Agent's trend-regime finding: long,
+location_in_range LOW tercile AND trailing-60d trend POSITIVE, time-based
+10-day exit, no stop/target. Frozen specs:
+research/studies/location-in-range-low-uptrend-10d-drift-h117-spec.md and
+-prospective-spec.md.
+
+Discovery-slice: n=342, mean_r=+0.451, ci_90=[0.223, 0.679] --
+DISCOVERY_PASS.
+Validation-slice prospective (bucket edges + trend threshold frozen from
+Discovery, nothing retuned): n=84, mean_r=-0.026, ci_90=[-0.443, 0.395] --
+CI spans zero AND wrong sign. PROSPECTIVE_FAIL. Full 90% promotion bar
+NOT cleared.
+
+STATUS: Attempt 1 of 2 CLOSED as a null. Same pattern as H116: a
+sizeable, credible-looking Discovery-slice effect did not replicate
+out-of-sample -- here the Validation-slice mean flipped negative
+entirely. Notably the Validation-slice signal count for the
+uptrend-conditioned bucket is thin (n=84, vs. 342 in Discovery), which
+by itself is a plausible partial explanation, but the CI is wide and
+centered near zero, not just imprecise -- this is a clean null, not
+merely an underpowered test.
+
+CUMULATIVE SCAN 001 RESULT: both live candidates that survived the full
+exploratory gauntlet (chronological split-sample, volatility-regime
+split, trend-regime split, and for H116 also separability) have now
+failed their first prospective Validation-slice test. 0 of 2 Discovery
+Engine candidates have reached promotion. This is now itself a LEARN
+entry: exploratory robustness screening run entirely on Discovery-slice
+data -- however many independent cuts are stacked -- does not reliably
+predict out-of-sample survival for this project's data. The chronological
+Discovery/Validation boundary remains the load-bearing check; multi-stage
+exploratory screening narrows the candidate pool but has not yet, across
+2/2 tries, correctly identified a genuine out-of-sample survivor.
+
+Per the 2-attempt limit, one further differently-motivated attempt
+remains open on EACH candidate (H116's overnight_range_vs_atr/mid and
+H117's location_in_range/low+uptrend) before each closes to LEARN.
+Given the 0-for-2 result this scan, the higher-value next step is
+judged to be a fresh Scan 002 with new state variables (per the KNOWN
+UNEXPLORED LEARN bucket: cross-market ES/VXN relationship, VWAP
+distance, volume-vs-expected, non-tercile discretization of
+directional_persistence) rather than immediately spending the
+remaining attempts on candidates that just went 0-for-2 -- consistent
+with the Research Director's mandate to weigh diminishing returns, not
+just "attempts remaining."
+
+Full: data/study_location_in_range_low_uptrend_10d_drift_h117_results.json,
+data/study_location_in_range_low_uptrend_10d_drift_h117_prospective_results.json.
+Ledger: hyp-000119 (Discovery), hyp-000120 (Validation prospective).
