@@ -1177,3 +1177,19 @@ regime-contamination check (does the apparent return effect survive controlling 
 period's dominant uptrend/vol regime) before writing a frozen behavioral-hypothesis spec for
 location_in_range or the overnight_range_vs_atr/mid case.
 Full results: data/discovery_scan_001_split_sample_robustness_results.json.
+
+## Agent governance restructure (2026-09-09, second structural pass)
+Added research/infrastructure/agent-governance-structure.md -- supersedes the flat six-agent list.
+Adds a Research Director (strategic authority, not an execution step -- CONTINUE/MODIFY/PIVOT/ABANDON
+on any research thread, performs Candidate Triage classifying every Discovery-Agent output A-F before
+Mechanism spends time on it) and refines Discovery (must report novelty + search exposure per
+candidate, not just effect size), Mechanism (testable predictions, not post-hoc stories), and
+Statistical (4 required questions incl. selection-sensitivity disclosure) agent standards. Monetization
+and Portfolio agents unchanged in role. Research Integrity stays independent of the Research Director
+(neither can override the other). LEARN formalized into KNOWN TRUE / KNOWN FAILED / KNOWN FAILURE
+MODES / KNOWN UNEXPLORED, consulted by the Research Director before triage. Every agent report now
+ends with 5 standard fields: Finding / Confidence / Novelty / Research Value / Recommendation.
+Central research question reframed: from "what behaviors does NQ exhibit" to "what conditional market
+states carry persistent, economically meaningful, verifiable information about future price behavior."
+Immediate application: Research Director formally reviews Scan 001's 3 split-sample survivors
+(Candidate Triage A-F) before further mechanism/regime work continues on them -- next action.
