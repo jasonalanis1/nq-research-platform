@@ -283,3 +283,40 @@ research actually produce better candidates?) -- not a final answer,
 but it supports the standing decision to keep the Observatory as the
 default hypothesis-generation mechanism rather than reopening
 intuition-first search now that data exists to check.
+
+
+## 6th failure mode added (2026-09-09): credible drift that doesn't survive risk-managed framing
+
+Prompted by Jason asking to revisit the project's "close hits" --
+correctly redirected (per the two-attempt limit) into a new standing
+LEARN entry instead of reopening closed hypotheses. Pattern observed
+across FOUR separate lines now: H87/H89 (gap-fade, long leg narrowly
+failed), H93 (marginal Discovery pass, failed its required prospective
+test), and H114/H115 (pre-NFP overnight short, OBS-FINDING-012 -- a
+CREDIBLE, well-powered raw price-drift effect that failed BOTH
+monetization attempts, excursion-derived and ATR-scaled stop/target
+alike).
+
+The common thread: this project's two standard exit-design conventions
+(fixed stop/target from disclosed Discovery-sample excursions, or
+ATR-scaled stop/target) both convert a real, credible average-return
+effect into a per-trade R-multiple whose own distribution doesn't
+clear the bar -- the mean drift is real, but the trade-level variance
+swamps it once a stop can get hit before the drift plays out. This is
+now a 6th named failure mode, distinct from cost-dominance (the effect
+is too small) or thin-sample overconfidence (not enough events): call
+it EXIT-DESIGN MISMATCH -- a real average-price effect whose natural
+realization path (a drift over hours, not a clean directional push)
+doesn't suit a binary stop/target trade structure.
+
+Implication for future monetization designs on drift-type findings
+(not level-touch or fade-type findings, where stop/target has fit
+fine): consider designs that don't rely on a single stop/target
+racing the drift -- e.g. a smaller fixed size held to a time-based
+exit only (accepting undefined-but-bounded overnight risk, which the
+project has flagged as its own open risk question), or scaling
+position size directly by the measured effect's own historical
+volatility rather than by a hard stop. NOT a retroactive fix to
+H87/H89, H93, or H114/H115 -- those stay closed per the two-attempt
+limit. This is knowledge for the NEXT drift-type hypothesis's frozen
+spec, designed in from the start rather than retrofitted.
