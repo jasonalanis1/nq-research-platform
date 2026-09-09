@@ -1104,3 +1104,21 @@ doesn't survive becoming an actual risk-managed trade -- same pattern
 as H87/H89 (near-miss) and H93 (marginal Discovery pass, failed
 prospective). Raw directional drift and tradeable edge are different
 bars; this project has now tested that gap 4 times and crossed it 0.
+
+## Structural change: Market Behavior Discovery Engine (2026-09-09)
+Jason's strategic review: existing pipeline optimized for rejecting bad hypotheses, not for
+efficiently discovering which behaviors are worth testing. Verdict: research framework CONTINUE,
+discovery mechanism MODIFY, strategy-first hypothesis queue MODIFY substantially, integrity
+controls KEEP, live trading DO NOT BUILD YET. Do not reopen H87/H89/H93.
+New frozen spec: research/infrastructure/market-behavior-discovery-engine-design.md — a state-first
+layer (Layer 0-5: Data -> Behavior Discovery -> Candidate Ranking -> Frozen Monetization ->
+Validation -> Promotion) sitting ahead of the existing hypothesis pipeline, with explicit
+multiple-testing controls (exploratory Discovery -> ranking gate -> frozen spec -> unchanged
+confirmation machinery), a new required "natural realization path" question before any
+monetization spec is frozen (operationalizes the exit-design-mismatch LEARN entry), and three
+progress metrics (research coverage / discovery yield / monetization yield) to track alongside the
+existing hypothesis ledger. Six agent roles proposed: Discovery, Mechanism, Statistical,
+Monetization, Research Integrity, Portfolio.
+Next concrete action: scaffold research/infrastructure/market_state_primitives.py (Layer 0),
+reusing the ATR-normalized conventions from volatility_conditioning.py, starting with
+range/volatility-based state descriptors before expanding to untested ones.
