@@ -1066,3 +1066,21 @@ n=559, good sample size, not a thin-sample issue). Also both legs
 cost-dominated (atr_normalized_effect 0.029/0.039, under the 0.05
 floor) even before the CI question. Logged hyp-000110, REJECTED. No
 retuning the tercile/window definition -- closed per protocol.
+
+## Tested / Closed -- Pre-FOMC Announcement Drift (2026-09-09)
+Frozen spec: research/studies/pre-fomc-drift-design-spec.md. Direct
+outcome of the "identify direction" staff meeting -- strongest-cited
+mechanism not yet tested (Lucca & Moench 2015), free calendar data
+(55 FOMC dates 2015-2021-10-03). Result: NOT credible (CI spans zero
+on both sub-windows, n=54 and n=53 -- too thin), but notably the ONLY
+candidate this session where direction matched the literature AND
+effect size cleared the cost floor (prior-day RTH +9.7pts, overnight
++9.2pts, both atr_normalized_effect > 0.05). This is a genuine
+thin-sample-underpowered result, not a clean/wrong-direction null like
+most of this session's other tests. Logged hyp-000111, REJECTED per
+protocol (Discovery didn't clear Promising). Per no-retuning-after-null
+rule, NOT reopening this with a different window/date list. Worth
+remembering: if this project ever has reason to look at FOMC-adjacent
+behavior again (e.g. as a conditioning input for a future directional
+candidate), the sign and rough magnitude here are a real, if
+underpowered, data point -- not dismissed as noise.
