@@ -254,3 +254,32 @@ real-signal ratio than the legacy strategy-first approach it replaced
 consistent with the 2026-09-08 audit's origin-family breakdown) over
 further refining the failure-mode screens for candidates that already
 clear the "real effect" bar, since that bar is the harder one to clear.
+
+## First data point on the open question (2026-09-09): does behavior-first beat intuition-first?
+
+Crude first pass, using the same rejected-hypothesis pool from the
+LEARN retrospective, broken out by strategy_origin: what fraction of
+each origin's rejections show ANY evidence of having found a real
+effect at some stage (vs. a clean null from the start)? Caveat:
+detected via keyword matching on ledger notes text, not a re-analysis
+of each hypothesis's actual statistics -- directional, not precise,
+and not itself a frozen/pre-registered test (this is retrospective
+data mining, appropriate for LEARN-layer knowledge, not for claiming a
+validated result).
+
+- `data_discovered` (Observatory-sourced): ~29% (4/14) showed a real
+  effect at some stage.
+- `derivative` (post-hoc filters/splits on existing signals): ~15% (4/26).
+- `rd_generated` (cross-asset/standalone signal search): ~11% (2/19).
+- `jason_hypothesis` / `external_claim` (intuition/claim-sourced,
+  mostly candlestick and bar patterns): 0% (0/17, 0/5).
+
+Directionally consistent with Observatory (behavior-first) sourcing
+having roughly 2x the real-effect base rate of the next-best origin
+family, and intuition/claim-sourced ideas finding nothing at all in
+this sample. This is a first, imprecise data point toward the open
+question raised in the original pilot evaluation (does behavior-first
+research actually produce better candidates?) -- not a final answer,
+but it supports the standing decision to keep the Observatory as the
+default hypothesis-generation mechanism rather than reopening
+intuition-first search now that data exists to check.
