@@ -1220,3 +1220,31 @@ robustness cut (regime split): overnight_range_vs_atr/mid/10d and location_in_ra
 is promoted, frozen, or treated as validated -- both still require a Mechanism Agent pass (testable
 mechanism prediction, not narrative) before a frozen monetization spec is written for either.
 Full results: data/research_director_regime_check_results.json.
+
+## Mechanism Agent trend-regime distinguishing test (2026-09-09)
+Ran src/mechanism_agent_trend_check.py on the 2 candidates surviving both prior robustness cuts,
+splitting Discovery by trailing 60-day trend direction (uptrend n=1316, downtrend n=340) to
+distinguish competing mechanism hypotheses for each -- per the new Mechanism Agent standard
+(testable prediction, not narrative).
+- overnight_range_vs_atr/mid/10d: effect present, same direction, clears cost floor in BOTH uptrend
+  (atr_norm 0.050) and downtrend (atr_norm 0.437, but thin n=92) regimes. Evidence AGAINST the
+  "secular-uptrend bleed-through" artifact explanation -- the effect does not disappear or reverse
+  when the broader trend flips, which is what a pure regime-clustering artifact would predict.
+  Still does not confirm a specific mechanism, and still needs to be distinguished from the
+  validated overnight-coil RANGE finding on the same predictor (that remains the open question).
+  Downtrend-regime n=92 is thin -- treat the very large downtrend effect size with skepticism (LEARN
+  thin-sample-overconfidence failure mode applies directly here).
+- location_in_range/low/10d: effect REVERSES sign between regimes -- outperforms baseline in
+  uptrends (atr_norm 0.631) and underperforms baseline in downtrends (atr_norm 0.418). This is
+  mechanistically coherent with a trend-dependent "dip-buying in an uptrend" story (a low in an
+  uptrend attracts support flow; the same low in a downtrend has no such support and keeps
+  falling) rather than pure trend-independent mean-reversion. Important caveat for any future spec:
+  this candidate's apparent edge is trend-context-dependent, not a standalone all-weather state
+  effect -- a frozen monetization spec for this candidate would need to condition on trend regime,
+  not treat location-in-range alone as sufficient.
+STATUS: both candidates still exploratory. overnight_range_vs_atr/mid is the more robust of the two
+(trend-independent) but still entangled with the known range finding -- next question is a direct
+statistical test of whether it's separable from that finding (e.g. does the return effect survive
+after controlling for the range outcome itself), not yet run. location_in_range/low is not
+trend-independent and any eventual spec must build in a trend-regime filter, per this test.
+Full results: data/mechanism_agent_trend_check_results.json.
