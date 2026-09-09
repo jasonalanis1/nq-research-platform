@@ -1,45 +1,61 @@
-# Agent Governance Structure -- Research Director, Candidate Triage, and agent role charter
+# Agent Governance Structure v2 -- Research Director, mandatory Integrity Gate, Portfolio scope
 
-Frozen 2026-09-09. Supersedes the six-agent list in
-research/infrastructure/mechanism-research-agent-design.md and the
-"Candidate agent roles" section of
-research/infrastructure/market-behavior-discovery-engine-design.md --
-those documents described WHAT each agent checks; this document adds
-WHO decides whether a candidate is worth pursuing at all, and freezes
-the reporting format every agent uses. Source: Jason's structural
-review, 2026-09-09, second pass (after the initial Discovery Engine
-design spec and Scan 001's split-sample results).
+Frozen 2026-09-09 (third structural pass, following H118's Discovery+
+Validation+Holdout result). Supersedes the prior version of this
+document (2026-09-09, second pass). Source: Jason's review against
+Tony_Project_Handoff.docx and the project's Master Methodology, plus
+his explicit instruction that this project should now run on the
+agent team's own judgment, with him providing direction rather than
+being asked for routine input.
 
-## What changed and why
+## What changed and why (this pass)
 
-The prior six-agent pipeline (Discovery -> Mechanism -> Statistical ->
-Monetization -> Validation, with Research Integrity across everything)
-is a strong execution pipeline but has no agent whose job is deciding
-whether the pipeline is investigating the right things. It will
-happily keep running mechanism/statistical/monetization passes on
-whatever Discovery surfaces, without ever asking "is this the
-highest-value use of the next research cycle?" Scan 001 made the gap
-concrete: 16 of 48 cells passed an individual threshold, and without a
-triage step every one of them could have consumed a full
-Mechanism+Statistical pass before anyone asked whether they were
-mostly the same handful of correlated series.
+The prior version added the Research Director and Candidate Triage but
+still treated Research Integrity as an informal, background presence
+rather than a mandatory, independent gate. H118 exposed the gap
+directly: it reached Holdout Generation 2 -- consuming a scarce,
+irreplaceable slot -- on the strength of checks I (Claude) performed
+myself (rediscovery/correlation check, regime splits). That is useful
+work, but it is not the same as an independent adversarial review whose
+job is to try to prove the candidate wrong. Per the methodology,
+Research Integrity is not optional or occasional -- it governs
+chronological separation, frozen specs, no post-result changes,
+complete logging, multiple-testing awareness, realistic costs, and
+out-of-sample validation THROUGHOUT the process, not as a stage that
+can be skipped when things look promising.
 
-Two additions close that gap. Everything else about the existing
-integrity framework, ledger, promotion bar, and 2-attempt limit is
-unchanged.
+Three changes this pass:
+  1. Research Director confirmed as a permanent, standing authority
+     (not new -- reaffirmed, now explicitly named a 7th agent for
+     clarity rather than "not an execution step," since Jason's
+     framing makes it a role, not merely a veto).
+  2. Research Integrity becomes a MANDATORY, independent gate with
+     veto authority, sitting both continuously across the pipeline
+     AND as a required, explicit stop immediately before any candidate
+     enters formal Discovery->Validation->Holdout confirmation. A
+     candidate does not proceed past this gate on the strength of
+     self-performed checks alone.
+  3. Portfolio Agent's activation criterion and first task are both
+     narrowed: it activates only once a candidate has genuinely
+     cleared the full documented promotion bar (all three: 90% CI
+     entirely above zero, >=0.05R economically meaningful, confirmed
+     by the prescribed prospective test on untouched data), and its
+     first job is never "combine these for more return" -- it is
+     "does this provide incremental information beyond what we
+     already have, or is it the same latent state restated."
 
-## Pipeline (updated)
+## Pipeline (v2)
 
-    Jason
+    Jason (direction, not routine sign-off -- see Standing Rule below)
       |
       v
-    RESEARCH DIRECTOR  (strategic authority -- not an execution step)
+    RESEARCH DIRECTOR  (research strategy & capital allocation -- what's worth pursuing)
       |
       v
     DISCOVERY AGENT  (maps candidate behaviors, reports novelty + search exposure)
       |
       v
-    CANDIDATE TRIAGE  (a function the Research Director performs, not a 7th agent)
+    CANDIDATE TRIAGE  (Research Director function: A-F classification)
       |
       v
     MECHANISM AGENT  (testable mechanism predictions, not post-hoc stories)
@@ -48,185 +64,160 @@ unchanged.
     STATISTICAL AGENT  (stability, regime dependence, magnitude, selection sensitivity)
       |
       v
+    RESEARCH DIRECTOR RE-EVALUATION  (is the evidence strong enough to spend more research capital?)
+      |
+      v
     MONETIZATION AGENT  (natural realization path; "no credible path" is a valid conclusion)
       |
       v
-    DISCOVERY -> VALIDATION -> PROMOTION  (existing pipeline, unchanged)
+    *** MANDATORY INTEGRITY GATE ***  (independent adversarial review -- see below; VETO authority)
+      |
+      v
+    DISCOVERY -> VALIDATION -> HOLDOUT  (existing pipeline, unchanged, this is where H118 currently sits)
+      |
+      v
+    PORTFOLIO AGENT  (only once a candidate clears the full promotion bar: incremental-information test)
 
-Wrapping the whole thing, independently of each other and of the
-Research Director:
+Research Integrity also operates CONTINUOUSLY across every stage above
+(freeze rules, contamination, multiple-testing tracking, 2-attempt
+limit, no resurrection) -- the Integrity Gate is a required, explicit
+checkpoint IN ADDITION to that continuous role, not a replacement for
+it. LEARN remains institutional memory consulted throughout, by every
+agent and the Research Director.
 
-    RESEARCH INTEGRITY  -- are we doing this honestly? (freeze rules, contamination,
-                            multiple-testing tracking, 2-attempt limit, no resurrection)
-    LEARN                -- what do we already know? (known-true, known-failed,
-                            known-failure-modes, known-unexplored)
+## Research Director (7th agent, standing authority)
 
-Research Integrity and the Research Director have different jobs and
-neither can override the other's domain: the Director can want a
-candidate pursued; Integrity can still veto the proposed test as
-contaminated. That separation is deliberate.
+Question, always: "Are we researching the right thing?" Reviews what's
+tested/failed/succeeded/genuinely-unexplored, novelty, accumulated
+multiple-testing exposure, diminishing returns within a research
+family, and whether the current methodology itself is still producing
+useful discoveries (per the methodology's own principle: when it stops
+working, change the methodology, don't keep generating strategies).
+Authority: CONTINUE / MODIFY / PIVOT / ABANDON on any thread or family,
+at any point. Performs Candidate Triage (A-F, unchanged from v1 -- see
+prior spec in git history) and the Research Director Re-Evaluation step
+newly added to the pipeline above: after Statistical, before
+Monetization, an explicit second look at whether the evidence justifies
+spending a Monetization + Integrity + confirmation-pipeline cycle on
+this specific candidate, given everything already known.
 
-## Research Director
+## Discovery / Mechanism / Statistical / Monetization Agents
 
-Not a pipeline step -- the strategic authority over the pipeline. Its
-question is always: "Is this the highest-value research we could be
-doing right now?" It reviews what's already been tested, what failed,
-what succeeded, what's genuinely unexplored, what Discovery is
-finding, whether candidates are novel or rediscoveries, how much
-multiple-testing exposure has accumulated, what data is available or
-would materially expand the research space, and whether the current
-research family shows diminishing returns.
+Unchanged from the v1 spec (git history: research/infrastructure/
+agent-governance-structure.md as of 2026-09-09, first revision) --
+Discovery reports novelty + search exposure + known-relationship
+overlap; Mechanism requires testable predictions, not narratives;
+Statistical requires the 4 questions (stability, regime dependence,
+magnitude, selection sensitivity) plus mandatory disclosure of
+same-data selection; Monetization stays last before Integrity,
+determines natural realization path, "no credible path" is a valid,
+successful conclusion.
 
-Authority: CONTINUE / MODIFY / PIVOT / ABANDON on any research thread
-or family, at any point -- including after Discovery has already
-surfaced candidates and before Mechanism spends time on them. This
-operationalizes the existing methodology principle that the project
-should change methodology when methodology itself stops producing
-useful discoveries, rather than endlessly generating strategies.
+## Research Integrity -- MANDATORY GATE, independent, with VETO authority
 
-Also performs Candidate Triage: classifies every Discovery-Agent
-candidate before Mechanism sees it --
-  A. Novel and potentially important -- worth investigating
-  B. Probably known/duplicative -- compare against existing findings
-     before spending research resources
-  C. Statistical artifact / multiple-testing concern -- do not advance yet
-  D. Economically too small -- close
-  E. Interesting behavior, unclear monetization -- keep as behavioral
-     knowledge (LEARN), don't force a strategy
-  F. Redundant with an existing hypothesis -- don't retest merely
-     because the formulation looks different
+This is the structural correction. Research Integrity is not
+background process and not optional. It has two roles:
+  1. CONTINUOUS, across every stage (freeze rules, contamination
+     prevention, multiple-testing tracking, 2-attempt limit, no
+     hypothesis resurrection) -- unchanged from before.
+  2. A MANDATORY, EXPLICIT GATE immediately before any candidate is
+     allowed to enter formal Discovery->Validation->Holdout
+     confirmation, or to accumulate further evidence once results
+     exist. A candidate does not pass this gate on the strength of
+     self-performed checks by whoever built the monetization spec --
+     it requires an independent adversarial pass.
 
-Example: Scan 001's overnight_range_vs_atr/mid/10d survivor is a B/C
-borderline case (same predictor as the validated overnight-coil range
-finding, still-unresolved regime-contamination question) -- exactly
-the kind of candidate this layer exists to catch before a full
-Mechanism+Statistical pass is spent on it.
+The Integrity Gate's standing brief, for every candidate: "Assume this
+candidate is wrong. Find every reason we could be fooling ourselves."
+Specifically examines:
+  - data leakage
+  - Discovery/Validation contamination
+  - whether the candidate was selected after seeing the relevant result
+  - multiple-testing exposure (naive and effective-independent-series)
+  - whether related hypotheses were previously tested
+  - whether the candidate is genuinely distinct from previous findings
+  - whether the direction was determined beforehand (pre-registered)
+    or fit to the result
+  - whether any parameter or definition changed after seeing results
+  - whether current evidence has been used to influence subsequent
+    testing (leakage across candidates, not just within one)
+  - whether the candidate is effectively a resurrection/reformulation
+    of a closed hypothesis
+  - whether its claimed statistical strength accounts for the full
+    research history (how many other cells/candidates were scanned to
+    produce it)
 
-## Discovery Agent (refined objective)
+Research Integrity has VETO authority -- independent of the Research
+Director, and the Director cannot override it. A candidate the
+Integrity Gate does not clear does not proceed, regardless of how
+promising the Director or the numbers look.
 
-Objective changes from "maximize statistically interesting results" to
-"discover candidate market behaviors." Every candidate it reports
-carries, at minimum:
-  - state definition and observed behavior
-  - effect size and sample size
-  - search exposure (how many states x horizons x conditions were
-    scanned to produce this candidate -- Scan 001's 48-cell grid /
-    ~12-effectively-independent-series figure is the model)
-  - known-relationship overlap (does this reuse a predictor already
-    behind a validated finding?)
-  - novelty: Low / Medium / High
-  - economic magnitude (ATR-normalized, existing convention)
-  - status: always EXPLORATORY CANDIDATE, never "finding"
+## Portfolio Agent -- activation criterion and first task, both narrowed
 
-"Statistically significant" is reported with its search-exposure
-context attached, not as a bare number -- 10 tests and 10,000 tests
-producing the same p-value are not the same evidence.
+Activates ONLY once a candidate has genuinely cleared the full
+documented promotion bar: (1) 90% bootstrap CI entirely above zero,
+(2) >=0.05R economically meaningful, (3) confirmed by the prescribed
+prospective test on untouched data (Validation, and per this project's
+practice, Holdout). "Survived Discovery" or "survived Validation" alone
+is NOT the activation trigger -- only the full bar.
 
-## Mechanism Agent (refined standard)
+When it does activate, its FIRST job is never optimization or "can we
+make more money combining these." Its first job is: "Does this
+candidate provide incremental information beyond what we already
+validated, or is there evidence it's the same latent market state
+restated in different variables?" The three pre-existing validated
+findings (range-contraction, overnight coil, midday-afternoon range
+persistence) are all volatility/range-persistence facts -- if a new
+candidate is also volatility-related, Portfolio's job is to be
+PARTICULARLY skeptical of double-counting before any diversification
+claim is entertained, not to assume independence.
 
-Not asked "can you think of a reason this might work" (too easy --
-plausible post-hoc stories are cheap). Asked instead: "what observable
-market mechanism could have generated this relationship, and what
-evidence would distinguish that mechanism from coincidence?" Output is
-a testable mechanism PREDICTION (if mechanism X is real, we should
-observe Y/Z under independently measurable conditions; absence of Y/Z
-lowers confidence in X) -- not a narrative.
+## LEARN
 
-## Statistical Agent (refined standard)
+Unchanged (4 buckets: KNOWN TRUE, KNOWN FAILED, KNOWN FAILURE MODES,
+KNOWN UNEXPLORED) -- see prior spec in git history for the full current
+contents. Consulted by every agent and the Research Director throughout.
 
-Four required questions, not just first-half-vs-second-half agreement:
-  1. Stability -- does the behavior persist across time?
-  2. Regime dependence -- does it only exist in one market environment?
-  3. Magnitude -- is the effect economically meaningful?
-  4. Selection sensitivity -- does the result survive reasonable
-     changes to the measurement definition without becoming parameter
-     optimization?
-Plus a mandatory disclosure: was this candidate selected because it
-looked good in the same data now being used to evaluate it? If yes,
-the analysis is explicitly labeled EXPLORATORY, never confirmatory --
-this is already how the Scan 001 split-sample screen was run and
-reported (see research/infrastructure/market-behavior-discovery-engine-design.md
-and docs/BACKLOG.md's 2026-09-09 entries).
+## Reporting format
 
-## Monetization Agent (unchanged in spirit, reaffirmed)
+Unchanged: Finding / Confidence / Novelty / Research Value /
+Recommendation (CONTINUE/MODIFY/PIVOT/ABANDON), on every agent report.
 
-Stays last in the pipeline, deliberately. Determines the natural
-realization path (already specified in the Discovery Engine design
-spec) and is explicitly permitted to conclude "interesting behavior,
-no credible monetization mechanism identified" -- that is a successful
-research outcome, not a failure to force a strategy. Directly
-reaffirms the exit-design-mismatch LEARN entry from OBS-FINDING-012 /
-H114/H115.
+## Standing rule change (2026-09-09): team runs on its own judgment
 
-## Portfolio Agent (unchanged: dormant)
+Jason's explicit instruction: this structure is now meant to reduce how
+often he is asked for input, not increase it -- the team should follow
+its own direction using this governance structure, not default to
+asking him. This does not relax any existing standing rule (the 90%-
+promotion-bar-clearance and $5+-purchase exceptions to "don't loop me
+in" are unchanged and still the only mandatory stop points) -- it
+means the Research Director + Integrity Gate structure itself is now
+the mechanism for deciding what to research next and whether to trust
+a result, in place of asking Jason for that judgment. He directs the
+project's overall course; the agent team executes and self-governs the
+day-to-day research decisions within it.
 
-Not built. Becomes relevant only once multiple validated-but-
-individually-weak behaviors exist to potentially combine. Zero
-validated directional strategies exist today -- building this now is
-infrastructure ahead of need. Specification stays on file
-(research/infrastructure/market-behavior-discovery-engine-design.md),
-no research effort spent implementing it.
+## H118's status under this structure
 
-## Research Integrity (unchanged role, reaffirmed as independent)
+H118 (vwap_dist_vs_atr LOW tercile, 10d drift) reached Holdout
+Generation 2 and passed (Discovery/Validation/Holdout all CI-above-
+zero) WITHOUT having gone through the mandatory Integrity Gate defined
+above -- it was screened by checks I performed myself, not an
+independent adversarial pass. Per this corrected structure, its status
+is downgraded from "Holdout Passed" (treated as settled) to:
 
-Freeze rules, contamination prevention, multiple-testing tracking, the
-2-attempt limit, no hypothesis resurrection. Operates across every
-stage above, independently of the Research Director -- see governance
-note above.
+    PROMISING / UNDER INDEPENDENT INTEGRITY REVIEW
 
-## LEARN (strengthened into explicit institutional-memory structure)
-
-Maintains, and the Research Director consults before triaging or
-prioritizing:
-  KNOWN TRUE: range contraction -> future range contraction (hyp-046/048);
-    overnight coil -> same-day range contraction (hyp-056/057); midday
-    contraction -> afternoon contraction (OBS-FINDING-011, hyp-105/106)
-  KNOWN FAILED: gap fade; overnight directional fade (H93); pre-NFP
-    trade implementations (H114/H115); Turn-of-the-Month; closing-
-    pressure reversal; pre-FOMC drift
-  KNOWN FAILURE MODES (6, from two-layer-methodology.md): cost-
-    dominance; thin-sample overconfidence; correlated-lens double-
-    counting; direction-ambiguity in pooled measurements; marginal-
-    Discovery-passes-don't-replicate; exit-design mismatch
-  KNOWN UNEXPLORED: cross-market relationships (ES/VXN), VWAP distance,
-    volume-vs-expected, directional_persistence (needs a non-tercile
-    discretization -- degenerate in Scan 001), regime-conditioned
-    versions of the Scan 001 survivors
-
-## Reporting format (standard across every agent from here forward)
-
-Every agent report ends with the same five fields, replacing free-form
-narrative:
-  Finding -- what did we actually learn?
-  Confidence -- how strong is the evidence?
-  Novelty -- genuinely new, or rediscovery?
-  Research Value -- does this materially increase understanding or the
-    probability of finding an edge?
-  Recommendation -- CONTINUE / MODIFY / PIVOT / ABANDON
-
-## Reframed central research question
-
-From: "What important and repeatable behaviors does intraday NQ
-exhibit?"
-
-To: "What conditional market states contain information about future
-price behavior that is sufficiently persistent, economically
-meaningful, and independently verifiable to potentially support an
-executable trading edge?"
-
-Three filters this adds over the old framing: information (is there
-actually information about the future?), persistence (does it keep
-existing?), economic usefulness (can it actually be captured?). Keeps
-the project anchored to "profitable trading system," not "NQ behavior
-encyclopedia."
+pending a full adversarial Integrity Gate pass against the standing
+brief above. This does not undo the Holdout result or free up the
+consumed slot -- it means the result is not yet trusted as fully
+compliant evidence until Integrity has tried to break it. The Integrity
+Gate pass follows immediately in the ledger/BACKLOG record.
 
 ## Status
 
-Frozen governance spec. No code changes required by this document
-itself -- it changes decision authority and reporting format, not the
-Layer 0/1 scan mechanics already built (market_state_primitives.py,
-market_behavior_discovery_scan.py, discovery_scan_001_split_sample_robustness.py).
-Next application: the Research Director role formally reviews Scan
-001's 3 split-sample survivors (Candidate Triage classification A-F)
-before any further Mechanism-Agent-style regime-contamination work
-continues on them.
+Frozen governance spec, third pass. No code changes required by this
+document itself. Immediate next application: run the mandatory
+Integrity Gate pass on H118 using the standing brief above, and record
+the verdict (PASS / VETO / CONDITIONAL) before H118 accumulates any
+further evidence (Forward Validation or otherwise).

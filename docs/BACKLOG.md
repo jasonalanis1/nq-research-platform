@@ -1504,3 +1504,57 @@ stakes).
 
 Ledger: hyp-000123 (Holdout Generation 2, status HOLDOUT PASSED).
 Full: data/study_vwap_dist_low_10d_drift_h118_holdout_results.json.
+
+## Agent governance v2 + mandatory Integrity Gate on H118 (2026-09-09)
+
+Governance restructure per Jason's review against Tony_Project_Handoff.docx
+and the Master Methodology: Research Director confirmed as a standing 7th
+agent (adds a Research Director Re-evaluation step between Statistical and
+Monetization); Research Integrity upgraded from informal/background to a
+MANDATORY GATE with veto authority, required before any candidate enters
+formal confirmation or accumulates further evidence; Portfolio Agent's
+activation criterion narrowed to the FULL promotion bar only, first task
+narrowed to an incremental-information/double-counting test, not
+optimization. Full spec:
+research/infrastructure/agent-governance-structure.md (v2, supersedes the
+2026-09-09 second-pass version).
+
+Ran the first mandatory Integrity Gate pass on H118 (which had reached
+Holdout Gen 2 on self-performed checks alone, before this gate existed).
+Adversarial review against the standing brief ("assume this candidate is
+wrong, find every reason we could be fooling ourselves"):
+  - Data leakage / D-V-H contamination: none found (bucket edges frozen
+    from Discovery, verified by code review across all three stage scripts).
+  - Selected after seeing result: only within Discovery-slice exploratory
+    data (inherent to the Discovery Engine method) -- Validation and
+    Holdout data were never touched before their single respective tests.
+  - Multiple-testing exposure: PARTIALLY DISCLOSED -- only Scan 002's own
+    44 cells accounted for; no project-wide (123-hypothesis) multiple-
+    testing/deflated-Sharpe adjustment has ever been computed. Flagged as
+    an open item, not resolved by this pass.
+  - Resurrection/prior-work check: CLOSED THIS PASS. Two prior VWAP-related
+    hypotheses exist in the ledger -- hyp-000013 (vwap_mean_reversion,
+    intraday same-day fade off a 2-sigma VWAP band, decisively REJECTED,
+    expectancy -0.628R) and hyp-000084 (vwap_narrow_open_fade_h84, VWAP
+    touch fade in the opening hour/narrow regime, REJECTED). Both are
+    mechanically distinct from H118 (different horizon -- intraday vs.
+    10-day; different structure -- band-touch fade trade vs. daily
+    close-vs-VWAP STATE variable feeding a drift continuation, not a
+    fade). H118 is NOT a resurrection or reformulation of either.
+  - Genuine distinctness from the 3 validated findings: confirmed
+    (near-zero correlation with all 4 existing state variables).
+  - Definition changes after results: none, at any stage.
+  - Effect-size instability: 0.62R -> 0.28R -> 0.40R across the three
+    stages -- noisy, not monotonic decay, flagged as a standing reason
+    for caution regardless of gate outcome.
+
+VERDICT: PASS (upgraded from CONDITIONAL PASS now that the resurrection
+check is closed). No veto. The one still-open item -- project-wide
+multiple-testing exposure across all 123 hypotheses has never been
+formally quantified -- is not specific to H118 and is logged as a
+LEARN/KNOWN UNEXPLORED infrastructure gap (a project-wide deflated-Sharpe
+or similar adjustment), not a blocker on H118 specifically.
+
+H118 status updated: PROMISING / UNDER INDEPENDENT INTEGRITY REVIEW ->
+HOLDOUT PASSED, INTEGRITY-CLEARED. Cleared to proceed to Forward
+Validation (paper only, no capital, frozen definition unchanged).
