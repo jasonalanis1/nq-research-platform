@@ -131,6 +131,25 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-09: Observatory v6 (value-area/POC touches) -- built new
+  volume-profile infrastructure, found only a single-horizon artifact,
+  closed clean.** New src/volume_profile.py approximates POC/VAH/VAL
+  from 1-minute-bar volume (disclosed approximation, no tick data
+  available); reusable for future studies. v6 scan (216 combinations)
+  found one candidate clearing both statistical and cost bars
+  (prior_poc/wide/open/15min, n=92) but it's an isolated single-horizon
+  spike -- neighboring horizons don't agree in sign, the same
+  incoherence check that has qualified/disqualified every candidate
+  since OBS-FINDING-001. No finding written. Three Observatory scans
+  run in one day (v4/v5/v6) with only one Discovery-slice pass (v5,
+  already closed after failing prospective validation) -- recommend
+  pausing new single-event-type scan generations; more promising
+  unexplored direction is multi-condition/combination effects (revisit
+  the collective-evidence pilot approach with the current, more
+  rigorous protocol). Full detail:
+  research/studies/observatory-v6-evaluation.md.
+
+
 - **2026-09-09: Observatory v5 (overnight-direction event family) found
   the project's first-ever Discovery-slice Step 1+2 pass -- did not
   survive prospective validation.** New event family (overnight session
