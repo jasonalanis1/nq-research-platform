@@ -1122,3 +1122,29 @@ Monetization, Research Integrity, Portfolio.
 Next concrete action: scaffold research/infrastructure/market_state_primitives.py (Layer 0),
 reusing the ATR-normalized conventions from volatility_conditioning.py, starting with
 range/volatility-based state descriptors before expanding to untested ones.
+
+## Discovery Engine Scan 001 (2026-09-09) -- first re-test under new methodology
+Ran src/market_behavior_discovery_scan.py (Layer 1) over src/market_state_primitives.py (Layer 0)
+against the FULL Discovery slice (1717 days, 2015-01-01 to 2021-10-03), scanning 5 state variables
+(range_vs_atr, overnight_range_vs_atr, gap_vs_atr, directional_persistence, location_in_range) x 3
+buckets x 4 horizons (1/3/5/10 trading days) = 48 cells (directional_persistence degenerate, skipped
+-- too few distinct values for a tercile split on this data, needs a different discretization, not
+pursued this pass). 16/48 cells credible vs. zero AND clear the ATR-normalized cost floor -- a much
+higher hit rate than any single-hypothesis test this project has run, EXACTLY as expected from
+scanning many correlated cells at once (not evidence of a real edge by itself -- see caveats below).
+Top cells (by ATR-normalized effect size): location_in_range (low/mid/high) and
+overnight_range_vs_atr (mid/high) at the 10-day horizon, both ~0.13-0.26 atr_norm, some effects
+$30-90pts vs 127pt avg ATR(14).
+STATUS: EXPLORATORY ONLY, not logged to the ledger, not a finding, not validated. Per the design
+spec's ranking gate, this scan only auto-scores "unusual" (credible vs. zero) and "economically
+meaningful" (clears cost floor) -- "robust" (split-sample stability) and "mechanistically_plausible"
+still need a separate, explicit pass before ANY of these 16 cells is written up as a frozen
+monetization spec. Two live concerns flagged, not yet resolved: (1) heavy overlap between horizons
+(1/3/5/10-day forward windows on the same days are highly autocorrelated, not independent tests --
+the ranked list is NOT 16 independent discoveries), (2) both leading state variables are range/
+volatility proxies, the same family as the 3 already-validated findings -- worth checking whether
+location_in_range and overnight_range_vs_atr are just re-deriving already-known range-persistence
+structure rather than something new.
+Full results: data/market_behavior_discovery_scan_001_results.json.
+Next: split-sample robustness check (first half vs. second half of Discovery) on the top 2-3
+candidates before considering any frozen monetization spec.
