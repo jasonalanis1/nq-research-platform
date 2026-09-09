@@ -1558,3 +1558,28 @@ or similar adjustment), not a blocker on H118 specifically.
 H118 status updated: PROMISING / UNDER INDEPENDENT INTEGRITY REVIEW ->
 HOLDOUT PASSED, INTEGRITY-CLEARED. Cleared to proceed to Forward
 Validation (paper only, no capital, frozen definition unchanged).
+
+## H118 Forward Validation set up (2026-09-09)
+
+Frozen spec: research/studies/vwap-dist-low-10d-drift-h118-forward-validation-spec.md.
+Daily checker: src/forward_validate_h118_daily.py -- appends new signal
+days to research/forward_validation/h118_forward_log.jsonl (bucket edges
+frozen from Discovery, never refit) and resolves any open paper position
+whose 10-trading-day exit has arrived. Paper only, no capital, no
+retuning as forward results come in.
+
+First run: 0 signals so far -- latest available data is 2026-08-19,
+which was not a signal day (mid tercile). IMPORTANT OPERATIONAL GAP:
+the local price data file (NQ_1min_databento_2026-08-20.csv) is ~3
+weeks stale relative to today (2026-09-09). Forward Validation cannot
+meaningfully accumulate until the data feed is kept current -- this
+needs either a recurring data refresh (databento re-pull) or a live
+feed, neither of which exists yet. Logged as the concrete next
+infrastructure gap for Forward Validation to actually function, not
+just be defined on paper.
+
+No scheduled automation set up for the daily check itself -- it depends
+on device access to the local repo/data, which isn't guaranteed to be
+available at any given trigger time. Until a live/refreshed data path
+exists, this should be re-run manually (or the data pipeline should be
+scheduled first, then this).
