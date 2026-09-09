@@ -1583,3 +1583,122 @@ on device access to the local repo/data, which isn't guaranteed to be
 available at any given trigger time. Until a live/refreshed data path
 exists, this should be re-run manually (or the data pipeline should be
 scheduled first, then this).
+
+## CORRECTION — Forward Validation operational gaps CLOSED (2026-09-09, later same day)
+
+The two gaps flagged in the entry above are both resolved as of
+2026-09-09 evening. Recorded here so this section stops asserting stale
+facts to future sessions:
+
+- Stale data: CLOSED. The Databento re-pull was run; price data is now
+  current through 2026-09-08 (NQ_1min_databento_2026-09-09.csv). Note
+  the fetch must be run from a normal Terminal on Jason's Mac -- the
+  bridged/scheduled shell's egress allowlist blocks hist.databento.com.
+  src/data_fetch_databento.py now also quotes and logs the real dollar
+  cost of every paid chunk to data/_databento_cost_log.json.
+- No scheduled automation: CLOSED. Three device-bound scheduled tasks
+  now exist, each with the project folder attached so unattended runs
+  never stall on a permission prompt: a 4-hourly autonomous research work
+  session (silent unless it hits a Holdout-slot or $5+ stop point), and
+  two daily digests (research pipeline; paper & live trading, the latter
+  reporting in trade-ticket form with 1-MNQ dollar translation and a data
+  cost section).
+- H118 Forward Validation is live and accumulating: first signal fired
+  2026-09-08, paper long at 29538.00, exits ~2026-09-22.
+
+Ongoing session handoff now lives in research/NEXT_UP.md -- read that
+first, not this file. This file remains the idea inventory and permanent
+reasoning record.
+
+## H118 Forward Validation boundary bug found + fixed (2026-09-09, continuation session)
+
+Picking up this cycle: read the frozen governance doc, ledger, and BACKLOG
+end-to-end first (per standing practice). Confirmed status: H118 is
+HOLDOUT PASSED, INTEGRITY-CLEARED, in Forward Validation. exp-047's
+prospective tracker (research/ledger/prospective_exp047_log.jsonl) is
+current (3 weeks logged, next checkpoint at 104 weeks, no early-kill).
+Data on disk had already been refreshed to 2026-09-08 close (via
+data_fetch_databento.py, outside this session -- git history shows the
+fetch and an in-progress, uncommitted cost-logging addition to that
+script, now committed as-is).
+
+Running both daily/weekly trackers as routine upkeep (safe: no holdout
+slot spend, no cost, matches their own "idempotent, safe to re-run
+anytime" design) surfaced a real boundary bug in
+src/forward_validate_h118_daily.py. The frozen spec
+(research/studies/vwap-dist-low-10d-drift-h118-forward-validation-spec.md)
+states Forward Validation "only uses data from 2026-09-09 (today)
+forward ... NOT a slice of existing historical data (that would just be
+more Holdout, and the Holdout budget is separate and already partly
+spent)." Per docs/RESEARCH_INTEGRITY_PROTOCOL.md's own three-generation
+model, this is exactly what the "Forward Generation: live future data ->
+ongoing, never exhausted" category exists for -- explicitly distinct
+from Holdout Generation 1 (2026-04-07 onward, data_holdout.py's fixed
+boundary, "5 formal candidate evaluations total... each individual
+holdout use still requires Jason's explicit, in-the-moment sign-off")
+and Holdout Generation 2 (2024-01-04 -> 2026-04-06, the reserve H118's
+own Holdout test used, 1 of 5 slots consumed).
+
+The implementation never enforced that boundary. It set
+`ALLOW_HOLDOUT_DATA=1` (necessary to see recent data at all, since
+data_holdout.py excludes everything on/after 2026-04-07 by default) but
+then just read the single latest available trading day with no floor
+check -- which happened to be safe by accident so far (only ever reads
+`.iloc[-1]`, never backtests the full reserved range), but does not
+match either the frozen spec's own text or the Protocol's design, and
+directly contradicts CLAUDE.md's explicit standing rule on this flag
+("should only happen for a deliberate, one-time final validation
+check... not for routine testing", "that decision should be made
+explicitly with Jason... not made quietly by running a script with a
+flag on"). Concretely: the tool's one existing log entry (signal_date
+2026-09-08) is dated ONE DAY BEFORE the frozen spec's stated boundary --
+2026-09-08 was still Holdout Generation 1 data, not genuinely forward
+data, an artifact of the ~1-day settlement lag between a fetch and the
+most recent complete trading day it contains.
+
+Fix applied (src/forward_validate_h118_daily.py): added an explicit
+`FORWARD_VALIDATION_ANCHOR = 2026-09-09` constant (matching the frozen
+spec's own stated date, not a new/stricter date chosen unilaterally) and
+a hard check -- if the latest available trading day is before the
+anchor, the new-signal check is skipped entirely and this is printed
+loudly, regardless of what ALLOW_HOLDOUT_DATA otherwise makes reachable.
+Verified by re-running: it now correctly refuses to treat 2026-09-08 as
+forward data. Existing OPEN positions (the one 2026-09-08 entry) still
+get checked for their 10-day exit when it arrives -- that is a row-index
+lookup into already-loaded data, not a new read, and per this project's
+"never hand-edit/delete a logged result" rule the existing entry is left
+in the log as-is, not deleted or altered. It should be treated as
+boundary-violating (excluded from any future PASS/FAIL read of H118
+Forward Validation) when that day eventually resolves, and this note is
+the disclosure of why.
+
+No holdout slot was spent by this (Holdout Generation 2's 5-slot budget,
+covered by the standing stop-point rule, is untouched -- 1 of 5 still
+consumed by H118 alone) and no money was spent. This does concern the
+OLDER, separate Holdout Generation 1 protection in CLAUDE.md, which is
+not one of this task's two literal stop-points but is a standing,
+emphatically-worded project rule ("never set that variable... without
+Jason explicitly deciding, live, each time") -- flagging this to Jason
+directly rather than treating the fix alone as sufficient, since a
+previous part of today's work already set this precedent once without
+it being visible in this file. Recommend Jason review this entry and
+decide (a) whether the disclosed 2026-09-08 entry's eventual result
+should be excluded from H118's Forward Validation read (this session's
+default, absent other instruction), and (b) whether the general pattern
+(needing to bypass a Holdout-Generation-1-shaped gate to reach today's
+data at all) needs a cleaner long-term fix in data_holdout.py itself
+(e.g. a real "Forward Generation" boundary helper, separate from the
+Generation-1 bypass flag) rather than the per-script anchor patch
+applied here as an immediate, narrowly-scoped correction.
+
+Also fixed: research/ledger/prospective_exp047_log.jsonl and
+research/forward_validation/h118_forward_log.jsonl were both untracked
+in git (never committed) despite the exp-047 spec's own v2 tamper-
+evidence requirement ("every append... committed to git in its own
+commit... git history is the tamper-evidence mechanism"). Committed
+both as they currently stand (git history will show today's date for
+all prior entries, not their true individual append times -- a
+limitation of catching this late, not something this session could
+retroactively fix) and this pass's changes; future appends should each
+get their own commit per the frozen spec.
+

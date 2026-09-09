@@ -39,6 +39,29 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LOG_DIR = PROJECT_ROOT / "research" / "forward_validation"
 LOG_PATH = LOG_DIR / "h118_forward_log.jsonl"
 
+# --- Forward Generation boundary (added 2026-09-09, bug fix) ---------------
+# data_holdout.py's ALLOW_HOLDOUT_DATA=1 bypass (used below to see recent
+# data at all) grants access to the ENTIRE "Holdout Generation 1" legacy
+# reserve (2026-04-07 onward, ~130+ trading days), not just today. Per the
+# frozen spec (research/studies/vwap-dist-low-10d-drift-h118-forward-
+# validation-spec.md): "Forward Validation only uses data from 2026-09-09
+# (today) forward ... NOT a slice of existing historical data (that would
+# just be more Holdout, and the Holdout budget is separate and already
+# partly spent)." Per docs/RESEARCH_INTEGRITY_PROTOCOL.md's own three-
+# generation model, Forward Validation is supposed to run on the distinct
+# "Forward Generation: live future data -> ongoing, never exhausted" --
+# never Holdout Generation 1. The original version of this script relied
+# only on always reading `.iloc[-1]` (the single latest row) to keep this
+# safe in practice, but never enforced the boundary explicitly -- which
+# let one signal (2026-09-08, logged before this fix) get through one day
+# EARLIER than the frozen spec's stated boundary, because trading-day data
+# lags roughly a day behind the fetch date. That entry is left in the log
+# uncorrected (never hand-edit logged results -- see CLAUDE.md's research/
+# rules) but is flagged wherever it's discussed. This constant makes the
+# boundary explicit and hard-enforced from here on, independent of
+# whatever Holdout Generation 1 data happens to be technically reachable.
+FORWARD_VALIDATION_ANCHOR = pd.Timestamp("2026-09-09").date()
+
 
 def load_log():
     if not LOG_PATH.exists():
@@ -88,6 +111,15 @@ def main():
     latest_date = all_states["date"].iloc[-1]
     print(f"Latest available trading day: {latest_date}")
 
+    latest_day_is_forward_eligible = pd.Timestamp(latest_date).date() >= FORWARD_VALIDATION_ANCHOR
+    if not latest_day_is_forward_eligible:
+        print(f"Latest available day ({latest_date}) is before the Forward Validation "
+              f"anchor ({FORWARD_VALIDATION_ANCHOR}) -- this would be Holdout Generation 1 "
+              f"data, not genuinely forward data. Skipping the new-signal check for today "
+              f"(existing OPEN positions, if any, still get checked for their exit below -- "
+              f"that lookup is by row index into already-loaded data, not a new read of "
+              f"anything, and does not depend on this boundary).")
+
     rows = load_log()
     logged_dates = {r["signal_date"] for r in rows}
 
@@ -96,7 +128,7 @@ def main():
     latest_row_idx = len(all_states) - 1
 
     # 1. New signal check
-    if pd.notna(latest_bucket) and str(latest_bucket) == BUCKET and str(latest_date) not in logged_dates:
+    if latest_day_is_forward_eligible and pd.notna(latest_bucket) and str(latest_bucket) == BUCKET and str(latest_date) not in logged_dates:
         entry_close = float(all_states["Close"].iloc[-1])
         entry_atr = all_states["atr14"].iloc[-1]
         if pd.notna(entry_atr) and entry_atr > 0:
