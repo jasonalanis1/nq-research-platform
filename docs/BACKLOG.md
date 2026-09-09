@@ -1084,3 +1084,23 @@ remembering: if this project ever has reason to look at FOMC-adjacent
 behavior again (e.g. as a conditioning input for a future directional
 candidate), the sign and rough magnitude here are a real, if
 underpowered, data point -- not dismissed as noise.
+
+## Tested / Closed -- Pre-NFP Overnight Drift, OBS-FINDING-012 (2026-09-09)
+Frozen specs: research/studies/pre-nfp-drift-design-spec.md,
+pre-nfp-overnight-short-h114-spec.md, pre-nfp-overnight-short-h115-spec.md.
+Continuation of the macro-announcement-premium thread (after pre-FOMC
+drift, thin/non-credible). Pre-NFP overnight return (hyp-000112) came
+back CREDIBLE but WRONG DIRECTION vs. literature (n=74, effect
+-14.83pts, ci_90 entirely below zero, well above cost floor) -- the
+strongest single statistical result of this session, documented as
+OBS-FINDING-012 with a freshly pre-registered short direction.
+Two monetization attempts, both FAILED: H114 (excursion-derived fixed
+stop/target, hyp-000113, mean_r=-0.102, ci spans zero) and H115
+(ATR-scaled stop/target, project's standard convention, hyp-000114,
+mean_r=+0.029, ci spans zero). Per the two-attempt limit, this line is
+now CLOSED. LEARN note: this is the clearest example yet in this
+project of a credible, well-powered price-level finding that still
+doesn't survive becoming an actual risk-managed trade -- same pattern
+as H87/H89 (near-miss) and H93 (marginal Discovery pass, failed
+prospective). Raw directional drift and tradeable edge are different
+bars; this project has now tested that gap 4 times and crossed it 0.
