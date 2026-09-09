@@ -1421,3 +1421,45 @@ the harder mechanism/Validation bars are cleared.
 
 Full: data/market_behavior_discovery_scan_002_results.json,
 data/scan_002_split_sample_robustness_results.json.
+
+## H118: FIRST CANDIDATE TO CLEAR THE FULL PROMOTION BAR (2026-09-09)
+
+vwap_dist_vs_atr LOW tercile -> positive 10-trading-day forward return,
+long, time-based exit, no stop/target. Discovered in Scan 002, survived
+chronological split-sample AND both independent regime cuts (volatility-
+regime AND trend-regime -- the cleanest regime result of any Discovery
+Engine candidate so far), confirmed genuinely novel via rediscovery
+check (near-zero correlation with all 4 existing state variables, ~36%
+tercile overlap with location_in_range vs. ~33% expected under
+independence). Frozen specs:
+research/studies/vwap-dist-low-10d-drift-h118-spec.md and
+-prospective-spec.md.
+
+Discovery-slice: n=554, mean_r=+0.617R, ci_90=[0.453, 0.785].
+DISCOVERY_PASS.
+Validation-slice prospective (single pre-registered test, bucket edges
+frozen from Discovery, nothing retuned): n=213, mean_r=+0.284R,
+ci_90=[0.048, 0.519] -- entirely above zero. PROSPECTIVE_PASS.
+
+FULL 90% PROMOTION BAR CLEARED. This is the first hypothesis in this
+project's entire history (hyp-000001 through hyp-000122) to pass both a
+Discovery-slice screen and a genuine, unmodified, pre-registered
+Validation-slice prospective test with the CI entirely above zero. Per
+the standing protocol, this is the exception that requires looping
+Jason in -- not proceeding further (no Holdout test, no live
+authorization, nothing else) until he has reviewed this.
+
+Ledger: hyp-000121 (Discovery), hyp-000122 (Validation, status
+VALIDATION CANDIDATE -- cleared Discovery+Validation, explicitly NOT
+Holdout-tested, NOT live-authorized).
+
+Effect size note for Jason's review: the Validation-slice effect
+(0.284R) is meaningfully smaller than the Discovery-slice effect
+(0.617R) -- roughly a 54% drop, though the CI still clears zero with
+room (lower bound 0.048). Given this project's track record of larger
+Discovery-to-Validation drops on H116/H117 that went all the way to
+null, this pass should be read as real but not necessarily as strong as
+the headline Discovery number suggests.
+
+Full: data/study_vwap_dist_low_10d_drift_h118_results.json,
+data/study_vwap_dist_low_10d_drift_h118_prospective_results.json.
