@@ -1463,3 +1463,44 @@ the headline Discovery number suggests.
 
 Full: data/study_vwap_dist_low_10d_drift_h118_results.json,
 data/study_vwap_dist_low_10d_drift_h118_prospective_results.json.
+
+## H118 HOLDOUT GENERATION 2: PASSED (2026-09-09) -- first hypothesis ever to clear Discovery + Validation + Holdout
+
+Jason's explicit sign-off given in response to the full-promotion-bar
+report. Slot 1 of 5 (Holdout Generation 2) consumed.
+
+Holdout-slice result (bucket edges frozen from Discovery throughout,
+never refit at any stage): n=187, mean_r=+0.396R, ci_90=[0.136, 0.650]
+-- entirely above zero. HOLDOUT_PASS. Status: HOLDOUT PASSED.
+
+Full three-stage record for vwap_dist_vs_atr LOW tercile -> long, 10-day
+time-based exit:
+  Discovery:  n=554  mean_r=+0.617R  ci_90=[0.453, 0.785]
+  Validation: n=213  mean_r=+0.284R  ci_90=[0.048, 0.519]
+  Holdout:    n=187  mean_r=+0.396R  ci_90=[0.136, 0.650]
+
+This is the first hypothesis in this project's entire history (of 123
+logged) to pass all three stages with the CI entirely above zero every
+time, on a fully out-of-sample, unmodified, frozen definition. The
+effect size bounced back up from Validation to Holdout rather than
+continuing to decay (0.62 -> 0.28 -> 0.40R) -- noisy but not a
+monotonic decay pattern, and all three point estimates and CI lower
+bounds stay on the same side of zero across very different market
+regimes (Discovery ends 2021-10-03, Validation covers 2021-10-04 to
+2024-01-03, Holdout covers 2024-01-04 to 2026-04-06).
+
+STATUS: HOLDOUT PASSED. Per the six-state classification (REJECTED ->
+PROMISING -> VALIDATION CANDIDATE -> HOLDOUT PASSED -> FORWARD
+VALIDATION -> PAPER VERIFIED), this is now two stages short of
+paper-verified, three short of anything resembling live-authorization
+eligibility. Live Authorization remains "not_authorized" and nothing
+about this result changes that on its own -- explicitly outside what
+any automated process here can grant. Next stages per protocol (not
+started, need Jason's direction): Forward Validation (paper trading
+against live/forward data) and Paper Verified. NOT proceeding further
+without his explicit direction, per the standing exception for a
+full-bar clearance (now doubly applicable given the finite-holdout-slot
+stakes).
+
+Ledger: hyp-000123 (Holdout Generation 2, status HOLDOUT PASSED).
+Full: data/study_vwap_dist_low_10d_drift_h118_holdout_results.json.
