@@ -1372,3 +1372,52 @@ just "attempts remaining."
 Full: data/study_location_in_range_low_uptrend_10d_drift_h117_results.json,
 data/study_location_in_range_low_uptrend_10d_drift_h117_prospective_results.json.
 Ledger: hyp-000119 (Discovery), hyp-000120 (Validation prospective).
+
+## Scan 002: new state variables + split-sample screen (2026-09-09)
+
+Following Scan 001's 0-for-2 Validation result, ran a fresh scan on state
+variables not covered in Scan 001, per the KNOWN UNEXPLORED LEARN bucket:
+volume_vs_expected (RTH volume vs. trailing 20d average), vwap_dist_vs_atr
+(RTH close distance from session VWAP, ATR-normalized), vxn_level_vs_trailing
+(VXN daily close vs. its own trailing 20d average -- the only cross-market
+series on disk; true ES/NQ relationship stays deferred, no ES data
+available), and directional_persistence_quintile (same underlying variable
+as Scan 001, re-cut into quintiles instead of terciles). New Layer 0 code:
+src/market_state_primitives_v2.py (extends market_state_primitives.py
+rather than modifying it). Scan script: src/market_behavior_discovery_scan_002.py.
+
+44 cells scanned (4 vars x 3-5 buckets x [subset of] 4 horizons), 15
+credible+cost-floor. Multiple-testing: naive 4.4 expected false positives
+of 44 cells; ~0.4 expected among 4 effectively-independent series at
+alpha=0.10 -- 15 raw hits is well above the pure-noise floor pre-screen,
+consistent with Scan 001's pattern (real structure exists, screening still
+required before trusting any one cell).
+
+Split-sample robustness screen (src/scan_002_split_sample_robustness.py,
+bucket edges/quintiles frozen on full sample) on the top 4 deduped
+candidates: only 1 of 4 survived. vxn_level_vs_trailing/low/10d and
+directional_persistence_quintile/q2/10d both flipped direction between
+halves (secular-regime artifacts, most likely -- Discovery spans the 2018
+selloff/2020 vol spike and the 2020-21 melt-up, very different regimes).
+volume_vs_expected/low/10d was not credible in the first half at all.
+Survivor: vwap_dist_vs_atr/low/10d (a day whose RTH close sits well below
+its own session VWAP) -- consistent direction and magnitude in both
+halves (1st half atr_norm=0.088, 2nd half atr_norm=0.209, same sign),
+though the near-3x magnitude jump between halves is itself worth treating
+cautiously going into the next screening stage.
+
+STATUS: 1 live candidate from Scan 002 (vwap_dist_vs_atr/low/10d), same
+stage Scan 001's 2 candidates were at before their eventual 0-for-2
+Validation result. Next required steps before any frozen monetization
+spec, per standing protocol: regime-split check, mechanism pass (why
+would closing well below session VWAP predict a positive 10-day forward
+return -- a plausible testable prediction, not yet articulated), then
+only if both survive, a frozen spec and the same Discovery->Validation
+gate that just rejected H116 and H117. Given the 0-for-2 track record so
+far, this candidate is being treated as no more likely to survive than
+H116/H117 were despite surviving one more screen -- proceeding to the
+regime-split check next, without spending disproportionate effort before
+the harder mechanism/Validation bars are cleared.
+
+Full: data/market_behavior_discovery_scan_002_results.json,
+data/scan_002_split_sample_robustness_results.json.
