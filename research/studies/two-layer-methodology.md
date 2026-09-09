@@ -135,3 +135,76 @@ producing a genuine edge under this methodology -- never merely by
 whether it happens to be unfinished. Classification results and their
 reasoning are recorded in docs/BACKLOG.md and/or the ledger at the time
 the classification is made.
+
+## Addendum (2026-09-09): Institutional Knowledge as a Third, Persistent Layer
+
+Jason's refinement, formalized here. The research sequence is:
+
+MARKET -> OBSERVE -> MEASURE -> CHARACTERIZE -> HYPOTHESIS -> FREEZE ->
+TEST -> VALIDATE -> PROMOTE/REJECT -> **LEARN**
+
+The new step, LEARN, is not another pipeline stage a single hypothesis
+passes through -- it's a persistent, accumulating layer that sits
+alongside the two-layer structure and feeds every future hypothesis's
+design, without ever retroactively reopening a closed one.
+
+**The guardrail, stated precisely:** "build on what we've learned"
+means accumulating checkable KNOWLEDGE (failure modes, magnitude
+scales, structural constraints), never accumulating MODIFICATIONS to a
+specific hypothesis. A rejected hypothesis is never reshaped based on
+its own result beyond the existing two-attempt limit (H81->H82,
+H87->H89, H92->H93 pattern) -- that boundary is unchanged. What's new
+is that its REASON for failure becomes a standing, reusable fact,
+separate from the hypothesis itself, checked against before writing
+the NEXT, unrelated hypothesis.
+
+**Failure-mode taxonomy accumulated so far** (from ~104 hypotheses):
+
+1. **Cost-dominance** -- a real, credible gross effect is wiped out by
+   fixed transaction cost because the realistic risk distance (15-25
+   points for most NQ intraday setups) is only a few multiples of
+   round-trip cost. Diagnosed 2026-09-08, now enforced mechanically as
+   the ATR-normalized cost floor (0.05) at Observatory scan time
+   (v4-v6) -- a candidate below this floor is deprioritized before a
+   hypothesis spec is ever written, not discovered after a failed test.
+2. **Thin-sample overconfidence** -- a technically-credible CI (entirely
+   above/below zero) computed on too few observations (n<15-40
+   depending on the test) is not trustworthy even when it passes the
+   mechanical bar. (hyp-000051 n=9; several Observatory Interesting-
+   but-thin candidates in v4/v6.) Enforced via MIN_N_FOR_PROMISING=40
+   for "Promising" vs. n>=15 for "Interesting" (not fully trusted).
+3. **Correlated-lens double-counting** -- aggregating several variants
+   of the SAME underlying signal and treating their agreement as
+   corroboration is not independent evidence. (Collective-evidence
+   pilot v1, hyp-000025/027, explicitly disclosed and later fixed in
+   pilot v2 by using 3 genuinely independent mechanisms.)
+4. **Direction ambiguity in aggregate/pooled measurements** -- a real,
+   credible POOLED effect (e.g. "2+ independent signals agreeing
+   predicts X") can dissolve once restricted to a single, consistent
+   trade direction -- the pooled statistic was real but not itself
+   actionable. (OBS-FINDING-010 / collective-evidence v2, 2026-09-09.)
+5. **Marginal Discovery passes don't replicate** -- a Step-1+2 pass
+   whose CI lower bound sits near zero (barely credible) should be
+   treated as a weak signal for the prospective test, not a strong one
+   -- so far 0-for-several on marginal passes surviving Validation
+   (H93's marginal pass failed; COT positioning's stronger Discovery
+   result also failed). Not yet formalized as a numeric rule (would
+   need more data points to calibrate honestly) -- flagged as an open
+   question for the LEARN layer to eventually resolve, not assumed.
+
+**How this is used going forward:** before writing any new Observatory
+Behavioral Finding or hypothesis spec, check candidate 1-5 above --
+does the candidate's expected magnitude clear the cost floor (1)? Is
+its sample size adequate for the confidence level being claimed (2)?
+Are its contributing signals genuinely independent, not variants of
+one thing (3)? If it's a pooled/aggregate measurement, does the effect
+survive being split by actionable direction (4)? If it clears Discovery
+only marginally, is that flagged honestly rather than treated as
+equivalent to a strong pass (5)? This doesn't add new pipeline steps or
+new sign-offs -- it's a checklist drawn from accumulated failures,
+applied silently at design time, the same way the ATR cost floor
+already is for failure mode 1.
+
+This addendum itself is subject to the same discipline it describes:
+it will be extended (new failure modes appended) as the project learns
+more, but never rewritten to fit a specific hypothesis's result.
