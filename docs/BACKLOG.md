@@ -1266,3 +1266,56 @@ spec, next step is writing the frozen monetization spec (natural-realization-pat
 per the exit-design-mismatch LEARN entry), then the full Discovery->Validation pipeline -- this
 candidate has cleared every exploratory gate the new structure requires before that step.
 Full results: data/separability_check_results.json.
+
+## H116 monetization attempt: overnight-range-mid 10-day drift (2026-09-09)
+
+First monetization attempt on the Discovery Engine's strongest surviving
+candidate (overnight_range_vs_atr mid tercile -> positive 10-trading-day
+forward return; survived chronological split-sample, volatility-regime,
+trend-regime, and separability checks -- see prior BACKLOG entries this
+date). Natural realization path: TIME-BASED EXIT, long-only, no
+stop/target (matches how the effect was discovered, avoiding the
+exit-design-mismatch trap from H114/H115). Frozen specs:
+research/studies/overnight-range-mid-10d-drift-h116-spec.md and
+-prospective-spec.md.
+
+Discovery-slice result: n=435, mean_r=+0.682, ci_90=[0.506, 0.854],
+credible and economically meaningful. Verdict: DISCOVERY_PASS.
+
+Validation-slice prospective result (single pre-registered test, bucket
+edges frozen from Discovery, nothing retuned): n=140, mean_r=+0.052,
+ci_90=[-0.261, 0.381] -- CI spans zero. Verdict: PROSPECTIVE_FAIL. Full
+90% promotion bar NOT cleared.
+
+STATUS: Attempt 1 of 2 (per the 2-attempt limit) CLOSED as a null. The
+Discovery-slice effect (0.68R) did not replicate on the Validation slice
+(0.05R, not credible) -- a large drop in magnitude consistent with the
+Discovery-slice estimate being inflated by selection (this candidate was
+identified via the Discovery Engine's uncorrected scan, then survived
+several exploratory robustness cuts on Discovery data only -- none of
+those cuts involved out-of-sample data). This is itself informative: it
+shows that surviving four exploratory robustness checks on the same
+sample is NOT a substitute for genuine out-of-sample testing, exactly
+as the protocol's chronological Discovery/Validation split is designed
+to catch.
+
+Per the 2-attempt limit: one further, differently-motivated attempt on
+this underlying candidate is permitted (not a retune of the 10-day/
+mid-tercile/time-exit definition -- a genuinely different framing, e.g.
+testing whether the effect concentrates in a sub-window of the 10-day
+holding period, or is conditional on a second state variable). If a
+second attempt is not pursued or also fails, this line closes to LEARN
+as: real-looking Discovery-slice patterns from the new Discovery Engine
+require prospective Validation confirmation before being trusted, same
+as patterns found under the old flat pipeline -- multi-stage exploratory
+robustness on Discovery data alone (split-sample, regime-split,
+separability) narrows false positives but does not replace an actual
+out-of-sample test.
+
+Full: data/study_overnight_range_mid_10d_drift_h116_results.json,
+data/study_overnight_range_mid_10d_drift_h116_prospective_results.json.
+Ledger: hyp-000117 (Discovery), hyp-000118 (Validation prospective).
+NEXT: evaluate whether a genuinely differently-motivated second attempt
+is warranted, or close this candidate to LEARN; separately,
+location_in_range/low/10d's trend-dependent (dip-buying) mechanism
+remains an open, not-yet-pursued thread from the same Scan 001 cohort.
