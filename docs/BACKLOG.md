@@ -1040,3 +1040,19 @@ publishes VX futures settlement history; believed free/low-cost but
 NOT YET CONFIRMED OR ACQUIRED -- next inexpensive-data action item,
 behind Turn-of-Month (closed, this session) and MOC imbalance
 (tabled -- real feed not free).
+
+## Data infrastructure finding -- roll-day RTH gap in continuous NQ series (2026-09-09)
+Discovered while testing witching-volatility-expansion (hyp-000109, aborted not
+rejected): the continuous NQ 1-min series has ZERO usable RTH bars on every
+quarterly witching day checked (2016, 2018, 2020 -- third Friday of Mar/Jun/
+Sep/Dec), out of 250-450 total (mostly overnight) bars that calendar date.
+Continuous-contract construction almost certainly rolls exactly at quarterly
+expiration and drops/mislabels that session's RTH data. IMPLICATION: any prior
+or future Observatory scan that includes quarterly-expiration Fridays is
+silently missing RTH data on those specific days -- worth a quick audit of
+whether this materially affected any of the 3 validated findings (unlikely,
+since they're not date-keyed to witching Fridays specifically, but flagging
+for completeness). Needs raw per-contract data across the roll to fix, not
+just for the witching hypothesis but for data integrity generally. Same
+underlying gap that blocks the calendar-spread/roll-basis candidates the
+research agent already deprioritized as not directionally plausible anyway.
