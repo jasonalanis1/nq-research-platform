@@ -1007,3 +1007,17 @@ A single place to capture every idea the moment it comes up, so nothing said in 
   versions of this file for the full pricing detail). Moved from Parked to
   here, not just left sitting -- Jason wants this off the list of things that
   keep resurfacing as an option, not merely deprioritized.
+
+## Tested / Closed -- Turn-of-the-Month effect (2026-09-09)
+Frozen spec: research/studies/turn-of-the-month-design-spec.md. First
+flow/calendar-mechanism candidate (vs. all prior pure volatility-
+clustering findings), sourced from external market-microstructure
+research, zero incremental data cost (calendar-derived). Result: clean
+null, and the point estimate ran OPPOSITE the literature's pre-
+specified direction (TOM mean -2.62pts vs non-TOM +3.68pts; ci_90
+spans zero: -15.27 to 2.30). Also cost-dominated (atr_normalized_effect
+0.0493, just under the 0.05 floor). Logged hyp-000108, REJECTED. No
+retuning the window definition -- closed per protocol. LEARN note: NQ's
+own TOM behavior does not replicate the equity-index literature over
+this sample; do not re-test this specific effect without new data or a
+materially different window definition backed by its own rationale.
