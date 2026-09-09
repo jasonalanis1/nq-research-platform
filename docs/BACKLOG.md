@@ -1193,3 +1193,30 @@ Central research question reframed: from "what behaviors does NQ exhibit" to "wh
 states carry persistent, economically meaningful, verifiable information about future price behavior."
 Immediate application: Research Director formally reviews Scan 001's 3 split-sample survivors
 (Candidate Triage A-F) before further mechanism/regime work continues on them -- next action.
+
+## Research Director regime-split check + updated Candidate Triage (2026-09-09)
+Ran src/research_director_regime_check.py: second independent robustness cut on Scan 001's 3
+split-sample survivors, splitting Discovery by trailing-ATR volatility regime (median split, frozen
+threshold) instead of chronology. Result changes the triage:
+- location_in_range/high/10d: FAILS. Effect is essentially a high-vol-regime artifact -- low-vol
+  regime shows no real effect (atr_norm 0.005, fails cost floor), high-vol regime shows a LARGE
+  effect in the opposite direction of what the low-vol slice showed. Direction flips across regimes.
+  Reclassified Research Director Triage A -> C (statistical artifact / regime-dependent). Do NOT
+  advance to Mechanism Agent. Kept in LEARN as KNOWN FAILED / regime-contaminated, not pursued further.
+- overnight_range_vs_atr/mid/10d: SURVIVES. Direction consistent and clears cost floor in both
+  low-vol and high-vol regimes (atr_norm 0.119 / 0.160), on top of already surviving the
+  chronological split-sample check. This is now the single most robust candidate from Scan 001.
+  Stays Triage B/C pending the still-unresolved mechanism question: it's the exact predictor behind
+  the validated overnight-coil RANGE finding (hyp-000056/057), so a Mechanism Agent pass must
+  establish whether this is a genuinely distinct RETURN effect or a restatement of the known RANGE
+  effect (e.g. via measurement correlation between "wide realized range" and "mean return" in a
+  skewed/fat-tailed sample) before any frozen spec is written.
+- location_in_range/low/10d: SURVIVES both cuts (direction consistent, both regimes clear cost
+  floor). Confirmed Triage A -- novel predictor family, not used by any validated finding, worth a
+  full Mechanism Agent pass.
+Net: of Scan 001's original 16 credible cells (48 scanned), exactly 2 candidates now carry positive
+evidence across BOTH an internal-consistency check (chronological split) AND an independent
+robustness cut (regime split): overnight_range_vs_atr/mid/10d and location_in_range/low/10d. Neither
+is promoted, frozen, or treated as validated -- both still require a Mechanism Agent pass (testable
+mechanism prediction, not narrative) before a frozen monetization spec is written for either.
+Full results: data/research_director_regime_check_results.json.
