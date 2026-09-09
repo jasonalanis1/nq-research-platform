@@ -1248,3 +1248,21 @@ statistical test of whether it's separable from that finding (e.g. does the retu
 after controlling for the range outcome itself), not yet run. location_in_range/low is not
 trend-independent and any eventual spec must build in a trend-regime filter, per this test.
 Full results: data/mechanism_agent_trend_check_results.json.
+
+## Separability check: overnight_range_vs_atr/mid/10d return effect vs. known range finding (2026-09-09)
+Ran src/separability_check.py: partial regression of 10-day forward return on the mid-bucket dummy,
+controlling for realized forward range over the same window (proxy for the already-known
+range/volatility channel). Result: mid_bucket coefficient +36.35pts (no control) vs +35.73pts
+(controlling for forward range) -- 98% of the raw effect retained, still credible (ci_90 excludes
+zero) after the control. VERDICT: SEPARABLE. The return effect is not a byproduct of the known
+overnight-coil range relationship -- it carries information beyond what forward range alone explains.
+This resolves the rediscovery concern raised in the earlier triage/mechanism passes: this candidate
+is evidence of a genuinely distinct behavior (a return effect), not a restatement of the validated
+range finding on the same predictor, even though they share the same state variable.
+Candidate status update: overnight_range_vs_atr/mid/10d has now survived FOUR independent checks --
+chronological split-sample, volatility-regime split, trend-regime split, and this separability check.
+This is the strongest candidate this project's Discovery Engine has produced to date. Per governance
+spec, next step is writing the frozen monetization spec (natural-realization-path question first,
+per the exit-design-mismatch LEARN entry), then the full Discovery->Validation pipeline -- this
+candidate has cleared every exploratory gate the new structure requires before that step.
+Full results: data/separability_check_results.json.
