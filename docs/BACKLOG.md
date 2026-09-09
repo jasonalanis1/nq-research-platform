@@ -129,7 +129,22 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03. **Closed 2026-09-07**: `HypothesisRecord` gained a `search_batch_id` field (optional, set by the calling script when multiple hypotheses come from one joint run); `larry_validate.py`'s `evaluate_candidate()` now tries an exact batch-based sibling count first and only falls back to lineage-walking when no batch id is set. `n_trials_override` still exists as a manual escape hatch. Verified with a scratch-ledger test: a 2-hypothesis batch with different immediate parents was correctly counted as 2, and a hypothesis with no batch id correctly fell through to the old lineage logic. Existing ledger rows (hyp-000007/hyp-000008 included) are untouched and keep using their documented `n_trials_override` -- this is additive, not a retroactive rewrite.
 
-## Tested / Closed
+## Tested / Closed (in progress)
+
+- **2026-09-09: Collective-evidence pilot v2 -- real corroboration
+  signal found, OBS-FINDING-010.** Fixed pilot v1's disclosed
+  correlated-variant limitation by using 3 genuinely independent
+  Observatory mechanisms (gap-magnitude, overnight-direction+regime,
+  reference-level touch). Days where 2+ fire together show a credibly
+  different (more positive) 10-min forward return than days where 0-1
+  fire: n=397 vs 920, diff=+3.21pts, ci_90=(0.68, 5.91). Real signal,
+  but NOT yet a monetization-ready finding -- the 3 source conditions
+  don't all imply the same trade direction, so a direction-assignment
+  follow-up measurement is needed before any hypothesis spec (flagged
+  explicitly in the finding, not skipped). Full detail:
+  research/studies/obs-finding-010-collective-evidence-corroboration.md.
+  Next step: direction-conditioned re-measurement, not yet done.
+
 
 - **2026-09-09: Observatory v6 (value-area/POC touches) -- built new
   volume-profile infrastructure, found only a single-horizon artifact,
