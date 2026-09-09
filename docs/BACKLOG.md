@@ -1148,3 +1148,32 @@ structure rather than something new.
 Full results: data/market_behavior_discovery_scan_001_results.json.
 Next: split-sample robustness check (first half vs. second half of Discovery) on the top 2-3
 candidates before considering any frozen monetization spec.
+
+## Scan 001 split-sample robustness screen (2026-09-09, exploratory, not confirmation)
+Ran src/discovery_scan_001_split_sample_robustness.py on the top 6 unique (state_var, bucket)
+candidates from Scan 001, using bucket edges FROZEN on the full Discovery sample (not refit per
+half) and Discovery split at its chronological midpoint (2015-01-02..2018-06-06 vs.
+2018-06-07..2021-10-01). Per Jason's explicit framing: this is NOT independent confirmation
+(candidates were selected on the full sample the two halves come from) -- it only screens for
+gross internal inconsistency before anything is worth a frozen spec.
+Result: 3 of 6 candidates survive both halves (credible + cost floor in each half) with consistent
+direction: location_in_range/high/10d, overnight_range_vs_atr/mid/10d, location_in_range/low/10d.
+3 fail: overnight_range_vs_atr/high/10d (direction flips between halves), location_in_range/mid/5d
+(fails cost floor in 1st half), gap_vs_atr/low/10d (fails cost floor in 1st half).
+Multiple-testing: naive expectation under pure null ~4.8 false positives across the raw 48 cells;
+collapsing to ~12 effectively-independent (state_var x bucket) series (horizons are correlated,
+not independent tests) drops that to ~1.2 expected false positives. 3 surviving both a full-sample
+scan AND a split-sample consistency check is above that noise floor -- suggestive, not proof.
+Rediscovery check: both surviving state variables raise a live mechanism question.
+overnight_range_vs_atr/mid/10d uses the EXACT predictor behind the already-validated overnight-coil
+finding (hyp-000056/057), which predicts same-day RANGE, never return -- an apparent RETURN effect
+on the same predictor needs an explicit check for whether it's a distinct directional behavior or
+volatility-clustering/trend-period bleed-through (Discovery is a period of strong secular NQ uptrend
+overlapping the higher-volatility 2020 COVID stretch) before being treated as new. location_in_range
+is NOT used by any validated finding -- genuinely new predictor family, but only 1 of 2 horizons
+tested here (10d) and needs the same regime-contamination check.
+STATUS: still exploratory. No candidate frozen as a monetization spec yet -- next step is the
+regime-contamination check (does the apparent return effect survive controlling for the Discovery
+period's dominant uptrend/vol regime) before writing a frozen behavioral-hypothesis spec for
+location_in_range or the overnight_range_vs_atr/mid case.
+Full results: data/discovery_scan_001_split_sample_robustness_results.json.
