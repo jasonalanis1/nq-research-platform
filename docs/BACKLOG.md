@@ -1056,3 +1056,13 @@ for completeness). Needs raw per-contract data across the roll to fix, not
 just for the witching hypothesis but for data integrity generally. Same
 underlying gap that blocks the calendar-spread/roll-basis candidates the
 research agent already deprioritized as not directionally plausible anyway.
+
+## Tested / Closed -- Closing-Pressure Reversal (2026-09-09)
+Frozen spec: research/studies/closing-pressure-reversal-design-spec.md.
+Sourced from market-microstructure research agent (auction/closing-
+price batch), free/zero-cost OHLCV-derivable data. Both legs (late_up
+next-day, late_down next-day) null -- CI spans zero on both (n=558 and
+n=559, good sample size, not a thin-sample issue). Also both legs
+cost-dominated (atr_normalized_effect 0.029/0.039, under the 0.05
+floor) even before the CI question. Logged hyp-000110, REJECTED. No
+retuning the tercile/window definition -- closed per protocol.
