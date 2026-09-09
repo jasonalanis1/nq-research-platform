@@ -131,6 +131,27 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 ## Tested / Closed
 
+- **2026-09-09: Observatory v5 (overnight-direction event family) found
+  the project's first-ever Discovery-slice Step 1+2 pass -- did not
+  survive prospective validation.** New event family (overnight session
+  direction x volatility regime) surfaced OBS-FINDING-009
+  (overnight-down move after a wide-regime day -> opening-hour fade),
+  a real, multi-horizon-consistent, cost-viable candidate (n=140).
+  First monetization attempt (H92, ATR-scaled stop) failed. Second and
+  final attempt (H93, excursion-derived fixed stop/target) PASSED
+  Step 1+2 on Discovery (n=140, mean_r=+0.176, ci_90 barely above
+  zero) -- the first candidate in the project's ~100-hypothesis
+  history to clear this bar. Sent immediately to its required
+  pre-registered prospective test rather than reported as a milestone
+  on its own. Prospective test on the Validation slice FAILED (n=50,
+  mean_r=-0.120, ci_90 spans zero, negative point estimate) -- the
+  marginal Discovery pass did not replicate. Two-attempt limit reached;
+  OBS-FINDING-009 closed to further monetization attempts. Full
+  detail: research/studies/obs-finding-009-overnight-down-wide-open-fade.md,
+  research/studies/overnight-down-wide-open-fade-h92-spec.md,
+  -h93-spec.md, -h93-prospective-spec.md.
+
+
 - **2026-09-09: Both new-starting-point threads closed -- no open leads
   remain.** (1) Overlay screen 3 (exp-119/hyp-000101): the project's 2
   validated volatility findings (range-contraction, overnight coil)
