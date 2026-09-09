@@ -77,6 +77,7 @@ HOW TO RUN:
 
 import os
 import sys
+import json
 import getpass
 import pandas as pd
 import databento as db
@@ -99,6 +100,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 KEY_FILE = PROJECT_ROOT / ".databento_key"
 CHUNK_CACHE_DIR = DATA_DIR / "_databento_yearly_chunks"  # temporary per-year cache, see fetch_databento_minute_data()
+COST_LOG_PATH = DATA_DIR / "_databento_cost_log.json"  # running log of actual $ spent per paid fetch, see log_cost_entry()
 
 
 def get_api_key() -> str:
@@ -129,6 +131,36 @@ def get_api_key() -> str:
         print(f"Saved to {KEY_FILE.name} (already excluded from git via .gitignore).")
 
     return key
+
+
+def load_cost_log() -> list:
+    """Returns the running list of past Databento cost entries (each a
+    dict: date, dataset, symbol, schema, start, end, cost_usd). Empty
+    list if no log exists yet."""
+    if not COST_LOG_PATH.exists():
+        return []
+    try:
+        return json.loads(COST_LOG_PATH.read_text())
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def log_cost_entry(cost_usd: float, chunk_start: datetime, chunk_end: datetime) -> None:
+    """Appends one real, Databento-quoted cost entry to the running log
+    -- never an estimate or guess, only what metadata.get_cost() actually
+    returned for that specific paid request. This is the only source of
+    truth the daily reports use for dollar cost tracking."""
+    log = load_cost_log()
+    log.append({
+        "date": datetime.now().strftime("%Y-%m-%d"),
+        "dataset": DATASET,
+        "symbol": SYMBOL,
+        "schema": SCHEMA,
+        "start": chunk_start.strftime("%Y-%m-%d"),
+        "end": chunk_end.strftime("%Y-%m-%d"),
+        "cost_usd": cost_usd,
+    })
+    COST_LOG_PATH.write_text(json.dumps(log, indent=2))
 
 
 def fetch_databento_minute_data(api_key: str) -> pd.DataFrame:
@@ -183,6 +215,19 @@ def fetch_databento_minute_data(api_key: str) -> pd.DataFrame:
             chunk_df = pd.read_csv(cache_path, index_col=0, parse_dates=[0])
         else:
             print(f"  {year}: fetching {chunk_start.date()} to {chunk_end.date()}...")
+            try:
+                quoted_cost = client.metadata.get_cost(
+                    dataset=DATASET,
+                    symbols=[SYMBOL],
+                    schema=SCHEMA,
+                    stype_in="continuous",
+                    start=chunk_start.strftime("%Y-%m-%d"),
+                    end=chunk_end.strftime("%Y-%m-%d"),
+                )
+                print(f"    Quoted cost for {year}: ${quoted_cost:.4f}")
+                log_cost_entry(quoted_cost, chunk_start, chunk_end)
+            except Exception as cost_err:
+                print(f"    (Could not get a cost quote for {year}: {cost_err} -- proceeding anyway, cost log won't have this entry.)")
             try:
                 # stype_in="continuous" tells Databento that SYMBOL is a
                 # continuous-contract symbol (NQ.c.0) rather than one
