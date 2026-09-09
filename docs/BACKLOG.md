@@ -1021,3 +1021,22 @@ retuning the window definition -- closed per protocol. LEARN note: NQ's
 own TOM behavior does not replicate the equity-index literature over
 this sample; do not re-test this specific effect without new data or a
 materially different window definition backed by its own rationale.
+
+## Infrastructure -- Mechanism Research Agent design (2026-09-09)
+research/infrastructure/mechanism-research-agent-design.md. Formalized
+the parallel candidate-vetting step (Agent-tool research, no repo
+access, dispatchable concurrently) as distinct from frozen-spec
+execution (stays serial, on Jason's actual repo, one candidate at a
+time -- ledger integrity and no-retuning-after-null both depend on
+this staying serial). Direct response to Jason's request for "an agent
+that does this."
+
+## Data sourcing -- VIX futures term-structure (not yet acquired)
+Subagent candidate #4 (contango/backwardation as a conditioning
+filter) needs CBOE VX futures settlement data across expirations --
+we currently only hold VXNCLS_MAX.csv (VXN spot index level, already
+used in study_vxn_level_signal.py / study_vxn_roc_signal.py). CBOE
+publishes VX futures settlement history; believed free/low-cost but
+NOT YET CONFIRMED OR ACQUIRED -- next inexpensive-data action item,
+behind Turn-of-Month (closed, this session) and MOC imbalance
+(tabled -- real feed not free).
