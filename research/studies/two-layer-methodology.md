@@ -208,3 +208,49 @@ already is for failure mode 1.
 This addendum itself is subject to the same discipline it describes:
 it will be extended (new failure modes appended) as the project learns
 more, but never rewritten to fit a specific hypothesis's result.
+
+## Retrospective application (2026-09-09): applying LEARN to all 81 past rejections
+
+Classified every currently-REJECTED hypothesis (81 of 104 logged) by
+which LEARN failure mode, if any, explains its rejection. Result:
+
+- **~23 (28%)** hit one of the 5 named failure modes above -- a real,
+  credible signal was found and then lost to a specific, now-known
+  downstream cause (marginal Discovery passes not replicating: 9;
+  thin-sample overconfidence: 7; single-event/artifact concentration: 4;
+  cost-dominance: 2 explicitly named in their own notes, though the
+  2026-09-08 diagnostic showed this mechanism is present much more
+  broadly across the Observatory-era hypotheses than just these 2 --
+  most just don't name it explicitly in the notes text; correlated-lens
+  double-counting: 1).
+- **~55-60 (roughly 70%)** are CLEAN NULLS -- no real effect was ever
+  detected in the first place (CI spans zero from Step 1, no gross
+  edge, wrong-direction point estimate). These are not failures of
+  monetization or sample size; the underlying idea itself had nothing
+  there.
+
+**This is the single most useful retrospective finding from applying
+LEARN to the project's history**, and it reframes the project's own
+self-diagnosis: the popular internal narrative (informed heavily by
+the 2026-09-08 cost-dominance diagnostic, which was itself based on a
+small number of Observatory-era near-misses) was that "the project
+finds real effects but can't monetize them." Applied across all 81
+rejections, that story explains only about a quarter of them. The
+majority of tested ideas -- most bar patterns, most cross-asset
+standalone signals, most legacy strategy-first re-mines -- never
+showed a real effect at all, at any stage, regardless of cost or
+sample size. Cost-dominance and the other 4 failure modes are real and
+worth screening for (and are, mechanically, in Observatory v4-v6), but
+they describe the minority case: candidates that got somewhere and
+then hit a specific wall. Most candidates never got anywhere.
+
+**Practical implication for future candidate sourcing:** this argues
+for weighting effort toward whatever process improves the base rate of
+finding a real effect in the first place (better event definitions,
+genuinely novel data, or the Observatory's own baseline-relative
+measurement approach, which empirically has a better clean-null vs.
+real-signal ratio than the legacy strategy-first approach it replaced
+-- not independently verified with a formal count in this pass, but
+consistent with the 2026-09-08 audit's origin-family breakdown) over
+further refining the failure-mode screens for candidates that already
+clear the "real effect" bar, since that bar is the harder one to clear.
