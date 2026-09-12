@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-12T20:29:00Z",
- "generated_at_local": "September 12th, 3:29 pm CT",
+ "generated_at": "2026-09-12T22:20:00Z",
+ "generated_at_local": "September 12th, 5:20 pm CT",
  "last_run": "2026-09-12T20:13:00Z",
  "last_run_local": "September 12th, 3:13 pm CT",
- "next_run": "2026-09-12T22:00:00Z",
- "next_run_local": "September 12th, 5:00 pm CT",
+ "next_run": "2026-09-13T00:00:00Z",
+ "next_run_local": "September 12th, 7:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "287 tests",
  "ops": {
@@ -13,27 +13,27 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 16 min, last activity 1 min ago"
+    "detail": "session running 20 min, last activity 1 min ago"
    },
    {
     "name": "shelf",
     "status": "WARN",
-    "detail": "below floor, sourcing owed (Shelf 2/3 DRAWABLE (Entry 21, 22; pending on data/Jason: Entry 15, 17,)"
+    "detail": "below floor, sourcing owed (Shelf 1/3 DRAWABLE (Entry 22; pending on data/Jason: Entry 15, 17, 18,)"
    },
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "cycle in progress: Entry 20 / M16 draw / registering cells, writing scan_021"
+    "detail": "cycle in progress: Entry 24 / M20 draw / registering cells, writing scan_023"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'studies': 2}"
+    "detail": "last cycle moved=True delta={'ledger_rows': 2, 'scans_registered': 2, 'mechanism_docs': 2, 'studies': 2, 'inventory_entries': 2, 'inventory_closed': 2}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 1 min ago"
+    "detail": "refreshed 112 min ago"
    },
    {
     "name": "reports",
@@ -48,12 +48,12 @@
    {
     "name": "ledger",
     "status": "PASS",
-    "detail": "105 idea families, no stale statuses"
+    "detail": "107 idea families, no stale statuses"
    },
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "22 mechanism doc(s) cover every advanced candidate"
+    "detail": "25 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -68,24 +68,24 @@
   ]
  },
  "progress": {
-  "trials_since_last_survivor": 34,
-  "trials_total": 337,
+  "trials_since_last_survivor": 59,
+  "trials_total": 362,
   "survivors_alive": 2,
-  "trials_per_survivor": 168.5,
+  "trials_per_survivor": 181.0,
   "last_survivor": {
    "hypothesis_id": "hyp-000144",
    "name": "vxn_level_vs_trailing_high_next_day_range_prospective",
    "date": "2026-09-12"
   },
-  "scan_cells_total": 245,
-  "standalone_total": 92,
-  "scans_run": 21,
-  "scans_with_no_survivor": 16
+  "scan_cells_total": 268,
+  "standalone_total": 94,
+  "scans_run": 23,
+  "scans_with_no_survivor": 18
  },
- "ledger_rows": 179,
- "distinct_hypotheses": 139,
+ "ledger_rows": 182,
+ "distinct_hypotheses": 141,
  "funnel": {
-  "closed": 102,
+  "closed": 104,
   "discovery": 0,
   "validation": 1,
   "holdout": 1,
@@ -94,7 +94,7 @@
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 2/3 DRAWABLE (Entry 21, 22; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
+  "shelf": "Shelf 1/3 DRAWABLE (Entry 22; pending on data/Jason: Entry 15, 17, 18, 23, 25) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
   "rows": [
    {
     "tier": "GATED",
@@ -146,7 +146,7 @@
  },
  "shelf": {
   "floor": 3,
-  "count": 6,
+  "count": 7,
   "floor_met": true,
   "live": [
    {
@@ -166,16 +166,30 @@
     "name": "M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) \u2014 PARKED: not testable at the current data ceiling (needs ES)"
    },
    {
-    "id": 21,
-    "name": "M17: intraday periodicity, same half-hour slot next day (open + close slots), NQ (literature, September 12th, ~4:40 pm CT test cycle) \u2014 DRAWABLE (map-ranked #3)"
-   },
-   {
     "id": 22,
     "name": "M18: volume-conditioned daily reversal (Campbell-Grossman-Wang), NQ (literature, September 12th, ~5:10 pm CT test cycle) \u2014 DRAWABLE (map-ranked #3)"
+   },
+   {
+    "id": 23,
+    "name": "M19: Treasury auction concession and rebound, ZN (open scope; map channel; September 12th, ~5:05 pm CT cycle) \u2014 WAITING ON data: TreasuryDirect 10-year auction dates (free CSV, Jason)"
+   },
+   {
+    "id": 25,
+    "name": "M21: ECB rate decision pre/post-release volatility, 6E (open scope; map channel; companion to M20; September 12th, ~5:55 pm CT cycle) \u2014 WAITING ON verified historical ECB press-conference date list (2015-2026); draw attempted ~6:35 pm CT, blocked on web-tool session limit, not fabricated"
    }
   ]
  },
  "recent_closures": [
+  {
+   "id": "hyp-000148",
+   "name": "Eia report volatility jump cl m20",
+   "date": "2026-09-12"
+  },
+  {
+   "id": "hyp-000147",
+   "name": "Intraday periodicity same slot next day m17",
+   "date": "2026-09-12"
+  },
   {
    "id": "hyp-000146",
    "name": "Market intraday momentum first30 last30 m16",
@@ -190,16 +204,6 @@
    "id": "hyp-000123",
    "name": "H118 \u00b7 VWAP distance LOW tercile, 10-day drift",
    "date": "2026-09-12"
-  },
-  {
-   "id": "hyp-000051",
-   "name": "Intraday multi-day base breakout",
-   "date": "2026-09-11"
-  },
-  {
-   "id": "hyp-000027",
-   "name": "Intraday collective-evidence pilot",
-   "date": "2026-09-11"
   }
  ],
  "sessions": [

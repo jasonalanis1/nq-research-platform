@@ -1406,7 +1406,7 @@ intraday momentum").
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M16. STATUS: CLOSED (Scan 021, P1 FAIL; see mechanism doc Section 9).
 
-## ENTRY 21 — M17: intraday periodicity, same half-hour slot next day (open + close slots), NQ (literature, September 12th, ~4:40 pm CT test cycle) — DRAWABLE (map-ranked #3)
+## ENTRY 21 — M17: intraday periodicity, same half-hour slot next day (open + close slots), NQ (literature, September 12th, ~4:40 pm CT test cycle) — CLOSED September 12th, ~5:35 pm CT (Scan 022, hyp-000147): clean null in all 3 slots, attempt 1 of 2
 
 Generation (sourcing stage, TEST cycle under the budget-use rule): full
 mechanism doc research/mechanisms/intraday-periodicity-same-slot-next-day-m17.md,
@@ -1433,7 +1433,7 @@ written BEFORE any scan. Source CHANNEL: literature (Heston-Korajczyk-Sadka
    repeats direction in the same slot on consecutive days.
 3. **HORIZON**: same slot, next session (30-minute hold).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M17. STATUS: DRAWABLE, third on the shelf.
+5. **MAP ANCHOR**: M17. STATUS: CLOSED (Scan 022, P1 FAIL; see mechanism doc Section 9).
 
 ## ENTRY 22 — M18: volume-conditioned daily reversal (Campbell-Grossman-Wang), NQ (literature, September 12th, ~5:10 pm CT test cycle) — DRAWABLE (map-ranked #3)
 
@@ -1460,3 +1460,105 @@ BEFORE any scan. Source CHANNEL: literature.
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW, adjacencies disclosed.
    Attempt 1 of 2.
 5. **MAP ANCHOR**: M18. STATUS: DRAWABLE, third on the shelf.
+
+## ENTRY 23 — M19: Treasury auction concession and rebound, ZN (open scope; map channel; September 12th, ~5:05 pm CT cycle) — WAITING ON data: TreasuryDirect 10-year auction dates (free CSV, Jason)
+
+Generation (sourcing stage, scheduled cycle): full mechanism doc
+research/mechanisms/treasury-auction-concession-zn-m19.md, written BEFORE
+any scan. Source CHANNEL: map (forced participant: primary dealers'
+bidding obligation), literature support Lou-Yan-Zhang 2013 RFS.
+- LEARN/Integrity: NEW, signed at sourcing. Not a resurrection of the ZN
+  lead-lag family, the cross-asset state claims, or the calendar family
+  (obligated participant + pre-registered no-auction placebo). Attempt 1
+  of 2.
+- Discovery: ZN 1-minute on disk. Auction dates NOT on disk -- the
+  sandbox cannot fetch treasurydirect.gov (robots-blocked). Needs one
+  CSV: Auction Query -> Notes -> 2015-01-01 to 2021-12-31, saved as
+  data/treasury_auctions_notes_2015_2021.csv. 14 cells, 2 gating.
+- Statistical: EVENT-level n (~80 auctions in Discovery) -- thin-sample
+  rule (failure mode #2) applies; block bootstrap; NULL 1 = ZN's own
+  3-session drift.
+- Director: information gain HIGH (first open-scope test: is the 0-for-11
+  map record about the map or about NQ?); edge moderate-high (tens of
+  ZN ticks per leg, 12x/year). Track: directional in ZN. Realization:
+  time-based, 3-session legs.
+- KILL RULE: post-leg concentrated in the first 1-min bar after the
+  1 pm result.
+
+1. **STATE VARIABLE**: session distance to the next / from the last
+   10-year auction (t-3..t, t..t+3); bid-to-cover tercile if available.
+2. **MECHANISM CLAIM**: dealer underwriting concession into the auction,
+   recovered after.
+3. **HORIZON**: 3 sessions per leg.
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M19. STATUS: FILED, WAITING ON auction dates.
+
+## ENTRY 24 — M20: EIA weekly petroleum report pre/post-release volatility, CL (open scope; map channel; September 12th, ~5:45 pm CT cycle) — DISCOVERY PASSED, CLOSED AT MONETIZATION (no CL strategy to attach to); September 12th ~6:20 pm CT, hyp-000148
+
+Generation (sourcing stage, scheduled cycle): full mechanism doc
+research/mechanisms/eia-inventory-report-drift-cl-m20.md, written BEFORE
+any scan. Source CHANNEL: map (forced participant: scheduled repricing at
+a fixed release time), literature support Linn-Zhu 2004, Gu-Kurov-Wolfe
+2018.
+- LEARN/Integrity: NEW, signed at sourcing. Not a resurrection of CPI/NFP
+  (direction-ambiguity CLOSED family -- different instrument, and this
+  entry gates on MAGNITUDE not direction, explicitly built against that
+  failure mode). Not on the SKIP LIST (calendar effects with no named
+  participant) -- participant named. First CL event-day entry ever.
+  Attempt 1 of 2.
+- Discovery: CL 1-minute on disk; release-day rule (Wed, or Thu after a
+  Monday holiday) computed from the existing NYSE holiday calendar --
+  no new data file needed. 6 cells (9 with the optional surprise-size
+  split), 1 gating.
+- Statistical: hourly n (~350+ release weeks in Discovery); block
+  bootstrap; NULL 1 = unconditional hourly |return|/ATR14 distribution,
+  built into the gating statistic by construction.
+- Director: rank 1 (only drawable entry this cycle). Information gain
+  moderate-high (tests whether CPI/NFP's failure was the statistic or
+  the instrument/event class); edge potential moderate, volatility-track
+  if it passes (same product class as the 3 validated facts). Track:
+  risk-execution. Realization: event-anchored, 1-hour window.
+- KILL RULE: post-release response concentrated in the release's own
+  first minute (a print artifact, not an information-flow signature).
+
+1. **STATE VARIABLE**: none (this is an unconditional event-window
+   magnitude claim); EIA release Wednesday/Thursday-after-holiday.
+2. **MECHANISM CLAIM**: scheduled repricing at the 10:30 ET release
+   widens realized volatility in the hour after, more than an ordinary
+   RTH hour.
+3. **HORIZON**: 1 hour pre, 1 hour post (gating on post).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M20. STATUS: CLOSED (Scan 023 Discovery PASS; Monetization: no credible path; KNOWN TRUE / characterization on file. See mechanism doc Section 9).
+
+## ENTRY 25 — M21: ECB rate decision pre/post-release volatility, 6E (open scope; map channel; companion to M20; September 12th, ~5:55 pm CT cycle) — WAITING ON verified historical ECB press-conference date list (2015-2026); draw attempted ~6:35 pm CT, blocked on web-tool session limit, not fabricated
+
+Generation (sourcing stage, scheduled cycle): full mechanism doc
+research/mechanisms/ecb-decision-day-volatility-6e-m21.md, written BEFORE
+any scan. Source CHANNEL: map (forced participant: fixed public
+announcement schedule), literature support Andersen-Bollerslev-Diebold-
+Vega 2003, Ehrmann-Fratzscher 2005.
+- LEARN/Integrity: NEW, signed at sourcing. Not a resurrection of
+  CPI/NFP (different instrument/event, magnitude not direction) or
+  pre/post-FOMC (US Fed, not ECB). No prior 6E-plus-event entry in the
+  ledger. Explicit companion to M20 (P3 cross-check), not a duplicate.
+  Attempt 1 of 2.
+- Discovery: 6E 1-minute on disk; ECB press-conference dates (~8/year
+  since 2015, fixed schedule) assembled as a short list in-script -- no
+  new external data file needed. 6 cells, 1 gating.
+- Statistical: hourly n (~50 ECB dates in Discovery); block bootstrap;
+  NULL 1 = unconditional hourly |return|/ATR14 distribution.
+- Director: rank 2 (behind M20). Information gain moderate (tests
+  whether the scheduled-macro-event volatility design generalizes past
+  one instrument); edge moderate if it passes, volatility-track. Track:
+  risk-execution. Realization: event-anchored, 1-hour window.
+- KILL RULE: response concentrated in the statement's own first minute
+  (07:45 print), before the press-conference window the mechanism
+  actually targets.
+
+1. **STATE VARIABLE**: none (unconditional event-window magnitude
+   claim); ECB press-conference dates.
+2. **MECHANISM CLAIM**: scheduled repricing through the press conference
+   widens realized volatility beyond an ordinary hour.
+3. **HORIZON**: 1 hour, event-anchored (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M21. STATUS: DRAWABLE, second on the shelf.

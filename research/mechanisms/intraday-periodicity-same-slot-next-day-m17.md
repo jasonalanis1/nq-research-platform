@@ -115,5 +115,18 @@ Edge potential: LOW-MODERATE. A 30-minute hold on a small persistence;
 the paper's effect is strongest in the cross-section, and 2010 is old.
 Base case is decayed. It is cheap, fully specified, and nothing to tune.
 
-## 9. Prediction status
-P1 -- untested. P2 -- untested. P3 -- untested. P4 -- untested.
+## 9. Prediction status -- SCAN 022 RUN, September 12th, ~5:35 pm CT, CLOSED
+P1 -- FAIL. OPEN slot sign-adjusted next-day mean -0.013 ATR, CI
+(-0.026, +0.001); CLOSE -0.003, CI (-0.011, +0.005). Neither clears zero.
+P2 -- MIDDAY control -0.005, CI (-0.012, +0.001): indistinguishable from
+OPEN/CLOSE, so the (null) result is not slot-specific either -- there is
+simply no cross-day same-slot persistence anywhere in the session. P3 --
+both halves null throughout. P4 -- dose split (top vs bottom |slot-ret|
+tercile) shows no gradient, all null. Kill rule not triggered (first-
+minute shares -0.25 / -0.09 / +0.21, well inside the 0.5 line).
+Ledger: hyp-000147 REJECTED. Attempt 1 of 2 spent. n=1,617-1,632 sessions.
+What it means: the stock-level cross-day periodicity in Heston et al.
+does not transfer to the NQ index at daily granularity. Third literature
+entry this cycle to close clean (with M15, M16) -- the pattern across all
+three is the same: well-specified, well-cited cross-sectional or single-
+name equity results do not automatically hold at the index-future level.

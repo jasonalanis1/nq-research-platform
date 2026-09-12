@@ -43,6 +43,13 @@ the three stay here as RULED, with the reason, so they are not re-proposed.
   morning move is information, not exhaustion); if M16 fails, P-2 may
   be re-ruled with the M15 night-leg landing as its mechanism and a
   first-minute kill rule. Parked behind M16.
+- RE-RULED September 12th, ~5:10 pm CT, after M16 closed (Scan 021, null;
+  point estimate a slight late-day REVERSAL, not credible) and M15 closed
+  (Scan 020: no night premium to 'land'): the claim's only remaining
+  form is 'fade the first 15-30 minutes', which is the opening-hour
+  reference-level fade family (hyp-081/082/084/085/090, five rejected
+  variants) with a volume filter instead of a level. Cosmetic novelty.
+  RULED: no entry. CLOSED in this stream.
 
 ### P-3 "VWAP reclaim after a failed breakdown"
 - Practitioner form: price breaks below VWAP, fails, reclaims -> long.
@@ -59,5 +66,8 @@ names no participant goes to the Observatory (characterize) rather than
 the shelf (claim). Record every ruling here so the stream does not
 re-propose. Next practitioner claims to rule on, when sourced: "the
 first hour's high/low holds on trend days" (IB family, likely SKIP),
-"Friday afternoon de-risking" (calendar, check vs rejected calendar
-effects), "post-lunch volume return at 13:30" (M10 attempt 1 spent).
+"Friday afternoon de-risking" -- RULED September 12th, ~5:10 pm CT: a
+day-of-week directional claim with no obligated participant named (risk
+limits are a choice, not a mandate); the calendar family is on the SKIP
+LIST and Scan 020's weekend-leg observation is a within-family slice, not
+a mechanism. No entry. "post-lunch volume return at 13:30" (M10 attempt 1 spent).

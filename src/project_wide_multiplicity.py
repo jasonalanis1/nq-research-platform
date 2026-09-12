@@ -231,6 +231,27 @@ SCAN_REGISTRY = {
     "scan_019_2026-09-12": {"cells_scanned": 9, "promoted_hypothesis_ids": []},
     "scan_020_2026-09-12": {"cells_scanned": 7, "promoted_hypothesis_ids": []},
     "scan_021_2026-09-12": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
+    "scan_022_2026-09-12": {"cells_scanned": 17, "promoted_hypothesis_ids": []},
+    "scan_023_2026-09-12": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
+    # Scan 023 (Entry 24 / map M20: EIA weekly petroleum report pre/post-
+    # release volatility, CL, open scope). 6 cells: post-release-hour
+    # |return|/ATR14 vs unconditional hourly |return|/ATR14 (GATING,
+    # magnitude not direction, avoiding the CPI/NFP direction-ambiguity
+    # failure mode); pre-release signed mean (reported, unpinned); NULL 1
+    # reference; first-minute print-only share (kill); Discovery halves
+    # (decay, 2 cells). Attempt 1 of 2. Registered September 12th, ~6:00
+    # pm CT BEFORE the scan ran. Release-day rule (Wed, or Thu after a
+    # Monday federal holiday) computed from pandas USFederalHolidayCalendar.
+    # Mechanism doc research/mechanisms/eia-inventory-report-drift-cl-m20.md.
+    # Scan 022 (Entry 21 / map M17: intraday periodicity, same half-hour
+    # slot next day, Heston-Korajczyk-Sadka 2010). 17 cells per mechanism
+    # doc Section 7: gating = OPEN slot and CLOSE slot sign-adjusted
+    # next-day mean (2 gating, Sidak at 2); NULL 1 = each slot's own
+    # unconditional drift; MIDDAY slot specificity control (P2); Discovery
+    # halves (P3 decay); day-t |slot ret| tercile split (P4 dose); first-
+    # minute kill share. Attempt 1 of 2. Registered September 12th, ~5:20
+    # pm CT BEFORE the scan ran. Mechanism doc research/mechanisms/
+    # intraday-periodicity-same-slot-next-day-m17.md.
     # Scan 021 (Entry 20 / map M16: market intraday momentum, Gao-Han-Li-Zhou
     # 2018 -- prior close->10:00 predicts 15:30->16:00). 10 cells per
     # mechanism doc Section 7: gating = sign-adjusted last-30 given extreme
