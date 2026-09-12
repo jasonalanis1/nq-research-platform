@@ -320,3 +320,47 @@ volatility rather than by a hard stop. NOT a retroactive fix to
 H87/H89, H93, or H114/H115 -- those stay closed per the two-attempt
 limit. This is knowledge for the NEXT drift-type hypothesis's frozen
 spec, designed in from the start rather than retrofitted.
+
+
+## Amendment: the two nulls (September 12th, 2026 -- binding from this date)
+
+Found by Scan 019 (research/mechanisms/cross-asset-correlation-convergence-
+m12.md, Section 10) and confirmed the same morning by the H118 baseline
+diagnostic (research/studies/h118-baseline-diagnostic-2026-09-12.md).
+
+NQ's unconditional forward drift over the Discovery slice is roughly +0.18
+to +0.20 ATR per 3 days and about +0.50 net R per 10 days -- the real
+equity risk premium of 2015-2021, cross-checked against the index's actual
+annualized return. The promotion bar, "90% CI entirely above zero," was
+therefore the WRONG null for any LONG-ONLY directional claim: a filter that
+selects ordinary days and holds them long clears it. H118 did exactly that
+three times.
+
+From this date:
+
+NULL 1 -- directional claims. The reported effect is
+    mean(signal days) - mean(ALL days on the same slice, same horizon,
+    same units),
+with a bootstrap CI on the DIFFERENCE. When forward windows overlap (any
+horizon longer than one bar), the moving-block bootstrap with block =
+horizon is the CI of record; the iid CI may be shown alongside. The
+promotion bar applies to the difference, not to the raw mean.
+
+NULL 2 -- cross-index claims (anything involving ES, RTY, YM or a spread).
+The OUTCOME is the residual r_target - beta * r_reference, with beta
+estimated from data strictly before the observation (rolling window) and
+FROZEN within each out-of-sample stage. "NQ went up after X" is not a
+finding if ES went up by the beta-implied amount.
+
+Unaffected: sign-adjusted, ratio-based (range/volatility) and long-minus-
+short constructions, which are baseline-free by construction. All three
+validated volatility facts are in this class and stand.
+
+Helpers: src/baseline_relative.py (baseline_relative, bootstrap_diff_ci,
+block_bootstrap_diff_ci, rolling_beta, beta_residual), tests in
+tests/test_baseline_relative.py.
+
+Named failure mode #7 -- BASELINE CONFUSION: a long-only effect measured
+against zero on a trending asset. Distinct from cost-dominance (too small)
+and thin-sample overconfidence (too few): the effect is real and well-
+measured, it just isn't the signal's.

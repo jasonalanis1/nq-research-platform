@@ -195,6 +195,7 @@ def evaluate_candidate(
     winner_returns,                 # 1-D array: the candidate's own per-period returns
     sibling_returns: Optional["np.ndarray"] = None,  # (n_configs, n_obs): the full trial set it was picked from, for PBO
     n_trials_override: Optional[int] = None,
+    var_sharpe_override: Optional[float] = None,
     ledger_path=rl.LEDGER_PATH,
 ) -> LarryVerdict:
     """
@@ -208,6 +209,42 @@ def evaluate_candidate(
     otherwise walks parent lineage via `_family_via_lineage()`. Either
     way this is read from the ledger / stated explicitly by the caller
     with documented reasoning, never silently hand-typed from memory.
+
+    BUG FOUND AND FIXED 2026-09-09 (project-wide multiple-testing
+    exposure work, NEXT_UP queue item 2): DSR's `var_sharpe` argument
+    is the variance of Sharpe ratios ACROSS the n_trials candidates --
+    purgedcv's own docstring is explicit that it must be supplied by
+    the caller because estimating it "require[s] knowing the
+    distribution of submitted strategies." The ORIGINAL version of this
+    function, when `sibling_returns` was not given, computed
+    `np.var([single_value])`, which is a ONE-ELEMENT array -- its
+    variance is identically 0.0 by construction, REGARDLESS of
+    `n_trials_considered`. Since the DSR deflation benchmark scales
+    with `sqrt(var_sharpe)`, var_sharpe=0.0 collapses the deflation
+    benchmark to 0 for ANY n_trials, so DSR silently reduced to the
+    plain (non-deflated) probabilistic Sharpe ratio -- `n_trials` was
+    accepted and stored in the returned verdict but had NO effect on
+    the actual DSR number. This is the same class of failure as the
+    2026-09-03 trial-counting bug ("silently defeating the entire
+    point of running DSR"), confirmed live: DSR came back identical
+    (0.99999997...) for n_trials in {1, 10, 100, 1384, 100_000,
+    100_000_000} on a real candidate (H118) when called without
+    sibling_returns. It did NOT corrupt any past real decision -- the
+    only prior non-test caller
+    (src/apply_larry_liquidity_filter_family.py) always supplied
+    sibling_returns -- but it WOULD have silently mis-certified any
+    future DSR-only application (exactly the project-wide,
+    no-common-sibling-matrix use case this module was being asked to
+    support). Fixed by refusing to guess: when sibling_returns is None
+    and n_trials_considered > 1, a var_sharpe_override must be
+    supplied explicitly (e.g. estimated from a real, disclosed
+    reference pool of trial Sharpe-like statistics, as
+    src/study_project_wide_multiple_testing_exposure.py does from the
+    Observatory scan pool) or this function now raises, rather than
+    silently returning an unadjusted number that looks adjusted.
+    n_trials_considered==1 is unaffected (var_sharpe=0 is CORRECT
+    there -- no correction is the right answer for one trial, per
+    purgedcv's own docstring).
     """
     winner_returns = np.asarray(winner_returns, dtype=float)
 
@@ -224,11 +261,24 @@ def evaluate_candidate(
             or _family_via_lineage(hypothesis_id, current)
         )
 
-    var_sharpe = float(np.var(
-        [np.mean(winner_returns) / np.std(winner_returns)], ddof=0
-    )) if sibling_returns is None else float(np.var(
-        sibling_returns.mean(axis=1) / sibling_returns.std(axis=1), ddof=1
-    ))
+    if sibling_returns is not None:
+        var_sharpe = float(np.var(
+            sibling_returns.mean(axis=1) / sibling_returns.std(axis=1), ddof=1
+        ))
+    elif var_sharpe_override is not None:
+        var_sharpe = float(var_sharpe_override)
+    elif n_trials_considered <= 1:
+        var_sharpe = 0.0  # correct: no correction needed for a single trial
+    else:
+        raise ValueError(
+            f"evaluate_candidate({hypothesis_id!r}): n_trials_considered="
+            f"{n_trials_considered} > 1 but no sibling_returns and no "
+            "var_sharpe_override were given. Refusing to silently fall back "
+            "to var_sharpe=0.0 (which would make the n_trials correction a "
+            "no-op -- see the 2026-09-09 bug note in this function's "
+            "docstring). Supply sibling_returns, or an explicit, documented "
+            "var_sharpe_override."
+        )
 
     dsr = deflated_sharpe_ratio(winner_returns, n_trials=n_trials_considered, var_sharpe=var_sharpe)
 

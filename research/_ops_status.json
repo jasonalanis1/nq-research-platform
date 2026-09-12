@@ -1,0 +1,41 @@
+{
+ "generated_at": "2026-09-10T16:55:00Z",
+ "overall": "WARN",
+ "checks": [
+  {
+   "name": "lock",
+   "status": "PASS",
+   "detail": "session running 40 min, last activity 0 min ago"
+  },
+  {
+   "name": "console",
+   "status": "PASS",
+   "detail": "refreshed 0 min ago"
+  },
+  {
+   "name": "reports",
+   "status": "PASS",
+   "detail": "4 reports, latest 2026-09-10-1614.md well-formed"
+  },
+  {
+   "name": "new-information",
+   "status": "PASS",
+   "detail": "latest run recorded new information"
+  },
+  {
+   "name": "ledger",
+   "status": "PASS",
+   "detail": "99 idea families, no stale statuses"
+  },
+  {
+   "name": "mechanism-gate",
+   "status": "WARN",
+   "detail": "1 candidate(s) past Discovery with no mechanism doc: prospective_validation_weekly_trend_exp047"
+  },
+  {
+   "name": "awaiting-jason",
+   "status": "PASS",
+   "detail": "nothing parked on Jason in the queue"
+  }
+ ]
+}

@@ -129,6 +129,8 @@ A single place to capture every idea the moment it comes up, so nothing said in 
 
 - **research_ledger.py has no `search_batch_id` field** -- found 2026-09-03. **Closed 2026-09-07**: `HypothesisRecord` gained a `search_batch_id` field (optional, set by the calling script when multiple hypotheses come from one joint run); `larry_validate.py`'s `evaluate_candidate()` now tries an exact batch-based sibling count first and only falls back to lineage-walking when no batch id is set. `n_trials_override` still exists as a manual escape hatch. Verified with a scratch-ledger test: a 2-hypothesis batch with different immediate parents was correctly counted as 2, and a hypothesis with no batch id correctly fell through to the old lineage logic. Existing ledger rows (hyp-000007/hyp-000008 included) are untouched and keep using their documented `n_trials_override` -- this is additive, not a retroactive rewrite.
 
+- **Event-conditioned intraday reversal-off-level (wide version)** -- proposed by Jason 2026-09-11 via an uploaded research-gap-analysis doc. Considered and declined as drafted: resurrection check against the actual repo found the core mechanism (price touches/rejects a reference level, reverses) already tested three times over -- the Level Sweep Reversal family (6 variants, closed), hyp-000013 vwap_mean_reversion (REJECTED, -0.628R), and especially exp-110/hyp-000081 "Opening-Hour Reference-Level Fade" (same 5 reference levels -- prior-day/overnight high-low, VWAP -- REJECTED as a trade, though the Observatory found the underlying conditional-return behavior real). Event-timing alone has also been tried twice (pre-FOMC drift, hyp-000111, thin/non-credible; pre-NFP drift, hyp-000112, credible but wrong-direction with two failed monetization attempts). The one open cell -- conditioning exp-110's real, already-measured effect on proximity to a scheduled catalyst window, which has never been combined with it before -- was carved out and routed separately for LEARN/Mechanism/Director review: `research/studies/event-conditioned-reference-level-fade-h81-recut-draft.md`. Event-calendar data acquisition held pending that review.
+
 ## Tested / Closed
 
 - **2026-09-09: Observatory v7 (mechanism-first selection) -- third-ever
@@ -1739,3 +1741,282 @@ reached PROMISING and was later superseded now has a same-session-findable
 correction or progression pointer. Ledger: hyp-000124 through hyp-000129 (all
 today).
 
+
+## Project-wide multiple-testing exposure quantified (2026-09-09, automated session)
+
+Closed the open item the mandatory Integrity Gate flagged on H118
+("no project-wide (123-hypothesis) multiple-testing/deflated-Sharpe
+adjustment has ever been computed," logged as a LEARN/KNOWN UNEXPLORED
+infrastructure gap). Per research/NEXT_UP.md queue item 1, built
+`src/project_wide_multiplicity.py`: a Sidak family-wise correction
+applied per-stage (not one blanket N) to every ledger candidate's
+already-computed 90% CI, using stage-specific project-wide trial counts
+derived from the live ledger plus the Discovery-Engine scan registry
+(Discovery N=178, Validation N=18, Holdout N=1 as of this ledger). Full
+method, counting rules, and disclosed limitations (Discovery N is a
+floor, not a ceiling -- pre-Scan-001/002 exploratory work without a
+documented per-cell count is not included) are in the module's
+docstring. Full results table and narrative:
+research/studies/project-wide-multiplicity-2026-09-09.md.
+
+Headline finding: every Discovery-stage result examined (7/7) survives
+the correction (Discovery samples are large, CIs start tight), but only
+1 of 6 Validation-stage results examined survives (midday-lull's narrow
+bucket) -- Validation samples are much smaller, so correcting for 18
+project-wide one-shot Validation attempts is enough to flip most of
+them across the null. H118's Validation leg (hyp-000122) is among the
+results that do not survive (adjusted CI [-0.111, 0.679], spans zero);
+its Discovery (hyp-000121) and Holdout (hyp-000123) legs both do
+survive, and Holdout -- the stage underlying Jason's 2026-09-09 sign-off
+and the open Forward Validation paper position -- is also the stage
+structurally immune to this problem right now (N=1, nothing else has
+ever competed for that scarce slot). This is a disclosed diagnostic,
+not a status change: no ledger strategy_status was altered, Jason's
+sign-off and the consumed Holdout slot stand as recorded, and this
+reading is consistent with (not contradicted by) the effect-size
+instability across H118's three stages (0.62R -> 0.28R -> 0.40R)
+already flagged as a standing caution in this same Integrity Gate pass.
+Range-contraction, overnight-coil, and midday-lull-not-narrow show the
+same Validation-stage pattern; all three are already scoped only as
+risk-sizing inputs in src/volatility_conditioning.py, not standalone
+P&L rules, so this doesn't change their current usage.
+
+Re-expressed as four new pointer rows (never mutating the originals,
+same convention as this project's status-correction rows):
+hyp-000130 (H118), hyp-000131 (range-contraction), hyp-000132
+(overnight coil), hyp-000133 (midday lull) -- each keeps its
+candidate's current accurate strategy_status and carries the
+multiplicity-adjusted picture in its notes.
+
+Process change recorded in
+research/infrastructure/agent-governance-structure.md: the Integrity
+Gate's standing brief now points to this module as the concrete
+mechanism for its existing "whether its claimed statistical strength
+accounts for the full research history" check, so this becomes a
+repeatable step on future candidates approaching Validation or Holdout,
+not a one-off analysis.
+
+## Discovery Engine Scan 003 (2026-09-09) -- opening range + ZN bond regime
+
+Per research/NEXT_UP.md queue item 2 and
+research/studies/project-audit-and-new-starting-point-2026-09-09.md's
+"thread 2" recommendation (Observatory-style scanning of untested state
+variables). Scanned the two variables flagged as untested earlier
+2026-09-09: opening_range_vs_atr (implemented in market_state_primitives.py
+since Scan 001, never previously included in a scan's STATE_VARS) and a new
+descriptor, zn_level_vs_trailing (market_state_primitives_v3.py -- ZN
+10-Year Treasury futures prior-day level vs. its own 20-day trailing
+average, the bond/rate-regime analogue of Scan 002's vxn_level_vs_trailing;
+ZN data on disk covers 2015-01-01 through 2024-01-03, spanning all of
+Discovery and Validation but never reaching Holdout, so no boundary-leakage
+risk). Same frozen constants as Scan 001/002 (N_BOOTSTRAP=3000, seed=7,
+HORIZONS=[1,3,5,10], MIN_N_FOR_RANKED=40, ATR_NORMALIZED_FLOOR=0.05, tercile
+buckets), fixed before running. `src/market_behavior_discovery_scan_003.py`.
+
+24 (state x bucket x horizon) cells scanned, 4 cleared the unusual-and-cost
+gate, collapsing to 3 unique (state_var, bucket) candidates after dedup
+across horizon. Ran the same split-sample internal-consistency screen used
+on Scan 001 (`src/discovery_scan_003_split_sample_robustness.py`, bucket
+edges frozen from the full sample, Discovery split at its chronological
+midpoint, each half scored against its own baseline):
+
+- zn_level_vs_trailing / mid / h=10d (the full-sample-strongest candidate,
+  atr_norm 0.11): FAILS -- first half not credible vs. zero, direction
+  consistent but magnitude ratio 0.24 (well outside the [0.4, 2.5]
+  consistency band). Full-sample-only artifact, not pursued further.
+- opening_range_vs_atr / mid / h=1d (atr_norm 0.054, barely above floor):
+  FAILS -- first half effect near zero (atr_norm 0.003), magnitude ratio
+  22x. Also consistent with this project's standing cost-dominance
+  diagnostic for 1-day-horizon effects. Not pursued further.
+- zn_level_vs_trailing / low / h=10d (atr_norm 0.060 full-sample): SURVIVES
+  both halves -- first half +13.11pts (atr_norm 0.187, credible), second
+  half +18.17pts (atr_norm 0.099, credible), same direction, magnitude
+  ratio 0.53 (within the consistency band). The one candidate from this
+  scan carried forward.
+
+Not yet promoted to a ledger hypothesis_id -- per the frozen pipeline (no
+stage skipped), this candidate still needs a genuine Mechanism-agent pass
+before any frozen monetization spec. Flagged, not resolved, in
+market_state_primitives_v3.py and the split-sample script itself: the
+mechanism is not obviously a rates-direction story (ZN below its own
+trailing average = rates persistently rising vs. recent trend predicting
+STRONGER positive NQ drift runs against the naive "rising rates pressure
+equity valuations" prior) and could plausibly be a regime-timing artifact
+of the 2015-2021 Discovery window (a broadly rising-rate, broadly
+rising-NQ recovery/expansion period) rather than a repeatable conditional
+state effect -- the two-half split (2015-2018 vs 2018-2021) is reassuring
+but not decisive on this question, since each half still spans multiple
+sub-regimes. Queued as the next concrete item in research/NEXT_UP.md.
+SCAN_REGISTRY in src/project_wide_multiplicity.py updated (Discovery N:
+178 -> 202); re-run that module if this candidate is later promoted (see
+its own updated comment for the pending promoted_hypothesis_ids entry).
+
+## Scan 003 candidate closed out: fails independent volatility-regime split (2026-09-09)
+
+Continuation of "Discovery Engine Scan 003" above. The one candidate that
+survived the chronological split-sample screen (zn_level_vs_trailing / low
+tercile / 10-day horizon) was given the same second, independent robustness
+cut Scan 001's survivors got (`src/research_director_regime_check_scan003.py`
+mirrors `src/research_director_regime_check.py`): Discovery split by
+volatility regime (trailing ATR(14) above/below the full-sample median,
+frozen threshold, not refit per regime) rather than chronologically.
+
+Result: FAILS decisively. Low-vol-regime days (n=334): effect vs. baseline
+-1.41pts, atr_norm 0.023, below the cost floor. High-vol-regime days
+(n=220): effect vs. baseline +95.98pts, atr_norm 0.495 -- roughly 10x the
+full-sample atr_norm (0.060) and clears every gate easily.
+direction_consistent_across_regimes=False, regime_dependent_only_one_side=
+True. The candidate's entire apparent full-sample effect is concentrated in
+the high-volatility-regime subset; in the low-vol subset (the majority of
+its own "low" bucket days) there is effectively no effect. This is the same
+regime-contamination failure mode this project's Discovery Engine design
+doc and the Scan 001 regime check were built to catch.
+
+Per the frozen pipeline and the no-post-hoc-redefinition rule: this closes
+zn_level_vs_trailing/low/h=10d as originally scanned -- ABANDON, not
+promoted, no hypothesis_id spent. It is NOT reframed here as "conditional
+on high-vol regime" and carried forward as if that were the same tested
+candidate -- narrowing to the sub-slice that looks good after seeing the
+regime split is exactly the selection-after-seeing-results pattern this
+check exists to prevent. If a genuinely NEW hypothesis ("does ZN's level
+vs. trailing average predict NQ drift specifically WITHIN high-volatility
+regimes") is pursued later, it must be pre-registered fresh, on its own
+frozen spec, not treated as a resumption of this line -- same convention
+already applied to hyp-000051 in the 2026-09-09 project audit.
+
+Net effect: Scan 003 (opening_range_vs_atr, zn_level_vs_trailing) is now
+fully closed -- 4 cells cleared the initial gate, all 3 unique candidates
+failed one or the other of two independent robustness cuts (split-sample:
+2 of 3; volatility-regime: the 1 remaining). SCAN_REGISTRY in
+src/project_wide_multiplicity.py already correctly carries
+promoted_hypothesis_ids=[] for scan_003_2026-09-09 -- no change needed
+there. Per
+research/studies/project-audit-and-new-starting-point-2026-09-09.md's
+"thread 2," the next Discovery Engine step is a fresh scan (Scan 004) over
+event families not yet touched: options-expiration effects,
+session-transition behavior (RTH close -> overnight open), multi-day
+(not intraday) reference-level touches.
+
+## Discovery Engine Scan 004 (2026-09-10) -- options-expiration, session-transition, multi-day reference-levels, short horizons
+
+Per research/studies/project-audit-and-new-starting-point-2026-09-09.md's
+"thread 2" and the Standing Research Priority (2026-09-10, favor fast-
+resolving candidates -- HORIZONS retargeted to [intraday, overnight, 1d,
+2d] instead of every prior scan's [1,3,5,10]-day set). Full pre-
+registration frozen BEFORE any code was written or result looked at:
+research/studies/scan-004-scoping-2026-09-10.md.
+
+Three new state descriptors (`src/market_state_primitives_v4.py`), one
+per named event family, each explicitly checked against and distinguished
+from a prior related, already-closed test so nothing here resurrects it:
+  - `days_to_monthly_opex` -- trading days to the next STANDARD MONTHLY
+    (all 12 months) equity-index options expiration. Distinct from
+    exp-035 (study_futures_expiration.py, REJECTED clean null), which
+    used the QUARTERLY IMM futures-rollover calendar (4/year) as a
+    continuous-contract-splice proxy on two specific pre-existing series.
+  - `prior_close_location_in_range` -- where yesterday's RTH close sat
+    within yesterday's own RTH high-low range. Distinct from hyp-000110
+    (closing-pressure-reversal, REJECTED cost-dominated), which used
+    last-15-min RETURN as state and next-day close-to-close as the only
+    outcome.
+  - `dist_to_multiday_reference_level_vs_atr` -- ATR-normalized distance
+    from today's RTH open to the nearest trailing 5-day/20-day RTH
+    high/low. Distinct from the opening-hour/mid-morning reference-level
+    fade studies (hyp-000081 family), which used single-PRIOR-DAY levels
+    as INTRADAY touch/fade entry signals, not multi-day levels as a
+    continuous proximity state variable.
+
+`market_behavior_discovery_scan_004.py` mirrors Scan 003's structure,
+generalized to support `intraday`/`overnight` outcome types (in addition
+to close-to-close `Nd`), and adds a second, additive absolute-cost gate
+(effect >= 3x ROUND_TRIP_COST_POINTS) alongside the unchanged 0.05
+ATR-normalized floor, per the standing priority's cost caveat for short
+horizons.
+
+Result: 36 cells scanned (3 vars x 3 buckets x 4 horizons). 1 cleared
+BOTH cost gates: `prior_close_location_in_range` / low / intraday, n=552,
+mean=+10.13pts, vs_baseline=+7.02pts, atr_norm=0.0550 (barely above the
+0.05 floor), ci_90=[3.62, 16.02]. The other two descriptors produced
+nothing credible-and-cost-clearing on any horizon. SCAN_REGISTRY updated:
+scan_004_2026-09-10, 36 cells, promoted_hypothesis_ids=[].
+
+## Scan 004 candidate closed out: fails split-sample robustness (2026-09-10)
+
+`src/discovery_scan_004_split_sample_robustness.py` (same method as the
+Scan 001/003 versions: bucket edges frozen from the full Discovery
+sample, NOT refit per half; Discovery split at its chronological
+midpoint; each half scored against its own baseline and its own average
+ATR14) on the sole survivor:
+
+First half (2015-01-02 to 2018-06-06, n=267): effect vs. baseline
++1.10pts, atr_norm 0.0157 -- not credible, does not clear either cost
+floor. Second half (2018-06-07 to 2021-10-01, n=285): effect vs. baseline
++12.48pts, atr_norm 0.0677 -- credible, clears both floors.
+direction_consistent=True (both positive) but magnitude_ratio(2nd/1st)=
+4.32, far outside the [0.4, 2.5] consistency band -- magnitude_consistent=
+False. SURVIVES_BOTH_HALVES=False: the full-sample "effect" is
+concentrated almost entirely in the second half of Discovery; the first
+half alone would never have cleared Discovery's own gate.
+
+Per the frozen pipeline and the no-post-hoc-redefinition rule: this
+closes prior_close_location_in_range/low/h=intraday as originally
+scanned -- ABANDON, not promoted, no hypothesis_id spent. Not reframed as
+"a post-2018 effect" and carried forward -- same convention as Scan 003's
+regime-contamination closure and hyp-000051's earlier treatment. Scan 004
+is now fully closed: 0 of 36 cells survived through to a Mechanism pass.
+
+Net effect across Scan 003 + Scan 004: all 3 named "thread 2" event
+families from the 2026-09-09 project audit (options-expiration,
+session-transition, multi-day reference-level touches) plus the prior
+scan's opening-range and ZN-regime descriptors have now been scanned at
+the single-descriptor/tercile-bucket/short-and-long-horizon grid level --
+0 survivors reaching a Mechanism pass across both scans. Consistent with
+this project's overall Discovery yield (per the 2026-09-09 audit: 2 real
+findings, both volatility/range-persistence facts, across the entire
+project's history) -- an honest, disclosable data point about this
+search strategy's yield, not a process failure. (Separately: Thread 1
+from that same audit, the H87/H89 gap-fade x validated-volatility-finding
+overlay screen, was ALSO already run and closed BEFORE the audit's own
+writing -- exp-119/hyp-000101, REJECTED, both classifiers' CIs span
+zero -- the audit's framing of it as "untried" was already stale by the
+time this session read it; confirmed via ledger, not re-run.)
+
+Research Director's call on the next Discovery Engine step (Scan 005,
+queued in research/NEXT_UP.md, not yet scoped or built this session):
+the 3 explicitly-named thread-2 families are now exhausted at this grid
+level, so a fresh scan needs genuinely new state descriptors, not a
+retune of these 3. market_state_primitives.py v1's own docstring already
+flags untried territory that fits the short-horizon standing priority
+without inventing anything: distance from session VWAP, volume vs.
+trailing/expected volume, and cross-market relationships using data
+already on disk (ES, VXN, ZN) -- e.g. ES-NQ divergence or a VXN-level
+regime state, scanned across the same short HORIZONS this scan
+established. Not pre-committed to any one of these -- the next session's
+scoping step should freeze the actual choice, same discipline as Scan
+004's own scoping doc.
+
+## exp-127: IB Breakout, afternoon-conditioned stop-width overlay -- NULL, closed (2026-09-10, automated)
+
+NEXT_UP.md queue item 0 (queued by the 08:15 session's Monetization
+position on hyp-000106). First real test of the long-open LEARN/KNOWN
+UNEXPLORED gap: position_size_multiplier()-style conditioning overlays
+have a confirmed volatility fact behind them but no real signal has
+ever used one as an actual sizing/stop-width input. IB Breakout
+(hyp-000011, closed standalone) stop re-anchored from entry at 14:00 ET
+using get_afternoon_conditioning()'s Validation-confirmed multiplier
+(hyp-000106/OBS-FINDING-011), target untouched, for trades still open
+at that point -- paired design (same trades, two policies), distinct
+from the 4 prior group-split overlay screens (exp-077/086/087/093).
+Integrity Gate pre-clearance ruled this is not a resurrection of those
+(logged in the frozen spec). Result: only 82 of 1709 Discovery signals
+(4.8%) were still open at 14:00 -- IB Breakout's modest 1.35R target
+resolves most trades same-morning. Affected-only diff -0.0004R, 90% CI
+[-0.0571, 0.0456], not credible; robust null under 2x cost stress.
+Closes this specific pairing per the pre-registered rule. Structural
+lesson for LEARN, distinct from "no edge to condition": this
+conditioning fact needs a setup with materially longer time-in-trade
+(e.g. VWAP mean reversion's open-ended hold) to ever get a fair test --
+a morning-resolving breakout/continuation setup structurally cannot
+exercise a 14:00-gated overlay. Ledger: hyp-000135 (parent hyp-000011).
+Full detail: research/studies/ib-breakout-afternoon-conditioned-stop-overlay-spec.md,
+src/study_ib_breakout_afternoon_conditioned_stop.py.

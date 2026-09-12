@@ -19,3 +19,15 @@ __pycache__/
 # Secrets -- API keys/tokens should never be committed. data_fetch_databento.py
 # reads its key from here if the DATABENTO_API_KEY environment variable isn't set.
 .databento_key
+
+# Session-runtime state and scratch (rebuilt every cycle; never history)
+research/_worksession.lock
+research/_worksession.lock.meta
+research/_scratch_worksession/
+research/_cycle_checkpoint.json
+research/NEXT_UP.md.bak-*
+research/ledger/*.bak-*
+data/_worksession_cache/
+data/_fetch_run.log
+_to_delete/
+_tmp_patch_*.py

@@ -1,0 +1,231 @@
+{
+ "generated_at": "2026-09-12T14:06:00Z",
+ "generated_at_local": "September 12th, 9:06 am CT",
+ "last_run": "2026-09-12T14:00:00Z",
+ "last_run_local": "September 12th, 9:00 am CT",
+ "next_run": "2026-09-12T16:00:00Z",
+ "next_run_local": "September 12th, 11:00 am CT",
+ "cadence": "Every 2 hours, on the odd Central hour",
+ "tests": "284 tests",
+ "ops": {
+  "overall": "WARN",
+  "checks": [
+   {
+    "name": "lock",
+    "status": "PASS",
+    "detail": "session running 5 min, last activity 0 min ago"
+   },
+   {
+    "name": "checkpoint",
+    "status": "PASS",
+    "detail": "cycle in progress: queue v2 item 2a / filed, waiting on data"
+   },
+   {
+    "name": "value",
+    "status": "WARN",
+    "detail": "no movement for 3+ cycles, acknowledged by Jason 2026-09-12: map exhausted after M12 closed; data-ceiling decision parked; sessions run routine checkers as normal -- expected while the map is empty, do not re-alert"
+   },
+   {
+    "name": "console",
+    "status": "PASS",
+    "detail": "refreshed 58 min ago"
+   },
+   {
+    "name": "reports",
+    "status": "PASS",
+    "detail": "34 reports, latest 2026-09-12-1400.md well-formed"
+   },
+   {
+    "name": "new-information",
+    "status": "PASS",
+    "detail": "latest run recorded new information"
+   },
+   {
+    "name": "ledger",
+    "status": "PASS",
+    "detail": "103 idea families, no stale statuses"
+   },
+   {
+    "name": "mechanism-gate",
+    "status": "PASS",
+    "detail": "17 mechanism doc(s) cover every advanced candidate"
+   },
+   {
+    "name": "data-currency",
+    "status": "PASS",
+    "detail": "price data through 2026-09-08 (3 sessions behind)"
+   },
+   {
+    "name": "awaiting-jason",
+    "status": "WARN",
+    "detail": "1 item(s) blocked on Jason: GATED hyp-000142: Holdout slot"
+   }
+  ]
+ },
+ "progress": {
+  "trials_since_last_survivor": 15,
+  "trials_total": 318,
+  "survivors_alive": 3,
+  "trials_per_survivor": 106.0,
+  "last_survivor": {
+   "hypothesis_id": "hyp-000144",
+   "name": "vxn_level_vs_trailing_high_next_day_range_prospective",
+   "date": "2026-09-12"
+  },
+  "scan_cells_total": 228,
+  "standalone_total": 90,
+  "scans_run": 19,
+  "scans_with_no_survivor": 14
+ },
+ "ledger_rows": 171,
+ "distinct_hypotheses": 137,
+ "funnel": {
+  "closed": 99,
+  "discovery": 0,
+  "validation": 1,
+  "holdout": 2,
+  "forward": 3,
+  "paper": 0,
+  "live": 0
+ },
+ "sweep": {
+  "shelf": "Shelf 2/3 live (Entry 15, 17) -> TOP-UP OWED before any draw",
+  "rows": [
+   {
+    "tier": "GATED",
+    "id": "hyp-000142",
+    "name": "Vxn level vs trailing high next day range",
+    "stage_reached": "Integrity Gate checkpoint cleared",
+    "next_owed": "nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot",
+    "legacy": false
+   },
+   {
+    "tier": "FROZEN",
+    "id": "EXP047",
+    "name": "EXP-047 \u00b7 weekly momentum tracker",
+    "stage_reached": "FORWARD VALIDATION",
+    "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
+    "legacy": false
+   },
+   {
+    "tier": "FROZEN",
+    "id": "H118",
+    "name": "H118 \u00b7 VWAP distance LOW tercile, 10-day drift",
+    "stage_reached": "FORWARD VALIDATION",
+    "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
+    "legacy": false
+   },
+   {
+    "tier": "FROZEN",
+    "id": "hyp-000105",
+    "name": "Midday lull \u2192 afternoon expansion",
+    "stage_reached": "HOLDOUT PASSED",
+    "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+    "legacy": false
+   }
+  ],
+  "counts": {
+   "OPEN": 0,
+   "GATED": 1,
+   "FROZEN": 3
+  }
+ },
+ "waiting_on_jason": [
+  {
+   "id": "hyp-000142",
+   "name": "Vxn level vs trailing high next day range",
+   "status": "ready for your sign-off",
+   "detail": "nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot"
+  }
+ ],
+ "h118_forward": {
+  "resolved": 0,
+  "target_trades": 40,
+  "open": 1,
+  "entry": 29538.0,
+  "entry_date": "2026-09-08",
+  "horizon_days": 10,
+  "net_points_resolved": 0
+ },
+ "shelf": {
+  "floor": 3,
+  "count": 3,
+  "floor_met": true,
+  "live": [
+   {
+    "id": 8,
+    "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 VALIDATION CANDIDATE, GATED at Holdout (hyp-000142/143/144; Scan 014 9:47 pm CT -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> one-shot Validation PASS 9:57 pm CT: HIGH 1.120 [1.066,1.177], Sidak [1.026,1.213]). Waiting on Jason for a Holdout slot."
+   },
+   {
+    "id": 15,
+    "name": "M9: Nasdaq-100 quarterly rebalance close-window volume/move -> next-day reaction (map-ranked #7, September 11th, 11:37 pm CT) \u2014 INDETERMINATE, RE-PARKED September 12th, 12:20 am CT (Scan 018)"
+   },
+   {
+    "id": 17,
+    "name": "M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT)"
+   }
+  ]
+ },
+ "recent_closures": [
+  {
+   "id": "hyp-000051",
+   "name": "Intraday multi-day base breakout",
+   "date": "2026-09-11"
+  },
+  {
+   "id": "hyp-000027",
+   "name": "Intraday collective-evidence pilot",
+   "date": "2026-09-11"
+  },
+  {
+   "id": "hyp-000025",
+   "name": "Trend family collective-evidence pilot",
+   "date": "2026-09-11"
+  },
+  {
+   "id": "hyp-000023",
+   "name": "Weekly trend split by volatility regime",
+   "date": "2026-09-11"
+  },
+  {
+   "id": "hyp-000140",
+   "name": "Abs gap vs atr same day range magnitude",
+   "date": "2026-09-11"
+  }
+ ],
+ "sessions": [
+  {
+   "file": "2026-09-12-1400.md",
+   "ts": "2026-09-12T14:00:00Z",
+   "new_information": "H118, the only candidate ever to pass all three stages, is not distinguishable from buy-and-hold over the same windows. The promotion bar was measured against the wrong null. Fixed going forward; H118's status is Jason's decision.",
+   "agents_ran": 7,
+   "agents_not_run": 1,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 9:00 am CT"
+  },
+  {
+   "file": "2026-09-12-1307.md",
+   "ts": "2026-09-12T13:07:00Z",
+   "new_information": "None \u2014 practice cycle.",
+   "agents_ran": 0,
+   "agents_not_run": 1,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 8:07 am CT"
+  },
+  {
+   "file": "2026-09-12-0800.md",
+   "ts": "2026-09-12T08:00:00Z",
+   "new_information": "None \u2014 routine cycle.",
+   "agents_ran": 2,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 3:00 am CT"
+  }
+ ]
+}

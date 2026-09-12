@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-09-10 02:34 UTC",
+  "ledger_total": 134,
+  "status_counts": {
+    "REJECTED": 100,
+    "PROMISING": 21,
+    "FORWARD VALIDATION": 4,
+    "VALIDATION CANDIDATE": 6,
+    "HOLDOUT PASSED": 3
+  },
+  "h118": {
+    "open": [
+      {
+        "signal_date": "2026-09-08",
+        "state_var": "vwap_dist_vs_atr",
+        "bucket": "low",
+        "horizon_days": 10,
+        "entry_row_idx": 2991,
+        "entry_close": 29538.0,
+        "entry_atr14": 366.5357142857143,
+        "status": "OPEN",
+        "exit_date": null,
+        "exit_close": null,
+        "net_points": null,
+        "r_multiple": null
+      }
+    ],
+    "resolved": 0,
+    "target_trades": 40,
+    "months_needed": 12,
+    "start": "2026-09-09",
+    "effect_working": "0.40R (~147 pts)  [lower bound 0.14R]",
+    "effect_discovery": "0.62R",
+    "effect_validation": "0.28R",
+    "effect_holdout": "0.40R"
+  },
+  "exp047": {
+    "weeks": 3,
+    "informative_weeks": 0,
+    "cumulative_pts": 153.5,
+    "next_checkpoint": 104,
+    "max_horizon": 260,
+    "rows": [
+      {
+        "date": "2026-W35",
+        "position": 1,
+        "flipped": false,
+        "price_change": 111.25,
+        "pnl": 111.25,
+        "cost": 0.0,
+        "net_pnl": 111.25
+      },
+      {
+        "date": "2026-W36",
+        "position": 1,
+        "flipped": false,
+        "price_change": 64.25,
+        "pnl": 64.25,
+        "cost": 0.0,
+        "net_pnl": 64.25
+      },
+      {
+        "date": "2026-W37",
+        "position": 1,
+        "flipped": false,
+        "price_change": -22.0,
+        "pnl": -22.0,
+        "cost": 0.0,
+        "net_pnl": -22.0
+      }
+    ]
+  },
+  "sessions": [
+    "2026-09-09 23:15:01 work-session STARTED",
+    "2026-09-09 23:20:12 interactive: queue re-chunked into ~2-min items after 23:15 run stalled on an oversized first item",
+    "2026-09-09 23:23:20 closed NEXT_UP queue item 1 (project-wide multiplicity exposure): built src/project_wide_multiplicity.py, wrote research/studies/project-wide-multiplicity-2026-09-09.md, logged hyp-000130..133, updated agent-governance-structure.md; headline: only 1/6 examined Validation-stage results (incl. H118's) survive Sidak correction, Discovery/Holdout unaffected.",
+    "2026-09-09 23:25:04 NOTE: git diff HEAD on NEXT_UP.md shows a concurrent interactive-session edit at 23:20:12 ('queue re-chunked into ~2-min items') that this session's 23:23 rewrite overwrote without re-reading first -- a real process miss (should have re-checked the file before the final write). No apparent loss of substance: that edit was queue-reorganization scaffolding anticipating a stalled/truncated run, and this session instead completed queue item 1 in full. One piece of content from that overwritten version IS worth preserving and was recovered via 'git diff HEAD -- research/NEXT_UP.md': queue item 2 previously read 'Scan 003 is a reasonable next Discovery Engine step (untested state variables: opening_range_vs_atr already implemented but never scanned; a ZN-bond-derived state variable, data on disk through 2024-01-03, Discovery-slice-safe) -- Research Director's call, not pre-committed.' Folded into NEXT_UP.md now. Flagging for Jason: overlapping interactive/automated writes to NEXT_UP.md have now happened twice today (see the earlier 'possible double-fire' note) -- no locking/merge mechanism exists for this baton file.",
+    "2026-09-09 23:29:55 interactive: added SCOPE BOUNDARY to baton \u2014 automated sessions work below the Forward Validation line only; promoted candidates (H118, EXP047) frozen, flag-and-stop only",
+    "2026-09-09 23:35:24 automated session: confirmed triage sweep + multiplicity exposure closed (built on/converged with concurrent sessions' identical work), full test suite green (202/202), rewrote NEXT_UP.md flagging the multi-session concurrency issue and leftover scratch files for cleanup; did not start queue item 1 (intraday characterization) given active contention this run.",
+    "2026-09-09 23:37:14 closed NEXT_UP queue item (Scan 003): ran Discovery scan (opening_range_vs_atr, zn_level_vs_trailing), 24 cells/4 cleared gate; split-sample triage killed 2 of 3 candidates, zn_level_vs_trailing/low/h10d survives both halves; not yet promoted, needs Mechanism pass (queued as next item); noted a 3rd/4th concurrent-session collision on this repo tonight (another session built a parallel true-DSR multiplicity draft + set a new SCOPE BOUNDARY forbidding automated H118/EXP047 edits, which this session had already, coincidentally, respected in spirit for its own multiplicity re-expression work); corrected a mislabel of market_state_primitives_v3.py as orphaned.",
+    "2026-09-09 23:40:07 interactive: documented shielded exception (daily track = append-signal + fill-exit only) and flagged undefined PAPER VERIFIED review threshold as an open governance gap",
+    "2026-09-09 23:42:45 Statistical-stage volatility-regime check on Scan 003's surviving candidate (zn_level_vs_trailing/low/h10d) FAILS: effect concentrated entirely in high-vol regime (n=220, atr_norm 0.495) vs near-zero in low-vol (n=334, atr_norm 0.023) -- regime-contaminated, ABANDONED as scanned, no hyp_id spent, not reframed post-hoc. Scan 003 fully closed (all 3 candidates now dead: 2 via split-sample, 1 via regime-split). Queued Scan 004 scoping (options-expiration, session-transition, multi-day reference-level touches) as next item.",
+    "2026-09-09 23:43:23 work-session ENDING (no hard stop hit; queue not empty, Scan 004 scoping queued as next item; test suite 202/202 green; ending quietly per no-notify-on-routine-progress rule).",
+    "2026-09-09 23:49:32 interactive: one-shot Integrity Gate review of H118 multiplicity finding COMPLETE -- CONDITIONAL PASS, effect re-baselined to Holdout ~0.40R, forward review locked at 40 resolved trades AND 12 months",
+    "2026-09-09 23:49:44 interactive: one-shot Integrity Gate review of H118 multiplicity finding COMPLETE -- CONDITIONAL PASS, effect re-baselined to Holdout ~0.40R, forward review locked at 40 resolved trades AND 12 months",
+    "2026-09-10 00:01:49 interactive: STANDING PRIORITY added - favor short-horizon (intraday/1-day/2-day) candidates over h10d, because holding period governs validation speed; Scan 004 retargeted accordingly; H118 review point deliberately NOT changed (pre-registered, no post-hoc goalpost moves); no early-kill added per Jason",
+    "2026-09-10 00:07:01 interactive: froze back-half architecture v3 (research/infrastructure/back-half-production-integrity-v3.md) -- 6-stage post-promotion ladder, Production Integrity Layer (diagnose/authorize, never optimize), anti-optimization rule, stop/suspend categories; flagged that stage 3 execution qualification cannot run because no execution infra exists",
+    "2026-09-10 00:07:40 interactive: back-half v3 pointer + anti-optimization rule added to baton (permanent section)",
+    "2026-09-10 00:15:31 work-session STARTED",
+    "2026-09-10 00:16:31 interactive: AMENDMENT v3.1 frozen -- terminology split (Prospective Statistical Forward Test / Paper Trading / Live), two parallel clocks, stage 3 evidence-based not calendar-based, 14 execution checks, minimal build scope, statistical-kill vs execution-kill policy. Execution clock queued as item 0.",
+    "2026-09-10 00:23:35 automated: Scan 004 scoped and frozen (research/studies/scan-004-scoping-2026-09-10.md) -- 3 descriptors (days_to_monthly_opex, prior_close_location_in_range, dist_to_multiday_reference_level_vs_atr), each distinguished from a prior closed test to avoid resurrection; HORIZONS=[intraday,overnight,1d,2d]; constants unchanged from Scan001-003 + new additive absolute-cost gate. Noted queue item 0 (EXECUTION CLOCK, H118, added interactively by Jason at 00:16 mid-lock) is out of automated scope per SCOPE BOUNDARY (promoted candidate) -- left untouched, worked item 1 instead. Next: implement market_state_primitives_v4.py + scan_004.py per frozen spec, then run.",
+    "2026-09-10 00:29:29 automated: built src/market_state_primitives_v4.py + src/market_behavior_discovery_scan_004.py per frozen scan-004-scoping doc, sanity-checked (descriptors compute cleanly on 1717 Discovery days), not yet run. Next: run Scan 004 Discovery pass.",
+    "2026-09-10 00:30:57 automated: ran Scan 004 Discovery pass -- 36 cells, 1 survivor (prior_close_location_in_range/low/intraday, n=552, mean=+10.13pts, vs_baseline=+7.02pts, atr_norm=0.0550, ci_90=[3.62,16.02]). Other 2 descriptors produced nothing. SCAN_REGISTRY updated. Queued split-sample robustness triage as next item.",
+    "2026-09-10 00:32:33 interactive: queue reordered per Jason - start now with what we have; 0b signal engine moved first (unblocked, no broker/spend/decision needed), 0a spec blocked pending his entry/exit answer tomorrow",
+    "2026-09-10 00:36:02 automated: split-sample robustness FAILS on Scan 004's sole survivor (prior_close_location_in_range/low/intraday) -- first half atr_norm=0.016 (not credible), second half 0.068, magnitude ratio 4.3x (way outside consistency band). ABANDONED as scanned, no hyp_id spent. Scan 004 fully closed, 0/36 cells survived to Mechanism. Appended full narrative to docs/BACKLOG.md; confirmed via ledger (not re-run) that audit-doc 'thread 1' (H87/H89 overlay screen) was already closed pre-audit (exp-119/hyp-000101). Queued Scan 005 scoping (VWAP/volume/cross-market descriptors, Research Director's direction, not yet frozen) as next item. Full test suite 202/202 green (incl. purgedcv-dependent test, installed fresh this session).",
+    "2026-09-10 00:36:02 work-session ENDING (no hard stop hit; queue not empty -- Scan 005 scoping queued as next item, not yet started; test suite 202/202 green; ending quietly per no-notify-on-routine-progress rule).",
+    "2026-09-10 00:44:15 interactive: wrote docs/PROJECT_PROMPT.md - single-source operating prompt (ideology + front half + back half + never-bent rules + autonomy + session mechanics + comms) per Jason's request",
+    "2026-09-10 02:20:58 interactive: queued vwap_dist LOW 1-day variant per Jason - Scan 002 already measured it (1d edge +13.38pts/0.105R vs 10d +20.45pts/0.160R, effect flat 1d-5d then jumps at 10d). Framed as VARIANT of known finding, Integrity Gate pre-clearance required FIRST (new hypothesis vs 2nd attempt on vwap_dist family), strict separation from H118 both directions, honest cost model non-negotiable."
+  ],
+  "scan_004_file": "data/market_behavior_discovery_scan_004_results.json",
+  "data_file": "NQ_1min_databento_2026-09-09.csv",
+  "databento_cost_logged": 0.0,
+  "queue_raw": "## Queue\n\n0. EXECUTION CLOCK \u2014 running NOW, in PARALLEL with H118's frozen\n   statistical forward test. Approved by Jason 2026-09-10. Spec:\n   research/infrastructure/back-half-production-integrity-v3.md\n   (AMENDMENT v3.1). Build the MINIMUM execution-validation layer for H118\n   only \u2014 no production stack, no dashboards, no multi-strategy\n   architecture. Target: the 14 execution checks in v3.1 section 4.\n   H118's frozen spec is INPUT ONLY; never modify it to suit the\n   implementation.\n\n   JASON'S STANDING DIRECTION (2026-09-10): start now with what we have,\n   don't wait for a perfect design. Iterating on the MACHINERY (fill\n   measurement, order timing, logging) is expected and good. Iterating on\n   the STRATEGY because execution disappointed is a NEW HYPOTHESIS \u2014 back\n   of the front-half queue, never an edit to a promoted strategy.\n\n   Work in this order. 0b is UNBLOCKED \u2014 start there, not 0a:\n\n   0b. SIGNAL ENGINE (start here, nothing blocks it). Generate H118\n       signals in real time from the frozen rules against data on disk.\n       Prove: fires when the spec says, exactly once, correct timing, no\n       missed and no duplicate signals. Checks 1-2 of the 14. Needs no\n       broker, no account, no spend, no decision from Jason.\n   0a. EXECUTION-QUALIFICATION SPEC \u2014 BLOCKED until Jason answers the\n       entry/exit question below (he was asked 2026-09-10). Make the 14\n       checks concrete for H118 and pre-register the MINIMUM EXECUTION\n       SAMPLE (evidence-based, not calendar-based) that ends stage 3.\n   0c. Order construction, logging, position reconciliation against a free\n       broker paper endpoint. Measure fill vs expected, slippage, latency\n       \u2014 never assume any of them. Needs 0a answered first.\n   0d. Failure handling: prove a crash cannot s"
+}
