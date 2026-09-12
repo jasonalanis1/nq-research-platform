@@ -405,9 +405,10 @@ tightened:
 QUEUE v2 (Jason, September 12th ~9:10 am CT, after three outside-AI responses
 were folded in -- research/infrastructure/outside-ai-synthesis-2026-09-12.md
 is the reasoning; this block is the work). Cycles work it front to back under
-the normal budget clock. PREPARATION items run unattended. The first
-Discovery SCAN on any new entry waits for Jason's go. Active slate is capped
-at 5 families at any time; everything else sits in research/sourcing/.
+the normal budget clock. HOLD LIFTED (September 12th, 10:33 am CT, Jason): cycles DRAW and SCAN
+shelf entries on their own under the normal sweep rules -- no per-entry go
+from Jason. Holdout slots and purchases remain his alone. Active slate is
+capped at 5 families at any time; everything else sits in research/sourcing/.
 
 1. DONE September 12th, 9:03 am CT -- two-nulls amendment filed (two-layer-methodology.md),
    src/baseline_relative.py + 4 tests, H118 diagnostic run: LOW minus ALL-
@@ -464,8 +465,8 @@ at 5 families at any time; everything else sits in research/sourcing/.
    (overnight-vs-intraday split), then e (intraday momentum). Write up,
    then they are DRAWABLE and the shelf refills honestly. After those: item
    4 Observatory on the FOUR instruments on disk (NQ/ZN/6E/CL), item 5
-   practitioner proxies, item 6 event reaction shape. First scan on a new
-   entry still waits for Jason's go.
+   practitioner proxies, item 6 event reaction shape. Scans run on the
+   cycle's own authority once an entry is DRAWABLE.
    Mechanism doc BEFORE any scan. One shot at the exact published spec.
 3. DATA -- CLOSED, NO PURCHASE (see PARKED). Original text kept for the record: in order, each via metadata.get_cost FIRST; any single pull at
    $5.00 or more stops and lists the number under "needs Jason" unless he
