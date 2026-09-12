@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-12T18:13:00Z",
- "generated_at_local": "September 12th, 1:13 pm CT",
- "last_run": "2026-09-12T16:00:00Z",
- "last_run_local": "September 12th, 11:00 am CT",
- "next_run": "2026-09-12T20:00:00Z",
- "next_run_local": "September 12th, 3:00 pm CT",
+ "generated_at": "2026-09-12T20:07:00Z",
+ "generated_at_local": "September 12th, 3:07 pm CT",
+ "last_run": "2026-09-12T20:00:00Z",
+ "last_run_local": "September 12th, 3:00 pm CT",
+ "next_run": "2026-09-12T22:00:00Z",
+ "next_run_local": "September 12th, 5:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "286 tests",
  "ops": {
@@ -13,7 +13,7 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 6 min, last activity 0 min ago"
+    "detail": "session running 7 min, last activity 0 min ago"
    },
    {
     "name": "shelf",
@@ -28,22 +28,22 @@
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'inventory_entries': 1}"
+    "detail": "last cycle moved=True delta={'mechanism_docs': 2, 'inventory_entries': 2}"
    },
    {
     "name": "console",
-    "status": "WARN",
-    "detail": "console state is 221 min old \u2014 refresh step may be failing"
+    "status": "PASS",
+    "detail": "refreshed 114 min ago"
    },
    {
     "name": "reports",
-    "status": "WARN",
-    "detail": "2026-09-12-1600.md missing section(s): Agents"
+    "status": "PASS",
+    "detail": "37 reports, latest 2026-09-12-2000.md well-formed"
    },
    {
     "name": "new-information",
-    "status": "WARN",
-    "detail": "1 recent report(s) omit the new-information line"
+    "status": "PASS",
+    "detail": "latest run recorded new information"
    },
    {
     "name": "ledger",
@@ -204,11 +204,22 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-12-2000.md",
+   "ts": "2026-09-12T20:00:00Z",
+   "new_information": "Closed a real gap (the range-contraction fact had never been checked against the other two directly) and produced the first cross-asset lead-lag characterization at this data ceiling -- both are new information, neither is busy-work. Shelf did not move (2/3); this was Observatory sourcing, not shelf-entry sourcing, by the queue's own order.",
+   "agents_ran": 4,
+   "agents_not_run": 1,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 3:00 pm CT"
+  },
+  {
    "file": "2026-09-12-1600.md",
    "ts": "2026-09-12T16:00:00Z",
-   "new_information": "",
-   "agents_ran": 0,
-   "agents_not_run": 0,
+   "new_information": "Two new sourced entries with mechanism docs and resurrection rulings (M15 overnight-vs-intraday split, M16 intraday momentum) plus three practitioner claims ruled (none entered, honest nulls at the ruling stage). Real new information, not busy-work.",
+   "agents_ran": 2,
+   "agents_not_run": 1,
    "staff_meeting": false,
    "returns": false,
    "disposition": null,
@@ -224,17 +235,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 12th, 9:28 am CT"
-  },
-  {
-   "file": "2026-09-12-1400.md",
-   "ts": "2026-09-12T14:00:00Z",
-   "new_information": "H118, the only candidate ever to pass all three stages, is not distinguishable from buy-and-hold over the same windows. The promotion bar was measured against the wrong null. Fixed going forward; H118's status is Jason's decision.",
-   "agents_ran": 7,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 9:00 am CT"
   }
  ]
 }

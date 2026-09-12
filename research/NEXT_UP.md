@@ -513,7 +513,7 @@ capped at 5 families at any time; everything else sits in research/sourcing/.
    AUM/shares outstanding from issuer files (manual assembly). Register each
    file in data_loader with a coverage test. If no API key is available to
    the cycle, stop and say so under needs Jason.
-4. OBSERVATORY PROGRAM (characterize, do not claim): an information-
+4. OBSERVATORY PROGRAM (characterize, do not claim) -- IN PROGRESS (September 12th, 3pm cycle): separability of the 3rd volatility fact confirmed (both pairings separable, research/studies/portfolio-range-contraction-separability-2026-09-12.md); info-transmission v1 done for NQ/ZN/6E/CL 15-min RTH (no lead-lag, research/studies/observatory-information-transmission-v1-2026-09-12.md). NEXT under this item: overnight session, other resolutions (5/30/60-min), shock-conditioned view, then the fixed state classifier. Original spec: an information-
    transmission map across ES/NQ/RTY/YM/ZN/6E/CL at 5/15/30/60-minute bars
    built from the 1-min data: shock -> first responder -> lag -> decay ->
    reversal, conditioned on the three validated vol states + semivariance.
@@ -839,7 +839,9 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
-September 12th, 1:35 pm CT (2026-09-12 18:35 UTC), scheduled 11:00 am CT cycle (ran on device reconnect). Shelf 0/3 -> 2/3 DRAWABLE: queue item 2c filed (M15 overnight-vs-intraday split, Entry 19, map-ranked #1) and item 2e filed (M16 market intraday momentum, Entry 20, #2), mechanism docs before any scan; item 5 practitioner stream opened with three claims ruled (no entry). No draw (below floor). Daily checkers clean. Next cycle: sourcing via item 4 Observatory; draw Entry 19 when the shelf reaches 3. Full: research/sessions/2026-09-12-1600.md.
+September 12th, 4:15 pm CT (2026-09-12 21:15 UTC), scheduled 3:00 pm CT cycle. Shelf held at 2/3 (below floor, no draw). Queue v2 item 4 Observatory: closed the last unchecked separability pairing (prior-day range regime vs. overnight coil and vs. midday-lull, both SEPARABLE) and ran the first NQ/ZN/6E/CL information-transmission characterization (no lead-lag at 15-min RTH resolution, a third lens agreeing with the M11/M12 nulls). Fixed a report-format gap from the 11am cycle (missing Agents/new-information sections). pytest 286/286. Full: research/sessions/2026-09-12-2000.md.
+
+Previous: September 12th, 1:35 pm CT (2026-09-12 18:35 UTC), scheduled 11:00 am CT cycle (ran on device reconnect). Shelf 0/3 -> 2/3 DRAWABLE: queue item 2c filed (M15 overnight-vs-intraday split, Entry 19, map-ranked #1) and item 2e filed (M16 market intraday momentum, Entry 20, #2), mechanism docs before any scan; item 5 practitioner stream opened with three claims ruled (no entry). No draw (below floor). Daily checkers clean. Next cycle: sourcing via item 4 Observatory; draw Entry 19 when the shelf reaches 3. Full: research/sessions/2026-09-12-1600.md.
 
 Previous: September 12th, 9:30 am CT (2026-09-12 14:28 UTC), TEST cycle with Jason watching, after the push (fb52280) and the post-push staff meeting (CONTINUE). Queue v2 item 2b filed: M14 gamma-regime entry (Entry 18), mechanism doc before any scan, waits on ES data. Daily checkers clean. Full: research/sessions/2026-09-12-1428.md.
 
