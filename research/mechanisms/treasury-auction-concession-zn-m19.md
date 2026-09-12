@@ -126,3 +126,27 @@ times a year. Cheap to hold, cheap to test, nothing to tune.
 ## 9. Prediction status
 P1 -- untested. P2 -- untested. P3 -- untested. P4 -- untested.
 WAITING ON auction dates (Jason: one CSV download).
+
+## 10. Scan 024 result, 2026-09-12 ~7:10 pm CT (hyp-000149)
+Jason supplied the TreasuryDirect auction-date CSV (filtered to
+securityTerm=="10-Year" exactly, 2015-01 through 2021-08, n=41 dates,
+n=40 usable events). GATING P1 (pre-auction concession, expected
+credibly negative): diff -0.271 ATR vs unconditional, CI (-0.702,+0.240)
+-- not credible. GATING P2 (post-auction rebound, expected credibly
+positive): diff +0.012 ATR, CI (-0.474,+0.345) -- not credible. Kill
+check: first-minute-after-the-1pm-announcement share of the post-leg is
+8.8%, well under the 0.5 kill threshold -- this is a genuine absence,
+not a print artifact being mistaken for a null. Halves show an unstable
+sign flip on the post-leg (first half negative, second half positive),
+consistent with no sample-stable effect rather than decay of a real one.
+Placebo cells (same-day-of-month, non-auction months) were themselves
+non-null in places, which argues the comparison is simply noisy at n=40
+rather than that auctions specifically matter.
+REJECTED (hyp-000149). The Lou-Yan-Zhang / Fleming-Rosenberg auction
+concession is not visible in ZN 1-minute futures at this data ceiling
+and this event count. Thin-sample rule (failure mode #2) applies: n=40
+does not have the power to rule out a small real effect, but there is no
+candidate here to advance. Entry CLOSED, attempt 1 of 2 spent. A second
+attempt would need a different forced-flow proxy or event set (e.g. 30-
+year auctions, or bid-to-cover-conditioned sub-samples if that data is
+ever obtained), not a retuned window on the same 40 events.

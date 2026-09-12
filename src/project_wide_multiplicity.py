@@ -233,6 +233,19 @@ SCAN_REGISTRY = {
     "scan_021_2026-09-12": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
     "scan_022_2026-09-12": {"cells_scanned": 17, "promoted_hypothesis_ids": []},
     "scan_023_2026-09-12": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
+    "scan_024_2026-09-12": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
+    # Scan 024 (Entry 23 / map M19: Treasury 10-year note auction
+    # concession and rebound, ZN, open scope -- first open-scope entry,
+    # Jason supplied the TreasuryDirect auction dates). 10 cells: pre-leg
+    # (t-3->t) and post-leg (t->t+3) each vs unconditional 3-session drift
+    # (2 gating, Sidak at 2); shared unconditional 3-session reference
+    # (NULL 1); same-day-of-month no-auction placebo, pre and post (2
+    # cells); Discovery halves, pre and post (4 cells, decay); first-
+    # minute post-announcement-print share (kill). Attempt 1 of 2.
+    # Registered September 12th, ~6:55 pm CT BEFORE the scan ran. n~41
+    # events (10-year original-term auctions only, 2015-01 to 2021-08) --
+    # thin-sample rule applies at Statistical. Mechanism doc
+    # research/mechanisms/treasury-auction-concession-zn-m19.md.
     # Scan 023 (Entry 24 / map M20: EIA weekly petroleum report pre/post-
     # release volatility, CL, open scope). 6 cells: post-release-hour
     # |return|/ATR14 vs unconditional hourly |return|/ATR14 (GATING,

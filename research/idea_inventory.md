@@ -1461,7 +1461,7 @@ BEFORE any scan. Source CHANNEL: literature.
    Attempt 1 of 2.
 5. **MAP ANCHOR**: M18. STATUS: DRAWABLE, third on the shelf.
 
-## ENTRY 23 — M19: Treasury auction concession and rebound, ZN (open scope; map channel; September 12th, ~5:05 pm CT cycle) — WAITING ON data: TreasuryDirect 10-year auction dates (free CSV, Jason)
+## ENTRY 23 — M19: Treasury auction concession and rebound, ZN (open scope; map channel; September 12th, ~5:05 pm CT cycle) — CLOSED (Scan 024, ~7:10 pm CT, hyp-000149 REJECTED): neither gating leg credible vs ZN's unconditional 3-session drift; n=40 events; thin-sample rule applies, not enough power to rule out a small real effect but nothing to advance
 
 Generation (sourcing stage, scheduled cycle): full mechanism doc
 research/mechanisms/treasury-auction-concession-zn-m19.md, written BEFORE
