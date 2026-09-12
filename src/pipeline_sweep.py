@@ -145,21 +145,28 @@ def shelf_line() -> str:
     # title carrying a ledger id (hyp-NNNNNN): once drawn it lives in the
     # sweep table, not on the shelf (Entry 8 again, after it became a
     # VALIDATION CANDIDATE the same night).
-    live = re.findall(r"^## ENTRY (\d+) — (?!SHELVED)(?!.*CLOSED)(?!.*IN TRIAGE)(?!.*hyp-\d{6})", txt, flags=re.M)
-    closed = re.findall(r"^## ENTRY (\d+) — .*CLOSED", txt, flags=re.M)
-    live_ids = sorted(int(x) for x in live)
+    # 2026-09-12 (found in the TEST cycle after the front-end upgrade): an
+    # entry whose title says PARKED / RE-PARKED is blocked on data or on
+    # Jason, and one whose title says WAITING is filed but cannot be drawn
+    # yet. Both are on the shelf (they exist and are not closed) but NEITHER
+    # may be named as the next draw -- the sweep offered re-parked M9 (Entry
+    # 15) as "next DRAW" the moment two sourcing entries were filed.
+    heads = re.findall(r"^## ENTRY (\d+) — (?!SHELVED)(?!.*CLOSED)(?!.*IN TRIAGE)(?!.*hyp-\d{6})(.*)$", txt, flags=re.M)
+    live_ids = sorted(int(e) for e, _ in heads)
+    blocked = {int(e) for e, title in heads if re.search(r"PARKED|WAITING", title)}
+    drawable = [(e, t) for e, t in heads if int(e) not in blocked]
     floor = 3
     if len(live_ids) < floor:
         return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> TOP-UP OWED before any draw"
+    if not drawable:
+        return (f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> NOTHING DRAWABLE: "
+                f"all live entries are parked or waiting on data/Jason (Entry {', '.join(map(str, sorted(blocked)))})")
     # UPGRADE 1 (2026-09-11): the Director ranks map-anchored scopes; a
     # "map-ranked #N" tag in a live title sets draw order. Untagged -> oldest.
-    ranked = sorted(
-        (int(n), int(e)) for e, title in re.findall(r"^## ENTRY (\d+) — (?!SHELVED)(?!.*CLOSED)(?!.*IN TRIAGE)(?!.*hyp-\d{6})(.*)$", txt, flags=re.M)
-        for n in re.findall(r"map-ranked #(\d+)", title)
-    )
+    ranked = sorted((int(n), int(e)) for e, title in drawable for n in re.findall(r"map-ranked #(\d+)", title))
     if ranked:
         return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> next DRAW: Entry {ranked[0][1]} (map-ranked #{ranked[0][0]})"
-    return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> next DRAW: Entry {live_ids[0]} (oldest live)"
+    return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> next DRAW: Entry {drawable[0][0]} (oldest drawable)"
 
 
 def build() -> dict:

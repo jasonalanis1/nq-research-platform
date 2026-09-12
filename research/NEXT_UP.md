@@ -72,7 +72,7 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 (auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 0, GATED 1, FROZEN 3.)
 
-- SHELF: Shelf 2/3 live (Entry 15, 17) -> TOP-UP OWED before any draw
+- SHELF: Shelf 3/3 live (Entry 15, 17, 18) -> NOTHING DRAWABLE: all live entries are parked or waiting on data/Jason (Entry 15, 17, 18)
 - GATED hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144): reached Integrity Gate checkpoint cleared -> OWED: nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN H118 vwap_dist_low_10d_drift_h118_INTEGRITY_REVIEW_MULTIPLICITY (re-expressions: hyp-000126, hyp-000130): reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
@@ -422,7 +422,7 @@ at 5 families at any time; everything else sits in research/sourcing/.
    a. LETF close rebalancing, instrument as a factor (RTY/ES/NQ), flow
       measured from AUM. DONE (Entry 17 / M13). Either outcome is decisive
       about whether "search where the forcing is largest" is a principle.
-   b. Hedging-demand intraday momentum (Baltussen et al. 2021 JFE), price-
+   b. DONE September 12th, 9:30 am CT (Entry 18 / M14, waiting on ES data). Hedging-demand intraday momentum (Baltussen et al. 2021 JFE), price-
       only base with gamma regime computed from ES. Low pass odds, highest
       strategic information: it is the gate on buying options data.
    c. Overnight-vs-intraday tug-of-war (Lou, Polk, Skouras 2019 JFE).
@@ -768,7 +768,9 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
-September 12th, 9:06 am CT (2026-09-12 14:00 UTC), scheduled cycle. Queue v2 item 1 done: two-nulls amendment + baseline_relative.py; H118 baseline diagnostic FAILS (edge not distinguishable from NQ's own drift, Jason messaged, status his call). Item 2 started: sourcing template + M13 LETF close rebalance filed (Entry 17), waits on RTY/ES data. pytest 284/284. Full: research/sessions/2026-09-12-1400.md.
+September 12th, 9:30 am CT (2026-09-12 14:28 UTC), TEST cycle with Jason watching, after the push (fb52280) and the post-push staff meeting (CONTINUE). Queue v2 item 2b filed: M14 gamma-regime entry (Entry 18), mechanism doc before any scan, waits on ES data. Daily checkers clean. Full: research/sessions/2026-09-12-1428.md.
+
+Previous: September 12th, 9:06 am CT (2026-09-12 14:00 UTC), scheduled cycle. Queue v2 item 1 done: two-nulls amendment + baseline_relative.py; H118 baseline diagnostic FAILS (edge not distinguishable from NQ's own drift, Jason messaged, status his call). Item 2 started: sourcing template + M13 LETF close rebalance filed (Entry 17), waits on RTY/ES data. pytest 284/284. Full: research/sessions/2026-09-12-1400.md.
 
 Previous: September 12th, 3:02 am CT (2026-09-12 08:00 UTC), routine cycle. Map empty by Jason's choice; daily checkers run, nothing new; pytest 280/280. Full: research/sessions/2026-09-12-0800.md.
 

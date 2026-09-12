@@ -48,3 +48,9 @@ either way, times what it is worth if real -- NOT by the probability of a
 positive Discovery result. A low-odds entry that decides a data purchase or
 a design principle outranks a likely-but-minor pass. State both factors in
 one line each at the bottom of every entry.
+
+HEADER CONVENTION (binding, from the September 12th test cycle): an Idea
+Inventory entry that is filed but cannot be scanned yet carries "WAITING ON
+<what>" in its "## ENTRY" header line; a parked one carries "PARKED" or
+"RE-PARKED". pipeline_sweep.py reads the header line only -- body notes do
+not count -- and never offers a PARKED or WAITING entry as the next draw.

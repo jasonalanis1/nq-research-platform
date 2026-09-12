@@ -36,7 +36,7 @@ def test_only_frozen_or_gated_can_touch_holdout():
 
 def test_shelf_line_reports_floor_state():
     line = ps.shelf_line()
-    assert line.startswith("Shelf ") and ("TOP-UP OWED" in line or "next DRAW" in line)
+    assert line.startswith("Shelf ") and ("TOP-UP OWED" in line or "next DRAW" in line or "NOTHING DRAWABLE" in line)
 
 
 def test_closed_parent_bookkeeping_row_is_hidden_not_phantom_owed_work():
@@ -163,3 +163,18 @@ def test_shelf_line_excludes_entries_in_triage(tmp_path, monkeypatch):
     monkeypatch.setattr(ps, "INVENTORY", inv)
     line = ps.shelf_line()
     assert line.startswith("Shelf 1/3 live (Entry 1)") and "TOP-UP OWED" in line
+
+
+def test_shelf_line_never_offers_parked_or_waiting_entries_as_next_draw(tmp_path, monkeypatch):
+    """2026-09-12 TEST cycle: re-parked M9 (Entry 15) was offered as the next
+    draw once two sourcing entries were filed. PARKED/RE-PARKED and WAITING
+    entries count as live (they exist, they are not closed) but are never
+    drawable."""
+    inv = tmp_path / "idea_inventory.md"
+    inv.write_text("## ENTRY 15 — thing (map-ranked #7) — INDETERMINATE, RE-PARKED\n\n## ENTRY 17 — thing (sourcing 2a) — WAITING ON DATA\n\n## ENTRY 18 — other (sourcing 2b) — WAITING ON ES DATA\n")
+    monkeypatch.setattr(ps, "INVENTORY", inv)
+    line = ps.shelf_line()
+    assert line.startswith("Shelf 3/3 live") and "NOTHING DRAWABLE" in line and "Entry 15" in line
+    inv.write_text("## ENTRY 15 — thing (map-ranked #7) — RE-PARKED\n\n## ENTRY 17 — thing (map-ranked #3) — WAITING\n\n## ENTRY 19 — ready thing (map-ranked #5)\n")
+    line = ps.shelf_line()
+    assert "next DRAW: Entry 19 (map-ranked #5)" in line

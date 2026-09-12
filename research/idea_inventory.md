@@ -1298,7 +1298,7 @@ Full detail and the H118 implication: research/mechanisms/cross-asset-
 correlation-convergence-m12.md Sections 8-10.
 
 
-## ENTRY 17 — M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT)
+## ENTRY 17 — M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) — WAITING ON RTY/ES DATA
 
 Generation (sourcing stage, first entry under the new template,
 research/sourcing/TEMPLATE.md; from outside-AI response A via the synthesis
@@ -1321,3 +1321,26 @@ doc): full mechanism doc research/mechanisms/letf-close-rebalance-m13.md.
 3. **HORIZON**: 15:30 -> 16:00 (gating); next session (reported).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M13. STATUS: FILED, WAITING ON DATA + JASON'S GO.
+
+
+## ENTRY 18 — M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) — WAITING ON ES DATA
+
+Generation (sourcing stage, TEST cycle with Jason watching): full mechanism
+doc research/mechanisms/hedging-demand-gamma-regime-m14.md.
+- LEARN/Integrity: NEW; not a resurrection of the closed VXN family; shares
+  the late-day channel with M13 by design and tests only the regime
+  DIFFERENCE. Decay recorded (base effect 1993-2013, published 2018/2021).
+- Discovery: needs ES 1-minute bars (queue item 3). 8 cells.
+- Statistical: daily n; the gating statistic is a between-regime difference
+  with its own CI; NULL 1 per cell; volatility-tercile control pre-registered.
+- Director: rank 2 by information gain -- decides the options-data purchase
+  either way. Track: risk-execution first. Realization: time-based, close.
+- Information gain / edge potential: both stated in doc Section 6.
+
+1. **STATE VARIABLE**: trailing 20-day lag-1 autocorrelation of ES 30-min
+   intraday returns, terciles frozen on Discovery, lagged one day.
+2. **MECHANISM CLAIM**: short-gamma dealers must hedge WITH the day's move
+   into the close, amplifying it; long-gamma dealers damp it.
+3. **HORIZON**: 15:30 -> 16:00 (gating); next session (reported).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M14. STATUS: FILED, WAITING ON ES DATA + JASON'S GO.

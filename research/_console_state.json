@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-09-12T14:06:00Z",
- "generated_at_local": "September 12th, 9:06 am CT",
- "last_run": "2026-09-12T14:00:00Z",
- "last_run_local": "September 12th, 9:00 am CT",
+ "generated_at": "2026-09-12T14:33:00Z",
+ "generated_at_local": "September 12th, 9:33 am CT",
+ "last_run": "2026-09-12T14:28:00Z",
+ "last_run_local": "September 12th, 9:28 am CT",
  "next_run": "2026-09-12T16:00:00Z",
  "next_run_local": "September 12th, 11:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "284 tests",
+ "tests": "285 tests",
  "ops": {
   "overall": "WARN",
   "checks": [
@@ -18,22 +18,22 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "cycle in progress: queue v2 item 2a / filed, waiting on data"
+    "detail": "cycle in progress: sweep fix: parked/waiting never drawable / done"
    },
    {
     "name": "value",
-    "status": "WARN",
-    "detail": "no movement for 3+ cycles, acknowledged by Jason 2026-09-12: map exhausted after M12 closed; data-ceiling decision parked; sessions run routine checkers as normal -- expected while the map is empty, do not re-alert"
+    "status": "PASS",
+    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 58 min ago"
+    "detail": "refreshed 3 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "34 reports, latest 2026-09-12-1400.md well-formed"
+    "detail": "35 reports, latest 2026-09-12-1428.md well-formed"
    },
    {
     "name": "new-information",
@@ -48,7 +48,7 @@
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "17 mechanism doc(s) cover every advanced candidate"
+    "detail": "18 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -89,7 +89,7 @@
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 2/3 live (Entry 15, 17) -> TOP-UP OWED before any draw",
+  "shelf": "Shelf 3/3 live (Entry 15, 17, 18) -> NOTHING DRAWABLE: all live entries are parked or waiting on data/Jason (Entry 15, 17, 18)",
   "rows": [
    {
     "tier": "GATED",
@@ -149,7 +149,7 @@
  },
  "shelf": {
   "floor": 3,
-  "count": 3,
+  "count": 4,
   "floor_met": true,
   "live": [
    {
@@ -162,7 +162,11 @@
    },
    {
     "id": 17,
-    "name": "M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT)"
+    "name": "M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) \u2014 WAITING ON RTY/ES DATA"
+   },
+   {
+    "id": 18,
+    "name": "M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) \u2014 WAITING ON ES DATA"
    }
   ]
  },
@@ -195,6 +199,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-12-1428.md",
+   "ts": "2026-09-12T14:28:00Z",
+   "new_information": "Process only, but a real defect: with two sourcing entries filed, pipeline_sweep.py offered the re-parked M9 entry as the next draw. Fixed in the script with a test (PARKED / WAITING header tags are never drawable; a NOTHING DRAWABLE state now exists), plus a header convention in the sourcing template. 285/285. This is exactly what the test cycle was for.",
+   "agents_ran": 1,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 9:28 am CT"
+  },
+  {
    "file": "2026-09-12-1400.md",
    "ts": "2026-09-12T14:00:00Z",
    "new_information": "H118, the only candidate ever to pass all three stages, is not distinguishable from buy-and-hold over the same windows. The promotion bar was measured against the wrong null. Fixed going forward; H118's status is Jason's decision.",
@@ -215,17 +230,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 12th, 8:07 am CT"
-  },
-  {
-   "file": "2026-09-12-0800.md",
-   "ts": "2026-09-12T08:00:00Z",
-   "new_information": "None \u2014 routine cycle.",
-   "agents_ran": 2,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 3:00 am CT"
   }
  ]
 }
