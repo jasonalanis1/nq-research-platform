@@ -25,6 +25,17 @@ unreachable, schedule the successor FIRST, then retry the device once.
    (mechanism doc + ruling + data on disk; PARKED/WAITING headers never
    count). Below floor 3 = SOURCING OWED, never a draw, never an invented
    scope. Work the queue in research/NEXT_UP.md (QUEUE v2) in order.
+   BUDGET USE (staff meeting, September 12th, ~4:10 pm CT): the budget is
+   a ceiling, not a target -- but do not stop at the first clean
+   sub-step if the queue item has more honest, pre-specified sub-steps
+   left and budget remains. Continue through the item's own listed next
+   steps (e.g. Observatory's remaining resolutions/views) until the
+   budget is genuinely used, the item is genuinely exhausted, or sourcing
+   is owed instead -- never by inventing new sub-steps, adding scan
+   cells, or re-touching anything past its one pre-registered stage just
+   to fill time. An early finish is still correct when the reason is
+   real; it is the QUEUE that should be sized to the budget, not the
+   cycle padded to match it.
 4. If the shelf is at floor and nothing else is owed, DRAW the next entry
    (map-ranked) and run its ONE pre-registered scan at the frozen spec;
    register cells in SCAN_REGISTRY; TWO NULLS; block bootstrap is the CI
