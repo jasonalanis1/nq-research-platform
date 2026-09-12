@@ -378,9 +378,36 @@ sequence is: device_stage_files the console JSON -> cloud Bash cp to
 /home/claude/console_state.json -> read_db get with that out_dir (version
 only) -> write_db set with if_version pinned.
 
+CHANGE FREEZE ON STRUCTURE until September 19th (Jason, September 12th, 10:44 am CT): no changes
+to the pipeline, the shelf rule, the templates, the governance docs, the
+cadence, or the tooling except to fix a defect that blocks a cycle (with a
+test). Anything that looks wrong gets written into research/weekly/ for the
+review, not fixed live. Reason: a lot changed in 48 hours; let it run and
+judge it at the checkpoint.
+
+WEEKLY REVIEW (Jason, September 12th, 10:44 am CT): the first cycle on or after Saturday 8:00 am CT
+writes research/weekly/YYYY-MM-DD.md -- one page: shelf state, what closed
+and why, what is parked, source-channel hit rates, loose ends, and the
+standing question "are we changing things faster than we are learning from
+them?" -- and messages Jason with it. First one: September 19th, which also
+serves as the CHECKPOINT page.
+
+KNOWLEDGE.md (Jason, September 12th, 10:44 am CT): research/KNOWLEDGE.md is the organizational
+memory -- what is true, what failed and why, what is parked, what is open,
+and the dated decision log. Every cycle updates it at close (LEARN update
+step) when anything in those sections changed. It is the first thing a new
+session reads after this file.
+
+LOOSE ENDS (named September 12th, 10:44 am CT): (1) the three volatility facts have never been
+turned into a product -- the vol-conditioned sizing overlay on a simple base
+is the biggest open item and a candidate for the checkpoint recommendation;
+(2) execution clock (signal engine) is PARKED explicitly now that H118 is
+closed; (3) four overlapping governance documents -- consolidation goes on
+the review list, not into the freeze window; (4) VXN gated at Holdout, held.
+
 CHECKPOINT (set September 12th, 10:35 am CT, Jason's worry about whether anything will be found):
-the new front end gets a defined run -- through September 26th, or the first
-six entries through Discovery, whichever comes first. At that point one page
+the new front end gets a defined run -- through September 19th (Jason moved it
+up from the 26th), or the first six entries through Discovery, whichever comes first. At that point one page
 to Jason: what survived, what it is worth per trade after costs, and ONE
 recommendation. If at least one entry has reached Validation, continue. If
 none has, the honest conclusion is that this data tier is exhausted for
