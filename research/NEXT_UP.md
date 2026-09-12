@@ -70,12 +70,11 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 ## Pipeline sweep
 
-(auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 0, GATED 1, FROZEN 3.)
+(auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 0, GATED 1, FROZEN 2.)
 
 - SHELF: Shelf 0/3 DRAWABLE (Entry none; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
 - GATED hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144): reached Integrity Gate checkpoint cleared -> OWED: nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
-- FROZEN H118 vwap_dist_low_10d_drift_h118_INTEGRITY_REVIEW_MULTIPLICITY (re-expressions: hyp-000126, hyp-000130): reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
 
 ## SESSION HANDOFF RULES (set by Jason 2026-09-11) — binding for every session, interactive or scheduled
@@ -502,9 +501,10 @@ GEX/"smart money" products; pure 1-minute cross-index lead/lag as a TRADE.
 Order: 1 -> 2a-f (write-ups) -> 3 -> 4 -> 5 -> 6. Daily checkers every cycle.
 
 PARKED, NOT FORGOTTEN -- Jason's items, raise only if he asks:
-- H118 STATUS (raised September 12th, 9:03 am CT, IMMEDIATE, awaiting his call): baseline
-  diagnostic shows the edge is not distinguishable from NQ's own drift.
-  Nothing frozen touched. Ledger status change is his decision.
+- H118 DECIDED (September 12th, 10:25 am CT, Jason: "just apply that and move on"): reclassified
+  REJECTED on hyp-000121/122/123/126/130/134 -- closed as an edge, retained
+  as knowledge (failure mode #7). Forward log keeps running for information
+  only; no capital, no promotion path. Do not re-raise.
 - DATA DECISION (Jason, September 12th, 10:16 am CT): NO PURCHASE. Exact quotes were obtained
   (ES $14.69, RTY $10.77, YM $14.31 -- $39.77 for batch 1) and Jason chose not
   to spend. WORKING ASSUMPTION, binding until he says otherwise: the data
