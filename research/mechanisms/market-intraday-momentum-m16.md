@@ -128,5 +128,18 @@ Edge potential: MODERATE. Gao et al. report the effect survives costs on
 SPY; on NQ a 30-minute hold with tight costs is realistic, but the
 paper's sample ends 2013 and decay is the base case.
 
-## 9. Prediction status
-P1 -- untested. P2 -- untested. P3 -- untested. P4 -- untested.
+## 9. Prediction status -- SCAN 021 RUN, September 12th, ~5:20 pm CT (test cycle), CLOSED
+P1 -- FAIL. Sign-adjusted last-30 after an extreme first-30: -0.008 ATR,
+block CI (-0.018, +0.005), n=1,048. Middle tercile -0.006, unconditional
+-0.002: nothing in any cell. P2 -- first-30 OLS coefficient -0.015
+(CI -0.033..+0.007) with the mid-day return included; mid-day coefficient
++0.015 (CI -0.010..+0.040): neither carries the close. P3 -- high-ATR
+-0.018, low-ATR -0.008, both null. P4 -- both halves null. Kill rule not
+triggered (print share 0.47 of a null). Ledger: hyp-000146 REJECTED.
+Attempt 1 of 2 spent. Sessions 1,572, dropped 56.
+What it means: NQ's closing half-hour carries no continuation of the
+morning's information at this ceiling; the 2018 SPY result is either
+decayed or never index-level in NQ. Practitioner claim P-2 (opening-drive
+exhaustion) was parked behind this entry -- it may now be re-ruled, but
+note the point estimate here is a slight REVERSAL of the morning move at
+the close, which is not the same claim and is not a finding.

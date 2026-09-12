@@ -154,6 +154,14 @@ def test_consecutive_barren_runs_fail(workspace):
     assert "staff meeting" in result.detail
 
 
+def test_long_new_information_paragraph_is_not_missing(workspace):
+    """A long (>400 char) single paragraph under the heading is still a
+    recorded line -- regression for the September 12th test-cycle defect."""
+    (workspace / "sessions" / "2026-09-10-0400.md").write_text(
+        _report_with_info("Two entries scanned and closed cleanly. " * 20))
+    assert ops_checks.check_new_information().status == PASS
+
+
 def test_missing_new_information_line_warns(workspace):
     (workspace / "sessions" / "2026-09-10-0400.md").write_text(REPORT_OK)
     assert ops_checks.check_new_information().status == WARN

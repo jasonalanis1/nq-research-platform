@@ -206,14 +206,18 @@ def check_new_information() -> Result:
     missing_line, barren = 0, 0
     for path in reports[:BARREN_RUN_LIMIT + 2]:
         text = path.read_text(errors="replace")
+        # The section body runs to the next blank line or heading, whatever
+        # its length -- a long honest paragraph must not read as "missing"
+        # (defect found September 12th test cycle: a >400-char paragraph
+        # made the lazy `.{0,400}?` fail to reach a terminator).
         m = re.search(
-            r"WHAT NEW INFORMATION THIS RUN PRODUCED[^\n]*\n+(.{0,400}?)(?:\n\n|\n#|$)",
+            r"WHAT NEW INFORMATION THIS RUN PRODUCED[^\n]*\n+(.*?)(?:\n\n|\n#|$)",
             text, re.IGNORECASE | re.DOTALL,
         )
         if not m:
             missing_line += 1
             continue
-        body = " ".join(m.group(1).split()).lower()
+        body = " ".join(m.group(1).split()).lower()[:400]
         if body.startswith("none") or "nothing new" in body:
             barren += 1
         else:

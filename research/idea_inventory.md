@@ -1345,7 +1345,7 @@ doc research/mechanisms/hedging-demand-gamma-regime-m14.md.
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M14. STATUS: FILED, WAITING ON ES DATA + JASON'S GO.
 
-## ENTRY 19 — M15: overnight vs intraday return split, NQ -> night leg carries the drift (sourcing 2c, September 12th, 11:00 am CT cycle) — DRAWABLE (map-ranked #1 by information gain)
+## ENTRY 19 — M15: overnight vs intraday return split, NQ -> night leg carries the drift (sourcing 2c, September 12th, 11:00 am CT cycle) — CLOSED September 12th, ~5:00 pm CT (Scan 020, hyp-000145): clean null, night 55% of drift not 'all', attempt 1 of 2
 
 Generation (sourcing stage, unattended cycle): full mechanism doc
 research/mechanisms/overnight-vs-intraday-return-split-m15.md, written
@@ -1376,10 +1376,9 @@ BEFORE any scan. Source CHANNEL: literature (Lou-Polk-Skouras 2019 JFE
    leg earns ~zero.
 3. **HORIZON**: ~17.5 hours (gating); no multi-day cell.
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M15. STATUS: DRAWABLE. Next cycle with budget draws
-   it -- one pre-registered scan at the Section 7 spec.
+5. **MAP ANCHOR**: M15. STATUS: CLOSED (Scan 020, P1 FAIL; see mechanism doc Section 9 incl. the run-1 sample bug and the weekday-only warning).
 
-## ENTRY 20 — M16: market intraday momentum, prior close->10:00 predicts 15:30->16:00, NQ (sourcing 2e, September 12th, 11:00 am CT cycle) — DRAWABLE (map-ranked #2)
+## ENTRY 20 — M16: market intraday momentum, prior close->10:00 predicts 15:30->16:00, NQ (sourcing 2e, September 12th, 11:00 am CT cycle) — CLOSED September 12th, ~5:20 pm CT (Scan 021, hyp-000146): clean null in every cell, attempt 1 of 2
 
 Generation (sourcing stage, unattended cycle): full mechanism doc
 research/mechanisms/market-intraday-momentum-m16.md, written BEFORE any
@@ -1405,4 +1404,59 @@ intraday momentum").
    targeters) trades in the direction of the morning's information.
 3. **HORIZON**: 15:30 -> 16:00 same session (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M16. STATUS: DRAWABLE, behind Entry 19.
+5. **MAP ANCHOR**: M16. STATUS: CLOSED (Scan 021, P1 FAIL; see mechanism doc Section 9).
+
+## ENTRY 21 — M17: intraday periodicity, same half-hour slot next day (open + close slots), NQ (literature, September 12th, ~4:40 pm CT test cycle) — DRAWABLE (map-ranked #3)
+
+Generation (sourcing stage, TEST cycle under the budget-use rule): full
+mechanism doc research/mechanisms/intraday-periodicity-same-slot-next-day-m17.md,
+written BEFORE any scan. Source CHANNEL: literature (Heston-Korajczyk-Sadka
+2010 JF).
+- LEARN/Integrity: NEW, signed at sourcing. Not a resurrection of M16
+  (same-day), M1/hyp-000110 (close -> next open), IB family, calendar
+  family. Shares a participant class with M16 (close-scheduled flow),
+  disclosed. Attempt 1 of 2.
+- Discovery: NQ on disk; roll-Friday sessions dropped, counted. 17 cells,
+  2 gating (open slot, close slot), Sidak at 2.
+- Statistical: daily n; block bootstrap CI of record; NULL 1 = each slot's
+  own unconditional mean, reported beside the gate; MIDDAY slot is the
+  specificity control (P2).
+- Director: rank 3 (behind Entries 19, 20). Information gain moderate
+  (fourth angle on "is scheduled flow fully competed in NQ"); edge
+  potential low-moderate, decay is the base case. Track: directional.
+  Realization: time-based 30-min hold.
+- KILL RULE: >50% of the next-day slot response in its first 1-min bar.
+
+1. **STATE VARIABLE**: sign (and tercile of |size|/ATR14) of slot k return
+   on day t, k in {OPEN 09:30-10:00, CLOSE 15:30-16:00}; MIDDAY control.
+2. **MECHANISM CLAIM**: schedule-constrained institutional execution
+   repeats direction in the same slot on consecutive days.
+3. **HORIZON**: same slot, next session (30-minute hold).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M17. STATUS: DRAWABLE, third on the shelf.
+
+## ENTRY 22 — M18: volume-conditioned daily reversal (Campbell-Grossman-Wang), NQ (literature, September 12th, ~5:10 pm CT test cycle) — DRAWABLE (map-ranked #3)
+
+Generation (sourcing stage, TEST cycle): full mechanism doc
+research/mechanisms/volume-conditioned-daily-reversal-m18.md, written
+BEFORE any scan. Source CHANNEL: literature.
+- LEARN/Integrity: NEW with two disclosed adjacencies (hyp-000043 volume
+  level alone; M1/hyp-000110 close-window flow). Integrity re-checks
+  separability from M1 at Statistical if P1 passes. Attempt 1 of 2.
+- Discovery: NQ on disk (volume included). 10 cells, 1 gating.
+- Statistical: daily n; block bootstrap; NULL 1 = unconditional lag-1
+  daily autocorrelation; the gate is the HIGH-volume cell, P2 the
+  gradient; P3 separates informed from liquidity volume.
+- Director: rank 3. Information gain moderate (a null closes the volume
+  channel as a state variable, with 043); edge low-moderate, decay base
+  case. Track: directional. Realization: time-based next session.
+- KILL RULE: >50% of the response in the next session's first 1-min bar.
+
+1. **STATE VARIABLE**: tercile of RTH volume / trailing-20d mean (lagged
+   edges), frozen on Discovery; sign of today's RTH return.
+2. **MECHANISM CLAIM**: liquidity-provision concessions after large
+   non-informational imbalances reverse next session.
+3. **HORIZON**: next RTH session (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, adjacencies disclosed.
+   Attempt 1 of 2.
+5. **MAP ANCHOR**: M18. STATUS: DRAWABLE, third on the shelf.

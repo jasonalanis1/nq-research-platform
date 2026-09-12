@@ -153,5 +153,25 @@ tight costs. Realistic best case is a low-Sharpe carry that the
 Monetization cost hurdle may close. It is the cheapest test on the
 shelf: no state variable, no thresholds, nothing to tune.
 
-## 9. Prediction status
-P1 -- untested. P2 -- untested. P3 -- untested. P4 -- untested.
+## 9. Prediction status -- SCAN 020 RUN, September 12th, ~5:00 pm CT (test cycle), CLOSED
+P1 -- FAIL. night mean +0.037 ATR (CI +0.014..+0.059), day mean +0.031
+(CI +0.005..+0.057), night-minus-day +0.006 (block CI -0.028..+0.038).
+Night carries 55% of NQ's drift, not "almost all". Falsifier (a).
+P2 -- no decay pattern (both halves null, same sign). P3 -- open-print
+share 1%: not an auction artifact; kill rule not triggered. P4 -- lag-1
+autocorrelation of the night leg -0.014 (CI -0.059..+0.030): no
+persistence, consistent with hyp-000139's reversion finding.
+Ledger: hyp-000145 REJECTED. Attempt 1 of 2 spent. A second attempt needs
+a claim that is not "the drift lives overnight" -- and the LEARN note
+below says what is NOT a second attempt.
+RUN RECORD: run 1 had a sample defect (Sunday Globex-only calendar days
+reset the prior-close chain, silently dropping every Monday's night leg,
+n=1,252) and showed a marginal P1 pass (+0.036, CI +0.002..+0.074).
+Caught by the dropped-session count; fixed to the frozen spec (nothing in
+Section 7 excludes Mondays); run 2, n=1,572, is the scan of record. Both
+JSON outputs are on disk. The flip is itself information: the WEEKEND
+leg drags the night mean down. "Weekday-only overnight" is slicing on
+the same data, not a new mechanism -- do not propose it.
+Design lesson for every future directional entry: 55/45 means NQ's
+intraday session is NOT a zero-drift session; intraday directional claims
+must still be measured against a positive drift baseline, not zero.

@@ -229,6 +229,26 @@ SCAN_REGISTRY = {
     "scan_017_2026-09-12": {"cells_scanned": 1, "promoted_hypothesis_ids": []},
     "scan_018_2026-09-12": {"cells_scanned": 2, "promoted_hypothesis_ids": []},
     "scan_019_2026-09-12": {"cells_scanned": 9, "promoted_hypothesis_ids": []},
+    "scan_020_2026-09-12": {"cells_scanned": 7, "promoted_hypothesis_ids": []},
+    "scan_021_2026-09-12": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
+    # Scan 021 (Entry 20 / map M16: market intraday momentum, Gao-Han-Li-Zhou
+    # 2018 -- prior close->10:00 predicts 15:30->16:00). 10 cells per
+    # mechanism doc Section 7: gating = sign-adjusted last-30 given extreme
+    # first-30 tercile; NULL 1 = middle tercile + unconditional last-30; OLS
+    # with mid-day return (P2 separation from M13/day-so-far momentum);
+    # high/low ATR split (P3); Discovery halves (P4); closing-print share
+    # (kill). Attempt 1 of 2. Registered September 12th, ~5:15 pm CT BEFORE
+    # the scan ran (test cycle, budget-use rule; shelf 3/3, nothing else
+    # owed). Mechanism doc research/mechanisms/market-intraday-momentum-m16.md.
+    # Scan 020 (Entry 19 / map M15: overnight vs intraday return split, NQ,
+    # Lou-Polk-Skouras 2019 / Cooper-Cliff-Gulen 2008). 7 cells: night mean,
+    # day mean, night-minus-day (GATING, block bootstrap), night-minus-day on
+    # each Discovery half (decay), open-print share of the night leg (kill
+    # rule), lag-1 autocorrelation of the night leg (diagnostic). Attempt 1
+    # of 2. Registered September 12th, ~4:50 pm CT, BEFORE the scan ran, in
+    # the test cycle under the budget-use rule; drawn on the cycle's own
+    # authority (shelf 3/3, nothing else owed). Mechanism doc
+    # research/mechanisms/overnight-vs-intraday-return-split-m15.md.
     # Scan 019 (Entry 16 / map M12: 5-day change in 20-day average pairwise
     # correlation across the NQ/ZN/6E/CL basket, terciles x NQ forward 1/2/3
     # day return in ATR units. GATING = HIGH tercile at h=3, credibly

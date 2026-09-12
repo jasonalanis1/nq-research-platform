@@ -1,44 +1,44 @@
 {
- "generated_at": "2026-09-12T20:07:00Z",
- "generated_at_local": "September 12th, 3:07 pm CT",
- "last_run": "2026-09-12T20:00:00Z",
- "last_run_local": "September 12th, 3:00 pm CT",
+ "generated_at": "2026-09-12T20:29:00Z",
+ "generated_at_local": "September 12th, 3:29 pm CT",
+ "last_run": "2026-09-12T20:13:00Z",
+ "last_run_local": "September 12th, 3:13 pm CT",
  "next_run": "2026-09-12T22:00:00Z",
  "next_run_local": "September 12th, 5:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "286 tests",
+ "tests": "287 tests",
  "ops": {
   "overall": "WARN",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 7 min, last activity 0 min ago"
+    "detail": "session running 16 min, last activity 1 min ago"
    },
    {
     "name": "shelf",
     "status": "WARN",
-    "detail": "below floor, sourcing owed (Shelf 2/3 DRAWABLE (Entry 19, 20; pending on data/Jason: Entry 15, 17,)"
+    "detail": "below floor, sourcing owed (Shelf 2/3 DRAWABLE (Entry 21, 22; pending on data/Jason: Entry 15, 17,)"
    },
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "cycle in progress: opening / -"
+    "detail": "cycle in progress: Entry 20 / M16 draw / registering cells, writing scan_021"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'mechanism_docs': 2, 'inventory_entries': 2}"
+    "detail": "last cycle moved=True delta={'studies': 2}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 114 min ago"
+    "detail": "refreshed 1 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "37 reports, latest 2026-09-12-2000.md well-formed"
+    "detail": "38 reports, latest 2026-09-12-2013.md well-formed"
    },
    {
     "name": "new-information",
@@ -48,12 +48,12 @@
    {
     "name": "ledger",
     "status": "PASS",
-    "detail": "103 idea families, no stale statuses"
+    "detail": "105 idea families, no stale statuses"
    },
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "20 mechanism doc(s) cover every advanced candidate"
+    "detail": "22 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -68,24 +68,24 @@
   ]
  },
  "progress": {
-  "trials_since_last_survivor": 15,
-  "trials_total": 318,
+  "trials_since_last_survivor": 34,
+  "trials_total": 337,
   "survivors_alive": 2,
-  "trials_per_survivor": 159.0,
+  "trials_per_survivor": 168.5,
   "last_survivor": {
    "hypothesis_id": "hyp-000144",
    "name": "vxn_level_vs_trailing_high_next_day_range_prospective",
    "date": "2026-09-12"
   },
-  "scan_cells_total": 228,
-  "standalone_total": 90,
-  "scans_run": 19,
-  "scans_with_no_survivor": 14
+  "scan_cells_total": 245,
+  "standalone_total": 92,
+  "scans_run": 21,
+  "scans_with_no_survivor": 16
  },
- "ledger_rows": 177,
- "distinct_hypotheses": 137,
+ "ledger_rows": 179,
+ "distinct_hypotheses": 139,
  "funnel": {
-  "closed": 100,
+  "closed": 102,
   "discovery": 0,
   "validation": 1,
   "holdout": 1,
@@ -94,7 +94,7 @@
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 2/3 DRAWABLE (Entry 19, 20; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
+  "shelf": "Shelf 2/3 DRAWABLE (Entry 21, 22; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
   "rows": [
    {
     "tier": "GATED",
@@ -166,16 +166,26 @@
     "name": "M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) \u2014 PARKED: not testable at the current data ceiling (needs ES)"
    },
    {
-    "id": 19,
-    "name": "M15: overnight vs intraday return split, NQ -> night leg carries the drift (sourcing 2c, September 12th, 11:00 am CT cycle) \u2014 DRAWABLE (map-ranked #1 by information gain)"
+    "id": 21,
+    "name": "M17: intraday periodicity, same half-hour slot next day (open + close slots), NQ (literature, September 12th, ~4:40 pm CT test cycle) \u2014 DRAWABLE (map-ranked #3)"
    },
    {
-    "id": 20,
-    "name": "M16: market intraday momentum, prior close->10:00 predicts 15:30->16:00, NQ (sourcing 2e, September 12th, 11:00 am CT cycle) \u2014 DRAWABLE (map-ranked #2)"
+    "id": 22,
+    "name": "M18: volume-conditioned daily reversal (Campbell-Grossman-Wang), NQ (literature, September 12th, ~5:10 pm CT test cycle) \u2014 DRAWABLE (map-ranked #3)"
    }
   ]
  },
  "recent_closures": [
+  {
+   "id": "hyp-000146",
+   "name": "Market intraday momentum first30 last30 m16",
+   "date": "2026-09-12"
+  },
+  {
+   "id": "hyp-000145",
+   "name": "Overnight vs intraday return split m15",
+   "date": "2026-09-12"
+  },
   {
    "id": "hyp-000123",
    "name": "H118 \u00b7 VWAP distance LOW tercile, 10-day drift",
@@ -190,19 +200,20 @@
    "id": "hyp-000027",
    "name": "Intraday collective-evidence pilot",
    "date": "2026-09-11"
-  },
-  {
-   "id": "hyp-000025",
-   "name": "Trend family collective-evidence pilot",
-   "date": "2026-09-11"
-  },
-  {
-   "id": "hyp-000023",
-   "name": "Weekly trend split by volatility regime",
-   "date": "2026-09-11"
   }
  ],
  "sessions": [
+  {
+   "file": "2026-09-12-2013.md",
+   "ts": "2026-09-12T20:13:00Z",
+   "new_information": "",
+   "agents_ran": 1,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 3:13 pm CT"
+  },
   {
    "file": "2026-09-12-2000.md",
    "ts": "2026-09-12T20:00:00Z",
@@ -224,17 +235,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 12th, 11:00 am CT"
-  },
-  {
-   "file": "2026-09-12-1428.md",
-   "ts": "2026-09-12T14:28:00Z",
-   "new_information": "Process only, but a real defect: with two sourcing entries filed, pipeline_sweep.py offered the re-parked M9 entry as the next draw. Fixed in the script with a test (PARKED / WAITING header tags are never drawable; a NOTHING DRAWABLE state now exists), plus a header convention in the sourcing template. 285/285. This is exactly what the test cycle was for.",
-   "agents_ran": 1,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 9:28 am CT"
   }
  ]
 }
