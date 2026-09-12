@@ -36,7 +36,7 @@ def test_only_frozen_or_gated_can_touch_holdout():
 
 def test_shelf_line_reports_floor_state():
     line = ps.shelf_line()
-    assert line.startswith("Shelf ") and ("TOP-UP OWED" in line or "next DRAW" in line or "NOTHING DRAWABLE" in line)
+    assert line.startswith("Shelf ") and ("SOURCING OWED" in line or "next DRAW" in line)
 
 
 def test_closed_parent_bookkeeping_row_is_hidden_not_phantom_owed_work():
@@ -162,7 +162,7 @@ def test_shelf_line_excludes_entries_in_triage(tmp_path, monkeypatch):
     inv.write_text("## ENTRY 1 — live thing (map-ranked #2)\n\n## ENTRY 2 — drawn thing — IN TRIAGE\n\n## ENTRY 5 — validated thing — VALIDATION CANDIDATE, GATED (hyp-000999)\n\n## ENTRY 3 — old thing — CLOSED 2026-09-01\n\n## ENTRY 4 — SHELVED thing\n")
     monkeypatch.setattr(ps, "INVENTORY", inv)
     line = ps.shelf_line()
-    assert line.startswith("Shelf 1/3 live (Entry 1)") and "TOP-UP OWED" in line
+    assert line.startswith("Shelf 1/3 DRAWABLE (Entry 1") and "SOURCING OWED" in line
 
 
 def test_shelf_line_never_offers_parked_or_waiting_entries_as_next_draw(tmp_path, monkeypatch):
@@ -174,7 +174,7 @@ def test_shelf_line_never_offers_parked_or_waiting_entries_as_next_draw(tmp_path
     inv.write_text("## ENTRY 15 — thing (map-ranked #7) — INDETERMINATE, RE-PARKED\n\n## ENTRY 17 — thing (sourcing 2a) — WAITING ON DATA\n\n## ENTRY 18 — other (sourcing 2b) — WAITING ON ES DATA\n")
     monkeypatch.setattr(ps, "INVENTORY", inv)
     line = ps.shelf_line()
-    assert line.startswith("Shelf 3/3 live") and "NOTHING DRAWABLE" in line and "Entry 15" in line
+    assert line.startswith("Shelf 0/3 DRAWABLE") and "SOURCING OWED" in line and "pending on data/Jason: Entry 15, 17, 18" in line
     inv.write_text("## ENTRY 15 — thing (map-ranked #7) — RE-PARKED\n\n## ENTRY 17 — thing (map-ranked #3) — WAITING\n\n## ENTRY 19 — ready thing (map-ranked #5)\n")
     line = ps.shelf_line()
-    assert "next DRAW: Entry 19 (map-ranked #5)" in line
+    assert "Shelf 1/3 DRAWABLE" in line and "SOURCING OWED" in line  # one drawable is still below the floor: source first

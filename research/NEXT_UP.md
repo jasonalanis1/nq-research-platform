@@ -72,7 +72,7 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 (auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 0, GATED 1, FROZEN 3.)
 
-- SHELF: Shelf 3/3 live (Entry 15, 17, 18) -> NOTHING DRAWABLE: all live entries are parked or waiting on data/Jason (Entry 15, 17, 18)
+- SHELF: Shelf 0/3 DRAWABLE (Entry none; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
 - GATED hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144): reached Integrity Gate checkpoint cleared -> OWED: nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN H118 vwap_dist_low_10d_drift_h118_INTEGRITY_REVIEW_MULTIPLICITY (re-expressions: hyp-000126, hyp-000130): reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
@@ -378,6 +378,30 @@ Verified live: both calls complete with no approval request. The full
 sequence is: device_stage_files the console JSON -> cloud Bash cp to
 /home/claude/console_state.json -> read_db get with that out_dir (version
 only) -> write_db set with if_version pinned.
+
+SHELF RULE v2 (Jason, September 12th, 10:00 am CT: "put the shelf back, keep the research
+ideas stuff, use all areas of research"). The shelf stays. Two bolts
+tightened:
+- SOURCING RUNS EVERY CYCLE, FIRST, FROM EVERY CHANNEL. Before the sweep is
+  worked, a fixed slice of the budget (target 20 of 105 minutes; more when
+  the shelf is below the floor) goes to reading and scoping: the forced-
+  participant map, the literature, practitioner practice, and cross-market
+  Observatory relationships. Every entry records its SOURCE CHANNEL so hit
+  rates by channel accumulate in LEARN (map / literature / practitioner /
+  observatory / gut). We already know map > gut and behavior-first > map;
+  now the rest gets measured instead of argued.
+- THE SHELF COUNTS ONLY DRAWABLE ENTRIES: written up, mechanism doc done,
+  resurrection ruling signed, data on disk. Entries waiting on data or on
+  Jason are PENDING, shown separately, never counted. pipeline_sweep.py
+  reports "Shelf X/3 DRAWABLE (pending: ...)". The number is honest even
+  when it is zero -- and today it is zero.
+- FLOOR 3. Below the floor the owed action is MORE SOURCING, never a draw
+  and never an invented scope. If three consecutive cycles cannot restock,
+  ops_checks raises SHELF STARVING to Jason -- a sourcing problem, not a
+  reason to draw thin.
+- DRAW only from the shelf, only when the sweep owes nothing else, active
+  slate capped at 5. Ranking rule (information gain x edge potential)
+  decides draw order.
 
 QUEUE v2 (Jason, September 12th ~9:10 am CT, after three outside-AI responses
 were folded in -- research/infrastructure/outside-ai-synthesis-2026-09-12.md

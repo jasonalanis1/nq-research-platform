@@ -5,8 +5,9 @@ LEARN, and only then becomes a map row + Idea Inventory entry + mechanism
 doc. An entry with a blank in any required field is not an entry.
 
 - Working name:
-- Source (paper with citation and year / practitioner claim / Observatory
-  relationship):
+- Source CHANNEL (one of: map / literature / practitioner / observatory /
+  gut) and the source itself (paper with citation and year / practitioner
+  claim / Observatory relationship):
 - Claim (one sentence, falsifiable):
 - Instrument(s): free field. NQ is the default execution vehicle, not the
   search boundary. State which contract should carry the SIGNAL and which
@@ -54,3 +55,8 @@ Inventory entry that is filed but cannot be scanned yet carries "WAITING ON
 <what>" in its "## ENTRY" header line; a parked one carries "PARKED" or
 "RE-PARKED". pipeline_sweep.py reads the header line only -- body notes do
 not count -- and never offers a PARKED or WAITING entry as the next draw.
+
+SHELF STATE (binding): an entry is DRAWABLE only when its mechanism doc is
+written, its resurrection ruling is signed, and its data is on disk.
+Otherwise its header carries WAITING ON <what> and it is PENDING, not on
+the shelf. The floor (3) counts drawable entries only.

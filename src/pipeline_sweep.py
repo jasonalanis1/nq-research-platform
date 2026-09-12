@@ -155,18 +155,23 @@ def shelf_line() -> str:
     live_ids = sorted(int(e) for e, _ in heads)
     blocked = {int(e) for e, title in heads if re.search(r"PARKED|WAITING", title)}
     drawable = [(e, t) for e, t in heads if int(e) not in blocked]
+    # SHELF RULE v2 (Jason, September 12th ~10:00 am CT): the floor counts
+    # only DRAWABLE entries -- written up, mechanism doc done, data on disk.
+    # Parked / waiting entries are PENDING and shown separately so the number
+    # is honest. Below the floor the owed action is SOURCING (read + scope
+    # from every channel), never a draw and never an invented scope.
     floor = 3
-    if len(live_ids) < floor:
-        return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> TOP-UP OWED before any draw"
-    if not drawable:
-        return (f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> NOTHING DRAWABLE: "
-                f"all live entries are parked or waiting on data/Jason (Entry {', '.join(map(str, sorted(blocked)))})")
+    dr_ids = sorted(int(e) for e, _ in drawable)
+    pend = ", ".join(map(str, sorted(blocked))) if blocked else "none"
+    if len(dr_ids) < floor:
+        return (f"Shelf {len(dr_ids)}/{floor} DRAWABLE (Entry {', '.join(map(str, dr_ids)) or 'none'}; pending on data/Jason: Entry {pend}) "
+                f"-> SOURCING OWED (read + scope from every channel); no draw, no invented scope")
     # UPGRADE 1 (2026-09-11): the Director ranks map-anchored scopes; a
     # "map-ranked #N" tag in a live title sets draw order. Untagged -> oldest.
     ranked = sorted((int(n), int(e)) for e, title in drawable for n in re.findall(r"map-ranked #(\d+)", title))
     if ranked:
-        return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> next DRAW: Entry {ranked[0][1]} (map-ranked #{ranked[0][0]})"
-    return f"Shelf {len(live_ids)}/{floor} live (Entry {', '.join(map(str, live_ids))}) -> next DRAW: Entry {drawable[0][0]} (oldest drawable)"
+        return f"Shelf {len(dr_ids)}/{floor} DRAWABLE (Entry {', '.join(map(str, dr_ids))}; pending: Entry {pend}) -> next DRAW: Entry {ranked[0][1]} (map-ranked #{ranked[0][0]})"
+    return f"Shelf {len(dr_ids)}/{floor} DRAWABLE (Entry {', '.join(map(str, dr_ids))}; pending: Entry {pend}) -> next DRAW: Entry {drawable[0][0]} (oldest drawable)"
 
 
 def build() -> dict:
