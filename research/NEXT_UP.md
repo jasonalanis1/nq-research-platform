@@ -378,6 +378,17 @@ sequence is: device_stage_files the console JSON -> cloud Bash cp to
 /home/claude/console_state.json -> read_db get with that out_dir (version
 only) -> write_db set with if_version pinned.
 
+CHECKPOINT (set September 12th, 10:35 am CT, Jason's worry about whether anything will be found):
+the new front end gets a defined run -- through September 26th, or the first
+six entries through Discovery, whichever comes first. At that point one page
+to Jason: what survived, what it is worth per trade after costs, and ONE
+recommendation. If at least one entry has reached Validation, continue. If
+none has, the honest conclusion is that this data tier is exhausted for
+entry signals and the decision is between (a) buying the data that sees the
+participants, or (b) building the product around what has held up --
+volatility-conditioned sizing and execution on a simple base. Neither is
+failure. Cycles: do not soften a null to avoid this checkpoint.
+
 SHELF RULE v2 (Jason, September 12th, 10:00 am CT: "put the shelf back, keep the research
 ideas stuff, use all areas of research"). The shelf stays. Two bolts
 tightened:
