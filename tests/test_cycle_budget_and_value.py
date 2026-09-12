@@ -79,3 +79,16 @@ def test_value_ack_downgrades_to_warn_and_expires_when_something_moves(tmp_path,
     for _ in range(3):
         cb.HIST.open("a").write(json.dumps({"moved": False, "delta": {}, "finished": "2026-09-12T12:00:00+00:00"}) + "\n")
     assert ops_checks.check_value_per_cycle().status == ops_checks.FAIL
+
+
+def test_shelf_starving_after_three_cycles_without_restock(tmp_path, monkeypatch):
+    r = _wire(tmp_path, monkeypatch)
+    (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [], "shelf": "Shelf 0/3 DRAWABLE (Entry none; pending: none) -> SOURCING OWED"}))
+    assert ops_checks.check_shelf_starving().status == ops_checks.WARN
+    for _ in range(3):
+        cb.HIST.open("a").write(json.dumps({"moved": True, "delta": {"inventory_entries": 0, "studies": 1}}) + "\n")
+    assert ops_checks.check_shelf_starving().status == ops_checks.FAIL
+    cb.HIST.open("a").write(json.dumps({"moved": True, "delta": {"inventory_entries": 1}}) + "\n")
+    assert ops_checks.check_shelf_starving().status == ops_checks.WARN
+    (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [], "shelf": "Shelf 3/3 DRAWABLE (Entry 1, 2, 3; pending: none) -> next DRAW: Entry 1"}))
+    assert ops_checks.check_shelf_starving().status == ops_checks.PASS

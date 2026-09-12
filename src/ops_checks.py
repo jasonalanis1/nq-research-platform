@@ -509,8 +509,36 @@ def check_value_per_cycle() -> Result:
     return Result("value", PASS, f"last cycle moved={last.get('moved')} delta={ {k: v for k, v in last.get('delta', {}).items() if v} }")
 
 
+def check_shelf_starving() -> Result:
+    """SHELF RULE v2 (Jason, 2026-09-12): the shelf counts drawable entries
+    only. If it is below the floor AND the last 3 closed cycles added no
+    inventory entries, sourcing is failing to restock -> tell Jason. This
+    is a sourcing problem, never a reason to draw thin or invent a scope."""
+    sweep = RESEARCH.parent / "data" / "pipeline_sweep.json"
+    hist = RESEARCH / "_cycle_history.jsonl"
+    try:
+        shelf = json.loads(sweep.read_text()).get("shelf", "") if sweep.exists() else ""
+    except Exception:
+        shelf = ""
+    if "SOURCING OWED" not in shelf:
+        return Result("shelf", PASS, shelf[:90] if shelf else "no sweep yet")
+    entries = []
+    if hist.exists():
+        for line in hist.read_text().splitlines():
+            try:
+                entries.append(json.loads(line))
+            except Exception:
+                continue
+    recent = entries[-3:]
+    restocked = any((e.get("delta") or {}).get("inventory_entries", 0) for e in recent)
+    if len(recent) >= 3 and not restocked:
+        return Result("shelf", FAIL, "SHELF STARVING: below the floor and 3 closed cycles added no entries -- tell Jason; sourcing problem, do not draw thin")
+    return Result("shelf", WARN, f"below floor, sourcing owed ({shelf[:70]})")
+
+
 CHECKS = (
     check_lock_health,
+    check_shelf_starving,
     check_unfinished_checkpoint,
     check_value_per_cycle,
     check_console_fresh,
