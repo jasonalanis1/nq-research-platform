@@ -443,26 +443,32 @@ at 5 families at any time; everything else sits in research/sourcing/.
    RANKING RULE (Jason, September 12th ~9:50 am CT): order by EXPECTED
    INFORMATION GAIN x EDGE POTENTIAL, not by probability of a positive
    Discovery result. Write-ups and later scans follow this order:
-   a. LETF close rebalancing, instrument as a factor (RTY/ES/NQ), flow
-      measured from AUM. DONE (Entry 17 / M13). Either outcome is decisive
+   a. PARKED (not testable at ceiling: needs RTY/ES). LETF close rebalancing, instrument as a factor (RTY/ES/NQ), flow
+      measured from AUM. Written (Entry 17 / M13). Either outcome is decisive
       about whether "search where the forcing is largest" is a principle.
-   b. DONE September 12th, 9:30 am CT (Entry 18 / M14, waiting on ES data). Hedging-demand intraday momentum (Baltussen et al. 2021 JFE), price-
+   b. PARKED (not testable at ceiling: needs ES). Written September 12th, 9:30 am CT (Entry 18 / M14, waiting on ES data). Hedging-demand intraday momentum (Baltussen et al. 2021 JFE), price-
       only base with gamma regime computed from ES. Low pass odds, highest
       strategic information: it is the gate on buying options data.
    c. Overnight-vs-intraday tug-of-war (Lou, Polk, Skouras 2019 JFE).
       Probably true; explains H118; tells us where NQ's return lives; also
       a fast trade in its own right (hold overnight, flat by the open).
       Ruling vs gap-fade family and H116.
-   d. Cash-open acceptance/rejection of the pre-open NQ/ES residual --
+   d. PARKED (needs ES + SPY/QQQ). Cash-open acceptance/rejection of the pre-open NQ/ES residual --
       the cheapest test of whether ANY cross-index relative-value effect
       survives at minute resolution; a kill-rule outcome settles the tick-
       data question for the whole track. Needs SPY/QQQ bars.
    e. Intraday momentum (Gao, Han, Li, Zhou 2018 JFE). Ruling vs hyp-000076
       and the IB family. Mostly informative about literature decay; also
       the confound for (a).
-   f. Curve-conditioned NQ/ES rotation (needs ZT or SR3).
+   f. PARKED (needs ES + ZT). Curve-conditioned NQ/ES rotation.
+   NEXT UP UNDER THE CEILING (NQ-only testable, in ranking order): c
+   (overnight-vs-intraday split), then e (intraday momentum). Write up,
+   then they are DRAWABLE and the shelf refills honestly. After those: item
+   4 Observatory on the FOUR instruments on disk (NQ/ZN/6E/CL), item 5
+   practitioner proxies, item 6 event reaction shape. First scan on a new
+   entry still waits for Jason's go.
    Mechanism doc BEFORE any scan. One shot at the exact published spec.
-3. DATA, in order, each via metadata.get_cost FIRST; any single pull at
+3. DATA -- CLOSED, NO PURCHASE (see PARKED). Original text kept for the record: in order, each via metadata.get_cost FIRST; any single pull at
    $5.00 or more stops and lists the number under "needs Jason" unless he
    has set a cap (see PARKED below): (i) ES, RTY, YM 1-min OHLCV, outright
    contracts where the feed allows; (ii) NQ outright contract months for the
@@ -499,9 +505,13 @@ PARKED, NOT FORGOTTEN -- Jason's items, raise only if he asks:
 - H118 STATUS (raised September 12th, 9:03 am CT, IMMEDIATE, awaiting his call): baseline
   diagnostic shows the edge is not distinguishable from NQ's own drift.
   Nothing frozen touched. Ledger status change is his decision.
-- DATA CAP: Jason has not yet set a dollar cap for the ES/RTY/YM (and later
-  SPY/QQQ/IWM/DIA, ZT) pulls. Until he does, each pull quoted at $5.00+
-  stops and waits. Asked September 12th ~9:10 am CT.
+- DATA DECISION (Jason, September 12th, 10:16 am CT): NO PURCHASE. Exact quotes were obtained
+  (ES $14.69, RTY $10.77, YM $14.31 -- $39.77 for batch 1) and Jason chose not
+  to spend. WORKING ASSUMPTION, binding until he says otherwise: the data
+  ceiling is 1-minute OHLCV for NQ, ZN, 6E, CL and nothing else. Entries that
+  need other data are PARKED as "not testable at the current ceiling" -- not
+  closed, not counted, not re-raised. Research proceeds on what is testable
+  now. Do not quote, price, or propose data purchases again unless Jason asks.
 - M9 (Nasdaq rebalance): re-parked on a data gap; Jason is sourcing
   roll-day data himself. Details: research/mechanisms/nasdaq-rebalance-
   close-window-m9.md Section 6.

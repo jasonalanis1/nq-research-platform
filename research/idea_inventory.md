@@ -1298,7 +1298,7 @@ Full detail and the H118 implication: research/mechanisms/cross-asset-
 correlation-convergence-m12.md Sections 8-10.
 
 
-## ENTRY 17 — M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) — WAITING ON RTY/ES DATA
+## ENTRY 17 — M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) — PARKED: not testable at the current data ceiling (needs RTY/ES)
 
 Generation (sourcing stage, first entry under the new template,
 research/sourcing/TEMPLATE.md; from outside-AI response A via the synthesis
@@ -1323,7 +1323,7 @@ doc): full mechanism doc research/mechanisms/letf-close-rebalance-m13.md.
 5. **MAP ANCHOR**: M13. STATUS: FILED, WAITING ON DATA + JASON'S GO.
 
 
-## ENTRY 18 — M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) — WAITING ON ES DATA
+## ENTRY 18 — M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) — PARKED: not testable at the current data ceiling (needs ES)
 
 Generation (sourcing stage, TEST cycle with Jason watching): full mechanism
 doc research/mechanisms/hedging-demand-gamma-regime-m14.md.
