@@ -59,15 +59,14 @@ def test_value_check_fails_on_three_stalled_cycles_and_on_exhausted_queue(tmp_pa
     cb.HIST.open("a").write(json.dumps({"moved": True, "delta": {"studies": 1}}) + "\n")
     assert ops_checks.check_value_per_cycle().status == ops_checks.PASS
     (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [{"tier": "FROZEN", "next_owed": "nothing"}], "shelf": "Shelf 0/3 live () -> TOP-UP OWED"}))
-    res = ops_checks.check_value_per_cycle(); assert res.status == ops_checks.FAIL and "QUEUE EXHAUSTED" in res.detail
+    res = ops_checks.check_value_per_cycle(); assert res.status == ops_checks.PASS and "sourcing owed" in res.detail
 
 
 def test_value_ack_downgrades_to_warn_and_expires_when_something_moves(tmp_path, monkeypatch):
     r = _wire(tmp_path, monkeypatch)
     (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [{"tier": "FROZEN", "next_owed": "nothing"}], "shelf": "Shelf 0/3 live () -> TOP-UP OWED"}))
-    assert ops_checks.check_value_per_cycle().status == ops_checks.FAIL
+    assert ops_checks.check_value_per_cycle().status == ops_checks.PASS  # empty shelf is sourcing-owed, not exhausted (v2)
     (r / "_value_ack.json").write_text(json.dumps({"by": "Jason", "at": "2026-09-12T07:00:00+00:00", "reason": "map empty by choice"}))
-    res = ops_checks.check_value_per_cycle(); assert res.status == ops_checks.WARN and "acknowledged by Jason" in res.detail
     # busy-work path is also downgraded while acknowledged
     (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [{"tier": "OPEN", "next_owed": "Statistical"}], "shelf": "Shelf 3/3 live"}))
     for _ in range(3):

@@ -493,10 +493,12 @@ def check_value_per_cycle() -> Result:
     # its own the moment any cycle finished after ack.at actually MOVES
     # something -- a later stall is then a NEW event and FAILs again.
     ack = _value_ack(entries)
+    # SHELF RULE v2 (2026-09-12): an empty shelf is no longer "exhausted" --
+    # it means SOURCING is owed, and check_shelf_starving() owns the alert
+    # (FAIL only after 3 closed cycles fail to restock). This check keeps
+    # BUSY WORK only.
     if exhausted:
-        if ack:
-            return Result("value", WARN, f"QUEUE EXHAUSTED, acknowledged by {ack['by']} {ack['at'][:10]}: {ack['reason']} -- routine cycles only, do not manufacture work, do not re-alert")
-        return Result("value", FAIL, "QUEUE EXHAUSTED: nothing owed and the shelf is empty -- needs Jason (new map entries or data), do not manufacture work")
+        return Result("value", PASS, "shelf empty -> sourcing owed (see shelf check); not an exhaustion alert under shelf rule v2")
     if not entries:
         return Result("value", PASS, "no cycle history yet (first budget-clock cycle pending)")
     recent = entries[-BUSY_WORK_LIMIT:]
