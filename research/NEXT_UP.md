@@ -72,7 +72,7 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 (auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 0, GATED 1, FROZEN 2.)
 
-- SHELF: Shelf 0/3 DRAWABLE (Entry none; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
+- SHELF: Shelf 2/3 DRAWABLE (Entry 19, 20; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
 - GATED hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144): reached Integrity Gate checkpoint cleared -> OWED: nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
@@ -487,7 +487,7 @@ capped at 5 families at any time; everything else sits in research/sourcing/.
    b. PARKED (not testable at ceiling: needs ES). Written September 12th, 9:30 am CT (Entry 18 / M14, waiting on ES data). Hedging-demand intraday momentum (Baltussen et al. 2021 JFE), price-
       only base with gamma regime computed from ES. Low pass odds, highest
       strategic information: it is the gate on buying options data.
-   c. Overnight-vs-intraday tug-of-war (Lou, Polk, Skouras 2019 JFE).
+   c. DONE September 12th, 11:00 am CT cycle (Entry 19 / M15, DRAWABLE). Overnight-vs-intraday tug-of-war (Lou, Polk, Skouras 2019 JFE).
       Probably true; explains H118; tells us where NQ's return lives; also
       a fast trade in its own right (hold overnight, flat by the open).
       Ruling vs gap-fade family and H116.
@@ -495,13 +495,11 @@ capped at 5 families at any time; everything else sits in research/sourcing/.
       the cheapest test of whether ANY cross-index relative-value effect
       survives at minute resolution; a kill-rule outcome settles the tick-
       data question for the whole track. Needs SPY/QQQ bars.
-   e. Intraday momentum (Gao, Han, Li, Zhou 2018 JFE). Ruling vs hyp-000076
+   e. DONE September 12th, 11:00 am CT cycle (Entry 20 / M16, DRAWABLE). Intraday momentum (Gao, Han, Li, Zhou 2018 JFE). Ruling vs hyp-000076
       and the IB family. Mostly informative about literature decay; also
       the confound for (a).
    f. PARKED (needs ES + ZT). Curve-conditioned NQ/ES rotation.
-   NEXT UP UNDER THE CEILING (NQ-only testable, in ranking order): c
-   (overnight-vs-intraday split), then e (intraday momentum). Write up,
-   then they are DRAWABLE and the shelf refills honestly. After those: item
+   NEXT UP UNDER THE CEILING: c and e are written and DRAWABLE (shelf 2/3). Next: item
    4 Observatory on the FOUR instruments on disk (NQ/ZN/6E/CL), item 5
    practitioner proxies, item 6 event reaction shape. Scans run on the
    cycle's own authority once an entry is DRAWABLE.
@@ -525,7 +523,7 @@ capped at 5 families at any time; everything else sits in research/sourcing/.
    MAE per state. No ML. Portfolio's separability check of the range-
    contraction fact vs the other two comes first. Output = map-ready
    entries, not trades. This absorbs the day-type program.
-5. PRACTITIONER STREAM: research/sourcing/practitioner.md -- claims enter
+5. PRACTITIONER STREAM (OPENED September 12th, 11:00 am CT cycle; three seeded claims ruled, no entry yet): research/sourcing/practitioner.md -- claims enter
    only via mechanical proxy; seed with day-type by 10:30, opening-drive
    exhaustion, VWAP reclaim after failed breakdown; Mechanism rules on each.
 6. LOW PRIORITY, sourcing only: event reaction SHAPE across FOMC/CPI/NFP
@@ -841,7 +839,9 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
-September 12th, 9:30 am CT (2026-09-12 14:28 UTC), TEST cycle with Jason watching, after the push (fb52280) and the post-push staff meeting (CONTINUE). Queue v2 item 2b filed: M14 gamma-regime entry (Entry 18), mechanism doc before any scan, waits on ES data. Daily checkers clean. Full: research/sessions/2026-09-12-1428.md.
+September 12th, 1:35 pm CT (2026-09-12 18:35 UTC), scheduled 11:00 am CT cycle (ran on device reconnect). Shelf 0/3 -> 2/3 DRAWABLE: queue item 2c filed (M15 overnight-vs-intraday split, Entry 19, map-ranked #1) and item 2e filed (M16 market intraday momentum, Entry 20, #2), mechanism docs before any scan; item 5 practitioner stream opened with three claims ruled (no entry). No draw (below floor). Daily checkers clean. Next cycle: sourcing via item 4 Observatory; draw Entry 19 when the shelf reaches 3. Full: research/sessions/2026-09-12-1600.md.
+
+Previous: September 12th, 9:30 am CT (2026-09-12 14:28 UTC), TEST cycle with Jason watching, after the push (fb52280) and the post-push staff meeting (CONTINUE). Queue v2 item 2b filed: M14 gamma-regime entry (Entry 18), mechanism doc before any scan, waits on ES data. Daily checkers clean. Full: research/sessions/2026-09-12-1428.md.
 
 Previous: September 12th, 9:06 am CT (2026-09-12 14:00 UTC), scheduled cycle. Queue v2 item 1 done: two-nulls amendment + baseline_relative.py; H118 baseline diagnostic FAILS (edge not distinguishable from NQ's own drift, Jason messaged, status his call). Item 2 started: sourcing template + M13 LETF close rebalance filed (Entry 17), waits on RTY/ES data. pytest 284/284. Full: research/sessions/2026-09-12-1400.md.
 

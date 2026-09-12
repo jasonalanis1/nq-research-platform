@@ -1,44 +1,49 @@
 {
- "generated_at": "2026-09-12T14:33:00Z",
- "generated_at_local": "September 12th, 9:33 am CT",
- "last_run": "2026-09-12T14:28:00Z",
- "last_run_local": "September 12th, 9:28 am CT",
- "next_run": "2026-09-12T16:00:00Z",
- "next_run_local": "September 12th, 11:00 am CT",
+ "generated_at": "2026-09-12T18:13:00Z",
+ "generated_at_local": "September 12th, 1:13 pm CT",
+ "last_run": "2026-09-12T16:00:00Z",
+ "last_run_local": "September 12th, 11:00 am CT",
+ "next_run": "2026-09-12T20:00:00Z",
+ "next_run_local": "September 12th, 3:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "285 tests",
+ "tests": "286 tests",
  "ops": {
   "overall": "WARN",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 5 min, last activity 0 min ago"
+    "detail": "session running 6 min, last activity 0 min ago"
+   },
+   {
+    "name": "shelf",
+    "status": "WARN",
+    "detail": "below floor, sourcing owed (Shelf 2/3 DRAWABLE (Entry 19, 20; pending on data/Jason: Entry 15, 17,)"
    },
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "cycle in progress: sweep fix: parked/waiting never drawable / done"
+    "detail": "cycle in progress: opening / -"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1}"
+    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'inventory_entries': 1}"
    },
    {
     "name": "console",
-    "status": "PASS",
-    "detail": "refreshed 3 min ago"
+    "status": "WARN",
+    "detail": "console state is 221 min old \u2014 refresh step may be failing"
    },
    {
     "name": "reports",
-    "status": "PASS",
-    "detail": "35 reports, latest 2026-09-12-1428.md well-formed"
+    "status": "WARN",
+    "detail": "2026-09-12-1600.md missing section(s): Agents"
    },
    {
     "name": "new-information",
-    "status": "PASS",
-    "detail": "latest run recorded new information"
+    "status": "WARN",
+    "detail": "1 recent report(s) omit the new-information line"
    },
    {
     "name": "ledger",
@@ -48,7 +53,7 @@
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "18 mechanism doc(s) cover every advanced candidate"
+    "detail": "20 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -65,8 +70,8 @@
  "progress": {
   "trials_since_last_survivor": 15,
   "trials_total": 318,
-  "survivors_alive": 3,
-  "trials_per_survivor": 106.0,
+  "survivors_alive": 2,
+  "trials_per_survivor": 159.0,
   "last_survivor": {
    "hypothesis_id": "hyp-000144",
    "name": "vxn_level_vs_trailing_high_next_day_range_prospective",
@@ -77,19 +82,19 @@
   "scans_run": 19,
   "scans_with_no_survivor": 14
  },
- "ledger_rows": 171,
+ "ledger_rows": 177,
  "distinct_hypotheses": 137,
  "funnel": {
-  "closed": 99,
+  "closed": 100,
   "discovery": 0,
   "validation": 1,
-  "holdout": 2,
-  "forward": 3,
+  "holdout": 1,
+  "forward": 2,
   "paper": 0,
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 3/3 live (Entry 15, 17, 18) -> NOTHING DRAWABLE: all live entries are parked or waiting on data/Jason (Entry 15, 17, 18)",
+  "shelf": "Shelf 2/3 DRAWABLE (Entry 19, 20; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
   "rows": [
    {
     "tier": "GATED",
@@ -109,14 +114,6 @@
    },
    {
     "tier": "FROZEN",
-    "id": "H118",
-    "name": "H118 \u00b7 VWAP distance LOW tercile, 10-day drift",
-    "stage_reached": "FORWARD VALIDATION",
-    "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
     "id": "hyp-000105",
     "name": "Midday lull \u2192 afternoon expansion",
     "stage_reached": "HOLDOUT PASSED",
@@ -127,7 +124,7 @@
   "counts": {
    "OPEN": 0,
    "GATED": 1,
-   "FROZEN": 3
+   "FROZEN": 2
   }
  },
  "waiting_on_jason": [
@@ -149,7 +146,7 @@
  },
  "shelf": {
   "floor": 3,
-  "count": 4,
+  "count": 6,
   "floor_met": true,
   "live": [
    {
@@ -162,15 +159,28 @@
    },
    {
     "id": 17,
-    "name": "M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) \u2014 WAITING ON RTY/ES DATA"
+    "name": "M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) \u2014 PARKED: not testable at the current data ceiling (needs RTY/ES)"
    },
    {
     "id": 18,
-    "name": "M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) \u2014 WAITING ON ES DATA"
+    "name": "M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) \u2014 PARKED: not testable at the current data ceiling (needs ES)"
+   },
+   {
+    "id": 19,
+    "name": "M15: overnight vs intraday return split, NQ -> night leg carries the drift (sourcing 2c, September 12th, 11:00 am CT cycle) \u2014 DRAWABLE (map-ranked #1 by information gain)"
+   },
+   {
+    "id": 20,
+    "name": "M16: market intraday momentum, prior close->10:00 predicts 15:30->16:00, NQ (sourcing 2e, September 12th, 11:00 am CT cycle) \u2014 DRAWABLE (map-ranked #2)"
    }
   ]
  },
  "recent_closures": [
+  {
+   "id": "hyp-000123",
+   "name": "H118 \u00b7 VWAP distance LOW tercile, 10-day drift",
+   "date": "2026-09-12"
+  },
   {
    "id": "hyp-000051",
    "name": "Intraday multi-day base breakout",
@@ -190,14 +200,20 @@
    "id": "hyp-000023",
    "name": "Weekly trend split by volatility regime",
    "date": "2026-09-11"
-  },
-  {
-   "id": "hyp-000140",
-   "name": "Abs gap vs atr same day range magnitude",
-   "date": "2026-09-11"
   }
  ],
  "sessions": [
+  {
+   "file": "2026-09-12-1600.md",
+   "ts": "2026-09-12T16:00:00Z",
+   "new_information": "",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 11:00 am CT"
+  },
   {
    "file": "2026-09-12-1428.md",
    "ts": "2026-09-12T14:28:00Z",
@@ -219,17 +235,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 12th, 9:00 am CT"
-  },
-  {
-   "file": "2026-09-12-1307.md",
-   "ts": "2026-09-12T13:07:00Z",
-   "new_information": "None \u2014 practice cycle.",
-   "agents_ran": 0,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 8:07 am CT"
   }
  ]
 }

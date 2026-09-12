@@ -29,8 +29,8 @@ Structural conclusion (September 12th, four independent reads agree): scheduled,
 - Options / tick data: only if a price-only result earns it (M14 was designed as that gate).
 
 ## 4. What is OPEN (live work)
-- Shelf (SHELF RULE v2): counts DRAWABLE entries only; sourcing every cycle from every channel; below floor = more sourcing, never a draw. Currently 0/3 drawable, 3 pending.
-- Next write-ups (NQ-only, testable now): overnight-vs-intraday split (Lou/Polk/Skouras 2019); intraday momentum (Gao et al. 2018). Then the Observatory information-transmission program across NQ/ZN/6E/CL; practitioner proxies; event reaction shape.
+- Shelf (SHELF RULE v2): counts DRAWABLE entries only; sourcing every cycle from every channel; below floor = more sourcing, never a draw. Currently 2/3 drawable (Entry 19 M15 overnight-vs-intraday split; Entry 20 M16 intraday momentum), 3 pending at the data ceiling.
+- Written and drawable (September 12th, 11 am cycle): M15 overnight-vs-intraday split (Lou/Polk/Skouras 2019) and M16 intraday momentum (Gao et al. 2018), mechanism docs first, one pre-registered scan each. Practitioner stream opened (research/sourcing/practitioner.md; three claims ruled, none entered). Next sourcing: the Observatory information-transmission program across NQ/ZN/6E/CL; event reaction shape.
 - Forward logs: EXP047 weekly trend (3/260 weeks); H118 forward log for information only.
 - CHECKPOINT September 19th (Jason): one page — what survived, what it is worth, one recommendation. If nothing reached Validation, the decision is data vs. product (sizing overlay on a simple base).
 - CHANGE FREEZE on structure until September 19th: observations go into the weekly review, not into live fixes.
@@ -43,4 +43,5 @@ Sourcing (map / literature / practitioner / observatory) -> template with instru
 - 2026-09-10: Back-half v3 + v3.1 (forward test != paper trading != live; anti-optimization rule; two clocks); execution infrastructure pre-approved.
 - 2026-09-11: Outside review adopted — market structure map, mechanism BEFORE scan, blind gates, power check, 2-hour self-scheduling cycles with lock/budget/checkpoint; console simplified to one state document; UPGRADE brief ($1k/mo goal, $20/mo data, $300 risk budget).
 - 2026-09-12 (overnight): map exhausted (M1-M11 closed or parked); M9 untestable on a roll-day data gap; M12 cross-asset clean null; approval-card stall root-caused (a path outside the workspace); create_trigger vs send_later slip fixed.
+- 2026-09-12 (11 am cycle): first unattended cycle under SHELF RULE v2 ran as designed -- sourced two literature entries and ruled three practitioner claims instead of drawing thin; shelf 2/3. Open question for the Sept 19 review: is a #1-ranked, on-disk entry drawable below the floor.
 - 2026-09-12 (morning): scope opened beyond NQ; three outside AIs polled; sourcing stage + template + ranking by information gain x edge potential; TWO NULLS rule (failure mode #7); H118 baseline diagnostic -> H118 REJECTED; SHELF RULE v2 (drawable-only count, sourcing every cycle, no invented scopes, shelf-starving alert); data decision: no purchase; per-entry scan hold lifted (cycles scan autonomously); CHANGE FREEZE + CHECKPOINT September 19th; weekly review instituted; this file created.

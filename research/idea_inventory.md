@@ -1344,3 +1344,65 @@ doc research/mechanisms/hedging-demand-gamma-regime-m14.md.
 3. **HORIZON**: 15:30 -> 16:00 (gating); next session (reported).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M14. STATUS: FILED, WAITING ON ES DATA + JASON'S GO.
+
+## ENTRY 19 — M15: overnight vs intraday return split, NQ -> night leg carries the drift (sourcing 2c, September 12th, 11:00 am CT cycle) — DRAWABLE (map-ranked #1 by information gain)
+
+Generation (sourcing stage, unattended cycle): full mechanism doc
+research/mechanisms/overnight-vs-intraday-return-split-m15.md, written
+BEFORE any scan. Source CHANNEL: literature (Lou-Polk-Skouras 2019 JFE
+"A tug of war"; Cooper-Cliff-Gulen 2008 "Like night and day").
+- LEARN/Integrity: NEW, signed at sourcing. Not a resurrection of the
+  gap-fade family (gap sign as predictor), hyp-000139 (conditional
+  divergence, reverted), or the overnight RANGE family (056/057,
+  117/118). Attempt 1 of 2.
+- Discovery: NQ 1-minute file on disk; 27 roll-Friday sessions lack the
+  RTH block and are dropped with the count disclosed. 7 cells, 1 gating.
+- Statistical: daily n (~1,650 Discovery sessions); block bootstrap
+  (block 10) is the CI of record; NULL 1 is built into the gating
+  statistic (night minus day legs of the same drift).
+- Director: rank 1 by information gain -- sets the baseline for every
+  future intraday directional claim either way. Edge potential moderate.
+  Track: directional alpha. Realization: time-based (16:00 in, 09:30 out).
+- Decay: whole Discovery sample is post-publication; first/second-half
+  split is the pre-registered decay check (P2).
+- KILL RULE: >50% of the night premium in the 09:29->09:30 open print
+  terminates the family (P3).
+- Information gain / edge potential: stated in doc Section 8.
+
+1. **STATE VARIABLE**: none. Unconditional decomposition of each session
+   into R_night (16:00 -> 09:30) and R_day (09:30 -> 16:00), / ATR14.
+2. **MECHANISM CLAIM**: intermediaries decline to carry index inventory
+   overnight; the close-to-open leg pays the premium, the open-to-close
+   leg earns ~zero.
+3. **HORIZON**: ~17.5 hours (gating); no multi-day cell.
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M15. STATUS: DRAWABLE. Next cycle with budget draws
+   it -- one pre-registered scan at the Section 7 spec.
+
+## ENTRY 20 — M16: market intraday momentum, prior close->10:00 predicts 15:30->16:00, NQ (sourcing 2e, September 12th, 11:00 am CT cycle) — DRAWABLE (map-ranked #2)
+
+Generation (sourcing stage, unattended cycle): full mechanism doc
+research/mechanisms/market-intraday-momentum-m16.md, written BEFORE any
+scan. Source CHANNEL: literature (Gao-Han-Li-Zhou 2018 JFE "Market
+intraday momentum").
+- LEARN/Integrity: NEW, signed at sourcing. Not a resurrection of the IB
+  breakout family (011/028/065/135), hyp-000045, hyp-000076, or M1.
+  M13 is the pre-registered confound (P2 separates). Attempt 1 of 2.
+- Discovery: NQ file on disk; roll-Friday sessions dropped, disclosed.
+  10 cells, 1 gating.
+- Statistical: daily n; block bootstrap CI of record; NULL 1 = middle
+  tercile + unconditional last-30 mean reported beside the gate.
+- Director: rank 2 by information gain (maps where in the session the
+  predictable return lives; P2 tells M13/M14 whether close flow is
+  information- or momentum-driven). Edge potential moderate; decay is
+  the base case (sample ends 2013). Track: directional. Realization:
+  time-based 15:30 -> 16:00.
+- KILL RULE: >50% of the response in the 15:59->16:00 bar terminates.
+
+1. **STATE VARIABLE**: tercile of R_first30 (prior 16:00 close -> 10:00),
+   / ATR14, frozen on Discovery.
+2. **MECHANISM CLAIM**: close-scheduled flow (NAV rebalancers, vol
+   targeters) trades in the direction of the morning's information.
+3. **HORIZON**: 15:30 -> 16:00 same session (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M16. STATUS: DRAWABLE, behind Entry 19.
