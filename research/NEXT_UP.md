@@ -379,6 +379,11 @@ WEEKS 4-8:
   U21. Metrics dashboard on the ten yield metrics / weekly scorecard shape (C, F).
   U22. Day-60 review: Data Acquisition Trigger check; D12 goal/capital conversation
        once paper trading has a record.
+  U23. Console: render the bot-milestone table (research/_console_state.json now carries
+       `bot_milestones`, `upgrade_queue`, `ordering_principle` as of Sept 13th ~5:55 pm
+       CT; the published console HTML does not display them yet). Add a "Bot" panel at
+       the TOP of the console, above the research funnel -- the bot is the goal, the
+       funnel is the feeder. Republish the artifact.
 
 ## Queue
 
