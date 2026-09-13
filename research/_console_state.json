@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-13T20:10:00Z",
- "generated_at_local": "September 13th, 3:10 pm CT",
- "last_run": "2026-09-13T18:00:00Z",
- "last_run_local": "September 13th, 1:00 pm CT",
- "next_run": "2026-09-13T22:00:00Z",
- "next_run_local": "September 13th, 5:00 pm CT",
+ "generated_at": "2026-09-13T22:12:00Z",
+ "generated_at_local": "September 13th, 5:12 pm CT",
+ "last_run": "2026-09-13T21:42:00Z",
+ "last_run_local": "September 13th, 4:42 pm CT",
+ "next_run": "2026-09-14T00:00:00Z",
+ "next_run_local": "September 13th, 7:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "287 tests",
  "ops": {
@@ -13,7 +13,7 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 9 min, last activity 1 min ago"
+    "detail": "session running 30 min, last activity 0 min ago"
    },
    {
     "name": "shelf",
@@ -23,22 +23,22 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-13T18:15"
+    "detail": "last cycle closed cleanly at 2026-09-13T22:12"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'ledger_rows': 4, 'scans_registered': 4, 'mechanism_docs': 3, 'inventory_entries': 3, 'inventory_closed': 4}"
+    "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1, 'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1, 'inventory_closed': 1}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 117 min ago"
+    "detail": "refreshed 123 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "50 reports, latest 2026-09-13-1800.md well-formed"
+    "detail": "52 reports, latest 2026-09-13-2142.md well-formed"
    },
    {
     "name": "new-information",
@@ -48,12 +48,12 @@
    {
     "name": "ledger",
     "status": "PASS",
-    "detail": "116 idea families, no stale statuses"
+    "detail": "117 idea families, no stale statuses"
    },
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "32 mechanism doc(s) cover every advanced candidate"
+    "detail": "33 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -68,24 +68,24 @@
   ]
  },
  "progress": {
-  "trials_since_last_survivor": 138,
-  "trials_total": 447,
+  "trials_since_last_survivor": 143,
+  "trials_total": 452,
   "survivors_alive": 2,
-  "trials_per_survivor": 223.5,
+  "trials_per_survivor": 226.0,
   "last_survivor": {
    "hypothesis_id": "hyp-000151",
    "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
    "date": "2026-09-13"
   },
-  "scan_cells_total": 344,
-  "standalone_total": 103,
-  "scans_run": 32,
-  "scans_with_no_survivor": 27
+  "scan_cells_total": 348,
+  "standalone_total": 104,
+  "scans_run": 33,
+  "scans_with_no_survivor": 28
  },
- "ledger_rows": 194,
- "distinct_hypotheses": 151,
+ "ledger_rows": 195,
+ "distinct_hypotheses": 152,
  "funnel": {
-  "closed": 112,
+  "closed": 113,
   "discovery": 1,
   "validation": 0,
   "holdout": 2,
@@ -167,20 +167,25 @@
     "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 CLOSED, P1_FAIL"
    },
    {
-    "id": 30,
-    "name": "M26: Level Sweep Reversal (close_min_distance), conditioned on prior-day range contraction (resurrection, practitioner/map channel) \u2014 SOURCED September 13th, ~11:15 am CT (interactive-conversation-origin, scheduled cycle), DRAWABLE"
-   },
-   {
     "id": 31,
     "name": "M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) \u2014 SOURCED, DRAWABLE"
    },
    {
     "id": 32,
     "name": "M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) \u2014 SOURCED, DRAWABLE"
+   },
+   {
+    "id": 33,
+    "name": "M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) \u2014 SOURCED, DRAWABLE (Stage 0 free-look first)"
    }
   ]
  },
  "recent_closures": [
+  {
+   "id": "hyp-000159",
+   "name": "Level-sweep-reversal-prior-day-narrow-m26",
+   "date": "2026-09-13"
+  },
   {
    "id": "hyp-000158",
    "name": "Monthly-opex-week-delta-hedge-unwind-nq-m25",
@@ -200,14 +205,31 @@
    "id": "hyp-000154",
    "name": "Letf-close-rebalance-m13",
    "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000153",
-   "name": "Month end duration extension zn m22",
-   "date": "2026-09-13"
   }
  ],
  "sessions": [
+  {
+   "file": "2026-09-13-2142.md",
+   "ts": "2026-09-13T21:42:00Z",
+   "new_information": "",
+   "agents_ran": 4,
+   "agents_not_run": 2,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 4:42 pm CT"
+  },
+  {
+   "file": "2026-09-13-2001.md",
+   "ts": "2026-09-13T20:01:00Z",
+   "new_information": "",
+   "agents_ran": 4,
+   "agents_not_run": 2,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 3:01 pm CT"
+  },
   {
    "file": "2026-09-13-1800.md",
    "ts": "2026-09-13T18:00:00Z",
@@ -218,28 +240,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 13th, 1:00 pm CT"
-  },
-  {
-   "file": "2026-09-13-1601.md",
-   "ts": "2026-09-13T16:01:00Z",
-   "new_information": "",
-   "agents_ran": 5,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 11:01 am CT"
-  },
-  {
-   "file": "2026-09-13-1400.md",
-   "ts": "2026-09-13T14:00:00Z",
-   "new_information": "",
-   "agents_ran": 4,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 9:00 am CT"
   }
  ]
 }

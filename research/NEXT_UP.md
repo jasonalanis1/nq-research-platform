@@ -262,13 +262,13 @@ cheapness order -- YES. D16 yield metrics + weekly scorecard -- YES. D17 data pu
 still NO, write the six-condition trigger -- YES.
 
 THIS WEEK (no new infrastructure; fits the 2-hour cycles):
-  U1. Sidak stacking diagnosis, READ-ONLY (review A). Output: research/studies/
+  U1. [DONE Sept 13th 5:15 pm CT -- does not double-count; policy note for Jason] Sidak stacking diagnosis, READ-ONLY (review A). Output: research/studies/
       sidak-stacking-diagnosis-2026-09-1X.md -- does the Validation-stage cumulative
       correction re-count Discovery trials against an independent sample? No bar
       change; Jason rules after reading it.
   U2. M23 Statistical stage (owed anyway; reviews B, C, E).
-  U3. M26 and M27 exactly as frozen (C, F). M26 = first sanctioned conditional retest.
-  U4. Source the VXN-minus-realized-range state variable to the shelf as a Layer-0
+  U3. [M26 DONE Sept 13th 5:00 pm CT -- P1_FAIL, hyp-000159; M27 still owed] M26 and M27 exactly as frozen (C, F). M26 = first sanctioned conditional retest.
+  U4. [DONE Sept 13th 5:05 pm CT -- M29 / Entry 33] Source the VXN-minus-realized-range state variable to the shelf as a Layer-0
       primitive (D): VXN daily vs NQ trailing realized range; mechanism = dealer
       positioning dampens (implied >> realized) or amplifies (implied << realized).
   U5. Register review A's three conditional candidates as ONE-condition families:
@@ -930,7 +930,8 @@ introduced. Console pushed live cleanly (write_db). Full:
 research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
-
+September 13th, 4:42-5:25 pm CT -- INTERACTIVE TEST CYCLE (first under UPGRADE QUEUE v3; Jason asked to run a session and test it): U3 DONE -- drew Entry 30/M26 (Scan 033, 4 cells): P1_FAIL, compressed-day net R +0.030 ci_90 (-0.109,+0.186) n=131 powered; P2 diff not credible; hyp-000159 REJECTED; CLOSED, attempt 1 of 2 for the family. U1 DONE -- Sidak diagnosis (read-only): does NOT double-count (stage-specific N: 451/20/3); the Discovery bar tightens monotonically -- policy decision framed for Jason, no bar change. U4 DONE -- sourced M29/Entry 33 (implied-minus-realized vol gap, state primitive), shelf 3/3 (31, 32, 33). U2 (M23 Statistical) NOT done -- slipped to 7:00 pm cycle (scan hit the device-shell 3-minute limit twice before year-chunking fixed it). Tests 287, ops_checks 8/8 PASS. NEXT: U2 first, then U5 (three conditional families), U6-U8 (specs/forms), U10 (data trigger already in KNOWLEDGE.md).
+Previous: 
 3:00 pm CT scheduled cycle (2026-09-13 20:01 UTC). Drew Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ): Scan 032, 10 cells, calendar-week partition (80 expiration weeks vs. 269 non-expiration weeks). GATING clean fail -- expiration-week return, ATR14-normalized, net of NQ's own unconditional weekly drift, mean=+0.1872, ci_90=(-0.0291,+0.3950), wide interval spanning both signs (not a near-miss like M24, a clean non-credible result). P2 (expiration minus non-expiration) also not credible. Day-of-week cumulative cells (Tue/Wed/Thu/Fri) individually credibly positive but non-gating/descriptive, does not override the failed gate. Director CONCUR with closure. hyp-000158 REJECTED. Entry closed, shelf dropped to 2/3. Sourced Entry 32/M28 (pre-holiday effect, NQ) restoring shelf to 3/3 -- a well-replicated multi-decade, multi-market equity anomaly (Lakonishok-Smidt 1988, Ariel 1990) never before tested against NQ in this project, with an honestly-flagged weaker named-participant mechanism story than this project's usual standard. Mechanism doc written before any scan; not drawn this cycle, budget-use deferral, first in line next cycle. pytest 287/287, ops_checks PASS, console v80->v81. Full: research/sessions/2026-09-13-2001.md.
 
 Previous: 1:00 pm CT scheduled cycle (2026-09-13 18:00 UTC). Drew Entry 28/M24 (month-end payment-cycle reversal, NQ): Scan 031, 10 cells, thin-sample family (n=80 usable calendar months, ~27/tercile, block=3). GATING near-miss -- LOW-tercile next-month return net of NQ's own unconditional drift, mean=+0.0112, ci_90=(-0.0005,+0.0224), lower bound just barely negative, not credible. P2 (LOW-HIGH) also not credible. Not confounded with M6/hyp-000108 (first-3-session share 0.452, below kill threshold). Director CONCUR with closure despite the near-miss CI -- this project's own discipline treats a near-miss the same as a clean miss, no re-test authorized without new information. hyp-000157 REJECTED. Entry closed, shelf dropped to 2/3. Sourced Entry 31/M27 (Tokyo FX session open, 6E) restoring shelf to 3/3 -- direct companion to M23's own proven methodology (unconditional-hourly-baseline comparison, specificity check, kill check), applied to the non-overlapping Tokyo-open window (19:00-20:00 ET) with its own participant story (Japanese exporter/importer flow, Asian real-money accounts). Mechanism doc written before any scan; not drawn this cycle, budget-use deferral, first in line next cycle. pytest 287/287, ops_checks PASS, console v79->v80. Full: research/sessions/2026-09-13-1800.md.

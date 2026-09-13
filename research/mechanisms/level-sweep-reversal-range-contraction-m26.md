@@ -152,3 +152,24 @@ of 3 as SHELF RULE v2 requires, but the draw itself is deferred to
 preserve budget for a careful, unhurried close-out. DRAWABLE as of this
 doc's completion; first in line next cycle (or sooner, given Jason's
 explicit interest in this exact question ahead of September 19th).
+
+## 11. Disposition (2026-09-13, Scan 033, hyp-000159) -- first sanctioned conditional retest
+Drawn in the September 13th ~4:45 pm CT interactive test cycle (the first cycle
+after the freeze was lifted), under the eight-condition conditional-retest protocol
+adopted the same day. Four cells, registered in SCAN_REGISTRY before the scan ran.
+GATING P1: compressed-day (prior_day_narrow) net R mean=+0.0300, ci_90=(-0.1093,
++0.1860), n=131 -- adequately powered (falsifier (c) threshold 40), NOT credible.
+Reference: non-compressed mean=-0.0652, ci_90=(-0.1686,+0.0328), n=343.
+P2 (the real question): compressed minus non-compressed = +0.0952, ci_90=(-0.0687,
++0.2736) -- not credible. The gap points the predicted way (compressed days are
+better than non-compressed) but does not clear noise.
+Counts: 474 trades on the Discovery slice (exp-023 had 461 on the 2026-08-20 data
+file; this run used the 2026-09-09 file and a year-chunked scan with identical
+detection math -- disclosed, not material). 98.5% of compressed-day trades resolved
+(stop or target), so the result is not an artifact of unresolved end-of-day exits.
+VERDICT: P1_FAIL. Closed per falsifier (a). Director Re-Evaluation: CONCUR -- a clean,
+powered null, not a near-miss; attempt 1 of 2 for this conditioning family; no
+re-test without a materially different, independently established condition.
+Answer to Jason's question ("does a pattern that failed on average still work under
+specific conditions") for THIS pattern and THIS condition: no. The methodology
+itself worked as designed -- one pre-chosen condition, one shot, honest answer.

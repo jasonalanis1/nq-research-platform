@@ -1778,7 +1778,7 @@ weeks/year, S&P 100 names).
    the shelf to Entry 30/31 (2 of 3), sourcing owed next cycle per SHELF
    RULE v2.
 
-## ENTRY 30 — M26: Level Sweep Reversal (close_min_distance), conditioned on prior-day range contraction (resurrection, practitioner/map channel) — SOURCED September 13th, ~11:15 am CT (interactive-conversation-origin, scheduled cycle), DRAWABLE
+## ENTRY 30 — M26: Level Sweep Reversal (close_min_distance), conditioned on prior-day range contraction (resurrection, practitioner/map channel) — SOURCED September 13th, ~11:15 am CT; CLOSED September 13th, ~5:00 pm CT (Scan 033, hyp-000159, P1_FAIL, clean powered null, first sanctioned conditional retest)
 
 - Source CHANNEL: practitioner/map (resurrection of a previously-closed
   directional idea, now conditioned differently). Origin: today's
@@ -1830,7 +1830,7 @@ weeks/year, S&P 100 names).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW conditional claim on an
    old, closed unconditional pattern. Attempt 1 of 2 (tracked per-
    conditioning-variable).
-5. **MAP ANCHOR**: M26. STATUS: DRAWABLE. Mechanism doc:
+5. **MAP ANCHOR**: M26. STATUS: CLOSED (Scan 033, P1_FAIL: compressed-day net R +0.030, ci_90 (-0.109,+0.186), n=131; P2 diff +0.095 not credible; see mechanism doc Section 11). Mechanism doc:
    research/mechanisms/level-sweep-reversal-range-contraction-m26.md.
    Restores the 3-entry shelf floor (Entry 28, 29, 30).
 
@@ -1915,3 +1915,27 @@ specifically in this project.
    research/mechanisms/pre-holiday-effect-nq-m28.md. Restores the
    3-entry shelf floor (Entry 30, 31, 32).
 
+
+## ENTRY 33 — M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) — SOURCED, DRAWABLE (Stage 0 free-look first)
+
+Generation (sourcing stage, UPGRADE QUEUE v3 item U4): sourced to restore the
+3-entry shelf floor after M26/Entry 30 closed this cycle (P1_FAIL, hyp-000159),
+and because outside review D named it as the one state variable on disk that has
+never been used -- the closest available proxy for options-dealer hedging. Full
+mechanism doc research/mechanisms/implied-realized-vol-gap-nq-m29.md, written
+BEFORE any look at the data. Filed as a LAYER-0 STATE PRIMITIVE, not a directional
+claim.
+1. **CLAIM**: gap = VXN(t-1) minus trailing-20-session realized vol of NQ; HIGH-gap
+   days (implied >> realized, dealers dampening) show credibly LOWER next-session
+   RTH range ratio than LOW-gap days (P1); effect survives residualizing on the
+   VXN-level tercile (P2, separability from hyp-000142/144/151).
+2. **MECHANISM**: dealers net short options hedge against the move (dampening);
+   net long, hedge with the move (amplifying). Named participant; observable only
+   through this price proxy.
+3. **FROZEN SCOPE**: Stage 0 = descriptive free-look table (U11, no ID, no scan);
+   Stage 1 = ONE 4-cell scan only if the free-look shows a footprint (block=10).
+4. **RESURRECTION RULING**: NEW. Not hyp-000142 (different denominator), not M12,
+   not the tabled VIX-term-structure idea. Duplicate-closure rule: if the gap
+   tercile overlaps the VXN-level tercile >80% of days, close as duplicate.
+5. **MAP ANCHOR**: M29. STATUS: DRAWABLE for Stage 0 as soon as U11 (Observatory
+   free-look mode) exists. Restores the shelf to 3/3 (Entry 31, 32, 33).
