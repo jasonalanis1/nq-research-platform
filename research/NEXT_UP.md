@@ -72,7 +72,7 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 (auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 0, GATED 0, FROZEN 3.)
 
-- SHELF: Shelf 2/3 DRAWABLE (Entry 26, 27; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
+- SHELF: Shelf 2/3 DRAWABLE (Entry 27, 28; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
 - FROZEN hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144, hyp-000151): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
@@ -839,7 +839,9 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
-1:00 am CT scheduled cycle (2026-09-13 06:00 UTC). Sourced Entry 27/M23 (London FX session-open volatility burst, 6E, structural session-boundary mechanism) restoring shelf to 3/3, which authorized drawing within the same cycle per SHELF RULE v2. Drew and scanned Entry 22/M18 (volume-conditioned daily reversal, NQ): Scan 026 -- P1 gating passed (HIGH-volume credibly negative) but P2 failed (not credibly below LOW-volume); CLOSED, hyp-000152 REJECTED, not killed (first-min share 0.036). Shelf back to 2/3 (Entry 26, 27), sourcing owed again. pytest 287/287, ops_checks WARN only on expected shelf-below-floor. Full: research/sessions/2026-09-13-0600.md.
+3:00 am CT scheduled cycle (2026-09-13 08:00 UTC). Sourced Entry 28/M24 (month-end payment-cycle reversal, NQ, literature: forced institutional selling for month-end cash needs, reversing over the following month) restoring shelf to 3/3, authorizing a draw per SHELF RULE v2. Drew and scanned Entry 26/M22 (month-end ZN duration-extension flow): Scan 027 -- GATING cell n=82 mean=+0.1022 ci_90=(-0.1210,+0.2630), not credibly positive; not killed; issuance-direction split omitted (no issuance-size data on disk). CLOSED, hyp-000153 REJECTED, THIN-SAMPLE caveat (n=82, same discipline as M19). Shelf back to 2/3 (Entry 27, 28), sourcing owed again. pytest 287/287, ops_checks WARN only on expected shelf-below-floor. Full: research/sessions/2026-09-13-0800.md.
+
+Previous: 1:00 am CT scheduled cycle (2026-09-13 06:00 UTC). Sourced Entry 27/M23 (London FX session-open volatility burst, 6E, structural session-boundary mechanism) restoring shelf to 3/3, which authorized drawing within the same cycle per SHELF RULE v2. Drew and scanned Entry 22/M18 (volume-conditioned daily reversal, NQ): Scan 026 -- P1 gating passed (HIGH-volume credibly negative) but P2 failed (not credibly below LOW-volume); CLOSED, hyp-000152 REJECTED, not killed (first-min share 0.036). Shelf back to 2/3 (Entry 26, 27), sourcing owed again. pytest 287/287, ops_checks WARN only on expected shelf-below-floor. Full: research/sessions/2026-09-13-0600.md.
 
 Previous: September 12th, 11:00 pm CT scheduled cycle (2026-09-13 04:00 UTC). Sourcing owed, shelf stayed 2/3 -- considered the day_of_week/volume-regime follow-up flagged in Entry 4's closure notes and declined it as fishing-adjacent on an already-null variable; no other candidate cleared the LEARN/resurrection bar. Confirmed the interactive VXN Holdout pass (hyp-000151, between the 9pm and 11pm cycles) rolled cleanly into the sweep: GATED 0, FROZEN 3. pytest 287/287. Full: research/sessions/2026-09-13-0400.md.
 

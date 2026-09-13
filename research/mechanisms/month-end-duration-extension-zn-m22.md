@@ -117,3 +117,38 @@ magnitude fact does).
 SOURCED, map channel, open scope. Mechanism doc written BEFORE any scan
 per the upgrade-brief methodology. DRAWABLE once registered on the map
 and in the Idea Inventory. No scan run yet.
+
+## 10. Disposition (2026-09-13, ~3:20 am CT, scheduled cycle)
+Scan 027 run, Discovery slice only (82 calendar month-ends, 2015-01
+through 2021-10). Result:
+  - GATING cell (last-2-RTH-session ZN return/ATR14, net of ZN's own
+    unconditional 2-session drift): n=82, mean=+0.1022,
+    ci_90=(-0.1210,+0.2630) -- does NOT credibly clear zero (the CI
+    straddles it, though the point estimate is positive and in the
+    predicted direction).
+  - Kill check: final-minute share=0.096 (well under the 0.5 threshold)
+    -- NOT concentrated in a settlement-price artifact.
+  - Secondary issuance-direction split: OMITTED. The only issuance file
+    on disk (data/treasury_auctions_notes_2015_2021.csv, used by Scan
+    024/M19) has 10-year note auction DATES only, no issuance SIZE and
+    no other maturity terms -- there is no way to classify "months where
+    the auction calendar added net long-dated supply" from what is
+    actually on disk without inventing a proxy the doc did not specify.
+    Per the standing rule against fabricating data when a real source
+    cannot be found, this cell was skipped rather than approximated
+    (same precedent as Scan 024's own omitted bid-to-cover cell). The
+    doc marked this cell non-gating and low-power in advance, so the
+    entry's verdict does not depend on it.
+VERDICT: P1_FAIL. Per Section 2's own falsifier: "if the last-2-session
+ZN return, net of its own unconditional 2-session drift, does not clear
+a 90% block-bootstrap CI excluding zero, the flow is not visible in ZN
+futures at this data ceiling and the entry closes." Entry CLOSED.
+Logged: hyp-000153 (REJECTED), ledger data_slice=discovery.
+THIN-SAMPLE CAVEAT (flagged in the doc from the outset): n=82 month-ends
+is a small sample for a monthly-frequency test, comparable to M19's
+n=40 auction events. The point estimate is positive and economically
+plausible in size, but the confidence interval is wide enough that this
+null does not rule out a real, smaller effect than the CI's power can
+detect -- it only says the flow is not visible at this data ceiling,
+the same framing already applied to M19's closure.
+Next owed: none for M22 -- CLOSED.

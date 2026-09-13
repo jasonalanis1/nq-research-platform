@@ -1563,7 +1563,7 @@ Vega 2003, Ehrmann-Fratzscher 2005.
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M21. STATUS: DRAWABLE, second on the shelf.
 
-## ENTRY 26 — M22: month-end index duration-extension flow, ZN (map-ranked, open scope) — SOURCED September 13th, ~9:15 pm CT (map channel), DRAWABLE
+## ENTRY 26 — M22: month-end index duration-extension flow, ZN (map-ranked, open scope) — CLOSED (Scan 027, 2026-09-13 ~3:20 am CT, hyp-000153 REJECTED): last-2-session ZN return vs unconditional 2-session drift not credibly positive (n=82, thin-sample); not killed
 
 - Source CHANNEL: map (forced participant), literature-supported: bond
   index providers (Bloomberg US Aggregate/Treasury indices) rebalance
@@ -1603,8 +1603,7 @@ Vega 2003, Ehrmann-Fratzscher 2005.
    session return up relative to ZN's own unconditional drift.
 3. **HORIZON**: 1-2 sessions, calendar-anchored (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M22. STATUS: DRAWABLE. Mechanism doc:
-   research/mechanisms/month-end-duration-extension-zn-m22.md.
+5. **MAP ANCHOR**: M22. STATUS: CLOSED. Drawn and scanned same cycle (2026-09-13 ~3:20 am CT). Scan 027: GATING cell n=82 mean=+0.1022 ci_90=(-0.1210,+0.2630) -- does not credibly clear zero. Not killed (final-minute share 0.096). Issuance-direction split omitted (no issuance-size data on disk beyond 10Y auction dates). VERDICT: P1_FAIL, closed per the doc's own falsifier. Logged hyp-000153 (REJECTED, data_slice=discovery). THIN-SAMPLE caveat: n=82 is a small sample, comparable to M19's n=40 -- this null does not rule out a smaller real effect, only that it is not visible at this data ceiling. Mechanism doc: research/mechanisms/month-end-duration-extension-zn-m22.md.
 
 ## ENTRY 27 — M23: London FX session-open volatility burst, 6E (map-ranked, open scope) — SOURCED September 13th, ~1:15 am CT (map channel), DRAWABLE
 
@@ -1656,3 +1655,45 @@ Vega 2003, Ehrmann-Fratzscher 2005.
 5. **MAP ANCHOR**: M23. STATUS: DRAWABLE. Mechanism doc:
    research/mechanisms/london-open-volatility-6e-m23.md. Restores the
    3-entry shelf floor (Entry 22, 26, 27).
+
+## ENTRY 28 — M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) — SOURCED, DRAWABLE
+
+Generation (sourcing stage, scheduled cycle): full mechanism doc
+research/mechanisms/month-end-payment-cycle-reversal-m24.md, written
+BEFORE any scan. Source: Graziani (2024 EFMA working paper), "Time
+Series Reversal: A Payment Cycle Friction" -- pension/cash-management
+accounts forced to liquidate equity exposure to fund month-end
+obligations, depressing price temporarily; the pressure reverses over
+the following month.
+- LEARN/Integrity: NEW. Disclosed against M6/hyp-000108 (opposite flow
+  direction, unconditioned, first-3-days only -- different claim), M22
+  (different instrument/mechanism/window), M5 (cross-asset relative,
+  closed), hyp-000022 (unconditioned weekly basket reversal), and M18
+  (volume-conditioned daily reversal, different conditioning variable
+  and horizon). Attempt 1 of 2.
+- Discovery: NQ daily aggregation, already on disk, no new data. 10
+  cells, 1 gating. THIN-SAMPLE flagged in advance: ~82 monthly
+  observations, ~27 per tercile (same disclosure discipline as M19).
+- Statistical: block bootstrap (block=3, adapted for monthly
+  frequency); NULL 1 = NQ's own unconditional next-month drift; P2 =
+  LOW-vs-HIGH asymmetry (mechanism predicts no comparable effect on the
+  HIGH side, since it is a forced-SELLING story only).
+- Director: most direct monetization path of any open shelf candidate
+  -- NQ already has an existing base strategy, unlike CL/6E/ZN's open
+  "no base strategy" gap that stalled M20/M21/M22 at Monetization.
+- KILL/CONFOUND RULE: if the next-month reversal is concentrated in its
+  first 3 sessions, it is the closed turn-of-month effect (hyp-000108)
+  bleeding across the month boundary, not an independent month-long
+  reversal -- confounded regardless of the gating cell's own CI.
+
+1. **STATE VARIABLE**: tercile of NQ's last-5-RTH-session (last week of
+   the calendar month) close-to-close return, frozen on Discovery.
+2. **MECHANISM CLAIM**: forced month-end equity liquidation for
+   payroll/dividend/pension cash needs depresses price without
+   information; the depression reverses over the following month.
+3. **HORIZON**: 1 calendar month, time-based (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, five adjacencies
+   disclosed and distinguished. Attempt 1 of 2.
+5. **MAP ANCHOR**: M24. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/month-end-payment-cycle-reversal-m24.md. Restores
+   the 3-entry shelf floor (Entry 26, 27, 28).
