@@ -69,3 +69,29 @@ Sourced Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ, li
 - 2026-09-12 (~7:10 pm CT, interactive): Jason supplied the TreasuryDirect 10-year auction-date CSV he had asked what was needed of him for. Drew Entry 23/M19 (Treasury auction concession, ZN): Scan 024, both gating legs null vs ZN's unconditional 3-session drift (n=40 events), kill check clears cleanly (8.8%, not a print artifact -- a real absence). hyp-000149 REJECTED, entry CLOSED, attempt 1 of 2 spent. Caught and fixed a kill-share denominator bug in the scan itself before treating the result as final (used the signed post-leg mean instead of the mean of per-event |post-leg|, inflating the share past 1300%).
 - 2026-09-12 (5:00 pm CT cycle, survived a mid-cycle cloud-container reset with no work lost -- the connected project folder, not the ephemeral container, is where the working tree lives): sourced M19/ZN (Treasury auction concession, WAITING on TreasuryDirect data), M20/CL (EIA report volatility), M21/6E (ECB decision volatility) -- 2nd and 3rd open-scope entries. Drew and closed Entry 21/M17 (clean null, hyp-000147). Drew Entry 24/M20 through the full pipeline: first open-scope Discovery PASS in the project, honest near-kill disclosure, Monetization verdict NO CREDIBLE PATH (hyp-000148, valid characterization, no CL strategy to size with yet). Entry 25/M21 blocked honestly on a missing verified historical ECB date list (web-tool session limit hit) rather than scanned on guessed dates -- filed WAITING. Shelf 1/3, sourcing owed into the next cycle.
 - 2026-09-12 (morning): scope opened beyond NQ; three outside AIs polled; sourcing stage + template + ranking by information gain x edge potential; TWO NULLS rule (failure mode #7); H118 baseline diagnostic -> H118 REJECTED; SHELF RULE v2 (drawable-only count, sourcing every cycle, no invented scopes, shelf-starving alert); data decision: no purchase; per-entry scan hold lifted (cycles scan autonomously); CHANGE FREEZE + CHECKPOINT September 19th; weekly review instituted; this file created.
+
+## 2026-09-13 (interactive, off-cycle) — perspective scoping for Sept 19 checkpoint
+Jason asked whether the project's search perspective needs to shift: (1)
+incorporating scheduled-event/"chatter" data, and (2) reading order
+flow/market depth more like a discretionary trader, rather than only
+backward-testing documented mechanisms. He then asked to have this ready
+to think about ahead of the Sept 19 checkpoint.
+Scoping note written: research/infrastructure/perspective-scoping-2026-09-13.md.
+Key findings: (1) event-calendar data is already in use (FOMC/NFP/CPI
+tested on free public dates); a related idea is already queued for
+LEARN/Mechanism/Director review. (2) Order-flow/depth data at ~$54k/yr
+was priced Sept 3rd and explicitly rejected by Jason Sept 7th ("drop it
+entirely") — he is knowingly revisiting that closure now, told him so
+directly along with a correction (I had inaccurately told him I'd priced
+it "earlier tonight" — that was wrong, it was Sept 3rd/7th). Found a
+materially cheaper, previously-unpriced alternative: Databento Standard
+at $199/mo, no annual commitment, forward-collection only (1-month
+rolling window, no deep history) — ~$2,400/yr vs ~$54k/yr, different
+proposition (build forward, not buy history). (3) The "read like a
+trader" angle is already scoped and mostly run: 5 candidate intraday
+behaviors from the Sept 8th pivot were all tested, one (range-contraction)
+survived Validation — the project's first-ever Validation survivor. That
+surfaced a real open fork (pair the 3 surviving volatility facts with a
+new directional signal, vs. treat them as pure characterization) that has
+been sitting undecided since Sept 9th and needs no new data — flagged as
+probably the highest-leverage decision available for the 19th.
