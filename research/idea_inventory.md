@@ -1562,3 +1562,46 @@ Vega 2003, Ehrmann-Fratzscher 2005.
 3. **HORIZON**: 1 hour, event-anchored (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M21. STATUS: DRAWABLE, second on the shelf.
+
+## ENTRY 26 — M22: month-end index duration-extension flow, ZN (map-ranked, open scope) — SOURCED September 13th, ~9:15 pm CT (map channel), DRAWABLE
+
+- Source CHANNEL: map (forced participant), literature-supported: bond
+  index providers (Bloomberg US Aggregate/Treasury indices) rebalance
+  composition monthly as new issuance lands; index-tracking funds and
+  benchmarked accounts must extend duration to match, transacting in
+  Treasury futures (cheapest/fastest instrument) concentrated in the
+  last sessions of the month.
+- Claim entirely inside ZN -- not a resurrection of M19 (auction
+  concession: different participant, calendar anchored to specific
+  auction dates, not month-end), M5 (NQ-vs-ZN relative performance,
+  CLOSED clean null: cross-asset comparison, not a ZN-only claim), or
+  turn-of-month (hyp-000108, CLOSED: NQ equity flow, first sessions of
+  the month, not the last 2 before month-end). Genuinely distinct
+  participant, distinct calendar anchor, distinct instrument-internal
+  mechanism.
+- Discovery: ZN 1-minute on disk (already loaded for M19); NYSE holiday
+  calendar already in use project-wide. No new data needed.
+- Statistical: last-2-RTH-session close-to-close return/ATR14 vs.
+  unconditional 2-session drift (NULL 1, block bootstrap, block=5 per
+  M19 convention); descriptive issuance-direction split (non-gating,
+  low power); final-minute concentration kill check.
+- Director: information gain moderate (tests whether a genuinely
+  different, non-scheduled-event ZN-internal flow is visible at this
+  data ceiling, complementing rather than restating the M20/M21
+  scheduled-event-magnitude family); edge potential real if it passes
+  since the realization path is already flat/time-boxed (no separate
+  base strategy needed to monetize, unlike M20/M21's volatility-only
+  facts). Track: directional, single-instrument.
+- KILL RULE: response concentrated in the month's single final RTH
+  minute (settlement/marking artifact, not a multi-session flow).
+
+1. **STATE VARIABLE**: none (unconditional last-2-session window,
+   calendar-anchored on month-end); descriptive issuance-direction
+   split as a secondary, non-gating cell.
+2. **MECHANISM CLAIM**: index-tracking bond funds forced to extend
+   duration at month-end transact in ZN futures, bidding the last-2-
+   session return up relative to ZN's own unconditional drift.
+3. **HORIZON**: 1-2 sessions, calendar-anchored (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M22. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/month-end-duration-extension-zn-m22.md.
