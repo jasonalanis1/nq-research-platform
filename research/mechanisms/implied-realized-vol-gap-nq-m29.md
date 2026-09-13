@@ -105,3 +105,12 @@ One shot. No new cells, no retuning after seeing results.
 ## 10. Prediction status
 Not drawn this cycle. DRAWABLE for the free-look stage as soon as U11 exists; the
 Stage-1 scan is registered only after the free-look reports a footprint.
+
+### Stage 0 result (2026-09-13, ~5:45 pm CT, observatory free-look, descriptive)
+Distinct from VXN level: 47% tercile overlap (duplicate threshold 80%), corr +0.33 —
+proceeds. SIGN OPPOSITE to P1 as written: HIGH-gap days show LARGER range in every
+session window (first30 z=+7.4, morning +7.4, midday +6.4, last hour +6.8), LOW-gap
+smaller. Stage 1 will test P1 as pre-registered (one shot); P2 (residual on VXN level)
+is the informative cell. If P1 fails, attempt 1 of 2 closes; a reversed-sign attempt
+requires a new mechanism (candidate: wide implied-over-realized gap marks
+anticipated-event / regime-shift days, not dealer long-gamma) written BEFORE any scan.
