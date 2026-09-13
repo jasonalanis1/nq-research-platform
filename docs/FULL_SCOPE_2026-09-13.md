@@ -11,7 +11,7 @@ This is the complete scope of a project I call Tony, in one place, written so so
 
 I am not a statistician or a programmer. I direct this project; an AI agent team builds and runs it. What I want from a reader is candor: where is this structure fooling itself, where is it over-engineered, where is it missing something a professional would consider obvious, and does the whole thing actually point at the goal.
 
-This version is dated September 13, 2026 and supersedes the September 12 version. On September 13 I gathered six independent outside reviews of the September 12 scope, held the checkpoint that had been scheduled for the 19th, lifted the change freeze, and made one correction that reorders everything else: **the goal is a trading bot, not the best research tool.** Section 3 says what changed; Section 6 is the roadmap that now outranks the research queue.
+This version is dated September 13, 2026 and supersedes the September 12 version. On September 13 I gathered six independent outside reviews of the September 12 scope, held the checkpoint that had been scheduled for the 19th, lifted the change freeze, and made one correction that reorders everything else: **the goal is a trading bot, not the best research tool.** Section 3 says what changed; Section 4 shows how every piece connects; Section 7 is the roadmap that now outranks the research queue.
 
 # 1. The vision
 
@@ -45,11 +45,67 @@ What survives is real, and September 13 stopped calling it a consolation prize:
 - **Three Discovery-stage volatility bursts around scheduled events** — EIA report (crude), ECB decision (euro), London FX open (euro). Previously filed as "real but nowhere to put it"; on September 13 reclassified as one family, because micro contracts exist for both instruments and the family is the same question three times.
 - **One tracker**: a weekly momentum idea rejected at Discovery and followed forward as a calibration check. H118, the candidate that once cleared all three stages, remains **rejected** (baseline confusion) with its forward log kept for information only.
 
-Two things the six reviews said in unison: the validation machinery is the asset, and the idea-generation front end was the bottleneck. Two of them said *why*: the sourcing bar required a citation and a written mechanism before anyone was allowed to look at data, which selects for ideas already in print and already traded away. Four literature-sourced ideas failed in one day; that was the filter working as designed, against us. The September 13 changes in Section 5 are the response.
+Two things the six reviews said in unison: the validation machinery is the asset, and the idea-generation front end was the bottleneck. Two of them said *why*: the sourcing bar required a citation and a written mechanism before anyone was allowed to look at data, which selects for ideas already in print and already traded away. Four literature-sourced ideas failed in one day; that was the filter working as designed, against us. The September 13 changes in Section 6 are the response.
 
 What the checkpoint concluded (held September 13, `research/weekly/2026-09-13.md`): **continue**, and move the target from "find direction" to "build on structure." The volatility facts become a risk engine; the Observatory is allowed to look before anyone theorizes; execution gets measured now with a placeholder signal; the data ceiling stays, with a written trigger for when a purchase would earn it.
 
-# 4. How the research is structured
+# 4. How it all fits together — one loop
+
+Everything in this document is one closed loop. Read it once end to end before the sections that follow, because each section describes one station on this loop and none of them makes sense alone.
+
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  LOOK (Observatory · Idea Factory)                                     │
+    │  every on-disk market state × every session window × the outcome       │
+    │  battery, Discovery slice only, descriptive, timing rule enforced.     │
+    │  Output: a RANKED CANDIDATE QUEUE. Costs nothing. Proves nothing.      │
+    └──────────────────────────────┬────────────────────────────────────────┘
+                                   │ Sourcing Rule v3: take the top family with no mechanism
+                                   ▼
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  EXPLAIN (LEARN → Mechanism → Director)                                │
+    │  LEARN: has this been closed before? Mechanism: who is forced to       │
+    │  trade, and what would prove it wrong — written BEFORE any test.       │
+    │  Director: is it worth a slot? Grade A–F. Freeze the scope.            │
+    └──────────────────────────────┬────────────────────────────────────────┘
+                                   │ one registered scan, every cell counted forever
+                                   ▼
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  TEST (Discovery → Statistical → blind Gate → Validation → Gate →      │
+    │        Holdout [Jason])                                                │
+    │  Mechanical integrity suite runs before the Gate. One shot per stage.  │
+    │  Most candidates die here. Every death produces a CLOSURE FORM.        │
+    └───────┬──────────────────────────────────────────┬────────────────────┘
+            │ died                                      │ survived
+            ▼                                           ▼
+    ┌──────────────────────┐             ┌────────────────────────────────────┐
+    │  NEGATIVE KNOWLEDGE  │             │  FACT REGISTRY                      │
+    │  what not to retest, │             │  a validated market fact: what,     │
+    │  under what single   │             │  where, how strong, what it is      │
+    │  condition it may    │             │  good for (size, stop, permission,  │
+    │  come back           │             │  or — never yet — direction)        │
+    └──────────┬───────────┘             └──────────────────┬─────────────────┘
+               │ feeds LEARN                                │ feeds the engine
+               ▼                                            ▼
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  THE BOT (Section 6)                                                   │
+    │  signal (B3 placeholder, or a real edge if research ever supplies one) │
+    │  → size / stop / target / permission (B2 Risk/State Engine, built from │
+    │    the fact registry)                                                  │
+    │  → order (B4) → fill measured (B5) → kill switches (B6)                │
+    │  → paper run (B7) → Live-Limited, Jason only (B8) → scale (B9)         │
+    └──────────────────────────────┬────────────────────────────────────────┘
+                                   │ execution data: fills, slippage, latency,
+                                   │ MFE/MAE by state — NEVER touches the
+                                   │ confirmation slices
+                                   ▼
+                        back to LOOK and EXPLAIN as new state variables,
+                        exit-rule evidence, and cost reality
+
+Three things make it a loop and not a line. **Failures are stored, not discarded** — a closure form says what was learned and the one condition under which the idea may return, and LEARN checks it by name before the next idea is written. **Facts are stored as assets, not trophies** — the fact registry is the Risk/State Engine's input, so every validated fact immediately changes how the bot sizes and stops. **Execution feeds back without contaminating** — what the bot measures in real time becomes new questions for the Observatory and new evidence for exit design, but never enters Validation or Holdout, which stay sealed.
+
+The cycle that runs every two hours walks this loop in a fixed order: advance the lowest incomplete bot milestone it can; then work the pipeline's owed stages; then source from the queue; then close out. The bot is the trunk. The rest is the feeder.
+
+# 5. How the research is structured
 
 ## Data is split by time, and the split is sacred
 
@@ -82,7 +138,7 @@ Overlapping-horizon results use a block bootstrap as the confidence interval of 
 - Five Holdout slots, ever. Each use is consumed win or lose and requires my explicit sign-off first.
 - Project-wide multiple-testing correction (Šidák family-wise) is computed in code and cited for every candidate at every stage, using the project-wide trial count — not assessed informally per candidate. Every cell of every scan is registered in a scan registry before the scan runs.
 
-# 5. How we research — the front half
+# 6. How we research — the front half
 
 We start from market behavior, not trade ideas. Order matters:
 
@@ -97,7 +153,7 @@ We start from market behavior, not trade ideas. Order matters:
 
 Starting from "here's a strategy, let's test it" is how you end up testing your own imagination.
 
-Concretely, discovery runs as scans: a frozen scope names a state variable (something measurable about the market), the buckets it is cut into, and the horizon measured. The scan reports which cells clear a pre-set gate. Survivors go into the agent pipeline in Section 8. Non-survivors close and are logged.
+Concretely, discovery runs as scans: a frozen scope names a state variable (something measurable about the market), the buckets it is cut into, and the horizon measured. The scan reports which cells clear a pre-set gate. Survivors go into the agent pipeline in Section 9. Non-survivors close and are logged.
 
 The standing research priority is short horizons — intraday, overnight, one to a few days. They accumulate evidence far faster than a 10-day hold. The tradeoff is understood: short horizons are execution-fragile, because a few points of slippage is a rounding error against a large edge and a quarter of a small one. Costs are measured, never assumed, and a candidate that only survives on optimistic costs is dead.
 
@@ -115,7 +171,7 @@ The front end now has three layers, in order:
 
 **2. Write the mechanism from the queue (Sourcing Rule v3).** Each cycle takes the highest-ranked family with no mechanism document and writes one — who is on the other side, why they are forced to act, what would prove it wrong. A queue entry with no defensible participant is skipped and the skip is noted, never forced. Only when the queue is exhausted of writable families does a cycle fall back to the literature and practitioner channels, which stay open at a higher bar. The forced-participant map still governs what enters; the map channel outperformed the literature channel this week and now gets the weight.
 
-**3. Test once (unchanged).** Mechanism document before any scan; one pre-registered scan with every cell counted; the ladder in Section 8.
+**3. Test once (unchanged).** Mechanism document before any scan; one pre-registered scan with every cell counted; the ladder in Section 9.
 
 The first queue, run September 13: 1,045 comparisons ranked, 143 candidates in 19 families — and **zero of them about direction**. Every surviving candidate concerns how much price moves or how far a move runs before it turns. At far higher resolution than anything done before, direction still isn't there, and the excursion families are the raw material an exit rule is designed from.
 
@@ -148,7 +204,7 @@ After eleven forced-participant entries produced nine clean nulls, one near-miss
 
 I considered buying the data that would see them and decided, on September 12, **not to** — the cost was real and the return wasn't demonstrable. So the ceiling is fixed and acknowledged: one-minute bars on four instruments. Five otherwise-good entries are parked against it and are listed as parked, not quietly abandoned. The rule is now written down as a **Data Acquisition Trigger**: buy only when an existing price-based discovery establishes a credible mechanism, the missing variable is specifically required to test it, expected information gain is high, the candidate cannot be falsified with current data, the likely edge justifies the cost, and the purchase resolves a defined decision. All six, or no.
 
-# 6. The bot — the product roadmap (added September 13)
+# 7. The bot — the product roadmap (added September 13)
 
 This section outranks the research queue. `docs/BOT_ROADMAP.md` is the working copy; when the two conflict, the roadmap wins.
 
@@ -175,7 +231,7 @@ This section outranks the research queue. `docs/BOT_ROADMAP.md` is the working c
 
 **The one thing this roadmap will not do** is let the placeholder quietly become "the strategy." Its signals carry the placeholder label end to end, every session report names it, and no report to me presents its paper P&L as evidence of an edge.
 
-# 7. How we prove we can execute it — the back half
+# 8. How we prove we can execute it — the back half
 
 Promotion is not the finish line. The standard must not weaken once something finally works — that is exactly when it is most tempting.
 
@@ -200,7 +256,7 @@ A Production Integrity Layer will monitor four things once anything is executabl
 
 The execution build is specified as eleven phases. Phases 1–5 (research infrastructure through holdout validation) exist today. Phases 6–11 (signal generation, human-tracked paper trading, automated paper execution, human-approved live, limited automated live, expanded automation) are designed with promotion criteria but not built, on purpose — nothing has earned them. The design separates a Strategy Engine (produces a signal only), a Risk Engine (decides if, how much, and where the stop and target are), an Execution Engine (order mechanics), and the Broker. A full safety-controls list (kill switches, daily loss cap, position and order caps, stale-data and duplicate-order protection, fail-closed behavior) is required, built and tested, before any unattended live trading.
 
-# 8. The agents — how the work is done and reviewed
+# 9. The agents — how the work is done and reviewed
 
 The research runs through a fixed pipeline of specialized agents. Each examines one candidate or one question. The order is the control.
 
@@ -255,6 +311,10 @@ Measured in the first days of autonomous operation, the running chain was Discov
 
 **Staff meetings.** Any agent may request one; only the Director convenes one. Mandatory on five triggers: a second RETURN on the same candidate; conflicting recommendations between agents; a zero-survivor scan or every third closed scan (the methodology review — is the approach itself still producing discoveries?); any agent requesting one with a reason; and the shelf running dry. A staff meeting produces exactly one disposition plus the change that follows from it, and records every agent's position, not just the outcome, so a later session doesn't relitigate it blind. The Integrity Gate's veto survives inside the meeting — no majority overrules it.
 
+## The Observatory's new job (September 13)
+
+The Observatory used to be a measurement layer that characterized behavior without proposing trades. It is now also the project's generation engine. It is the only role allowed to look at Discovery data without a written mechanism, and the rules that make that safe are the ones above: descriptive only, no hypothesis ID, no scan registered, timing rule enforced, output is a queue and never a result. The Mechanism role still owns the story; the Observatory owns the looking. Splitting those two was the single most consequential change of the day.
+
 ## Two changes to the Integrity Gate (September 13)
 
 The reviews agreed the Gate is procedurally but not epistemically independent — one model in every role shares one set of blind spots, and H118's baseline confusion passed three stages because every reviewer had the same gap. Two fixes, both adopted:
@@ -267,7 +327,19 @@ The reviews agreed the Gate is procedurally but not epistemically independent �
 
 One review claimed the project-wide correction double-counts. It does not: the code uses three separate stage-specific trial counts (Discovery 451, Validation 20, Holdout 3), and Discovery trials are never re-counted at Validation. What *is* true is that the Discovery bar tightens for the life of the project — every scan cell ever run is added forever, 275 → 451 in three days — and it has already closed one candidate (hyp-139) that Validation could have judged. Whether to switch to within-scan false-discovery-rate control and let Validation/Holdout be the project-wide control is a bar change and my call. It is open.
 
-# 9. How we learn — and how we guard against fake work
+# 10. How we learn — and how we guard against fake work
+
+## What was added to the learning system on September 13
+
+**The closure form.** Every closed hypothesis now gets a fixed record: closure status (clean null · near miss · data limitation · execution limitation · valid-but-non-actionable · invalid premise · duplicate), the primary outcome as registered, sample adequacy, the mechanism verdict (falsified · weakened · untested-by-this-result), robustness and cost flags, what was learned in one searchable sentence, what must not be retested, the one permitted future condition, and a capacity action for its family. Filed as Section 12 of the mechanism document and mirrored in an append-only closures ledger. This is what turns "FAILED" into knowledge LEARN can actually consult; a retroactive pass over this week's twelve closures is owed.
+
+**The fact registry** (`research/registry/facts.md`). One row per validated fact: what it says in plain language, instrument, horizon, mechanism, stage reached, stability, which facts it relates to, and which strategies use it. Seeded with the four validated facts and the three event-volatility passes. The Risk/State Engine reads from it; every strategy must link back to the fact IDs it uses. A feature library — definition cards for every state variable, with its exact calculation and the moment it is known — sits beside it, and is where the timing rule's register lives.
+
+**The economic-validity checklist.** Before Statistical, every candidate answers: which null is correct and why; whether the effect is directional, relative, conditional, or a risk-state effect; which measurement (raw points, ATR-normalized, R-multiple, benchmark-relative) and why; concentration by year, regime, time of day, and event; placebo results (shifted, inverted, random entry); and a one-line verdict on each alternative explanation (trend, volatility, seasonality, drift, liquidity, beta). The correct-null part has been in force since the baseline fix; placebo, concentration and alternative-explanation checks are the September 13 additions, and the mechanical suite runs them.
+
+**Yield metrics replace "hypotheses closed."** Progress is now read as: actionable-pass rate; strategy-conversion rate (facts that became an executable component); paper-trade fidelity; research-family yield (which channels and families actually produce); reuse rate; reproducibility rate; defect escape rate; and open research debt. "We tested eleven things" is no longer a sentence that appears in a report without the next sentence saying what any of it was good for.
+
+**The swing question, parked correctly.** I asked for "swing trading with a particular exit strategy." I don't yet have the exit rule, so Tony wrote the question instead of an answer — what a swing strategy would be in this system's terms (entry, exit, size, permission), which of five pre-declared exit shapes (fixed stop and target; fixed stop plus time exit; fixed stop plus volatility-scaled trailing stop; fixed stop plus session-end exit; one exit conditioned on a validated fact) to test first, and whether a swing may hold through a scheduled release. Exit parameters will be calibrated from the bot's measured excursion data, never from a backtest. Nothing is built until I come back with an answer.
 
 ## Named shapes of manufactured work, each with a guard
 
@@ -288,7 +360,7 @@ We also track which **sources** of ideas have ever produced anything real: patte
 
 The ledger of every hypothesis is append-only and honest, including unflattering results. Nothing is ever hand-edited; if a result looks wrong, the fix is in the code, then re-run.
 
-# 10. Rules that never bend
+# 11. Rules that never bend
 
 **Anti-optimization.** A frozen strategy is frozen. "Fewer trades than expected, loosen the filter." "Lost three in a row, adjust the stop." "Regime changed, adapt it." All three are new hypotheses that enter the front half at the back of the queue under the two-attempt limit. They are never edits. The only permitted responses to disappointing behavior are retain, restrict, suspend, retire — and those are my calls.
 
@@ -306,7 +378,7 @@ The ledger of every hypothesis is append-only and honest, including unflattering
 
 **The timing rule.** A market state may only be crossed with an outcome window that starts at or after the moment the state is known. Binding on every generation pass, because a definition restated as a discovery is the cheapest way to fool a whole pipeline at once.
 
-# 11. Autonomy — what runs without me and what doesn't
+# 12. Autonomy — what runs without me and what doesn't
 
 The team runs continuously on its own judgment. It does not hand me forks, does not end reports on open questions, and does not narrate each step. The Research Director plus Integrity Gate structure is the mechanism for deciding what to research next and whether to trust a result — in place of asking me.
 
@@ -324,7 +396,7 @@ An autonomous cycle runs every two hours, around the clock, and schedules its ow
 
 The September 19 review was cancelled — the checkpoint was held on the 13th. A routine one-page weekly review resumes Saturday September 26, written by the first cycle of the morning, no separate scheduled task. Three questions are parked for me alone and the system does not raise them: what exit architecture I mean by "swing trading with a particular exit" (a question is written up for outside feedback, nothing is built); whether to change the Discovery-stage multiplicity bar; and what a realistic money goal is — deferred until paper trading has a record to calibrate against.
 
-# 12. What I want critiqued
+# 13. What I want critiqued
 
 I am not asking whether the writing is clear. I am asking whether the structure is right. Specifically:
 
