@@ -1,245 +1,303 @@
 {
- "generated_at": "2026-09-13T22:12:00Z",
- "generated_at_local": "September 13th, 5:12 pm CT",
- "last_run": "2026-09-13T21:42:00Z",
- "last_run_local": "September 13th, 4:42 pm CT",
- "next_run": "2026-09-14T00:00:00Z",
- "next_run_local": "September 13th, 7:00 pm CT",
- "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "287 tests",
- "ops": {
-  "overall": "PASS",
-  "checks": [
-   {
-    "name": "lock",
-    "status": "PASS",
-    "detail": "session running 30 min, last activity 0 min ago"
-   },
-   {
-    "name": "shelf",
-    "status": "PASS",
-    "detail": "Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest dr"
-   },
-   {
-    "name": "checkpoint",
-    "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-13T22:12"
-   },
-   {
-    "name": "value",
-    "status": "PASS",
-    "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1, 'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1, 'inventory_closed': 1}"
-   },
-   {
-    "name": "console",
-    "status": "PASS",
-    "detail": "refreshed 123 min ago"
-   },
-   {
-    "name": "reports",
-    "status": "PASS",
-    "detail": "52 reports, latest 2026-09-13-2142.md well-formed"
-   },
-   {
-    "name": "new-information",
-    "status": "PASS",
-    "detail": "latest run recorded new information"
-   },
-   {
-    "name": "ledger",
-    "status": "PASS",
-    "detail": "117 idea families, no stale statuses"
-   },
-   {
-    "name": "mechanism-gate",
-    "status": "PASS",
-    "detail": "33 mechanism doc(s) cover every advanced candidate"
-   },
-   {
-    "name": "data-currency",
-    "status": "PASS",
-    "detail": "price data through 2026-09-08 (3 sessions behind)"
-   },
-   {
-    "name": "awaiting-jason",
-    "status": "PASS",
-    "detail": "nothing parked on Jason in the queue"
-   }
-  ]
- },
- "progress": {
-  "trials_since_last_survivor": 143,
-  "trials_total": 452,
-  "survivors_alive": 2,
-  "trials_per_survivor": 226.0,
-  "last_survivor": {
-   "hypothesis_id": "hyp-000151",
-   "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
-   "date": "2026-09-13"
+  "generated_at": "2026-09-13T22:52:00Z",
+  "generated_at_local": "September 13th, 5:52 pm CT",
+  "last_run": "2026-09-13T21:42:00Z",
+  "last_run_local": "September 13th, 4:42 pm CT",
+  "next_run": "2026-09-14T00:00:00Z",
+  "next_run_local": "September 13th, 7:00 pm CT",
+  "cadence": "Every 2 hours, on the odd Central hour",
+  "tests": "287 tests",
+  "ops": {
+    "overall": "PASS",
+    "checks": [
+      {
+        "name": "lock",
+        "status": "PASS",
+        "detail": "free since 2026-09-13 22:46:42"
+      },
+      {
+        "name": "shelf",
+        "status": "PASS",
+        "detail": "Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest dr"
+      },
+      {
+        "name": "checkpoint",
+        "status": "PASS",
+        "detail": "last cycle closed cleanly at 2026-09-13T22:12"
+      },
+      {
+        "name": "value",
+        "status": "PASS",
+        "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1, 'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1, 'inventory_closed': 1}"
+      },
+      {
+        "name": "console",
+        "status": "PASS",
+        "detail": "refreshed 41 min ago"
+      },
+      {
+        "name": "reports",
+        "status": "PASS",
+        "detail": "52 reports, latest 2026-09-13-2142.md well-formed"
+      },
+      {
+        "name": "new-information",
+        "status": "PASS",
+        "detail": "latest run recorded new information"
+      },
+      {
+        "name": "ledger",
+        "status": "PASS",
+        "detail": "117 idea families, no stale statuses"
+      },
+      {
+        "name": "mechanism-gate",
+        "status": "PASS",
+        "detail": "33 mechanism doc(s) cover every advanced candidate"
+      },
+      {
+        "name": "data-currency",
+        "status": "PASS",
+        "detail": "price data through 2026-09-08 (3 sessions behind)"
+      },
+      {
+        "name": "awaiting-jason",
+        "status": "PASS",
+        "detail": "nothing parked on Jason in the queue"
+      }
+    ]
   },
-  "scan_cells_total": 348,
-  "standalone_total": 104,
-  "scans_run": 33,
-  "scans_with_no_survivor": 28
- },
- "ledger_rows": 195,
- "distinct_hypotheses": 152,
- "funnel": {
-  "closed": 113,
-  "discovery": 1,
-  "validation": 0,
-  "holdout": 2,
-  "forward": 3,
-  "paper": 0,
-  "live": 0
- },
- "sweep": {
-  "shelf": "Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest drawable)",
-  "rows": [
-   {
-    "tier": "OPEN",
-    "id": "hyp-000156",
-    "name": "London open volatility burst 6e m23",
-    "stage_reached": "Mechanism doc",
-    "next_owed": "Statistical stage (4 questions + multiplicity + POWER at the proposed review point)",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
-    "id": "EXP047",
-    "name": "EXP-047 \u00b7 weekly momentum tracker",
-    "stage_reached": "FORWARD VALIDATION",
-    "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
-    "id": "hyp-000105",
-    "name": "Midday lull \u2192 afternoon expansion",
-    "stage_reached": "HOLDOUT PASSED",
-    "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
-    "id": "hyp-000142",
-    "name": "Vxn level vs trailing high next day range",
-    "stage_reached": "HOLDOUT PASSED",
-    "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
-    "legacy": false
-   }
+  "progress": {
+    "trials_since_last_survivor": 143,
+    "trials_total": 452,
+    "survivors_alive": 2,
+    "trials_per_survivor": 226.0,
+    "last_survivor": {
+      "hypothesis_id": "hyp-000151",
+      "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
+      "date": "2026-09-13"
+    },
+    "scan_cells_total": 348,
+    "standalone_total": 104,
+    "scans_run": 33,
+    "scans_with_no_survivor": 28
+  },
+  "ledger_rows": 195,
+  "distinct_hypotheses": 152,
+  "funnel": {
+    "closed": 113,
+    "discovery": 1,
+    "validation": 0,
+    "holdout": 2,
+    "forward": 3,
+    "paper": 0,
+    "live": 0
+  },
+  "sweep": {
+    "shelf": "Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest drawable)",
+    "rows": [
+      {
+        "tier": "OPEN",
+        "id": "hyp-000156",
+        "name": "London open volatility burst 6e m23",
+        "stage_reached": "Mechanism doc",
+        "next_owed": "Statistical stage (4 questions + multiplicity + POWER at the proposed review point)",
+        "legacy": false
+      },
+      {
+        "tier": "FROZEN",
+        "id": "EXP047",
+        "name": "EXP-047 \u00b7 weekly momentum tracker",
+        "stage_reached": "FORWARD VALIDATION",
+        "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
+        "legacy": false
+      },
+      {
+        "tier": "FROZEN",
+        "id": "hyp-000105",
+        "name": "Midday lull \u2192 afternoon expansion",
+        "stage_reached": "HOLDOUT PASSED",
+        "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+        "legacy": false
+      },
+      {
+        "tier": "FROZEN",
+        "id": "hyp-000142",
+        "name": "Vxn level vs trailing high next day range",
+        "stage_reached": "HOLDOUT PASSED",
+        "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+        "legacy": false
+      }
+    ],
+    "counts": {
+      "OPEN": 1,
+      "GATED": 0,
+      "FROZEN": 3
+    }
+  },
+  "waiting_on_jason": [],
+  "h118_forward": {
+    "resolved": 0,
+    "target_trades": 40,
+    "open": 1,
+    "entry": 29538.0,
+    "entry_date": "2026-09-08",
+    "horizon_days": 10,
+    "net_points_resolved": 0
+  },
+  "shelf": {
+    "floor": 3,
+    "count": 7,
+    "floor_met": true,
+    "live": [
+      {
+        "id": 8,
+        "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 HOLDOUT PASSED, THIRD hypothesis in project history to clear all three stages (hyp-000142/143/144/151; Scan 014 -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> Validation PASS: HIGH 1.120 [1.066,1.177] -> Holdout PASS, September 12th ~9:45 pm CT, Jason's sign-off (slot 3 of 5): HIGH 1.239 [1.170,1.313], Sidak [1.154,1.324], effect strengthened Validation->Holdout, disclosed as unusual. Portfolio review (research/studies/portfolio-hyp142-separability-2026-09-13.md): SEPARABLE, 53-66% retained residualized on the existing conditioning facts -- higher overlap than the other three, must combine by RESIDUAL not product if integrated into volatility_conditioning.py, deferred to Sept 19th product-build decision. KNOWN TRUE, conditioning fact."
+      },
+      {
+        "id": 15,
+        "name": "M9: Nasdaq-100 quarterly rebalance close-window volume/move -> next-day reaction (map-ranked #7, September 11th, 11:37 pm CT) \u2014 INDETERMINATE, RE-PARKED September 12th, 12:20 am CT (Scan 018)"
+      },
+      {
+        "id": 28,
+        "name": "M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) \u2014 CLOSED, P1_FAIL"
+      },
+      {
+        "id": 29,
+        "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 CLOSED, P1_FAIL"
+      },
+      {
+        "id": 31,
+        "name": "M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) \u2014 SOURCED, DRAWABLE"
+      },
+      {
+        "id": 32,
+        "name": "M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) \u2014 SOURCED, DRAWABLE"
+      },
+      {
+        "id": 33,
+        "name": "M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) \u2014 SOURCED, DRAWABLE (Stage 0 free-look first)"
+      }
+    ]
+  },
+  "recent_closures": [
+    {
+      "id": "hyp-000159",
+      "name": "Level-sweep-reversal-prior-day-narrow-m26",
+      "date": "2026-09-13"
+    },
+    {
+      "id": "hyp-000158",
+      "name": "Monthly-opex-week-delta-hedge-unwind-nq-m25",
+      "date": "2026-09-13"
+    },
+    {
+      "id": "hyp-000157",
+      "name": "Month-end-payment-cycle-reversal-nq-m24",
+      "date": "2026-09-13"
+    },
+    {
+      "id": "hyp-000155",
+      "name": "Hedging-demand-gamma-regime-m14",
+      "date": "2026-09-13"
+    },
+    {
+      "id": "hyp-000154",
+      "name": "Letf-close-rebalance-m13",
+      "date": "2026-09-13"
+    }
   ],
-  "counts": {
-   "OPEN": 1,
-   "GATED": 0,
-   "FROZEN": 3
-  }
- },
- "waiting_on_jason": [],
- "h118_forward": {
-  "resolved": 0,
-  "target_trades": 40,
-  "open": 1,
-  "entry": 29538.0,
-  "entry_date": "2026-09-08",
-  "horizon_days": 10,
-  "net_points_resolved": 0
- },
- "shelf": {
-  "floor": 3,
-  "count": 7,
-  "floor_met": true,
-  "live": [
-   {
-    "id": 8,
-    "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 HOLDOUT PASSED, THIRD hypothesis in project history to clear all three stages (hyp-000142/143/144/151; Scan 014 -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> Validation PASS: HIGH 1.120 [1.066,1.177] -> Holdout PASS, September 12th ~9:45 pm CT, Jason's sign-off (slot 3 of 5): HIGH 1.239 [1.170,1.313], Sidak [1.154,1.324], effect strengthened Validation->Holdout, disclosed as unusual. Portfolio review (research/studies/portfolio-hyp142-separability-2026-09-13.md): SEPARABLE, 53-66% retained residualized on the existing conditioning facts -- higher overlap than the other three, must combine by RESIDUAL not product if integrated into volatility_conditioning.py, deferred to Sept 19th product-build decision. KNOWN TRUE, conditioning fact."
-   },
-   {
-    "id": 15,
-    "name": "M9: Nasdaq-100 quarterly rebalance close-window volume/move -> next-day reaction (map-ranked #7, September 11th, 11:37 pm CT) \u2014 INDETERMINATE, RE-PARKED September 12th, 12:20 am CT (Scan 018)"
-   },
-   {
-    "id": 28,
-    "name": "M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) \u2014 CLOSED, P1_FAIL"
-   },
-   {
-    "id": 29,
-    "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 CLOSED, P1_FAIL"
-   },
-   {
-    "id": 31,
-    "name": "M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) \u2014 SOURCED, DRAWABLE"
-   },
-   {
-    "id": 32,
-    "name": "M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) \u2014 SOURCED, DRAWABLE"
-   },
-   {
-    "id": 33,
-    "name": "M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) \u2014 SOURCED, DRAWABLE (Stage 0 free-look first)"
-   }
-  ]
- },
- "recent_closures": [
-  {
-   "id": "hyp-000159",
-   "name": "Level-sweep-reversal-prior-day-narrow-m26",
-   "date": "2026-09-13"
+  "sessions": [
+    {
+      "file": "2026-09-13-2142.md",
+      "ts": "2026-09-13T21:42:00Z",
+      "new_information": "",
+      "agents_ran": 4,
+      "agents_not_run": 2,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 13th, 4:42 pm CT"
+    },
+    {
+      "file": "2026-09-13-2001.md",
+      "ts": "2026-09-13T20:01:00Z",
+      "new_information": "",
+      "agents_ran": 4,
+      "agents_not_run": 2,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 13th, 3:01 pm CT"
+    },
+    {
+      "file": "2026-09-13-1800.md",
+      "ts": "2026-09-13T18:00:00Z",
+      "new_information": "",
+      "agents_ran": 4,
+      "agents_not_run": 2,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 13th, 1:00 pm CT"
+    }
+  ],
+  "bot_milestones": [
+    {
+      "id": "B0",
+      "component": "Signal contract",
+      "status": "DONE"
+    },
+    {
+      "id": "B1",
+      "component": "Signal engine",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "B2",
+      "component": "Risk/State Engine",
+      "status": "SPEC'D (U13)"
+    },
+    {
+      "id": "B3",
+      "component": "Base entry, frozen",
+      "status": "MISSING \u2014 the unlock"
+    },
+    {
+      "id": "B4",
+      "component": "Order path",
+      "status": "MISSING"
+    },
+    {
+      "id": "B5",
+      "component": "Execution measurement",
+      "status": "MISSING"
+    },
+    {
+      "id": "B6",
+      "component": "Kill switches wired",
+      "status": "CODE EXISTS, NOT WIRED"
+    },
+    {
+      "id": "B7",
+      "component": "Continuous paper run",
+      "status": "MISSING"
+    },
+    {
+      "id": "B8",
+      "component": "Live-Limited",
+      "status": "MISSING"
+    },
+    {
+      "id": "B9",
+      "component": "Scale behind evidence",
+      "status": "MISSING"
+    }
+  ],
+  "upgrade_queue": {
+    "done_or_specd": 9,
+    "total": 22,
+    "source": "research/NEXT_UP.md UPGRADE QUEUE v3"
   },
-  {
-   "id": "hyp-000158",
-   "name": "Monthly-opex-week-delta-hedge-unwind-nq-m25",
-   "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000157",
-   "name": "Month-end-payment-cycle-reversal-nq-m24",
-   "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000155",
-   "name": "Hedging-demand-gamma-regime-m14",
-   "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000154",
-   "name": "Letf-close-rebalance-m13",
-   "date": "2026-09-13"
-  }
- ],
- "sessions": [
-  {
-   "file": "2026-09-13-2142.md",
-   "ts": "2026-09-13T21:42:00Z",
-   "new_information": "",
-   "agents_ran": 4,
-   "agents_not_run": 2,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 4:42 pm CT"
-  },
-  {
-   "file": "2026-09-13-2001.md",
-   "ts": "2026-09-13T20:01:00Z",
-   "new_information": "",
-   "agents_ran": 4,
-   "agents_not_run": 2,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 3:01 pm CT"
-  },
-  {
-   "file": "2026-09-13-1800.md",
-   "ts": "2026-09-13T18:00:00Z",
-   "new_information": "",
-   "agents_ran": 4,
-   "agents_not_run": 2,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 1:00 pm CT"
-  }
- ]
+  "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)"
 }
