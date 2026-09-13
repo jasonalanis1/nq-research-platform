@@ -138,3 +138,40 @@ is deferred to preserve enough budget for a careful, unhurried close-out
 of an already-heavy cycle, rather than rushing a third scan's cell design
 in the time remaining. DRAWABLE as of this doc's completion; first in
 line next cycle.
+
+## 11. Disposition (2026-09-13, Scan 032, hyp-000158)
+Status: CLOSED, P1_FAIL.
+GATING (P1): expiration-week NQ return (ATR14-normalized, point-diff
+convention matching Scan 027/M22), net of NQ's own unconditional weekly
+drift -- mean=+0.1872, ci_90=(-0.0291,+0.3950), n=80 expiration weeks.
+Does not credibly clear zero (lower bound negative). NULL1's own
+unconditional weekly mean is itself large and positive (+0.3343),
+reflecting NQ's already-known positive intraday/weekly drift (M15) --
+exactly why the NULL1-relative test, not the raw expiration-week number,
+is the one that governs; a positive raw number was expected regardless
+of any expiration-specific effect.
+P2: expiration minus non-expiration difference not credible either:
+diff=+0.2429, ci_90=(-0.1167,+0.5907).
+Falsifier (b) diagnostic (within-week day-of-week cumulative cells,
+descriptive/non-gating): Tuesday, Wednesday, Thursday, and Friday
+cumulative cells all showed credibly positive values individually. This
+does NOT override the P1 gating failure -- same discipline this project
+applies elsewhere to a positive-looking non-gating cell sitting beside a
+failed gate (M13/M14/M18).
+KILL check (falsifier c): first-minute share averaged 124.5% of the
+week's net move (n=80) -- a share exceeding 100% is a construction
+artifact of weeks where the opening gap partially reversed by Friday's
+close (net week return smaller than the opening move), not a literal
+fraction; flagged as a caveat on the metric, moot regardless since P1
+already failed.
+VERDICT: P1_FAIL. Falsifier (a) applies. The dealer-hedge-unwind premium
+documented for S&P 100 stocks is not visible in NQ futures at this data
+ceiling. Entry closes.
+DIRECTOR RE-EVALUATION: CONCUR with closure -- the gating CI is wide and
+centered positive but spans a large negative range; not a near-miss the
+way M24 was, a clean non-credible result. No re-test authorized under
+the family's 2-attempt budget without a materially different approach
+(e.g., ES as a closer match to "large-cap options," noted as a possible
+attempt 2 in Section 8, not run this pass).
+MONETIZATION: NOT RUN -- gating failed, no path to a strategy design
+step.

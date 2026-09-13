@@ -1719,7 +1719,7 @@ the following month.
    per SHELF RULE v2.
 
 
-## ENTRY 29 — M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) — DRAWABLE
+## ENTRY 29 — M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) — CLOSED, P1_FAIL
 
 Generation (sourcing stage, 9:00 am CT scheduled cycle, shelf below floor
 after drawing both M13 and M14 this same cycle): full mechanism doc
@@ -1763,10 +1763,20 @@ weeks/year, S&P 100 names).
    buy-pressure drift across the containing week.
 3. **HORIZON**: 1 calendar week (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M25. STATUS: DRAWABLE. Mechanism doc:
-   research/mechanisms/monthly-opex-week-delta-hedge-m25.md. Restores the
-   3-entry shelf floor (Entry 27, 28, 29). NQ on disk, full Discovery
-   range, no purchase needed.
+5. **MAP ANCHOR**: M25. STATUS: CLOSED. Mechanism doc:
+   research/mechanisms/monthly-opex-week-delta-hedge-m25.md.
+   Scan 032 (2026-09-13, hyp-000158): P1 gate (expiration-week return,
+   ATR14-normalized, net of NQ's own unconditional weekly drift)
+   mean=+0.1872 ci_90=(-0.0291,+0.3950), n=80 -- not credible (lower
+   bound negative). P2 (expiration minus non-expiration) also not
+   credible: diff=+0.2429 ci_90=(-0.1167,+0.5907). Individual day-of-week
+   cumulative cells (Tue/Wed/Thu/Fri) were credibly positive but this is
+   descriptive, non-gating, and does not override the failed gate.
+   Director concurred with closure -- a clean non-credible result, not a
+   near-miss. Dealer-hedge-unwind premium documented for S&P 100 stocks
+   not visible in NQ futures at this data ceiling. Entry closes; drops
+   the shelf to Entry 30/31 (2 of 3), sourcing owed next cycle per SHELF
+   RULE v2.
 
 ## ENTRY 30 — M26: Level Sweep Reversal (close_min_distance), conditioned on prior-day range contraction (resurrection, practitioner/map channel) — SOURCED September 13th, ~11:15 am CT (interactive-conversation-origin, scheduled cycle), DRAWABLE
 
@@ -1862,4 +1872,46 @@ real-money accounts, Tokyo-based bank desks, not European dealers).
 5. **MAP ANCHOR**: M27. STATUS: DRAWABLE. Mechanism doc:
    research/mechanisms/tokyo-fx-open-6e-m27.md. Restores the 3-entry
    shelf floor (Entry 29, 30, 31).
+
+## ENTRY 32 — M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) — SOURCED, DRAWABLE
+
+Generation (sourcing stage, scheduled cycle): sourced to restore the
+3-entry shelf floor after M25/Entry 29 closed this cycle (P1_FAIL,
+hyp-000158). Full mechanism doc
+research/mechanisms/pre-holiday-effect-nq-m28.md, written BEFORE any
+scan. Literature: Lakonishok and Smidt (1988, Review of Financial
+Studies), Ariel (1990, Journal of Financial Economics) -- the trading
+session immediately before an exchange holiday has historically shown
+average returns many times larger than an ordinary session's average,
+across multiple decades and markets. Never tested against NQ
+specifically in this project.
+- LEARN/Integrity: NEW. Disclosed against M6/hyp-000108 (turn-of-month,
+  different calendar anchor), M24 (month-end payment-cycle reversal,
+  closed, different anchor and mechanism), M25 (options-expiration
+  week, closed, different anchor), and M22 (ZN month-end duration
+  extension, closed, different instrument/anchor). Attempt 1 of 2.
+- Discovery: NQ daily RTH aggregation, already on disk, no new data.
+  4 cells, 1 gating. Thin-annual-event-count family (roughly 9
+  NYSE full-closure holidays/year, ~55-65 usable pre-holiday sessions
+  expected across Discovery).
+- Mechanism honesty flag: weaker named-participant story than this
+  project's other open-scope entries (M19-M27 all name a specific
+  forced participant) -- included anyway given the unusual replication
+  strength of the underlying empirical regularity across markets and
+  decades.
+- Director: not yet reached -- entry sourced and filed DRAWABLE, not
+  drawn this cycle.
+
+1. **STATE VARIABLE**: session immediately before vs. after an NYSE
+   exchange holiday, NQ.
+2. **MECHANISM CLAIM**: reduced short-selling/hedging activity and
+   thinner volume ahead of a closure produce a small positive drift in
+   the pre-holiday session.
+3. **HORIZON**: 1 session (calendar-anchored, exchange-holiday
+   boundary).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, four adjacencies
+   disclosed and distinguished. Attempt 1 of 2.
+5. **MAP ANCHOR**: M28. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/pre-holiday-effect-nq-m28.md. Restores the
+   3-entry shelf floor (Entry 30, 31, 32).
 

@@ -155,3 +155,26 @@ participant story (Japanese exporter/importer flow, Asian real-money
 accounts, Tokyo bank desks). Mechanism doc written before any scan, per
 standard discipline; not drawn this cycle (budget-use deferral). Shelf
 3/3 restored (Entry 29, 30, 31).
+
+## 2026-09-13 (3:00 pm CT scheduled cycle) — M25/Entry 29 closed (P1_FAIL), M28/Entry 32 sourced
+
+Drew Entry 29 (map M25, monthly options-expiration week delta-hedge
+unwind, NQ): Scan 032, 10 cells, 1 gating, calendar-week partition
+(80 expiration weeks vs. 269 non-expiration weeks). GATING P1
+(expiration-week return, ATR14-normalized, net of NQ's own unconditional
+weekly drift) came back not credible: mean=+0.1872, ci_90=(-0.0291,
++0.3950) -- wide CI spanning both signs, a clean non-credible result
+(unlike M24's near-miss). P2 (expiration minus non-expiration) also not
+credible. Individual day-of-week cumulative cells (Tue/Wed/Thu/Fri) were
+credibly positive but non-gating, descriptive only -- does not override
+the failed gate, same discipline this project applies elsewhere.
+Director concurred with closure. Logged hyp-000158 (REJECTED). Entry
+closes; dropped the shelf to 2/3.
+Sourced M28/Entry 32 (pre-holiday effect, NQ) to restore the shelf
+floor: a well-replicated, multi-decade equity-market anomaly
+(Lakonishok-Smidt 1988, Ariel 1990) never before tested against NQ in
+this project -- flagged honestly as carrying a weaker named-participant
+mechanism story than this project's usual standard, included because
+the empirical regularity itself is unusually well-replicated. Mechanism
+doc written before any scan; not drawn this cycle (budget-use
+deferral). Shelf 3/3 restored (Entry 30, 31, 32).
