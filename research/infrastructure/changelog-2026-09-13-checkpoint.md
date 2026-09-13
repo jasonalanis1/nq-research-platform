@@ -108,3 +108,21 @@ Not in the repo (sent to Jason as files only): `last-24-hours-summary.md`, `2026
 ## 6. Nothing touched
 
 No code changed today. No gate, bar, or template edited. No hypothesis ID spent. H118 / EXP047 untouched. No Holdout slot used. No spend. The 2-hour cadence, lock, budget clock, console push, and close-out procedure are unchanged — today's changes are documents, queue order, and two trigger prompts.
+
+## 7. Addendum — changes after the first change log (4:50–5:30 pm CT)
+
+| Change | Detail | Commit |
+|---|---|---|
+| Sept 19th review CANCELLED | Jason: "we're doing all of it right now." Scheduled task trig_014PJoZXH7W5wSp5VVbVvUCM deleted. Routine Saturday weekly reviews resume Sept 26th, cycle-written, no trigger. | 1a0fc09 |
+| Checkpoint HELD today | `research/weekly/2026-09-13.md` — shelf state, closures, hit rates, "changing faster than learning?", CHECKPOINT verdict (CONTINUE; target moves from direction to structure), decisions. | 1a0fc09 |
+| Freeze FULLY lifted | NEXT_UP.md freeze paragraph and KNOWLEDGE.md section 4 + decision log updated; UPGRADE QUEUE v3 is the approved work; nothing else remains frozen. | 1a0fc09 |
+| 5:00 pm cycle moved to 7:00 pm | So the interactive test cycle would not collide with it; prompt fully rewritten afterward to reflect the real ending state + four platform rules learned. | (trigger) |
+| TEST CYCLE run (4:42–5:25 pm CT) | U3: Scan 033 / M26 conditional Level Sweep Reversal — P1_FAIL, hyp-000159 REJECTED, Entry 30 CLOSED (mechanism doc §11, inventory, map, SCAN_REGISTRY updated). U1: `research/studies/sidak-stacking-diagnosis-2026-09-13.md` — no cross-stage double-counting; Discovery-stage N tightens monotonically, policy note for Jason. U4: M29 / Entry 33 sourced (`research/mechanisms/implied-realized-vol-gap-nq-m29.md`), shelf 3/3. Session report `research/sessions/2026-09-13-2142.md`. Console v81→v82. 287 tests, ops 8/8. | 7f52275 |
+| New code | `src/market_behavior_discovery_scan_033.py` (year-chunked per-trade scan pattern); `src/project_wide_multiplicity.py` SCAN_REGISTRY +scan_033. No gate/bar/method changed. | 7f52275 |
+| Platform rules learned | Device shell: ~3-min hard limit per call, background jobs do not survive between calls; per-trade scans must be year-chunked; `log_hypothesis()` keywords are trade_count/expectancy_r; new files via SendUserFile → device_commit_files. Written into the 7:00 pm prompt and the session report. | — |
+
+## 8. UPGRADE QUEUE v3 status at 5:30 pm CT
+DONE: U1 (Šidák diagnosis), U3-M26, U4 (M29), U9 (swing question), U10 (data trigger).
+NEXT (7:00 pm cycle): U2 (M23 Statistical), U3-M27 (Tokyo), U5 (three conditional-family docs).
+AWAITING JASON: swing-strategy feedback (D11); Šidák policy decision (from U1); nothing else.
+DEFERRED BY JASON: D12 (goal vs capital) until paper trading has a record.
