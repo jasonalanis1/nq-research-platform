@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-13T10:03:00Z",
- "generated_at_local": "September 13th, 5:03 am CT",
- "last_run": "2026-09-13T08:00:00Z",
- "last_run_local": "September 13th, 3:00 am CT",
- "next_run": "2026-09-13T12:00:00Z",
- "next_run_local": "September 13th, 7:00 am CT",
+ "generated_at": "2026-09-13T12:04:00Z",
+ "generated_at_local": "September 13th, 7:04 am CT",
+ "last_run": "2026-09-13T10:00:00Z",
+ "last_run_local": "September 13th, 5:00 am CT",
+ "next_run": "2026-09-13T14:00:00Z",
+ "next_run_local": "September 13th, 9:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "287 tests",
  "ops": {
@@ -13,7 +13,7 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 3 min, last activity 3 min ago"
+    "detail": "session running 4 min, last activity 4 min ago"
    },
    {
     "name": "shelf",
@@ -28,17 +28,17 @@
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1, 'mechanism_docs': 1, 'inventory_entries': 1, 'inventory_closed': 1}"
+    "detail": "last cycle moved=False delta={}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 113 min ago"
+    "detail": "refreshed 122 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "45 reports, latest 2026-09-13-0800.md well-formed"
+    "detail": "46 reports, latest 2026-09-13-1000.md well-formed"
    },
    {
     "name": "new-information",
@@ -197,6 +197,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-13-1000.md",
+   "ts": "2026-09-13T10:00:00Z",
+   "new_information": "A considered-and-rejected sourcing candidate (the daylight-saving anomaly), recorded so it is not re-proposed and re-evaluated from scratch in a future cycle. No pipeline-stage movement otherwise.",
+   "agents_ran": 2,
+   "agents_not_run": 2,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 5:00 am CT"
+  },
+  {
    "file": "2026-09-13-0800.md",
    "ts": "2026-09-13T08:00:00Z",
    "new_information": "A new, well-differentiated sourcing candidate (M24) ready for next cycle's draw, and a genuine-but-underpowered null on whether ZN futures show a month-end duration-extension bid -- the direction was right, the statistics weren't strong enough to call it, which is itself useful information about the limits of what this data ceiling can resolve for low-frequency (monthly) calendar effects.",
@@ -217,17 +228,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 13th, 1:00 am CT"
-  },
-  {
-   "file": "2026-09-13-0400.md",
-   "ts": "2026-09-13T04:00:00Z",
-   "new_information": "None new from this cycle's own work -- a genuine no-movement outcome on sourcing, disclosed rather than padded. The pipeline sweep does confirm the interactive Holdout pass (hyp-000151) correctly rolled into FROZEN status and cleared the awaiting-Jason flag.",
-   "agents_ran": 1,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 11:00 pm CT"
   }
  ]
 }
