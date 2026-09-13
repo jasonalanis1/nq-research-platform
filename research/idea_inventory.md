@@ -1530,7 +1530,7 @@ a fixed release time), literature support Linn-Zhu 2004, Gu-Kurov-Wolfe
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M20. STATUS: CLOSED (Scan 023 Discovery PASS; Monetization: no credible path; KNOWN TRUE / characterization on file. See mechanism doc Section 9).
 
-## ENTRY 25 — M21: ECB rate decision pre/post-release volatility, 6E (open scope; map channel; companion to M20; September 12th, ~5:55 pm CT cycle) — WAITING ON verified historical ECB press-conference date list (2015-2026); draw attempted ~6:35 pm CT, blocked on web-tool session limit, not fabricated
+## ENTRY 25 — M21: ECB rate decision pre/post-release volatility, 6E (open scope; map channel; companion to M20; September 12th, ~5:55 pm CT cycle) — CLOSED (Scan 025, September 13th ~12:20 am UTC, hyp-000150): Discovery PASS (diff +0.534 ATR, largest effect in the M20/M21 family), Statistical PASS, Director CONTINUE, Monetization NO CREDIBLE PATH (no 6E strategy exists to size); filed KNOWN TRUE alongside M20
 
 Generation (sourcing stage, scheduled cycle): full mechanism doc
 research/mechanisms/ecb-decision-day-volatility-6e-m21.md, written BEFORE

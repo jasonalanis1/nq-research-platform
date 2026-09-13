@@ -8,3 +8,4 @@
 {"started": "2026-09-12T20:00:54.652392+00:00", "finished": "2026-09-12T20:07:50.437007+00:00", "delta": {"ledger_rows": 0, "scans_registered": 0, "mechanism_docs": 0, "studies": 2, "inventory_entries": 0, "inventory_closed": 0}, "moved": true}
 {"started": "2026-09-12T20:13:36.607838+00:00", "finished": "2026-09-12T20:29:19.109612+00:00", "delta": {"ledger_rows": 2, "scans_registered": 2, "mechanism_docs": 2, "studies": 2, "inventory_entries": 2, "inventory_closed": 2}, "moved": true}
 {"started": "2026-09-12T22:00:51.871864+00:00", "finished": "2026-09-12T22:21:58.842416+00:00", "delta": {"ledger_rows": 3, "scans_registered": 2, "mechanism_docs": 3, "studies": 3, "inventory_entries": 3, "inventory_closed": 2}, "moved": true}
+{"started": "2026-09-13T00:01:36.293132+00:00", "finished": "2026-09-13T00:10:03.973873+00:00", "delta": {"ledger_rows": 2, "scans_registered": 1, "mechanism_docs": 0, "studies": 3, "inventory_entries": 0, "inventory_closed": 1}, "moved": true}

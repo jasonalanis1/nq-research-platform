@@ -122,3 +122,34 @@ conference date list (2015-2026) -- either from a fresh WebFetch once the
 web-tool limit resets, or supplied by Jason. Mechanism doc and gating
 design (Section 7) are unchanged and remain pre-registered; only the
 date list is outstanding. Still DRAWABLE once the date list exists.
+
+## 11. Scan 025 result, 2026-09-13 ~12:20 am UTC (hyp-000150)
+A fresh WebFetch/WebSearch this cycle (the prior session's rate limit
+had reset) found a usable historical source: the Jarocinski-Karadi ECB
+monetary policy shocks dataset (public academic data, indexed by
+Governing Council meeting date since 1999), rather than the ECB's own
+site, whose press-conference archive pages did not return a usable
+static date list. n=54 dates in the Discovery window (2015-01 to
+2021-10.03), n=35 usable events.
+
+GATING P1 PASSED: decision-hour (08:30-09:30 ET) |return|/ATR14 = 0.713
+vs unconditional hourly 0.179, diff +0.534, CI (+0.457,+0.782) -- the
+largest magnitude effect found in either the M20 or M21 family. P2
+(signed decision-hour mean) is null as predicted: +0.048, CI
+(-0.166,+0.235). Kill check: 07:45 statement-print share is 37.9%,
+below the 0.5 threshold (not killed) but disclosed as material at
+Statistical. Halves: 0.863 / 0.571 (both well above baseline; some
+decay; CI not computable at this sample size).
+
+STATISTICAL PASS -> DIRECTOR CONTINUE (second open-scope Discovery pass,
+cross-confirms the scheduled-macro-event volatility pattern alongside
+M20) -> MONETIZATION: NO CREDIBLE PATH (no 6E strategy exists, live or
+Discovery, to attach a sizing overlay to -- every 6E-touching script in
+this codebase uses 6E only as a cross-asset predictor for NQ).
+
+hyp-000150 REJECTED as a valid characterization, not a failure. Filed
+KNOWN TRUE alongside M20's EIA/CL fact, held for a future 6E base
+strategy. Entry CLOSED at Monetization (not a Discovery-stage close);
+attempt 1 of 2 spent, though Monetization's disposition is not sample-
+dependent so a second attempt would only be warranted by a genuinely new
+claim, not a retry of this one.

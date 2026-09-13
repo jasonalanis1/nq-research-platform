@@ -71,3 +71,21 @@ day-of-week directional claim with no obligated participant named (risk
 limits are a choice, not a mandate); the calendar family is on the SKIP
 LIST and Scan 020's weekend-leg observation is a within-family slice, not
 a mechanism. No entry. "post-lunch volume return at 13:30" (M10 attempt 1 spent).
+
+### P-4 "The first hour's high/low holds on trend days"
+- Practitioner form: on days that open trending, the initial balance
+  (first-hour) high or low is not violated the rest of the session --
+  used as a level to trade against.
+- Mechanical proxy: computable (first-hour range, then check whether
+  the rest of RTH ever crosses it), but the claim is a level-holding /
+  range-breakout description, not a named forced participant.
+- LEARN ruling: this is the IB (initial balance) / opening-range
+  breakout family, CLOSED (hyp-000011/028/065/135, five variants
+  rejected across earlier sessions) and explicitly on the SKIP LIST.
+  "Trend days" is a post-hoc filter on the same underlying claim (the
+  first-hour range holding), not a new mechanism -- no obligated
+  participant is named beyond what the closed family already tested.
+  RULED September 13th, ~12:50 am UTC: no entry. Cosmetic restatement of
+  a closed family. Not re-proposable without a genuinely different
+  claim (e.g. a named participant whose actions would cause the level to
+  hold, not just an observation that it sometimes does).

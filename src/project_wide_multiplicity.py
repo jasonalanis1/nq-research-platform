@@ -234,6 +234,21 @@ SCAN_REGISTRY = {
     "scan_022_2026-09-12": {"cells_scanned": 17, "promoted_hypothesis_ids": []},
     "scan_023_2026-09-12": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
     "scan_024_2026-09-12": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
+    "scan_025_2026-09-13": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
+    # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
+    # press-conference, pre/post volatility, 6E, open scope -- third open-
+    # scope entry, companion/cross-check to M20). 6 cells: decision-hour
+    # (08:30-09:30 ET) |return|/ATR14 vs unconditional hourly |return|/ATR14
+    # (GATING, magnitude not direction, same design as M20); decision-hour
+    # signed mean (reported, unpinned); NULL 1 reference; first-1-minute
+    # statement-print share (kill, targets the Q&A window not the 07:45
+    # statement print); Discovery halves (decay, 2 cells). Attempt 1 of 2.
+    # Registered September 13th, ~12:15 am UTC BEFORE the scan ran. ECB
+    # press-conference dates (2015-01 to 2021-09, n=54) from the
+    # Jarocinski-Karadi ECB monetary policy shocks dataset (public academic
+    # data, github.com/marekjarocinski/jkshocks_update_ecb), fetched fresh
+    # this cycle after the prior sessions rate limit had reset.
+    # Mechanism doc research/mechanisms/ecb-decision-day-volatility-6e-m21.md.
     # Scan 024 (Entry 23 / map M19: Treasury 10-year note auction
     # concession and rebound, ZN, open scope -- first open-scope entry,
     # Jason supplied the TreasuryDirect auction dates). 10 cells: pre-leg
