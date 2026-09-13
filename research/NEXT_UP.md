@@ -234,7 +234,7 @@ Three honest caveats, which make discipline MORE important here, not less:
      src/project_wide_multiplicity.py updated every scan so the correction
      stays honest.
 
-## UPGRADE QUEUE v3 (approved by Jason September 13th; freeze fully lifted ~4:55 pm CT) -- BUILD CONTINUOUSLY: every cycle takes the next undone U-items in order after the sweep's owed stages, until the list is empty. The THIS WEEK / WEEKS 2-3 / WEEKS 4-8 labels below are ORDER, not pacing -- Jason (5:35 pm CT): "we need to incorporate those changes now."
+## UPGRADE QUEUE v3 (approved by Jason September 13th; freeze fully lifted ~4:55 pm CT) -- BUILD CONTINUOUSLY: every cycle takes the next undone U-items in order after the sweep's owed stages, until the list is empty. The THIS WEEK / WEEKS 2-3 / WEEKS 4-8 labels below are ORDER, not pacing -- Jason (5:08 pm CT): "we need to incorporate those changes now."
 Source: research/infrastructure/outside-review-synthesis-2026-09-13.md (six outside
 reviews consolidated; section 6 = decisions, section 7 = sequence). Each item names
 the review(s) that proposed it so the reasoning is traceable. Rules for this queue:
@@ -276,20 +276,20 @@ THIS WEEK (no new infrastructure; fits the 2-hour cycles):
       return split on NQ vs the drift null; (c) scheduled-event volatility as ONE
       family = M20 + M21 + M23 + NFP/CPI/FOMC on NQ (this is also D13). Mechanism
       docs first, per the existing template.
-  U6. [SPEC DONE 5:50 pm CT -> research/infrastructure/upgrade-specs-2026-09-13.md; BUILD owed: integrity_blind_packet.py tightening + src/integrity_checks.py + tests] Write the Integrity Gate blindness spec (B) + the mechanical integrity test
+  U6. [SPEC DONE 5:18 pm CT -> research/infrastructure/upgrade-specs-2026-09-13.md; BUILD owed: integrity_blind_packet.py tightening + src/integrity_checks.py + tests] Write the Integrity Gate blindness spec (B) + the mechanical integrity test
       suite spec (A: drift null, overnight/intraday split, cost sensitivity, roll-date
       contamination, subperiod stability) as pre-registrations; build in U11.
-  U7. [CHECKLIST DONE 5:50 pm CT -> upgrade-specs; BUILD owed: template Section 8b + scan-result fields] Write the Economic Validity Gate additions as a checklist (B: placebo -- shifted /
+  U7. [CHECKLIST DONE 5:18 pm CT -> upgrade-specs; BUILD owed: template Section 8b + scan-result fields] Write the Economic Validity Gate additions as a checklist (B: placebo -- shifted /
       inverted / random entry; concentration by year / regime / event; alternative-
       explanation list: trend, volatility, seasonality, drift, liquidity, beta).
-  U8. [FORM DONE 5:50 pm CT -> upgrade-specs; RETROACTIVE PASS owed: 12 closures + research/ledger/closures.jsonl] Write the closure form (F) and apply it retroactively to this week's eleven
+  U8. [FORM DONE 5:18 pm CT -> upgrade-specs; RETROACTIVE PASS owed: 12 closures + research/ledger/closures.jsonl] Write the closure form (F) and apply it retroactively to this week's eleven
       closures (M13, M14, M17-M25); this seeds the negative-knowledge library.
   U9. Swing-strategy question doc (D11) -- DONE September 13th, see file above; Jason
       takes it out for feedback; nothing built until he returns with an answer.
   U10. Write the Data Acquisition Trigger (B's six conditions) into KNOWLEDGE.md (D17).
 
 WEEKS 2-3 (structural; freeze lifted for these):
-  U11. [DONE 5:45 pm CT -- src/observatory_free_look.py; first read-out research/observatory/free-look-2026-09-13.md: direction is noise at time-of-day x state too; M29 distinct but sign opposite] Observatory FREE-LOOK mode (D): descriptive time-of-day windows (overnight,
+  U11. [DONE 5:15 pm CT -- src/observatory_free_look.py; first read-out research/observatory/free-look-2026-09-13.md: direction is noise at time-of-day x state too; M29 distinct but sign opposite] Observatory FREE-LOOK mode (D): descriptive time-of-day windows (overnight,
        first 30 min, midday, last hour, around events) x validated states, on the
        Discovery slice ONLY, spends NO hypothesis ID, registers NO scan; output is a
        descriptive table; anything with a footprint then goes through mechanism doc ->
@@ -298,7 +298,7 @@ WEEKS 2-3 (structural; freeze lifted for these):
        BATTERY -- mean vs drift-null, range ratio, MFE/MAE, time-to-resolution -- cut
        by session window, FDR within the battery, every cell registered up front.
        Extend with B/E/F question dimensions as families get registered.
-  U13. [SPEC DONE 5:55 pm CT -> upgrade-specs; BUILD owed: src/risk_state_engine.py + tests + daily log] Risk/State Engine spec (A, B, E): inputs = validated range facts (range
+  U13. [SPEC DONE 5:20 pm CT -> upgrade-specs; BUILD owed: src/risk_state_engine.py + tests + daily log] Risk/State Engine spec (A, B, E): inputs = validated range facts (range
        contraction, overnight coil, midday-lull/afternoon, VXN level, +U4 if it
        passes); outputs per session = expected range, target distance, stop distance,
        size multiplier, trade-permission flag. Frozen, versioned, NO P&L claim. This is
@@ -308,7 +308,7 @@ WEEKS 2-3 (structural; freeze lifted for these):
        reconciliation; sets the "unset" thresholds. Spend pre-approved 9/10.
   U15. Integrity Gate build (U6): tighten src/integrity_blind_packet.py (evidence in,
        narrative out) + mechanical suite as ops_checks-style code.
-  U16. [SEEDED 5:55 pm CT -> research/registry/facts.md; feature cards owed] Fact registry / market-behavior library (C, E) + feature-library definition
+  U16. [SEEDED 5:20 pm CT -> research/registry/facts.md; feature cards owed] Fact registry / market-behavior library (C, E) + feature-library definition
        cards (F) -- start from the existing validated facts.
   U17. Family-level attempt accounting in src/project_wide_multiplicity.py (C, F).
 

@@ -1,4 +1,4 @@
-# Upgrade specs — U6, U7, U8, U13 (written September 13th, ~5:50 pm CT; freeze lifted, build continuously)
+# Upgrade specs — U6, U7, U8, U13 (written September 13th, ~5:18 pm CT; freeze lifted, build continuously)
 
 These are the pre-registered specs for the structural items from the six-review
 synthesis. Each is a build target for the cycles, in the order listed in NEXT_UP.md

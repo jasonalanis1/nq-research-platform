@@ -106,7 +106,7 @@ One shot. No new cells, no retuning after seeing results.
 Not drawn this cycle. DRAWABLE for the free-look stage as soon as U11 exists; the
 Stage-1 scan is registered only after the free-look reports a footprint.
 
-### Stage 0 result (2026-09-13, ~5:45 pm CT, observatory free-look, descriptive)
+### Stage 0 result (2026-09-13, ~5:15 pm CT, observatory free-look, descriptive)
 Distinct from VXN level: 47% tercile overlap (duplicate threshold 80%), corr +0.33 —
 proceeds. SIGN OPPOSITE to P1 as written: HIGH-gap days show LARGER range in every
 session window (first30 z=+7.4, morning +7.4, midday +6.4, last hour +6.8), LOW-gap

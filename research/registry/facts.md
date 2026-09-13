@@ -1,4 +1,4 @@
-# Fact registry (seeded September 13th, ~5:55 pm CT; U16)
+# Fact registry (seeded September 13th, ~5:20 pm CT; U16)
 
 One row per validated market fact. A fact is not a strategy. Every strategy must
 link back to the fact IDs it uses; every fact lists the strategies using it.
