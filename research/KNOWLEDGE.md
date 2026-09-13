@@ -95,3 +95,37 @@ surfaced a real open fork (pair the 3 surviving volatility facts with a
 new directional signal, vs. treat them as pure characterization) that has
 been sitting undecided since Sept 9th and needs no new data — flagged as
 probably the highest-leverage decision available for the 19th.
+
+- 2026-09-13 (11:00 am CT scheduled cycle): drew Entry 27/M23 (London-open
+  volatility burst, 6E). Scan 030 (4 cells): GATING P1_PASS -- London-open
+  hour |return|/ATR14 credibly exceeds the unconditional hourly baseline
+  (diff +0.0400 ATR, ci_90=[+0.0279,+0.0550], n=891 days, largest-n
+  open-scope entry so far); pre-London hour secondary cell does NOT show
+  the same elevation (specificity confirmed -- effect concentrated at the
+  session boundary, not broader overnight elevation); not a first-minute
+  print artifact (share 0.194). A real, clean, well-powered structural
+  finding, first genuine (non-ambiguous) P1_PASS in the M20/M21/M23
+  open-scope-volatility family. Director: CONTINUE. Monetization: per
+  the mechanism doc's own Section 9, 6E has zero base strategies to size
+  and this fires daily (unlike M20/M21's rare events) -- credible path
+  via a standalone opening-range breakout/fade strategy, but designing
+  one is new work outside this hypothesis's registered scope, so deferred
+  to a fresh sourced entry rather than invented mid-cycle. hyp-000156
+  logged PROMISING (real characterization, live monetization path, not
+  yet a tested strategy). Filed KNOWN TRUE alongside M20/M21.
+  Sourced Entry 30/M26 to restore the shelf floor: Level Sweep Reversal
+  (close_min_distance variant), conditioned on prior_day_narrow (the
+  project's own already-validated range-contraction state fact), rather
+  than the bare unconditional pattern (six variants, all closed,
+  non-credible). Origin: this cycle's earlier interactive conversation --
+  Jason asked directly whether a pattern that failed on average could
+  still work under specific conditions. This is the first concrete test
+  of that question, and it directly serves the September 19th
+  hypothesis-generation-methodology deep dive he asked to prioritize.
+  Mechanism doc explicit on why this is not the overfitting trap the
+  question could easily become: the conditioning variable was chosen and
+  validated for an unrelated purpose before this hypothesis existed, not
+  searched-for after seeing Level Sweep Reversal's own results. NOT
+  drawn this cycle -- budget-use deferral (a full Discovery scan plus its
+  disposition already ran); first in line next cycle. Shelf 3/3
+  restored (Entry 28, 29, 30).

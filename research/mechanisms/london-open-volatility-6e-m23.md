@@ -120,6 +120,32 @@ opening-range breakout/fade AT the London open), not only search for a
 pre-existing strategy to size, before concluding there is no path.
 
 ## Status
-SOURCED, map channel, open scope. Mechanism doc written BEFORE any scan
-per the upgrade-brief methodology. DRAWABLE once registered on the map
-and in the Idea Inventory. No scan run yet.
+DRAWN 2026-09-13 (11:00 am CT cycle), Scan 030, hyp-000156. See Section 10.
+
+## 10. Disposition (2026-09-13, Scan 030, hyp-000156)
+GATING (P1): London-open hour |return|/ATR14 credibly exceeds the
+unconditional hourly baseline -- diff +0.0400, ci_90=[+0.0279,+0.0550],
+n=891 Discovery-slice days. CREDIBLE POSITIVE.
+SECONDARY (unpinned specificity check): pre-London hour does NOT show
+the same elevation -- diff -0.0174, ci_90=[-0.0281,-0.0038] (credibly
+NEGATIVE, i.e. below the unconditional baseline). This is the clean
+result the doc's Section 2 specificity check was designed to
+distinguish: the effect is concentrated at the session boundary itself,
+not a symptom of broader overnight-session volatility elevation.
+KILL CHECK: first-minute share of the London-open hour's |return| =
+0.194 -- well below the 0.5 kill threshold, not a stale-quote/thin-
+liquidity print artifact.
+VERDICT: P1_PASS (clean, not ambiguous). Director: CONTINUE -- real,
+well-powered (largest-n open-scope entry so far), genuinely structural
+mechanism (no news event, unlike M20/M21).
+MONETIZATION: per this doc's own Section 9, evaluated for a standalone
+base-strategy path (not only a sizing-overlay search) because this
+fires daily rather than on rare scheduled events. Verdict: CREDIBLE
+PATH EXISTS via a standalone opening-range breakout/fade strategy at
+the London open -- but designing and freezing that strategy's spec is
+new work outside this hypothesis's pre-registered scope (this hypothesis
+tested only the characterization, not a tradeable strategy). Deferred
+to a fresh sourced entry with its own frozen spec and its own
+Discovery/Validation run, rather than invented mid-cycle to fill budget.
+Logged hyp-000156, status PROMISING (a confirmed, real characterization
+with a live monetization path -- not yet a tested strategy).

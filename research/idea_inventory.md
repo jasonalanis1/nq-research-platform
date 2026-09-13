@@ -1605,7 +1605,7 @@ Vega 2003, Ehrmann-Fratzscher 2005.
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M22. STATUS: CLOSED. Drawn and scanned same cycle (2026-09-13 ~3:20 am CT). Scan 027: GATING cell n=82 mean=+0.1022 ci_90=(-0.1210,+0.2630) -- does not credibly clear zero. Not killed (final-minute share 0.096). Issuance-direction split omitted (no issuance-size data on disk beyond 10Y auction dates). VERDICT: P1_FAIL, closed per the doc's own falsifier. Logged hyp-000153 (REJECTED, data_slice=discovery). THIN-SAMPLE caveat: n=82 is a small sample, comparable to M19's n=40 -- this null does not rule out a smaller real effect, only that it is not visible at this data ceiling. Mechanism doc: research/mechanisms/month-end-duration-extension-zn-m22.md.
 
-## ENTRY 27 — M23: London FX session-open volatility burst, 6E (map-ranked, open scope) — SOURCED September 13th, ~1:15 am CT (map channel), DRAWABLE
+## ENTRY 27 — M23: London FX session-open volatility burst, 6E (map-ranked, open scope) — DRAWN & CLOSED September 13th, 11am CT cycle (Scan 030, hyp-000156, P1_PASS, Monetization deferred to new entry)
 
 - Source CHANNEL: map (forced participant), literature-supported:
   Andersen & Bollerslev (1998, JF) and later microstructure work (Ito &
@@ -1652,9 +1652,18 @@ Vega 2003, Ehrmann-Fratzscher 2005.
    |return|/ATR14 credibly above the unconditional hourly baseline.
 3. **HORIZON**: 1 hour, session-boundary anchored, daily (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M23. STATUS: DRAWABLE. Mechanism doc:
-   research/mechanisms/london-open-volatility-6e-m23.md. Restores the
-   3-entry shelf floor (Entry 22, 26, 27).
+5. **MAP ANCHOR**: M23. STATUS: CLOSED (Scan 030, 2026-09-13 11am CT
+   cycle, hyp-000156). GATING PASSED: London-open hour |return|/ATR14
+   credibly exceeds the unconditional hourly baseline (diff +0.0400,
+   ci_90=[+0.0279,+0.0550], n=891); pre-London hour does NOT (specificity
+   confirmed); not a first-minute print artifact (share 0.194). A real,
+   well-powered structural finding -- but Monetization found no existing
+   6E base strategy to size, and per this doc's own Section 9, the
+   standalone-strategy path (opening-range breakout/fade at the London
+   open) is credible but requires a fresh, separately frozen hypothesis
+   spec, not invented mid-cycle. Filed KNOWN TRUE; standalone-strategy
+   design queued as a new sourcing candidate. Mechanism doc:
+   research/mechanisms/london-open-volatility-6e-m23.md.
 
 ## ENTRY 28 — M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) — SOURCED, DRAWABLE
 
@@ -1747,3 +1756,59 @@ weeks/year, S&P 100 names).
    research/mechanisms/monthly-opex-week-delta-hedge-m25.md. Restores the
    3-entry shelf floor (Entry 27, 28, 29). NQ on disk, full Discovery
    range, no purchase needed.
+
+## ENTRY 30 — M26: Level Sweep Reversal (close_min_distance), conditioned on prior-day range contraction (resurrection, practitioner/map channel) — SOURCED September 13th, ~11:15 am CT (interactive-conversation-origin, scheduled cycle), DRAWABLE
+
+- Source CHANNEL: practitioner/map (resurrection of a previously-closed
+  directional idea, now conditioned differently). Origin: today's
+  interactive conversation with Jason, who asked directly whether a
+  pattern that failed unconditionally could still be real under a
+  specific market condition -- the first concrete test of that question.
+- Explicitly NOT a re-run of the unconditional Level Sweep Reversal
+  family (exp-003 through exp-024, all six variants closed, most
+  recently exp-023 close_min_distance -0.038R CI spans zero on the
+  proper Discovery slice) -- this tests ONE specific, pre-chosen
+  conditional claim, not another slice of the same dead unconditional
+  pattern. Not the FVG entry trigger (killed decisively, exp-025). Not
+  the undefined trend-structure-liquidity-filter idea. Not the
+  event-conditioned-reference-level-fade thread (different setup,
+  conditions on scheduled-event proximity not volatility state).
+- Discovery: NQ 1-minute on disk, full Discovery range, no new data.
+  Conditioning variable (`prior_day_narrow`, bottom-tercile prior-day
+  range) already exists and was validated (HOLDOUT PASSED, hyp-046/048)
+  for an unrelated purpose BEFORE this hypothesis existed -- chosen once,
+  not searched over.
+- Statistical: block bootstrap CI on per-trade R, compressed-day vs.
+  non-compressed-day cells plus their difference (the actual test), plus
+  a thin-sample disclosure check (Level Sweep Reversal fires
+  infrequently, 150-220 trades historically).
+- Director: information gain HIGH if real (first directional, not
+  merely conditioning, signal to survive Discovery in months; validates
+  the state-conditioning-on-old-ideas methodology Jason asked to
+  prioritize ahead of September 19th) and real if null (answers a
+  specific untested question plainly, closes one more Level Sweep
+  Reversal branch for good). Edge potential: directly tradeable if real
+  -- the setup already has a full entry/exit spec, unlike M23 this same
+  cycle which would need a new strategy design.
+- KILL RULE: none (an expectancy claim, not a magnitude/print-artifact
+  claim) -- thin-sample disclosure substitutes for a kill rule here (if
+  the compressed-day cell has fewer than ~40 trades, disclose as
+  underpowered rather than claim a null).
+
+1. **STATE VARIABLE**: `prior_day_narrow` (bottom tercile of trailing
+   prior-day range, existing frozen definition from
+   `src/volatility_conditioning.py`).
+2. **MECHANISM CLAIM**: a level sweep during an already-compressed
+   volatility regime is more likely a genuine liquidity grab ahead of
+   continued range-bound trading; the same sweep during an
+   already-expansive regime is more likely the start of a breakout,
+   where reversal is the wrong bet -- explaining why the unconditional
+   average came back flat.
+3. **HORIZON**: intraday (same-day entry/exit per the existing Level
+   Sweep Reversal spec), state known before the trading day begins.
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW conditional claim on an
+   old, closed unconditional pattern. Attempt 1 of 2 (tracked per-
+   conditioning-variable).
+5. **MAP ANCHOR**: M26. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/level-sweep-reversal-range-contraction-m26.md.
+   Restores the 3-entry shelf floor (Entry 28, 29, 30).
