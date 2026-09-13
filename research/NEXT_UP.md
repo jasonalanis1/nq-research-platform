@@ -234,6 +234,96 @@ Three honest caveats, which make discipline MORE important here, not less:
      src/project_wide_multiplicity.py updated every scan so the correction
      stays honest.
 
+## UPGRADE QUEUE v3 (Jason lifted the freeze for this list, September 13th, ~4:40 pm CT) -- work these IN ORDER, inside the normal budget, after the sweep's owed stages
+Source: research/infrastructure/outside-review-synthesis-2026-09-13.md (six outside
+reviews consolidated; section 6 = decisions, section 7 = sequence). Each item names
+the review(s) that proposed it so the reasoning is traceable. Rules for this queue:
+each item is a pre-registered piece of work with its own doc/test; no item may edit a
+frozen candidate's definition; every rule change gets a KNOWLEDGE.md decision-log
+line; nothing here touches H118/EXP047 or spends a Holdout slot.
+
+DECISIONS TAKEN (Jason, September 13th): D1 lift for named list -- YES. D2 two-track
+mandate -- YES. D3 paper-trade the Risk/State Engine ALONE first (no directional
+trigger) -- YES. D4 un-park execution-clock MEASUREMENT (dummy signal, free paper
+endpoint) -- YES. D5 Sidak: diagnose read-only first -- YES. D6 Integrity Gate: both
+blind packet tightening AND mechanical test suite -- YES. D7 Economic Validity Gate
+additions (placebo, concentration, alternative-explanation) -- YES. D8 Observatory
+free-look rule -- YES. D9 sourcing emphasis map/structure up, literature higher bar, no
+hard percentages -- YES. D10 conditional-retest protocol (F's 8 conditions) -- YES.
+D11 swing strategy: Jason has NOT named an exit rule; instead Tony PROPOSES THE
+QUESTION (what a swing strategy looks like in Tony's terms + how it plugs into the
+current pipeline) for Jason to get outside feedback on -- see
+research/infrastructure/swing-strategy-question-2026-09-13.md. D12 goal/capital fit
+-- DEFERRED by Jason until paper trading is actually running ("we could talk about
+how much money is realistic once we start actually doing paper trading"). D13
+reclassify M20/M21 into the scheduled-event volatility family -- YES. D14 source the
+VXN-minus-realized-range state variable -- YES. D15 registries/libraries/forms in
+cheapness order -- YES. D16 yield metrics + weekly scorecard -- YES. D17 data purchase
+still NO, write the six-condition trigger -- YES.
+
+THIS WEEK (no new infrastructure; fits the 2-hour cycles):
+  U1. Sidak stacking diagnosis, READ-ONLY (review A). Output: research/studies/
+      sidak-stacking-diagnosis-2026-09-1X.md -- does the Validation-stage cumulative
+      correction re-count Discovery trials against an independent sample? No bar
+      change; Jason rules after reading it.
+  U2. M23 Statistical stage (owed anyway; reviews B, C, E).
+  U3. M26 and M27 exactly as frozen (C, F). M26 = first sanctioned conditional retest.
+  U4. Source the VXN-minus-realized-range state variable to the shelf as a Layer-0
+      primitive (D): VXN daily vs NQ trailing realized range; mechanism = dealer
+      positioning dampens (implied >> realized) or amplifies (implied << realized).
+  U5. Register review A's three conditional candidates as ONE-condition families:
+      (a) fade-to-VWAP x forecast-compressed prior day; (b) overnight-vs-intraday
+      return split on NQ vs the drift null; (c) scheduled-event volatility as ONE
+      family = M20 + M21 + M23 + NFP/CPI/FOMC on NQ (this is also D13). Mechanism
+      docs first, per the existing template.
+  U6. Write the Integrity Gate blindness spec (B) + the mechanical integrity test
+      suite spec (A: drift null, overnight/intraday split, cost sensitivity, roll-date
+      contamination, subperiod stability) as pre-registrations; build in U11.
+  U7. Write the Economic Validity Gate additions as a checklist (B: placebo -- shifted /
+      inverted / random entry; concentration by year / regime / event; alternative-
+      explanation list: trend, volatility, seasonality, drift, liquidity, beta).
+  U8. Write the closure form (F) and apply it retroactively to this week's eleven
+      closures (M13, M14, M17-M25); this seeds the negative-knowledge library.
+  U9. Swing-strategy question doc (D11) -- DONE September 13th, see file above; Jason
+      takes it out for feedback; nothing built until he returns with an answer.
+  U10. Write the Data Acquisition Trigger (B's six conditions) into KNOWLEDGE.md (D17).
+
+WEEKS 2-3 (structural; freeze lifted for these):
+  U11. Observatory FREE-LOOK mode (D): descriptive time-of-day windows (overnight,
+       first 30 min, midday, last hour, around events) x validated states, on the
+       Discovery slice ONLY, spends NO hypothesis ID, registers NO scan; output is a
+       descriptive table; anything with a footprint then goes through mechanism doc ->
+       registered family -> normal pipeline. This is a rule change: log it.
+  U12. Discovery Engine v2 minimal (A): per state variable, a pre-registered OUTCOME
+       BATTERY -- mean vs drift-null, range ratio, MFE/MAE, time-to-resolution -- cut
+       by session window, FDR within the battery, every cell registered up front.
+       Extend with B/E/F question dimensions as families get registered.
+  U13. Risk/State Engine spec (A, B, E): inputs = validated range facts (range
+       contraction, overnight coil, midday-lull/afternoon, VXN level, +U4 if it
+       passes); outputs per session = expected range, target distance, stop distance,
+       size multiplier, trade-permission flag. Frozen, versioned, NO P&L claim. This is
+       what gets paper-traded first (D3).
+  U14. Execution-clock MEASUREMENT (A, D4): dummy signal on the H118 order path via the
+       free paper endpoint; measure fills vs reference, slippage, latency,
+       reconciliation; sets the "unset" thresholds. Spend pre-approved 9/10.
+  U15. Integrity Gate build (U6): tighten src/integrity_blind_packet.py (evidence in,
+       narrative out) + mechanical suite as ops_checks-style code.
+  U16. Fact registry / market-behavior library (C, E) + feature-library definition
+       cards (F) -- start from the existing validated facts.
+  U17. Family-level attempt accounting in src/project_wide_multiplicity.py (C, F).
+
+WEEKS 4-8:
+  U18. Shadow/paper engine running the Risk/State Engine on live sessions, logging every
+       signal, blocked trade, exception, expected vs assumed fill (C, E, F).
+  U19. Exit research pipeline on the first prototype (F, A): MFE/MAE, time-to-target,
+       P(target before stop), by vol state and session; the five-exit predeclared
+       family (fixed stop+target / +time exit / +vol-trailing / +session-end / one
+       state-conditioned exit). Parameters from paper excursion data, never backtests.
+  U20. Intake + test-design forms as queue gates; idea genome lineage (E, F).
+  U21. Metrics dashboard on the ten yield metrics / weekly scorecard shape (C, F).
+  U22. Day-60 review: Data Acquisition Trigger check; D12 goal/capital conversation
+       once paper trading has a record.
+
 ## Queue
 
    0. FRONT OF QUEUE (September 11th, 7:35 pm CT): FIRST -- Portfolio's activation
@@ -379,12 +469,14 @@ sequence is: device_stage_files the console JSON -> cloud Bash cp to
 /home/claude/console_state.json -> read_db get with that out_dir (version
 only) -> write_db set with if_version pinned.
 
-CHANGE FREEZE ON STRUCTURE until September 19th (Jason, September 12th, 10:44 am CT): no changes
-to the pipeline, the shelf rule, the templates, the governance docs, the
-cadence, or the tooling except to fix a defect that blocks a cycle (with a
-test). Anything that looks wrong gets written into research/weekly/ for the
-review, not fixed live. Reason: a lot changed in 48 hours; let it run and
-judge it at the checkpoint.
+CHANGE FREEZE -- LIFTED FOR THE NAMED LIST (Jason, September 13th, ~4:40 pm CT): the September 12th
+freeze is lifted ONLY for the items in "## UPGRADE QUEUE v3" below (the
+named list from research/infrastructure/outside-review-synthesis-2026-09-13.md
+section 6, decisions D2-D17 except D12). Everything not on that list stays
+frozen until the September 19th weekly review. Reason: Jason pulled the
+checkpoint forward, six outside reviews converged, and he approved moving
+forward with the upgrades. Anything else that looks wrong still goes into
+research/weekly/ for the review, not fixed live.
 
 WEEKLY REVIEW (Jason, September 12th, 10:44 am CT): the first cycle on or after Saturday 8:00 am CT
 writes research/weekly/YYYY-MM-DD.md -- one page: shelf state, what closed

@@ -127,3 +127,24 @@ paper-trading track (an exit rule is a concrete piece of turning a
 validated fact into something tradeable) but that link is Claude's
 inference, not something Jason stated — to confirm with him rather than
 assume.
+
+## Decisions — checkpoint pulled forward (September 13th, ~4:40 pm CT)
+
+After six outside reviews (consolidated in `outside-review-synthesis-2026-09-13.md`),
+Jason decided:
+
+- **Freeze lifted for the named list** (synthesis §6, D2–D17 except D12). Everything
+  else stays frozen until the 19th's weekly review. Work sequence is NEXT_UP.md
+  "## UPGRADE QUEUE v3".
+- **Topic 6 (swing trading with a particular exit):** Jason does not have a specific
+  exit rule in mind yet. He wants Tony to *propose the question* — what a swing
+  strategy looks like in Tony's terms and how it plugs into the current pipeline — so
+  he can get feedback on it. Written up as
+  `swing-strategy-question-2026-09-13.md`. Nothing built until he returns with an
+  answer.
+- **Money/goal question** (review A's $1,000/mo vs $300 budget point): deferred by
+  Jason until paper trading is actually running — "we could talk about how much money
+  is realistic once we start actually doing paper trading and move into actual
+  trading."
+- **Topics 1–5** stand as recorded above; Topic 1's hypothesis-generation upgrade is
+  now concrete (U4, U5, U11, U12) rather than a talking point.
