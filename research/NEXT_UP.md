@@ -234,6 +234,25 @@ Three honest caveats, which make discipline MORE important here, not less:
      src/project_wide_multiplicity.py updated every scan so the correction
      stays honest.
 
+
+## SOURCING RULE v3 (2026-09-13, ~5:40 pm CT -- replaces "think of an idea each cycle")
+Sourcing no longer means inventing a candidate. Every cycle, sourcing means:
+  1. Read the current Idea Factory queue (research/observatory/idea-factory-<date>.md,
+     regenerate with `python3 src/idea_factory.py` if older than a week or if a new
+     state variable was added).
+  2. Take the highest-ranked family that has no mechanism doc yet, and write one --
+     the queue entry supplies the pattern, the mechanism doc must supply WHO is on
+     the other side and WHAT would prove it wrong. A queue entry with no defensible
+     mechanism is SKIPPED, not forced; note the skip and move down the list.
+  3. Only if the queue is exhausted of writable families does a cycle source from
+     the literature/practitioner channels.
+BINDING: the queue is DESCRIPTIVE. A queue entry is never evidence, never a finding,
+never quoted as a result to Jason. It is a place to point the normal ladder.
+TIMING RULE (binding on every future generation pass): a state may only be crossed
+with an outcome window that starts at or after the moment the state is known.
+src/idea_factory.py KNOWN_AT is the register; add an entry there before adding any
+new state variable, or the engine will rank a definition as a discovery.
+
 ## UPGRADE QUEUE v3 (approved by Jason September 13th; freeze fully lifted ~4:55 pm CT) -- BUILD CONTINUOUSLY: every cycle takes the next undone U-items in order after the sweep's owed stages, until the list is empty. The THIS WEEK / WEEKS 2-3 / WEEKS 4-8 labels below are ORDER, not pacing -- Jason (5:08 pm CT): "we need to incorporate those changes now."
 Source: research/infrastructure/outside-review-synthesis-2026-09-13.md (six outside
 reviews consolidated; section 6 = decisions, section 7 = sequence). Each item names
@@ -294,7 +313,13 @@ WEEKS 2-3 (structural; freeze lifted for these):
        Discovery slice ONLY, spends NO hypothesis ID, registers NO scan; output is a
        descriptive table; anything with a footprint then goes through mechanism doc ->
        registered family -> normal pipeline. This is a rule change: log it.
-  U12. Discovery Engine v2 minimal (A): per state variable, a pre-registered OUTCOME
+  U12. [BUILT + RUN 2026-09-13 ~5:40 pm CT -- src/idea_factory.py; first queue
+       research/observatory/idea-factory-2026-09-13.md: 1045 cells ranked, 315
+       dropped circular by the new TIMING RULE, 143 candidates in 19 families,
+       ZERO direction families. Run 1 of the engine produced a z=-20.4 "discovery"
+       that was circular (vwap_dist known at the close, tested against the same
+       session) -- the timing rule was added because of it and is now binding on
+       all generation.] Discovery Engine v2 (A): per state variable, a pre-registered OUTCOME
        BATTERY -- mean vs drift-null, range ratio, MFE/MAE, time-to-resolution -- cut
        by session window, FDR within the battery, every cell registered up front.
        Extend with B/E/F question dimensions as families get registered.
