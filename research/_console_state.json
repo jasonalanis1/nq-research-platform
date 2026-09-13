@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-13T02:49:00Z",
- "generated_at_local": "September 12th, 9:49 pm CT",
+ "generated_at": "2026-09-13T04:03:00Z",
+ "generated_at_local": "September 12th, 11:03 pm CT",
  "last_run": "2026-09-13T02:03:00Z",
  "last_run_local": "September 12th, 9:03 pm CT",
- "next_run": "2026-09-13T04:00:00Z",
- "next_run_local": "September 12th, 11:00 pm CT",
+ "next_run": "2026-09-13T06:00:00Z",
+ "next_run_local": "September 13th, 1:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "287 tests",
  "ops": {
@@ -13,7 +13,7 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 6 min, last activity 0 min ago"
+    "detail": "session running 3 min, last activity 3 min ago"
    },
    {
     "name": "shelf",
@@ -23,7 +23,7 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-13T02:10"
+    "detail": "cycle in progress: opening / -"
    },
    {
     "name": "value",
@@ -33,7 +33,7 @@
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 1 min ago"
+    "detail": "refreshed 75 min ago"
    },
    {
     "name": "reports",
