@@ -107,3 +107,23 @@ to reference, not to resolve there.
   budget approved up front.
 - Full 19th scope = this deliberation record + agent/pipeline outputs +
   `research/infrastructure/perspective-scoping-2026-09-13.md`.
+- Swing trading with a particular exit strategy (Topic 6) needs scoping
+  from Jason before the 19th -- what the exit rule actually is.
+
+## Topic 6 — Swing trading with a defined exit strategy (added 2026-09-13, ~3pm CT)
+
+**Jason's addition:** wants swing trading, specifically with a
+particular/defined exit strategy, added as something to bring into the
+19th conversation. Flagged briefly, no elaboration yet on the specific
+exit rule he has in mind or how it relates to the existing shelf/pipeline
+work.
+
+**Where this stands:** captured as a new, distinct agenda item for the
+19th. Not yet scoped — needs Jason to specify what "particular exit
+strategy" means (a fixed target/stop, a trailing rule, a time-based exit,
+something conditioned on one of the project's own validated state facts)
+before it can be turned into pipeline work. Likely connects to Topic 1's
+paper-trading track (an exit rule is a concrete piece of turning a
+validated fact into something tradeable) but that link is Claude's
+inference, not something Jason stated — to confirm with him rather than
+assume.
