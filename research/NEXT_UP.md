@@ -234,7 +234,7 @@ Three honest caveats, which make discipline MORE important here, not less:
      src/project_wide_multiplicity.py updated every scan so the correction
      stays honest.
 
-## UPGRADE QUEUE v3 (Jason lifted the freeze for this list, September 13th, ~4:40 pm CT) -- work these IN ORDER, inside the normal budget, after the sweep's owed stages
+## UPGRADE QUEUE v3 (approved by Jason September 13th; freeze fully lifted ~4:55 pm CT) -- work these IN ORDER, inside the normal budget, after the sweep's owed stages
 Source: research/infrastructure/outside-review-synthesis-2026-09-13.md (six outside
 reviews consolidated; section 6 = decisions, section 7 = sequence). Each item names
 the review(s) that proposed it so the reasoning is traceable. Rules for this queue:
@@ -469,21 +469,20 @@ sequence is: device_stage_files the console JSON -> cloud Bash cp to
 /home/claude/console_state.json -> read_db get with that out_dir (version
 only) -> write_db set with if_version pinned.
 
-CHANGE FREEZE -- LIFTED FOR THE NAMED LIST (Jason, September 13th, ~4:40 pm CT): the September 12th
-freeze is lifted ONLY for the items in "## UPGRADE QUEUE v3" below (the
-named list from research/infrastructure/outside-review-synthesis-2026-09-13.md
-section 6, decisions D2-D17 except D12). Everything not on that list stays
-frozen until the September 19th weekly review. Reason: Jason pulled the
-checkpoint forward, six outside reviews converged, and he approved moving
-forward with the upgrades. Anything else that looks wrong still goes into
-research/weekly/ for the review, not fixed live.
+CHANGE FREEZE -- LIFTED (Jason, September 13th, ~4:55 pm CT): the checkpoint was held
+today instead of the 19th (research/weekly/2026-09-13.md). The named list is
+"## UPGRADE QUEUE v3" below; with no separate 19th review, nothing else remains
+frozen. Routine rule still applies: any structural change gets a KNOWLEDGE.md
+decision-log line and its own doc/test; frozen candidates' definitions are never
+edited.
 
-WEEKLY REVIEW (Jason, September 12th, 10:44 am CT): the first cycle on or after Saturday 8:00 am CT
-writes research/weekly/YYYY-MM-DD.md -- one page: shelf state, what closed
-and why, what is parked, source-channel hit rates, loose ends, and the
-standing question "are we changing things faster than we are learning from
-them?" -- and messages Jason with it. First one: September 19th, which also
-serves as the CHECKPOINT page.
+WEEKLY REVIEW (Jason, September 12th, amended September 13th): the first cycle on or after
+Saturday 8:00 am CT writes research/weekly/YYYY-MM-DD.md -- one page: shelf state,
+what closed and why, what is parked, source-channel hit rates, UPGRADE QUEUE v3
+progress, loose ends, and "are we changing things faster than we are learning from
+them?" -- and messages Jason with it. The September 19th review is CANCELLED (the
+checkpoint was held September 13th; its trigger is deleted). Next routine one:
+Saturday September 26th.
 
 KNOWLEDGE.md (Jason, September 12th, 10:44 am CT): research/KNOWLEDGE.md is the organizational
 memory -- what is true, what failed and why, what is parked, what is open,
