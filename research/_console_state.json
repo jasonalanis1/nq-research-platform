@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-13T08:11:00Z",
- "generated_at_local": "September 13th, 3:11 am CT",
- "last_run": "2026-09-13T06:00:00Z",
- "last_run_local": "September 13th, 1:00 am CT",
- "next_run": "2026-09-13T10:00:00Z",
- "next_run_local": "September 13th, 5:00 am CT",
+ "generated_at": "2026-09-13T10:03:00Z",
+ "generated_at_local": "September 13th, 5:03 am CT",
+ "last_run": "2026-09-13T08:00:00Z",
+ "last_run_local": "September 13th, 3:00 am CT",
+ "next_run": "2026-09-13T12:00:00Z",
+ "next_run_local": "September 13th, 7:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "287 tests",
  "ops": {
@@ -13,7 +13,7 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 10 min, last activity 1 min ago"
+    "detail": "session running 3 min, last activity 3 min ago"
    },
    {
     "name": "shelf",
@@ -33,12 +33,12 @@
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 119 min ago"
+    "detail": "refreshed 113 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "44 reports, latest 2026-09-13-0600.md well-formed"
+    "detail": "45 reports, latest 2026-09-13-0800.md well-formed"
    },
    {
     "name": "new-information",
@@ -197,6 +197,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-13-0800.md",
+   "ts": "2026-09-13T08:00:00Z",
+   "new_information": "A new, well-differentiated sourcing candidate (M24) ready for next cycle's draw, and a genuine-but-underpowered null on whether ZN futures show a month-end duration-extension bid -- the direction was right, the statistics weren't strong enough to call it, which is itself useful information about the limits of what this data ceiling can resolve for low-frequency (monthly) calendar effects.",
+   "agents_ran": 4,
+   "agents_not_run": 2,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 3:00 am CT"
+  },
+  {
    "file": "2026-09-13-0600.md",
    "ts": "2026-09-13T06:00:00Z",
    "new_information": "A new, fully differentiated sourcing candidate (M23) restoring the shelf toward its floor, and a clean, well-powered negative result on whether trading volume predicts the SIZE of NQ's daily mean reversion (it predicts that reversal happens, at roughly a constant rate, regardless of volume) -- closing that specific question rather than leaving it open or re-litigating it later.",
@@ -217,17 +228,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 12th, 11:00 pm CT"
-  },
-  {
-   "file": "2026-09-13-0203.md",
-   "ts": "2026-09-13T02:03:00Z",
-   "new_information": "One new, mechanism-doc'd, DRAWABLE candidate (M22/Entry 26) that is genuinely distinct from every prior ZN or month-end family in the project, with a real path to monetization even if Discovery passes (the realization path is already flat/time-boxed, unlike M20/M21's volatility-only facts that need a separate base strategy). No scan run, so no statistical result yet.",
-   "agents_ran": 2,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 9:03 pm CT"
   }
  ]
 }
