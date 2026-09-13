@@ -235,6 +235,7 @@ SCAN_REGISTRY = {
     "scan_023_2026-09-12": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
     "scan_024_2026-09-12": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
     "scan_025_2026-09-13": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
+    "scan_026_2026-09-13": {"cells_scanned": 10, "promoted_hypothesis_ids": []},  # M18 volume-conditioned daily reversal, NQ, Entry 22
     # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
     # press-conference, pre/post volatility, 6E, open scope -- third open-
     # scope entry, companion/cross-check to M20). 6 cells: decision-hour

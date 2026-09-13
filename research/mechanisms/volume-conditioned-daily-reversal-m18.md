@@ -121,3 +121,40 @@ tune.
 
 ## 9. Prediction status
 P1 -- untested. P2 -- untested. P3 -- untested. P4 -- untested.
+
+## 10. Disposition (2026-09-13, ~1:20 am CT, scheduled cycle)
+Scan 026 run, Discovery slice only (n_used=1665, sessions usable=1686,
+dropped=2). Result:
+  - Cell 1 (P1 GATING, HIGH-volume sign-adjusted next-day mean):
+    n=555, mean=-0.0942, ci_90=(-0.1523,-0.0463) -- credibly NEGATIVE.
+    P1 PASSES.
+  - Cell 2 (LOW-volume, same statistic): n=555, mean=-0.0353,
+    ci_90=(-0.0793,+0.0012) -- null.
+  - Cell 4 (HIGH minus LOW, bootstrap on the difference): mean_diff=
+    -0.0590, ci_90=(-0.1253,+0.0054) -- NOT credibly negative.
+    P2 FAILS.
+  - Cell 5 (NULL 1, unconditional sign-adjusted next-day mean):
+    mean=-0.0425 -- close to the HIGH-volume cell's own mean, which is
+    exactly what a P2 failure looks like: the reversal in the HIGH
+    cell is largely just NQ's own everyday daily mean reversion, not a
+    volume-driven gradient on top of it.
+  - Kill check: first-minute share of the HIGH-cell response = 0.036
+    (well under the 0.5 kill threshold) -- NOT an overnight-gap
+    artifact; the reversal genuinely builds in over the session. This
+    makes the P2 failure more informative, not less: it is a real
+    session-long effect, it just is not bigger after high-volume days
+    than after low-volume days.
+VERDICT: P1_PASS_P2_FAIL. Per falsifier (b) in Section 4: "P1 passes
+but P2 fails: it is NQ's own daily reversal (or lack of it), volume
+adds nothing; closes." Entry CLOSED.
+Logged: hyp-000152 (REJECTED), ledger data_slice=discovery.
+This closes the volume-gradient-on-reversal channel for good (alongside
+hyp-000043's closure of volume LEVEL alone) -- volume ratio, at least at
+this tercile split and this trailing-20d window, does not modulate the
+size of daily reversal in NQ index futures. Consistent with the
+project's read of Campbell-Grossman-Wang as decayed/index-level weak
+even before this test (Section 8 above flagged edge potential as
+LOW-MODERATE going in).
+Next owed: none for M18 -- CLOSED. Shelf consumption: Entry 22 drawn,
+scanned, and closed within the same cycle it reached DRAWABLE, per
+SHELF RULE v2 precedent (draw-then-scan once floor is met).

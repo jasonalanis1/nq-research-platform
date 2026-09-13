@@ -1435,7 +1435,7 @@ written BEFORE any scan. Source CHANNEL: literature (Heston-Korajczyk-Sadka
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M17. STATUS: CLOSED (Scan 022, P1 FAIL; see mechanism doc Section 9).
 
-## ENTRY 22 — M18: volume-conditioned daily reversal (Campbell-Grossman-Wang), NQ (literature, September 12th, ~5:10 pm CT test cycle) — DRAWABLE (map-ranked #3)
+## ENTRY 22 — M18: volume-conditioned daily reversal (Campbell-Grossman-Wang), NQ (literature, September 12th, ~5:10 pm CT test cycle) — CLOSED (Scan 026, 2026-09-13 ~1:20 am CT, hyp-000152 REJECTED): P1 gating passed (HIGH-volume cell credibly negative) but P2 failed (not credibly below LOW-volume cell); NQ's own daily reversal, volume adds no gradient; not killed
 
 Generation (sourcing stage, TEST cycle): full mechanism doc
 research/mechanisms/volume-conditioned-daily-reversal-m18.md, written
@@ -1459,7 +1459,7 @@ BEFORE any scan. Source CHANNEL: literature.
 3. **HORIZON**: next RTH session (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW, adjacencies disclosed.
    Attempt 1 of 2.
-5. **MAP ANCHOR**: M18. STATUS: DRAWABLE, third on the shelf.
+5. **MAP ANCHOR**: M18. STATUS: CLOSED. Drawn and scanned same cycle (2026-09-13 ~1:20 am CT) once the shelf reached 3/3. Scan 026: HIGH-volume sign-adjusted next-day mean n=555 mean=-0.0942 ci_90=(-0.1523,-0.0463) -- credibly negative (P1 PASS). HIGH-minus-LOW diff mean=-0.0590 ci_90=(-0.1253,+0.0054) -- not credibly negative (P2 FAIL). Kill check: first-min share=0.036, not killed -- a real session-long effect, just not volume-graded. VERDICT: P1_PASS_P2_FAIL, closed per falsifier (b). Logged hyp-000152 (REJECTED, data_slice=discovery). Closes the volume-gradient-on-reversal channel for good, alongside hyp-000043's closure of volume level alone.
 
 ## ENTRY 23 — M19: Treasury auction concession and rebound, ZN (open scope; map channel; September 12th, ~5:05 pm CT cycle) — CLOSED (Scan 024, ~7:10 pm CT, hyp-000149 REJECTED): neither gating leg credible vs ZN's unconditional 3-session drift; n=40 events; thin-sample rule applies, not enough power to rule out a small real effect but nothing to advance
 
@@ -1605,3 +1605,54 @@ Vega 2003, Ehrmann-Fratzscher 2005.
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
 5. **MAP ANCHOR**: M22. STATUS: DRAWABLE. Mechanism doc:
    research/mechanisms/month-end-duration-extension-zn-m22.md.
+
+## ENTRY 27 — M23: London FX session-open volatility burst, 6E (map-ranked, open scope) — SOURCED September 13th, ~1:15 am CT (map channel), DRAWABLE
+
+- Source CHANNEL: map (forced participant), literature-supported:
+  Andersen & Bollerslev (1998, JF) and later microstructure work (Ito &
+  Hashimoto 2006; Breedon & Ranaldo 2013) document the London FX session
+  open as the largest intraday volatility periodicity spike in EUR/USD --
+  a backlog of overnight orders, corporate/custodial flow, and
+  session-triggered algorithmic strategies clearing at once against
+  London's opening liquidity. NO scheduled news event involved.
+- Explicitly NOT a third instance of the declined "scheduled event ->
+  volatility magnitude jump" clone pattern (M20/M21): those are forced by
+  a public news release; this is forced by the STRUCTURE of the trading
+  day itself, the same class as M1 (NQ cash close) and M2 (NQ RTH open),
+  never before tested on 6E. Not a resurrection of M21 (different clock
+  time, different mechanism, no overlap) or the overnight-coil family
+  (that is an NQ-only next-session RANGE persistence claim; this is a
+  same-session 6E-only MAGNITUDE claim, no forecasting element).
+- Discovery: 6E 1-minute on disk, full 24-hour coverage confirmed
+  (00:00-23:59 local span verified directly against the loaded frame).
+  No new data needed.
+- Statistical: London-open hour (03:00-04:00 ET) |return|/ATR14 vs.
+  unconditional hourly baseline (block bootstrap, block=10, matching
+  M21's convention); pre-London hour reported unpinned as a specificity
+  check; first-minute concentration kill check.
+- Director: information gain HIGH -- this fires every trading day
+  (~1,650 Discovery-slice observations), the best-powered open-scope
+  entry sourced so far, versus M20's 329 and M21's 35 event dates. Edge
+  potential real and structurally different from M20/M21: a
+  daily-recurring session-open window is closer to NQ's cash-close/RTH-
+  open product shape (useful for a standalone opening-range strategy at
+  the London open, not only a sizing overlay on a pre-existing strategy)
+  than a rare-event characterization with nothing to attach to --
+  flagged explicitly so Monetization evaluates a standalone base-strategy
+  path here rather than defaulting to "no credible path" the way M20/M21
+  did.
+- KILL RULE: response concentrated in the single first minute of the
+  London session (03:00-03:01 ET, thin-liquidity print artifact rather
+  than a genuine hour-long effect).
+
+1. **STATE VARIABLE**: none (unconditional London-open-hour magnitude
+   claim, fires daily); pre-London hour as a secondary, non-gating
+   specificity check.
+2. **MECHANISM CLAIM**: London FX dealers clearing a backlog of orders
+   and algorithmic strategies at the session open drives realized
+   |return|/ATR14 credibly above the unconditional hourly baseline.
+3. **HORIZON**: 1 hour, session-boundary anchored, daily (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M23. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/london-open-volatility-6e-m23.md. Restores the
+   3-entry shelf floor (Entry 22, 26, 27).
