@@ -29,3 +29,38 @@ CREDIBLE SURVIVOR at Discovery. Logged hyp-000142 (PROMISING), SCAN_REGISTRY sca
 
 ## 7. Validation (September 11th, 9:57 pm CT) -- claim unchanged
 ONE-SHOT VALIDATION PASS (hyp-000144, Validation slice 2021-10-04..2024-01-03, frozen Discovery edges): HIGH n=198 ratio 1.120 ci_90 [1.066, 1.177], Sidak-adjusted [1.026, 1.213] > 1.0, economic floor cleared (0.12 >= 0.05). LOW n=166 0.865 [0.822, 0.910] compressed -- P2 also holds out of sample. MID 1.035 null. Effect size fell from 1.305 (Discovery) to 1.120 -- read with the usual caution, but the binding bar is cleared. P4 split out of sample: see data/study_vxn_high_next_day_range_h142_validation_results.json. Blind Integrity Gate ruled CONDITIONAL on three verifiable facts, all resolved in writing before the run (recorded in the spec). Status: VALIDATION CANDIDATE, GATED at Holdout (Jason). Would be the project's fourth range/conditioning fact and the first found by the map-anchored, mechanism-first v2.5 pipeline end to end.
+
+## 8. Holdout (September 12th, ~9:45 pm CT) -- claim unchanged, THIRD hypothesis to clear all three stages
+Jason's explicit sign-off ("Push through the option through the holdout") spent Holdout
+Generation 2 slot 3 of 5. Script written verbatim from the Validation script (only the
+holdout_gen2 loader and stage label swapped; diff-checked line-by-line before running,
+matching the frozen spec's requirement) -- no edge, lookback, normalisation, slice, or cell
+change of any kind.
+HOLDOUT PASS (hyp-000151, Holdout Gen 2 slice 2024-01-04..2026-04-06, frozen Discovery
+edges unchanged throughout): HIGH n=208 ratio 1.2389 ci_90 [1.170, 1.313], Sidak-adjusted
+at N_holdout=2 [1.154, 1.324] > 1.0, economic floor cleared (0.24 >= 0.05, the largest
+margin of the three stages). LOW n=139 ratio 0.770 [0.723, 0.820] compressed -- P2 holds
+a third time. MID 1.017 null, still a clean monotone gradient.
+Effect size: 1.305 (Discovery) -> 1.120 (Validation) -> 1.239 (Holdout) -- STRENGTHENED
+from Validation to Holdout, not the usual shrink-or-noisy pattern seen in this project's
+other multi-stage survivors (H118: 0.62->0.28->0.40R; midday-lull: stable but not
+strengthening). Noted plainly, not treated as simply good news -- flagged for Portfolio
+review rather than assumed to mean the effect is real "extra" strong.
+P4 split held its earlier shape out of sample a third time: prior-day-quiet 1.127
+[1.041,1.223] credible, prior-day-wild 1.351 [1.242,1.464] credible -- both elevated,
+effect present regardless of yesterday's realized range but larger when yesterday was
+already wild, consistent with the Validation-stage reading (mechanism weakened to "partly
+echo, partly genuine lead" rather than falsified; Statistical-stage residualisation still
+stands: ~53% of the HIGH-LOW spread survives controlling for prior-day realized range and
+overnight range together).
+Status: HOLDOUT PASSED, INTEGRITY-CLEARED (script matched the frozen spec verbatim; no new
+Gate review needed since no new judgment call was introduced). THIRD hypothesis in project
+history to clear all three stages, after H118 (vwap_dist_vs_atr, later reclassified
+REJECTED on the baseline-relative diagnostic) and midday-lull/afternoon-expansion
+(hyp-000105/106/141, KNOWN TRUE, Portfolio review complete). A next-session RANGE
+conditioning fact, not a directional edge -- joins src/volatility_conditioning.py as a
+sizing/context input if Portfolio finds it adds incremental information, not a standalone
+strategy. NEXT OWED: Portfolio's incremental-information question, per the blind Gate's
+binding condition -- combine this multiplier with the existing overnight-coil / realized-
+range conditioning BY RESIDUAL, never by product (VXN correlates +0.41 with overnight
+range; naive multiplication would double-count the shared component).

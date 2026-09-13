@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-13T02:09:00Z",
- "generated_at_local": "September 12th, 9:09 pm CT",
- "last_run": "2026-09-13T00:01:00Z",
- "last_run_local": "September 12th, 7:01 pm CT",
+ "generated_at": "2026-09-13T02:49:00Z",
+ "generated_at_local": "September 12th, 9:49 pm CT",
+ "last_run": "2026-09-13T02:03:00Z",
+ "last_run_local": "September 12th, 9:03 pm CT",
  "next_run": "2026-09-13T04:00:00Z",
  "next_run_local": "September 12th, 11:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
@@ -13,7 +13,7 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 6 min, last activity 2 min ago"
+    "detail": "session running 6 min, last activity 0 min ago"
    },
    {
     "name": "shelf",
@@ -23,22 +23,22 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "cycle in progress: opening / -"
+    "detail": "last cycle closed cleanly at 2026-09-13T02:10"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'ledger_rows': 2, 'scans_registered': 1, 'studies': 3, 'inventory_closed': 1}"
+    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'inventory_entries': 1}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 119 min ago"
+    "detail": "refreshed 1 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "41 reports, latest 2026-09-13-0001.md well-formed"
+    "detail": "42 reports, latest 2026-09-13-0203.md well-formed"
    },
    {
     "name": "new-information",
@@ -62,48 +62,40 @@
    },
    {
     "name": "awaiting-jason",
-    "status": "WARN",
-    "detail": "1 item(s) blocked on Jason: GATED hyp-000142: Holdout slot"
+    "status": "PASS",
+    "detail": "nothing parked on Jason in the queue"
    }
   ]
  },
  "progress": {
-  "trials_since_last_survivor": 77,
+  "trials_since_last_survivor": 71,
   "trials_total": 380,
   "survivors_alive": 2,
   "trials_per_survivor": 190.0,
   "last_survivor": {
-   "hypothesis_id": "hyp-000144",
-   "name": "vxn_level_vs_trailing_high_next_day_range_prospective",
-   "date": "2026-09-12"
+   "hypothesis_id": "hyp-000151",
+   "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
+   "date": "2026-09-13"
   },
   "scan_cells_total": 284,
   "standalone_total": 96,
   "scans_run": 25,
   "scans_with_no_survivor": 20
  },
- "ledger_rows": 185,
- "distinct_hypotheses": 143,
+ "ledger_rows": 187,
+ "distinct_hypotheses": 144,
  "funnel": {
   "closed": 106,
   "discovery": 0,
-  "validation": 1,
-  "holdout": 1,
-  "forward": 2,
+  "validation": 0,
+  "holdout": 2,
+  "forward": 3,
   "paper": 0,
   "live": 0
  },
  "sweep": {
   "shelf": "Shelf 2/3 DRAWABLE (Entry 22, 26; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
   "rows": [
-   {
-    "tier": "GATED",
-    "id": "hyp-000142",
-    "name": "Vxn level vs trailing high next day range",
-    "stage_reached": "Integrity Gate checkpoint cleared",
-    "next_owed": "nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot",
-    "legacy": false
-   },
    {
     "tier": "FROZEN",
     "id": "EXP047",
@@ -119,22 +111,23 @@
     "stage_reached": "HOLDOUT PASSED",
     "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
     "legacy": false
+   },
+   {
+    "tier": "FROZEN",
+    "id": "hyp-000142",
+    "name": "Vxn level vs trailing high next day range",
+    "stage_reached": "HOLDOUT PASSED",
+    "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+    "legacy": false
    }
   ],
   "counts": {
    "OPEN": 0,
-   "GATED": 1,
-   "FROZEN": 2
+   "GATED": 0,
+   "FROZEN": 3
   }
  },
- "waiting_on_jason": [
-  {
-   "id": "hyp-000142",
-   "name": "Vxn level vs trailing high next day range",
-   "status": "ready for your sign-off",
-   "detail": "nothing further automated -- frozen Holdout spec ready; Waiting on Jason to spend a Holdout slot"
-  }
- ],
+ "waiting_on_jason": [],
  "h118_forward": {
   "resolved": 0,
   "target_trades": 40,
@@ -151,7 +144,7 @@
   "live": [
    {
     "id": 8,
-    "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 VALIDATION CANDIDATE, GATED at Holdout (hyp-000142/143/144; Scan 014 9:47 pm CT -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> one-shot Validation PASS 9:57 pm CT: HIGH 1.120 [1.066,1.177], Sidak [1.026,1.213]). Waiting on Jason for a Holdout slot."
+    "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 HOLDOUT PASSED, THIRD hypothesis in project history to clear all three stages (hyp-000142/143/144/151; Scan 014 -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> Validation PASS: HIGH 1.120 [1.066,1.177] -> Holdout PASS, September 12th ~9:45 pm CT, Jason's sign-off (slot 3 of 5): HIGH 1.239 [1.170,1.313], Sidak [1.154,1.324], effect strengthened Validation->Holdout, disclosed as unusual. Portfolio review (research/studies/portfolio-hyp142-separability-2026-09-13.md): SEPARABLE, 53-66% retained residualized on the existing conditioning facts -- higher overlap than the other three, must combine by RESIDUAL not product if integrated into volatility_conditioning.py, deferred to Sept 19th product-build decision. KNOWN TRUE, conditioning fact."
    },
    {
     "id": 15,
@@ -204,6 +197,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-13-0203.md",
+   "ts": "2026-09-13T02:03:00Z",
+   "new_information": "One new, mechanism-doc'd, DRAWABLE candidate (M22/Entry 26) that is genuinely distinct from every prior ZN or month-end family in the project, with a real path to monetization even if Discovery passes (the realization path is already flat/time-boxed, unlike M20/M21's volatility-only facts that need a separate base strategy). No scan run, so no statistical result yet.",
+   "agents_ran": 2,
+   "agents_not_run": 1,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 12th, 9:03 pm CT"
+  },
+  {
    "file": "2026-09-13-0001.md",
    "ts": "2026-09-13T00:01:00Z",
    "new_information": "",
@@ -224,17 +228,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 12th, 6:15 pm CT"
-  },
-  {
-   "file": "2026-09-12-2200.md",
-   "ts": "2026-09-12T22:00:00Z",
-   "new_information": "",
-   "agents_ran": 2,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 12th, 5:00 pm CT"
   }
  ]
 }
