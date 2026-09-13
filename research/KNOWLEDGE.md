@@ -129,3 +129,29 @@ probably the highest-leverage decision available for the 19th.
   drawn this cycle -- budget-use deferral (a full Discovery scan plus its
   disposition already ran); first in line next cycle. Shelf 3/3
   restored (Entry 28, 29, 30).
+
+## 2026-09-13 (1:00 pm CT scheduled cycle) — M24/Entry 28 closed (P1_FAIL), M27/Entry 31 sourced
+
+Drew Entry 28 (map M24, month-end payment-cycle reversal, NQ): Scan 031,
+10 cells, 1 gating, thin-sample family (80 usable calendar months, ~27
+per tercile, block=3). GATING P1 (LOW-tercile next-month return net of
+NQ's own unconditional next-month drift) came back close but not
+credible: mean=+0.0112, ci_90=(-0.0005,+0.0224) -- lower bound sits just
+barely on the negative side of zero. P2 (LOW-minus-HIGH asymmetry) also
+not credible. Not confounded with the closed M6/hyp-000108 turn-of-month
+effect (first-3-session share 0.452, below the 0.5 kill threshold).
+Director concurred with closure despite the near-miss CI -- this
+project's own discipline treats a near-miss the same as a clean miss;
+no re-test authorized without new information (a longer data history or
+a materially different instrument). Logged hyp-000157 (REJECTED). Entry
+closes; dropped the shelf to 2/3.
+Sourced M27/Entry 31 (Tokyo FX session open, 6E) to restore the shelf
+floor: a direct companion to M23 (same day's earlier P1_PASS, London-
+open volatility), applying the identical pre-existing methodology
+(unconditional-hourly-baseline comparison, specificity check, kill
+check) to a distinct, non-overlapping session boundary (19:00-20:00 ET
+Tokyo open vs. M23's 03:00-04:00 ET London open) with its own
+participant story (Japanese exporter/importer flow, Asian real-money
+accounts, Tokyo bank desks). Mechanism doc written before any scan, per
+standard discipline; not drawn this cycle (budget-use deferral). Shelf
+3/3 restored (Entry 29, 30, 31).

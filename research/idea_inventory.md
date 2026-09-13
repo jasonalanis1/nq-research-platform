@@ -1665,7 +1665,7 @@ Vega 2003, Ehrmann-Fratzscher 2005.
    design queued as a new sourcing candidate. Mechanism doc:
    research/mechanisms/london-open-volatility-6e-m23.md.
 
-## ENTRY 28 — M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) — SOURCED, DRAWABLE
+## ENTRY 28 — M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) — CLOSED, P1_FAIL
 
 Generation (sourcing stage, scheduled cycle): full mechanism doc
 research/mechanisms/month-end-payment-cycle-reversal-m24.md, written
@@ -1703,9 +1703,20 @@ the following month.
 3. **HORIZON**: 1 calendar month, time-based (gating).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW, five adjacencies
    disclosed and distinguished. Attempt 1 of 2.
-5. **MAP ANCHOR**: M24. STATUS: DRAWABLE. Mechanism doc:
-   research/mechanisms/month-end-payment-cycle-reversal-m24.md. Restores
-   the 3-entry shelf floor (Entry 26, 27, 28).
+5. **MAP ANCHOR**: M24. STATUS: CLOSED. Mechanism doc:
+   research/mechanisms/month-end-payment-cycle-reversal-m24.md.
+   Scan 031 (2026-09-13, hyp-000157): P1 gate (LOW-tercile next-month
+   return net of NQ's own unconditional drift) mean=+0.0112
+   ci_90=(-0.0005,+0.0224) -- lower bound just barely negative, NOT
+   credible. Not confounded with M6/hyp-000108 (first-3-session share
+   0.452, below the 0.5 kill threshold). LOW-minus-HIGH P2 also not
+   credible (diff=+0.0112 ci_90=(-0.0109,+0.0328)). Director concurred
+   with closure despite the near-miss CI -- no re-test authorized
+   without new information. Thin-sample family (80 months, ~27/tercile)
+   -- a null here is not strong evidence the effect does not exist,
+   only that it is not visible at this data ceiling. Entry closes;
+   drops the shelf to Entry 29/30 (2 of 3), sourcing owed next cycle
+   per SHELF RULE v2.
 
 
 ## ENTRY 29 — M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) — DRAWABLE
@@ -1812,3 +1823,43 @@ weeks/year, S&P 100 names).
 5. **MAP ANCHOR**: M26. STATUS: DRAWABLE. Mechanism doc:
    research/mechanisms/level-sweep-reversal-range-contraction-m26.md.
    Restores the 3-entry shelf floor (Entry 28, 29, 30).
+
+## ENTRY 31 — M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) — SOURCED, DRAWABLE
+
+Generation (sourcing stage, scheduled cycle): sourced to restore the
+3-entry shelf floor after M24/Entry 28 closed this cycle (P1_FAIL,
+hyp-000157). Full mechanism doc
+research/mechanisms/tokyo-fx-open-6e-m27.md, written BEFORE any scan.
+Companion entry to M23 (London-open volatility, 6E, P1_PASS this same
+day, hyp-000156): same open-scope, structural-session-boundary
+methodology family, applied to the Tokyo FX session open
+(19:00-20:00 ET) instead -- a distinct, non-overlapping window with its
+own participant story (Japanese exporter/importer hedging flow, Asian
+real-money accounts, Tokyo-based bank desks, not European dealers).
+- LEARN/Integrity: NEW. Disclosed against M23 (non-overlapping window,
+  different participants -- not a re-run), M20/M21 (both scheduled news
+  events; this entry has none, purely session-structure), and M15
+  (unconditional session-split decomposition, different claim shape,
+  already closed). Attempt 1 of 2.
+- Discovery: 6E 1-minute OHLCV, already on disk (confirmed this same
+  cycle via Scan 030/M23), no new data. 4 cells, 1 gating, mirroring
+  M23's own Scan 030 exactly.
+- Statistical: block bootstrap (block=10, matches the M20/M21/M23
+  hourly-frequency convention); NULL 1 = 6E's own unconditional hourly
+  |return|/ATR14 baseline.
+- Director: same open question M23 left unresolved -- 6E has zero
+  existing base strategies, so a pass here again defers Monetization to
+  a fresh sourced entry rather than a same-cycle strategy design.
+
+1. **STATE VARIABLE**: Tokyo-open hour (19:00-20:00 ET) vs. pre-Tokyo
+   hour (18:00-19:00 ET), 6E.
+2. **MECHANISM CLAIM**: Tokyo-session-open order-backlog clearing against
+   thin US-afternoon/Asian-session-seam liquidity elevates |return| in
+   the opening hour, with no scheduled news event involved.
+3. **HORIZON**: 1 hour (session-boundary anchored, fires daily).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, three adjacencies
+   disclosed and distinguished (M23, M20/M21, M15). Attempt 1 of 2.
+5. **MAP ANCHOR**: M27. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/tokyo-fx-open-6e-m27.md. Restores the 3-entry
+   shelf floor (Entry 29, 30, 31).
+

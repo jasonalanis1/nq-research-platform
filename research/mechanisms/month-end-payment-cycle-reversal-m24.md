@@ -147,6 +147,41 @@ at all -- only that it is not visible at this data ceiling, exactly the
 thin-sample framing already applied to M19's n=40 events.
 
 ## Status
-SOURCED, literature channel, open scope. Mechanism doc written BEFORE
-any scan per the upgrade-brief methodology. DRAWABLE once registered on
-the map and in the Idea Inventory. No scan run yet.
+CLOSED, P1_FAIL (2026-09-13, Scan 031, hyp-000157).
+
+## 11. Disposition (2026-09-13, Scan 031, hyp-000157)
+GATING (P1): LOW-tercile next-month return, net of NQ's own
+unconditional next-month drift -- mean=+0.0112, ci_90=(-0.0005,+0.0224),
+n=27. Lower bound sits just barely on the negative side of zero: NOT
+credible. Directionally consistent with the predicted mechanism but not
+statistically confirmed at this data ceiling.
+SECONDARY (P2 asymmetry): HIGH-tercile net of NULL1 mean=+0.0000
+ci_90=(-0.0141,+0.0229), null, as the mechanism itself predicted (a
+forced-selling-only story should show nothing on the HIGH side). MID
+was credibly negative (ci_90=(-0.0231,-0.0005)), not predicted either
+way, reported only. LOW-minus-HIGH difference (the real P2 test):
+diff=+0.0112 ci_90=(-0.0109,+0.0328), not credible.
+CONFOUND/KILL check: first-3-RTH-session share of the LOW-tercile
+next-month return = 0.452, below the 0.5 kill threshold -- NOT
+confounded with the closed M6/hyp-000108 turn-of-month inflow effect.
+Descriptive-only split (P4, explicitly low-power): first-half
+mean=+0.0173 ci_90=(+0.0072,+0.0313) positive; second-half
+mean=+0.0055 ci_90=(-0.0175,+0.0204) null. Not treated as a second
+gate, consistent with the doc's own framing.
+Stability check (cell 10, LOW excluding months with a further leg
+down): mean=+0.0210 ci_90=(+0.0010,+0.0433), positive -- but this is a
+reported, non-gating cell and does not override the P1 gating failure.
+VERDICT: P1_FAIL. Falsifier (a) applies (Section 5). The payment-cycle
+friction is not visible in NQ futures at this data ceiling -- thin-
+sample family as flagged in advance (80 usable months, ~27 per
+tercile). A null here is not strong evidence the effect does not exist,
+only that it is not visible at this sample size. Entry closes.
+DIRECTOR RE-EVALUATION: CONCUR with closure -- the gating cell's CI
+sits close enough to zero (lower bound -0.0005) that a materially
+larger sample could plausibly flip it, but per this project's own
+discipline a near-miss CI is not treated differently from a clean
+miss. No re-test authorized under the family's 2-attempt budget without
+new information (e.g., a longer data history or a materially different
+instrument).
+MONETIZATION: NOT RUN -- gating failed, no path to a strategy design
+step.
