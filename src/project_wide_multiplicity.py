@@ -237,6 +237,8 @@ SCAN_REGISTRY = {
     "scan_025_2026-09-13": {"cells_scanned": 6, "promoted_hypothesis_ids": []},
     "scan_026_2026-09-13": {"cells_scanned": 10, "promoted_hypothesis_ids": []},  # M18 volume-conditioned daily reversal, NQ, Entry 22
     "scan_027_2026-09-13": {"cells_scanned": 3, "promoted_hypothesis_ids": []},  # M22 month-end ZN duration-extension flow, Entry 26
+    "scan_028_2026-09-13": {"cells_scanned": 15, "promoted_hypothesis_ids": []},  # M13 LETF close-rebalance flow, RTY/ES/NQ, Entry 17
+    "scan_029_2026-09-13": {"cells_scanned": 8, "promoted_hypothesis_ids": []},  # M14 option-dealer gamma regime, NQ/ES, Entry 18
     # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
     # press-conference, pre/post volatility, 6E, open scope -- third open-
     # scope entry, companion/cross-check to M20). 6 cells: decision-hour

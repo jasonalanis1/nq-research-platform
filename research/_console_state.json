@@ -1,24 +1,24 @@
 {
- "generated_at": "2026-09-13T12:04:00Z",
- "generated_at_local": "September 13th, 7:04 am CT",
- "last_run": "2026-09-13T10:00:00Z",
- "last_run_local": "September 13th, 5:00 am CT",
- "next_run": "2026-09-13T14:00:00Z",
- "next_run_local": "September 13th, 9:00 am CT",
+ "generated_at": "2026-09-13T14:33:00Z",
+ "generated_at_local": "September 13th, 9:33 am CT",
+ "last_run": "2026-09-13T14:00:00Z",
+ "last_run_local": "September 13th, 9:00 am CT",
+ "next_run": "2026-09-13T16:00:00Z",
+ "next_run_local": "September 13th, 11:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "287 tests",
  "ops": {
-  "overall": "WARN",
+  "overall": "PASS",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 4 min, last activity 4 min ago"
+    "detail": "session running 33 min, last activity 0 min ago"
    },
    {
     "name": "shelf",
-    "status": "WARN",
-    "detail": "below floor, sourcing owed (Shelf 2/3 DRAWABLE (Entry 27, 28; pending on data/Jason: Entry 15, 17,)"
+    "status": "PASS",
+    "detail": "Shelf 3/3 DRAWABLE (Entry 27, 28, 29; pending: Entry 15) -> next DRAW: Entry 27 (oldest dr"
    },
    {
     "name": "checkpoint",
@@ -33,12 +33,12 @@
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 122 min ago"
+    "detail": "refreshed 150 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "46 reports, latest 2026-09-13-1000.md well-formed"
+    "detail": "48 reports, latest 2026-09-13-1400.md well-formed"
    },
    {
     "name": "new-information",
@@ -48,12 +48,12 @@
    {
     "name": "ledger",
     "status": "PASS",
-    "detail": "111 idea families, no stale statuses"
+    "detail": "113 idea families, no stale statuses"
    },
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "28 mechanism doc(s) cover every advanced candidate"
+    "detail": "29 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -68,24 +68,24 @@
   ]
  },
  "progress": {
-  "trials_since_last_survivor": 86,
-  "trials_total": 395,
+  "trials_since_last_survivor": 111,
+  "trials_total": 420,
   "survivors_alive": 2,
-  "trials_per_survivor": 197.5,
+  "trials_per_survivor": 210.0,
   "last_survivor": {
    "hypothesis_id": "hyp-000151",
    "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
    "date": "2026-09-13"
   },
-  "scan_cells_total": 297,
-  "standalone_total": 98,
-  "scans_run": 27,
-  "scans_with_no_survivor": 22
+  "scan_cells_total": 320,
+  "standalone_total": 100,
+  "scans_run": 29,
+  "scans_with_no_survivor": 24
  },
- "ledger_rows": 189,
- "distinct_hypotheses": 146,
+ "ledger_rows": 191,
+ "distinct_hypotheses": 148,
  "funnel": {
-  "closed": 108,
+  "closed": 110,
   "discovery": 0,
   "validation": 0,
   "holdout": 2,
@@ -94,7 +94,7 @@
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 2/3 DRAWABLE (Entry 27, 28; pending on data/Jason: Entry 15, 17, 18) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope",
+  "shelf": "Shelf 3/3 DRAWABLE (Entry 27, 28, 29; pending: Entry 15) -> next DRAW: Entry 27 (oldest drawable)",
   "rows": [
    {
     "tier": "FROZEN",
@@ -139,7 +139,7 @@
  },
  "shelf": {
   "floor": 3,
-  "count": 6,
+  "count": 5,
   "floor_met": true,
   "live": [
    {
@@ -151,24 +151,30 @@
     "name": "M9: Nasdaq-100 quarterly rebalance close-window volume/move -> next-day reaction (map-ranked #7, September 11th, 11:37 pm CT) \u2014 INDETERMINATE, RE-PARKED September 12th, 12:20 am CT (Scan 018)"
    },
    {
-    "id": 17,
-    "name": "M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) \u2014 PARKED: not testable at the current data ceiling (needs RTY/ES)"
-   },
-   {
-    "id": 18,
-    "name": "M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) \u2014 PARKED: not testable at the current data ceiling (needs ES)"
-   },
-   {
     "id": 27,
     "name": "M23: London FX session-open volatility burst, 6E (map-ranked, open scope) \u2014 SOURCED September 13th, ~1:15 am CT (map channel), DRAWABLE"
    },
    {
     "id": 28,
     "name": "M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) \u2014 SOURCED, DRAWABLE"
+   },
+   {
+    "id": 29,
+    "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 DRAWABLE"
    }
   ]
  },
  "recent_closures": [
+  {
+   "id": "hyp-000155",
+   "name": "Hedging-demand-gamma-regime-m14",
+   "date": "2026-09-13"
+  },
+  {
+   "id": "hyp-000154",
+   "name": "Letf-close-rebalance-m13",
+   "date": "2026-09-13"
+  },
   {
    "id": "hyp-000153",
    "name": "Month end duration extension zn m22",
@@ -183,19 +189,31 @@
    "id": "hyp-000150",
    "name": "Ecb decision volatility jump 6e m21",
    "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000149",
-   "name": "Treasury auction concession rebound zn m19",
-   "date": "2026-09-12"
-  },
-  {
-   "id": "hyp-000148",
-   "name": "Eia report volatility jump cl m20",
-   "date": "2026-09-12"
   }
  ],
  "sessions": [
+  {
+   "file": "2026-09-13-1400.md",
+   "ts": "2026-09-13T14:00:00Z",
+   "new_information": "",
+   "agents_ran": 4,
+   "agents_not_run": 1,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 9:00 am CT"
+  },
+  {
+   "file": "2026-09-13-1200.md",
+   "ts": "2026-09-13T12:00:00Z",
+   "new_information": "Confirmed and re-documented a known data limitation (zero usable NQ RTH bars on quarterly witching Fridays) that rules out an entire class of future sourcing candidates until the underlying price series changes -- preventing a wasted mechanism doc and scan attempt on unusable data in any future cycle that might otherwise rediscover the same idea.",
+   "agents_ran": 2,
+   "agents_not_run": 2,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 7:00 am CT"
+  },
   {
    "file": "2026-09-13-1000.md",
    "ts": "2026-09-13T10:00:00Z",
@@ -206,28 +224,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 13th, 5:00 am CT"
-  },
-  {
-   "file": "2026-09-13-0800.md",
-   "ts": "2026-09-13T08:00:00Z",
-   "new_information": "A new, well-differentiated sourcing candidate (M24) ready for next cycle's draw, and a genuine-but-underpowered null on whether ZN futures show a month-end duration-extension bid -- the direction was right, the statistics weren't strong enough to call it, which is itself useful information about the limits of what this data ceiling can resolve for low-frequency (monthly) calendar effects.",
-   "agents_ran": 4,
-   "agents_not_run": 2,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 3:00 am CT"
-  },
-  {
-   "file": "2026-09-13-0600.md",
-   "ts": "2026-09-13T06:00:00Z",
-   "new_information": "A new, fully differentiated sourcing candidate (M23) restoring the shelf toward its floor, and a clean, well-powered negative result on whether trading volume predicts the SIZE of NQ's daily mean reversion (it predicts that reversal happens, at roughly a constant rate, regardless of volume) -- closing that specific question rather than leaving it open or re-litigating it later.",
-   "agents_ran": 4,
-   "agents_not_run": 2,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 1:00 am CT"
   }
  ]
 }

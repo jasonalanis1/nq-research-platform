@@ -1298,7 +1298,7 @@ Full detail and the H118 implication: research/mechanisms/cross-asset-
 correlation-convergence-m12.md Sections 8-10.
 
 
-## ENTRY 17 — M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) — PARKED: not testable at the current data ceiling (needs RTY/ES)
+## ENTRY 17 — M13: leveraged-ETF close rebalance -> last-30-min continuation, instrument as a factor RTY/ES/NQ (sourcing 2a, September 12th, ~9:25 am CT) — CLOSED (2026-09-13, Scan 028, P1_FAIL, hyp-000154 REJECTED)
 
 Generation (sourcing stage, first entry under the new template,
 research/sourcing/TEMPLATE.md; from outside-AI response A via the synthesis
@@ -1320,10 +1320,10 @@ doc): full mechanism doc research/mechanisms/letf-close-rebalance-m13.md.
    relative to the future's close liquidity (RTY).
 3. **HORIZON**: 15:30 -> 16:00 (gating); next session (reported).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M13. STATUS: FILED, WAITING ON DATA + JASON'S GO.
+5. **MAP ANCHOR**: M13. STATUS: CLOSED (2026-09-13, Scan 028, hyp-000154). Data ceiling lifted 2026-09-13: RTY_1min_databento_2026-09-13.csv and ES_1min_databento_2026-09-13.csv purchased (Jason, interactive session) and on disk. Common window (RTY-constrained, disclosed) 2017-07-09 -> 2021-10-03 used across all three instruments for comparability. P1 gate (TOP-tercile |r_day| sign-adjusted 15:30-16:00 return / ATR14, credibly positive vs each instrument's own unconditional NULL1) FAILED for RTY, ES, and NQ (diffs: RTY -0.0050 ci_90=(-0.0304,+0.0201); ES +0.0082 ci_90=(-0.0267,+0.0407); NQ +0.0060 ci_90=(-0.0221,+0.0371)). Falsifier (a) applies. Cross-instrument P2 ordering not reached (no instrument cleared the gate). VERDICT P1_FAIL. Entry closes.
 
 
-## ENTRY 18 — M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) — PARKED: not testable at the current data ceiling (needs ES)
+## ENTRY 18 — M14: option-dealer gamma regime -> late-day continuation DIFFERENCE, NQ and ES (sourcing 2b, September 12th, ~9:32 am CT) — CLOSED (2026-09-13, Scan 029, P1_FAIL, hyp-000155 REJECTED)
 
 Generation (sourcing stage, TEST cycle with Jason watching): full mechanism
 doc research/mechanisms/hedging-demand-gamma-regime-m14.md.
@@ -1343,7 +1343,7 @@ doc research/mechanisms/hedging-demand-gamma-regime-m14.md.
    into the close, amplifying it; long-gamma dealers damp it.
 3. **HORIZON**: 15:30 -> 16:00 (gating); next session (reported).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
-5. **MAP ANCHOR**: M14. STATUS: FILED, WAITING ON ES DATA + JASON'S GO.
+5. **MAP ANCHOR**: M14. STATUS: CLOSED (2026-09-13, Scan 029, hyp-000155). Data ceiling lifted 2026-09-13: ES_1min_databento_2026-09-13.csv purchased and on disk, full Discovery range. P1 gate (TOP-regime minus BOTTOM-regime sign-adjusted close-window return, credibly positive) FAILED for both NQ (diff=-0.0221 ci_90=(-0.0427,+0.0007)) and ES (diff=-0.0162 ci_90=(-0.0382,+0.0104)) -- both point estimates negative, opposite the predicted sign, neither credible. Falsifier (a) applies. Entry closes.
 
 ## ENTRY 19 — M15: overnight vs intraday return split, NQ -> night leg carries the drift (sourcing 2c, September 12th, 11:00 am CT cycle) — CLOSED September 12th, ~5:00 pm CT (Scan 020, hyp-000145): clean null, night 55% of drift not 'all', attempt 1 of 2
 
@@ -1697,3 +1697,53 @@ the following month.
 5. **MAP ANCHOR**: M24. STATUS: DRAWABLE. Mechanism doc:
    research/mechanisms/month-end-payment-cycle-reversal-m24.md. Restores
    the 3-entry shelf floor (Entry 26, 27, 28).
+
+
+## ENTRY 29 — M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) — DRAWABLE
+
+Generation (sourcing stage, 9:00 am CT scheduled cycle, shelf below floor
+after drawing both M13 and M14 this same cycle): full mechanism doc
+research/mechanisms/monthly-opex-week-delta-hedge-m25.md. Literature:
+Stivers and Sun, "Returns and Option Activity over the Option-Expiration
+Week for S&P 100 Stocks" (SSRN) -- large-cap stocks with actively traded
+options show substantially higher average returns during the calendar
+week containing the monthly third-Friday options expiration, driven by
+option-dealer delta-hedge unwind as open interest runs off into
+expiration (indicative +9.3%/year effect summed across 12 expiration
+weeks/year, S&P 100 names).
+- LEARN/Integrity: NEW. NOT the quarterly witching-day candidate declined
+  this same day (7:00 am CT cycle, killed on an NQ RTH data-integrity gap
+  on witching Fridays specifically) -- M25 is a whole-WEEK claim using
+  ordinary daily sessions, none of which individually depend on the
+  witching Friday's own intact 1-minute bars, and covers 12 events/year
+  (every month) vs. quarterly witching's 4. NOT M14 (option-dealer gamma
+  regime, CLOSED this cycle, hyp-000155, P1_FAIL) -- M14 tests an
+  intraday-autocorrelation-derived regime conditioning the last-30-minute
+  response; M25 tests a calendar-scheduled weekly return level with no
+  estimated proxy. Real thematic overlap (both cite dealer delta-hedge
+  unwind) but structurally independent tests, same overlap discipline as
+  M13/M14.
+- Statistical: ~78 expiration weeks vs. ~260 non-expiration weeks across
+  Discovery -- well powered relative to M19 (n=40) and M22 (n=82).
+- Director: not yet reached -- entry sourced and filed DRAWABLE, not
+  drawn this cycle. Restores the shelf to the 3-entry floor (Entry 27,
+  28, 29) per SHELF RULE v2 after both DRAWABLE entries (17, 18) were
+  drawn and closed earlier in this same cycle.
+- Budget-use note: NOT drawn this cycle by deliberate choice, not a
+  data/mechanism blocker -- this cycle already ran two full multi-
+  instrument scans (Scan 028, 15 cells; Scan 029, 8 cells) plus the
+  data-ceiling resolution and a cost-log bug fix; drawing a third family
+  in the time remaining risked a rushed cell design. First in line next
+  cycle.
+
+1. **STATE VARIABLE**: calendar partition (expiration week vs.
+   non-expiration week), not an estimated proxy -- no lookahead risk.
+2. **MECHANISM CLAIM**: option-dealer delta-hedge unwind as open interest
+   runs off into the monthly third-Friday expiration creates mechanical
+   buy-pressure drift across the containing week.
+3. **HORIZON**: 1 calendar week (gating).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW. Attempt 1 of 2.
+5. **MAP ANCHOR**: M25. STATUS: DRAWABLE. Mechanism doc:
+   research/mechanisms/monthly-opex-week-delta-hedge-m25.md. Restores the
+   3-entry shelf floor (Entry 27, 28, 29). NQ on disk, full Discovery
+   range, no purchase needed.

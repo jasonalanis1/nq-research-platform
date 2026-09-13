@@ -98,4 +98,30 @@ lagged one day (no lookahead). Outcome as in M13. Cells: 2 instruments x
 1-minute NOT on disk (queue item 3). Do not scan NQ-with-NQ-proxy first.
 
 ## 10. Prediction status
-P1 -- untested. P2 -- untested. Waiting on ES data and Jason's go.
+P1 -- FAILED. P2 -- not reached (P1 gate did not pass).
+
+## 11. Disposition (2026-09-13, Scan 029, hyp-000155)
+Data ceiling lifted 2026-09-13 (Jason purchased ES 1-min bars himself, same
+event that unblocked M13). Full Discovery range used for both NQ and ES
+(2015-01-01 -> 2021-10-03); M14 needs no RTY, so none of M13/Scan 028's
+common-window restriction applied here.
+
+P1 gate (TOP-regime minus BOTTOM-regime sign-adjusted 15:30-16:00 return /
+ATR14, credibly positive, block bootstrap 90% CI) FAILED for both
+instruments:
+  NQ: diff=-0.0221 ci_90=(-0.0427,+0.0007)
+  ES: diff=-0.0162 ci_90=(-0.0382,+0.0104)
+Falsifier (a) applies. Notably both point estimates are NEGATIVE -- the
+opposite sign from the mechanism's prediction, though neither clears the
+90% credible threshold. ES's own TOP-BOTTOM diff separately showed
+kill_share=0.557 (final-bar concentration) -- moot given P1 already
+failed, noted for completeness. Falsifier (b) (realized-volatility-tercile
+control) was not run -- it is a Statistical/Director-stage follow-up per
+the scan's own scope, not reached since P1 failed at the Discovery gate.
+
+Overlap discipline (Section 7) observed: this scan's regime-DIFFERENCE
+test is structurally independent of Scan 028/M13's own TOP-vs-NULL1 LEVEL
+test (which also failed, for all three instruments) -- neither result was
+counted as evidence for the other.
+
+VERDICT: P1_FAIL. hyp-000155 REJECTED. Entry closes.

@@ -145,17 +145,27 @@ def load_cost_log() -> list:
         return []
 
 
-def log_cost_entry(cost_usd: float, chunk_start: datetime, chunk_end: datetime) -> None:
+def log_cost_entry(cost_usd: float, chunk_start: datetime, chunk_end: datetime, symbol: str = SYMBOL, dataset: str = DATASET, schema: str = SCHEMA) -> None:
     """Appends one real, Databento-quoted cost entry to the running log
     -- never an estimate or guess, only what metadata.get_cost() actually
     returned for that specific paid request. This is the only source of
-    truth the daily reports use for dollar cost tracking."""
+    truth the daily reports use for dollar cost tracking.
+
+    BUG FIXED 2026-09-13: symbol/dataset/schema used to be hardcoded to
+    this module's own NQ constants regardless of what was actually being
+    quoted -- harmless for this file's own NQ calls, but silently
+    mislabeled every entry logged by a script that imports this function
+    for a DIFFERENT instrument (caught when data_fetch_databento_rty.py's
+    RTY quote landed in the log tagged "NQ.c.0"). Now defaults to this
+    module's NQ constants (so the existing NQ call site below needs no
+    change) but any caller can and should pass its own symbol/dataset/
+    schema explicitly -- see data_fetch_databento_rty.py for the pattern."""
     log = load_cost_log()
     log.append({
         "date": datetime.now().strftime("%Y-%m-%d"),
-        "dataset": DATASET,
-        "symbol": SYMBOL,
-        "schema": SCHEMA,
+        "dataset": dataset,
+        "symbol": symbol,
+        "schema": schema,
         "start": chunk_start.strftime("%Y-%m-%d"),
         "end": chunk_end.strftime("%Y-%m-%d"),
         "cost_usd": cost_usd,

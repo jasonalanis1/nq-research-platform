@@ -74,7 +74,7 @@ def quote_full_range_cost(api_key: str) -> float:
         start=HISTORY_START_DATE.strftime("%Y-%m-%d"),
         end=HISTORY_END_DATE.strftime("%Y-%m-%d"),
     )
-    log_cost_entry(cost, HISTORY_START_DATE, HISTORY_END_DATE)
+    log_cost_entry(cost, HISTORY_START_DATE, HISTORY_END_DATE, symbol=SYMBOL, dataset=DATASET, schema=SCHEMA)
     return cost
 
 

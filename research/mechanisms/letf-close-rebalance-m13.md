@@ -92,4 +92,33 @@ Investment Management); widely known since ~2010-2012 -- expect decay in ES
 and NQ; that is why RTY is the first-order test.
 
 ## 8. Prediction status
-P1 -- untested. P2 -- untested. Waiting on RTY/ES data and Jason's go.
+P1 -- FAILED. P2 -- not reached (P1 gate did not pass).
+
+## 9. Disposition (2026-09-13, Scan 028, hyp-000154)
+Data ceiling lifted 2026-09-13 (Jason purchased RTY and ES 1-min bars
+himself). RTY has no CME/GLBX.MDP3 history before 2017-07-09 (ICE-to-CME
+listing move) -- all three instruments restricted to the common window
+2017-07-09 -> 2021-10-03 for comparability, disclosed in the scan output,
+not silently absorbed (shortens the usable sample from ~6.75 to ~4.25
+years for NQ and ES too).
+
+P1 gate (TOP-tercile |r_day| sign-adjusted 15:30-16:00 return / ATR14,
+credibly positive vs the instrument's own unconditional NULL1, block
+bootstrap 90% CI) FAILED for all three instruments:
+  RTY: diff=-0.0050 ci_90=(-0.0304,+0.0201)
+  ES:  diff=+0.0082 ci_90=(-0.0267,+0.0407)
+  NQ:  diff=+0.0060 ci_90=(-0.0221,+0.0371)
+Falsifier (a) applies across the board. Cross-instrument ordering
+(RTY > ES >= NQ, the mechanism's P2 fingerprint) was not evaluated since
+no instrument cleared the gate. ES's own TOP cell separately showed
+kill_share=0.541 (final-bar concentration) -- moot given P1 already failed,
+noted for completeness.
+
+Labeling note carried into the scan (not resolved, not altering this
+frozen doc): Section 4's falsifier (b) cites "queue item 2b" as the
+generic intraday-momentum comparator; other entries' self-labeling
+suggests this should read "2e" (M16). M16 is already closed clean
+(Scan 021, hyp-000146, no promotion) and serves as the relevant
+corroborating null regardless of which label is correct.
+
+VERDICT: P1_FAIL. hyp-000154 REJECTED. Entry closes.
