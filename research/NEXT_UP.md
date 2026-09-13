@@ -235,6 +235,37 @@ Three honest caveats, which make discipline MORE important here, not less:
      stays honest.
 
 
+## BOT MILESTONES — THE TRUNK (Jason, September 13th ~6:00 pm CT: "this is an end goal trading bot... our overall goal should be working to that, not being the best research tool")
+Full document: docs/BOT_ROADMAP.md. IT OUTRANKS THIS QUEUE. Every cycle works the
+lowest-numbered incomplete milestone it can actually advance, BEFORE any research
+item; research fills the remaining budget. If no milestone can move, say which one
+is blocked and why, then fall through.
+
+  B0 Signal contract ................ DONE  (src/strategy_contract.py)
+  B1 Signal engine .................. PARTIAL (src/execution_clock_signal_engine.py,
+                                      checks 1-2 PASSED; built around H118's rule,
+                                      which was rejected -- repoint it at B3)
+  B2 Risk/State Engine .............. SPEC'D (= U13; the validated volatility facts
+                                      as a daily size/stop/target/permission decision)
+  B3 Base entry, frozen ............. MISSING -- THE UNLOCK. One ordinary,
+                                      pre-registered, publicly-known entry. NOT an
+                                      edge, never claimed as one. Every signal it
+                                      emits carries validation_status="placeholder".
+  B4 Order path ..................... MISSING (broker paper account; the ~$60-115/mo
+                                      spend was pre-approved 2026-09-10 conditioned
+                                      on reaching this stage -- this IS that stage)
+  B5 Execution measurement .......... MISSING (the 14 frozen checks; slippage
+                                      MEASURED, never assumed)
+  B6 Kill switches wired ............ CODE EXISTS (src/capital_protection.py),
+                                      nothing calls it because nothing trades
+  B7 Continuous paper run ........... MISSING (ends on evidence, not a calendar date)
+  B8 Live-Limited ................... MISSING (Jason's authorization ALONE, $300 cap)
+  B9 Scale behind evidence .......... MISSING
+
+RESEARCH'S TWO JOBS UNDER THIS ORDERING: (1) replace B3 with a real edge -- that is
+what the Idea Factory queue is FOR; (2) improve B2 with better state variables. A
+result that does neither is filed as knowledge and does not move the project.
+
 ## SOURCING RULE v3 (2026-09-13, ~5:40 pm CT -- replaces "think of an idea each cycle")
 Sourcing no longer means inventing a candidate. Every cycle, sourcing means:
   1. Read the current Idea Factory queue (research/observatory/idea-factory-<date>.md,
@@ -323,7 +354,7 @@ WEEKS 2-3 (structural; freeze lifted for these):
        BATTERY -- mean vs drift-null, range ratio, MFE/MAE, time-to-resolution -- cut
        by session window, FDR within the battery, every cell registered up front.
        Extend with B/E/F question dimensions as families get registered.
-  U13. [SPEC DONE 5:20 pm CT -> upgrade-specs; BUILD owed: src/risk_state_engine.py + tests + daily log] Risk/State Engine spec (A, B, E): inputs = validated range facts (range
+  U13. [= BOT MILESTONE B2 -- highest priority item in this queue] [SPEC DONE 5:20 pm CT -> upgrade-specs; BUILD owed: src/risk_state_engine.py + tests + daily log] Risk/State Engine spec (A, B, E): inputs = validated range facts (range
        contraction, overnight coil, midday-lull/afternoon, VXN level, +U4 if it
        passes); outputs per session = expected range, target distance, stop distance,
        size multiplier, trade-permission flag. Frozen, versioned, NO P&L claim. This is
