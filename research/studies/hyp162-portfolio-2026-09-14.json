@@ -1,0 +1,88 @@
+{
+  "slice": "validation 2021-10-04 -> 2024-01-03, coefficients fit on Discovery only",
+  "n_discovery_fit": 1126,
+  "n_validation_scored": 453,
+  "stack_held_fixed": [
+    "vxn_level_vs_trailing",
+    "overnight_range_vs_atr",
+    "range_vs_atr"
+  ],
+  "T1_joint_residual_separability": {
+    "raw_spread": {
+      "point": 0.2876655364034802,
+      "ci_90": [
+        0.19251307275527432,
+        0.38425897278923343
+      ]
+    },
+    "residual_spread": {
+      "point": 0.05894441844780177,
+      "ci_90": [
+        -0.029020762465535546,
+        0.15118324939801403
+      ],
+      "credible_above_zero": false
+    },
+    "retained_share": {
+      "point": 0.17671452780938085,
+      "ci_90": [
+        -0.14319138362427805,
+        0.41565670980912084
+      ],
+      "lower_90_bound": -0.14319138362427805,
+      "bar": 0.5,
+      "passes_with_interval": false
+    }
+  },
+  "T2_forecast_improvement": {
+    "mae_baseline": 0.32516282507837735,
+    "mae_with_candidate": 0.3256365686094731,
+    "mae_improvement": -0.00047374353109582833,
+    "mae_improvement_ci_90": [
+      -0.0069466472623714,
+      0.005596692462224025
+    ],
+    "improvement_credible": false,
+    "pct_improvement": -0.14569424748405266,
+    "corr_baseline": 0.4026512432844799,
+    "corr_with_candidate": 0.4089719134010688
+  },
+  "T3_controls_stratified_method": {
+    "stratified_vs_vxn_level_vs_trailing": {
+      "retained": 0.6868,
+      "lower_90": 0.476
+    },
+    "stratified_vs_overnight_range_vs_atr": {
+      "retained": 0.7476,
+      "lower_90": 0.5445
+    },
+    "stratified_vs_range_vs_atr": {
+      "retained": 0.9437,
+      "lower_90": 0.7802
+    },
+    "stratified_vs_opening_prev": {
+      "retained": 0.9556,
+      "lower_90": 0.8019
+    },
+    "stratified_vs_JOINT_stack_forecast": {
+      "retained": 0.5196,
+      "lower_90": 0.1486
+    }
+  },
+  "coefficients_discovery": {
+    "baseline": [
+      0.64273,
+      1.32958,
+      0.39325,
+      0.17312
+    ],
+    "with_candidate": [
+      0.68831,
+      1.26291,
+      0.33862,
+      0.13835,
+      0.13808,
+      -0.06899
+    ]
+  }
+}

@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-14T18:11:00Z",
-  "generated_at_local": "September 14th, 1:11 pm CT",
-  "last_run": "2026-09-14T18:00:00Z",
-  "last_run_local": "September 14th, 1:00 pm CT",
-  "next_run": "2026-09-14T20:00:00Z",
-  "next_run_local": "September 14th, 3:00 pm CT",
+  "generated_at": "2026-09-14T20:07:00Z",
+  "generated_at_local": "September 14th, 3:07 pm CT",
+  "last_run": "2026-09-14T20:00:00Z",
+  "last_run_local": "September 14th, 3:00 pm CT",
+  "next_run": "2026-09-14T22:00:00Z",
+  "next_run_local": "September 14th, 5:00 pm CT",
   "cadence": "Every 2 hours, on the odd Central hour",
   "tests": "461 tests",
   "ops": {
@@ -13,7 +13,7 @@
       {
         "name": "lock",
         "status": "PASS",
-        "detail": "free since 2026-09-14 18:11:16"
+        "detail": "free since 2026-09-14 20:06:33"
       },
       {
         "name": "shelf",
@@ -23,7 +23,7 @@
       {
         "name": "checkpoint",
         "status": "WARN",
-        "detail": "UNFINISHED work to resume: item=hyp-000162 Monetization + blind Gate step=closed files=[] (started 2026-09-14T18:00)"
+        "detail": "UNFINISHED work to resume: item=hyp-000162 one-shot Validation step=closed files=[] (started 2026-09-14T20:00)"
       },
       {
         "name": "value",
@@ -33,12 +33,12 @@
       {
         "name": "console",
         "status": "PASS",
-        "detail": "refreshed 126 min ago"
+        "detail": "refreshed 116 min ago"
       },
       {
         "name": "reports",
         "status": "PASS",
-        "detail": "62 reports, latest 2026-09-14-1800.md well-formed"
+        "detail": "63 reports, latest 2026-09-14-2000.md well-formed"
       },
       {
         "name": "new-information",
@@ -68,7 +68,7 @@
       {
         "name": "preflight",
         "status": "PASS",
-        "detail": "opening sequence ran 11 min ago, all steps ok"
+        "detail": "opening sequence ran 6 min ago, all steps ok"
       },
       {
         "name": "git-sync",
@@ -78,26 +78,26 @@
     ]
   },
   "progress": {
-    "trials_since_last_survivor": 159,
-    "trials_total": 468,
-    "survivors_alive": 2,
-    "trials_per_survivor": 234.0,
+    "trials_since_last_survivor": 6,
+    "trials_total": 467,
+    "survivors_alive": 3,
+    "trials_per_survivor": 155.7,
     "last_survivor": {
-      "hypothesis_id": "hyp-000151",
-      "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
-      "date": "2026-09-13"
+      "hypothesis_id": "hyp-000162",
+      "name": "opening_range_width_midday_range_excursion_nq_m30",
+      "date": "2026-09-14"
     },
     "scan_cells_total": 362,
-    "standalone_total": 106,
+    "standalone_total": 105,
     "scans_run": 36,
     "scans_with_no_survivor": 30
   },
-  "ledger_rows": 202,
+  "ledger_rows": 203,
   "distinct_hypotheses": 155,
   "funnel": {
     "closed": 115,
-    "discovery": 2,
-    "validation": 0,
+    "discovery": 1,
+    "validation": 1,
     "holdout": 2,
     "forward": 3,
     "paper": 0,
@@ -235,6 +235,17 @@
   ],
   "sessions": [
     {
+      "file": "2026-09-14-2000.md",
+      "ts": "2026-09-14T20:00:00Z",
+      "new_information": "**The project has its first Validation-passed SIZING fact that survived a hostile blind review first.** Every prior conditioning fact reached Validation before the blind Gate existed in this form. This one was attacked on procedure, had two real defects fixed, and then passed out of sample on a test written to the attacker's specification.",
+      "agents_ran": 0,
+      "agents_not_run": 0,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 14th, 3:00 pm CT"
+    },
+    {
       "file": "2026-09-14-1800.md",
       "ts": "2026-09-14T18:00:00Z",
       "new_information": "**The blind Gate earns its cost.** It was handed a masked packet and found two methodological defects that four prior stages \u2014 including a Director Re-Evaluation built specifically to be skeptical \u2014 had all missed, because all of them were reasoning about the *result* and the Gate could only reason about the *procedure*. Blinding is not a formality here; it changed what was noticed.",
@@ -255,17 +266,6 @@
       "returns": false,
       "disposition": null,
       "ts_local": "September 14th, 11:00 am CT"
-    },
-    {
-      "file": "2026-09-14-1400.md",
-      "ts": "2026-09-14T14:00:00Z",
-      "new_information": "",
-      "agents_ran": 0,
-      "agents_not_run": 0,
-      "staff_meeting": false,
-      "returns": false,
-      "disposition": null,
-      "ts_local": "September 14th, 9:00 am CT"
     }
   ],
   "bot_milestones": [
