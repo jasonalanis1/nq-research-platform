@@ -189,7 +189,14 @@ def test_main_is_idempotent(monkeypatch, tmp_path):
     monkeypatch.setattr(bpr, "decision_for", _permit())
 
     import data_loader
-    df = _orb_day(range_width=10, stop_pts=30, direction="long")
+    day = _orb_day(range_width=10, stop_pts=30, direction="long")
+    # pad to the close: the session-completeness guard (2026-09-14) refuses a day
+    # whose last bar is before 15:55 ET, and this fixture represents a FULL session
+    last_ts, last = day.index[-1], day.iloc[-1]
+    close = last_ts.normalize() + pd.Timedelta(hours=15, minutes=59)
+    extra_idx = pd.date_range(last_ts + pd.Timedelta(minutes=1), close, freq="min")
+    df = pd.concat([day, pd.DataFrame({c: [float(last[c])] * len(extra_idx) for c in day.columns},
+                                       index=extra_idx)])
     monkeypatch.setattr(data_loader, "load_price_data", lambda **kw: (df, False))
 
     bpr.main()

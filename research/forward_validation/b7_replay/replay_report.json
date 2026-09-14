@@ -1,26 +1,32 @@
 {
-  "ran_at_utc": "2026-09-14T17:32:28.211638+00:00",
+  "ran_at_utc": "2026-09-14T23:24:55.299325+00:00",
   "label": "REPLAY -- not the live execution record",
   "sessions": [
-    "2026-09-08"
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10",
+    "2026-09-11",
+    "2026-09-13",
+    "2026-09-14"
   ],
   "outcomes": {
-    "blocked": 1
+    "blocked": 4,
+    "skipped_incomplete": 2
   },
   "n_order_intents": 0,
   "n_fills": 0,
   "mechanical_checks": [
     {
       "check": "R1 one row per session",
-      "n": 1,
-      "passed": 1,
+      "n": 6,
+      "passed": 6,
       "status": "PASS",
-      "note": "1 rows for 1 sessions"
+      "note": "6 rows for 6 sessions"
     },
     {
       "check": "R2 at most one order per session",
-      "n": 1,
-      "passed": 1,
+      "n": 6,
+      "passed": 6,
       "status": "PASS",
       "note": ""
     },
@@ -61,10 +67,10 @@
     },
     {
       "check": "R8 signal timing / exactly-once (base_entry_b3.audit)",
-      "n": 1,
-      "passed": 1,
+      "n": 5,
+      "passed": 5,
       "status": "PASS",
-      "note": "{\"n_signals\": 1, \"duplicate_days\": 0, \"lookahead_violations\": 0, \"non_placeholder_labels\": 0, \"pass\": true}"
+      "note": "{\"n_signals\": 5, \"duplicate_days\": 0, \"lookahead_violations\": 0, \"non_placeholder_labels\": 0, \"pass\": true}"
     }
   ],
   "execution_measurement_replay": {

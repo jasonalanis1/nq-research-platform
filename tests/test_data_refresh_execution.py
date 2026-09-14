@@ -138,11 +138,58 @@ def quiet_broker(monkeypatch):
     monkeypatch.setattr(bpr, "decision_for", _permit())
 
 
+def _pad_to_close(day: pd.DataFrame) -> pd.DataFrame:
+    """Extend a synthetic day to 15:59 ET so it passes the session-completeness
+    guard (added 2026-09-14) -- these fixtures represent COMPLETE sessions."""
+    last_ts, last = day.index[-1], day.iloc[-1]
+    close = last_ts.normalize() + pd.Timedelta(hours=15, minutes=59)
+    if last_ts >= close:
+        return day
+    extra_idx = pd.date_range(last_ts + pd.Timedelta(minutes=1), close, freq="min")
+    extra = pd.DataFrame({c: [float(last[c])] * len(extra_idx) for c in day.columns}, index=extra_idx)
+    return pd.concat([day, extra])
+
+
 def _two_day_frame():
-    d1 = _orb_day(range_width=10.0, stop_pts=40.0, direction="long")   # $80 swing on MNQ: fits band
-    d2 = _orb_day(range_width=10.0, stop_pts=40.0, direction="short")
+    d1 = _pad_to_close(_orb_day(range_width=10.0, stop_pts=40.0, direction="long"))  # $80 swing: fits band
+    d2 = _pad_to_close(_orb_day(range_width=10.0, stop_pts=40.0, direction="short"))
     d2.index = d2.index + pd.Timedelta(days=1)
     return pd.concat([d1, d2])
+
+
+# ------------------------------------------------- session-completeness guard
+def test_session_guard_refuses_a_session_with_no_rth_bars():
+    """Regression, 2026-09-14: Globex reopens Sunday 18:00 ET, so a Sunday-evening
+    block of bars looked like a session and produced a log row."""
+    idx = pd.date_range("2026-09-13 18:00", periods=360, freq="min", tz="America/New_York")
+    sunday = pd.DataFrame({c: [100.0] * len(idx) for c in ["Open", "High", "Low", "Close"]}, index=idx)
+    ok, why = bpr.session_is_complete(sunday)
+    assert not ok and "RTH" in why
+
+
+def test_session_guard_refuses_a_day_still_in_progress():
+    """Regression, 2026-09-14: the current day's data ended 11:14 ET and was scored.
+    Had it filled, the bookkeeping exit would have been fabricated from the last
+    bar on disk for a trade that is still open."""
+    day = _orb_day(range_width=10.0, stop_pts=40.0, direction="long")
+    ok, why = bpr.session_is_complete(day)
+    assert not ok and "in progress" in why
+    ok2, _ = bpr.session_is_complete(_pad_to_close(day))
+    assert ok2
+
+
+def test_replay_records_an_incomplete_session_without_scoring_it(tmp_path, quiet_broker, monkeypatch):
+    monkeypatch.setattr(bpr, "LOG_PATH", tmp_path / "live.jsonl")
+    monkeypatch.setattr(bpr, "JOURNAL_DIR", tmp_path / "live_j")
+    full = _two_day_frame()
+    partial = _orb_day(range_width=10.0, stop_pts=40.0, direction="long")
+    partial.index = partial.index + pd.Timedelta(days=2)      # a third, unfinished day
+    df = pd.concat([full, partial])
+    sessions = sorted(set(df.index.date))
+    res = b7_replay.replay(df, sessions, tmp_path / "replay")
+    assert len(res["rows"]) == 3
+    assert res["rows"][-1]["outcome"] == "skipped_incomplete"
+    assert res["intents_per_session"][str(sessions[-1])] == 0
 
 
 def test_replay_runs_real_loop_into_its_own_dirs_and_passes_checks(tmp_path, quiet_broker, monkeypatch):

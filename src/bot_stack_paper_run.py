@@ -157,6 +157,39 @@ def _b7_execution_anchor(all_dates: list) -> object:
     return anchor
 
 
+SESSION_COMPLETE_BY = "15:55"   # the bookkeeping time-exit in _resolve_fill_outcome
+
+
+def session_is_complete(day_df: pd.DataFrame) -> tuple[bool, str]:
+    """Is this session safe to score, or is it a fragment?
+
+    ADDED 2026-09-14 after the FIRST Step A replay on fresh data (the queue
+    item's whole purpose: "any defect found here is fixed before live paper
+    begins"). Two fragments came through the loop, both of which would have
+    entered the permanent execution record as if they were ordinary sessions:
+
+      * 2026-09-13, a SUNDAY -- Globex reopens at 18:00 ET, so a Sunday-evening-
+        only block of bars looked like a session and produced a no_signal row.
+        There is no RTH in it at all.
+      * 2026-09-14, the CURRENT day, whose data ended at 11:14 ET. It happened to
+        be gate-blocked, so nothing was booked -- but had it filled,
+        _resolve_fill_outcome would have hit its session_end_fallback and booked
+        an exit at the last bar on disk, i.e. a fabricated outcome for a trade
+        that is still open in the real world.
+
+    Both are refused here rather than downstream, so the execution record only
+    ever contains sessions that could actually be scored. A session qualifies
+    when it has bars inside RTH AND its last bar is at or after the bookkeeping
+    time-exit."""
+    rth = day_df.between_time("09:30", "16:00", inclusive="left")
+    if rth.empty:
+        return False, "no RTH bars (overnight/Sunday-evening fragment)"
+    last = day_df.index[-1].strftime("%H:%M")
+    if last < SESSION_COMPLETE_BY:
+        return False, f"session still in progress (last bar {last} ET < {SESSION_COMPLETE_BY})"
+    return True, ""
+
+
 def load_log() -> list[dict]:
     if not LOG_PATH.exists():
         return []
@@ -308,8 +341,14 @@ def main():
         print(f"Nothing new: no session on/after {anchor} is both on disk and unlogged.")
         return
 
+    skipped = []
     for d in eligible:
         day_df = df[df.index.date == d]
+        ok, why = session_is_complete(day_df)
+        if not ok:
+            skipped.append((d, why))
+            print(f"  {d}: SKIPPED -- {why}")
+            continue
         row = run_session(d, day_df, rows)
         append_row(row)
         rows.append(row)
@@ -321,7 +360,10 @@ def main():
         else:
             print(f"  {d}: {row['outcome']}")
 
-    print(f"\n{len(eligible)} new session row(s) appended. Log: {LOG_PATH}")
+    if skipped:
+        print(f"\n{len(skipped)} session(s) skipped as incomplete (not logged, will be "
+              f"reconsidered on a later run once their data is complete).")
+    print(f"\n{len(eligible) - len(skipped)} new session row(s) appended. Log: {LOG_PATH}")
     print(f"Total logged: {len(load_log())}")
 
 

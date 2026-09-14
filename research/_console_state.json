@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-14T20:07:00Z",
-  "generated_at_local": "September 14th, 3:07 pm CT",
-  "last_run": "2026-09-14T20:00:00Z",
-  "last_run_local": "September 14th, 3:00 pm CT",
-  "next_run": "2026-09-14T22:00:00Z",
-  "next_run_local": "September 14th, 5:00 pm CT",
+  "generated_at": "2026-09-14T22:06:00Z",
+  "generated_at_local": "September 14th, 5:06 pm CT",
+  "last_run": "2026-09-14T22:00:00Z",
+  "last_run_local": "September 14th, 5:00 pm CT",
+  "next_run": "2026-09-15T00:00:00Z",
+  "next_run_local": "September 14th, 7:00 pm CT",
   "cadence": "Every 2 hours, on the odd Central hour",
   "tests": "461 tests",
   "ops": {
@@ -13,7 +13,7 @@
       {
         "name": "lock",
         "status": "PASS",
-        "detail": "free since 2026-09-14 20:06:33"
+        "detail": "free since 2026-09-14 22:06:12"
       },
       {
         "name": "shelf",
@@ -23,7 +23,7 @@
       {
         "name": "checkpoint",
         "status": "WARN",
-        "detail": "UNFINISHED work to resume: item=hyp-000162 one-shot Validation step=closed files=[] (started 2026-09-14T20:00)"
+        "detail": "UNFINISHED work to resume: item=hyp-000162 Portfolio step=closed files=[] (started 2026-09-14T22:00)"
       },
       {
         "name": "value",
@@ -33,12 +33,12 @@
       {
         "name": "console",
         "status": "PASS",
-        "detail": "refreshed 116 min ago"
+        "detail": "refreshed 120 min ago"
       },
       {
         "name": "reports",
         "status": "PASS",
-        "detail": "63 reports, latest 2026-09-14-2000.md well-formed"
+        "detail": "64 reports, latest 2026-09-14-2200.md well-formed"
       },
       {
         "name": "new-information",
@@ -92,7 +92,7 @@
     "scans_run": 36,
     "scans_with_no_survivor": 30
   },
-  "ledger_rows": 203,
+  "ledger_rows": 204,
   "distinct_hypotheses": 155,
   "funnel": {
     "closed": 115,
@@ -235,6 +235,17 @@
   ],
   "sessions": [
     {
+      "file": "2026-09-14-2200.md",
+      "ts": "2026-09-14T22:00:00Z",
+      "new_information": "**A validated fact was stopped at the last gate, by the stage built to ask the last question.** Four stages said advance. The one whose specific job is \"does this add to what we already own\" said no, with numbers, out of sample, and the project did not spend a scarce Holdout slot on it. That is the pipeline working as designed rather than failing.",
+      "agents_ran": 0,
+      "agents_not_run": 0,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 14th, 5:00 pm CT"
+    },
+    {
       "file": "2026-09-14-2000.md",
       "ts": "2026-09-14T20:00:00Z",
       "new_information": "**The project has its first Validation-passed SIZING fact that survived a hostile blind review first.** Every prior conditioning fact reached Validation before the blind Gate existed in this form. This one was attacked on procedure, had two real defects fixed, and then passed out of sample on a test written to the attacker's specification.",
@@ -255,17 +266,6 @@
       "returns": false,
       "disposition": "CONDITIONAL",
       "ts_local": "September 14th, 1:00 pm CT"
-    },
-    {
-      "file": "2026-09-14-1600.md",
-      "ts": "2026-09-14T16:00:00Z",
-      "new_information": "",
-      "agents_ran": 0,
-      "agents_not_run": 0,
-      "staff_meeting": false,
-      "returns": false,
-      "disposition": null,
-      "ts_local": "September 14th, 11:00 am CT"
     }
   ],
   "bot_milestones": [

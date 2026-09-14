@@ -81,6 +81,12 @@ def replay(df: pd.DataFrame, sessions: list, replay_dir: Path) -> dict:
         journal = OrderPathJournal(journal_dir)
         rows, per_session = [], {}
         for d in sessions:
+            ok, why = bpr.session_is_complete(df[df.index.date == d])
+            if not ok:
+                per_session[str(d)] = 0
+                rows.append({"date": str(d), "outcome": "skipped_incomplete", "note": why,
+                             "replay": True})
+                continue
             before = sum(1 for r in journal.all_records() if r.get("event") == "order_intent")
             row = bpr.run_session(d, df[df.index.date == d], rows)
             row["replay"] = True
