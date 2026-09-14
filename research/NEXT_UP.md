@@ -81,6 +81,24 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 ## SESSION HANDOFF RULES (set by Jason 2026-09-11) — binding for every session, interactive or scheduled
 
+- **EVERY CYCLE CLOSES WITH `python3 src/cycle_close.py --label "<which cycle>"`,** after the
+  commit+push and the lock release. It verifies the mechanical half of close-out -- tests pass,
+  ops_checks is not FAIL, the work is committed AND PUSHED (not just committed), the lock was
+  released, and this cycle's own preflight receipt is present and clean -- then appends ONE ROW to
+  research/_cycle_compliance.jsonl. It does NOT write the session report, NEXT_UP or KNOWLEDGE:
+  those carry judgment, and a script that generated them would produce exactly the reassuring
+  filler the Operations role is warned against. It also does not commit, push or release the lock
+  -- it verifies those happened, because a checker that performs the work it checks cannot fail.
+  If it reports CLOSE INCOMPLETE, say so in the session report; do not describe the cycle as clean.
+- **`python3 src/cycle_review.py`** prints the whole day's cycles side by side from that log --
+  which ran, which were complete, which moved the pipeline, and which are DUE BUT HAVE NO RECORDED
+  CLOSE. A cycle that fired and died leaves no row, and the absence is the finding, so missing
+  cycles are named rather than omitted. This is what Jason reads to check an unattended day.
+- **SCHEDULING (changed 2026-09-14):** the day's cycles are PRE-BOOKED as independent one-shots,
+  not chained. Previously each cycle scheduled its successor at close-out, so one cycle dying took
+  the rest of the day with it silently. The last pre-booked cycle of a day books the next day's.
+  A recurring schedule is not available here -- it would require a fresh session per fire and lose
+  the handoff context this session carries.
 - **EVERY CYCLE OPENS WITH `python3 src/cycle_preflight.py --owner cycle --note "<which cycle>"`.**
   One command: lock, budget clock, pipeline sweep, H118 daily checker, EXP047 weekly checker, and
   the shelf/sourcing position. It writes a receipt to research/_cycle_preflight.json and
