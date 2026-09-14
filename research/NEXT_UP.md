@@ -378,6 +378,10 @@ WEEKS 4-8:
        CT; the published console HTML does not display them yet). Add a "Bot" panel at
        the TOP of the console, above the research funnel -- the bot is the goal, the
        funnel is the feeder. Republish the artifact.
+       CONSOLE v24 (Sept 13th ~9:05 pm CT): new 'How hypotheses are shaped' card driven by a `methodology`
+       key in the state doc (summary, build U25-U30 with statuses, stacks_attempted, in_flight, rules). Every
+       console push must PRESERVE and update that key (tick U25-U30 statuses; bump stacks_attempted when a
+       stack is registered). State doc is now version 85.
   U24. Status-transition guard in src/research_ledger.py (from the 7pm test cycle): refuse
        VALIDATION CANDIDATE unless a Validation-slice result is attached; PROMISING is the
        only pre-Validation status. (hyp-156 was mislabelled and ops_checks flagged a Holdout slot.)
