@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-14T14:02:40.704585+00:00",
+ "ran_at": "2026-09-14T16:01:30.372999+00:00",
  "owner": "cycle",
- "note": "9:00 am cycle",
+ "note": "11:00 am cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 am cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 am cycle'"
    ],
    "stderr_tail": []
   },
@@ -52,11 +52,11 @@
   "shelf": {
    "ok": true,
    "known": true,
-   "count": 3,
+   "count": 4,
    "floor": 3,
-   "sourcing_owed": true,
-   "line": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
-   "note": "shelf is AT OR BELOW the floor -- SOURCING IS OWED this cycle, before the work item"
+   "sourcing_owed": false,
+   "line": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
+   "note": "shelf above the floor -- sourcing still runs every cycle per SHELF RULE v2"
   }
  },
  "failed": [],

@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-09-14T14:10:00Z",
- "generated_at_local": "September 14th, 9:10 am CT",
- "last_run": "2026-09-14T14:00:00Z",
- "last_run_local": "September 14th, 9:00 am CT",
- "next_run": "2026-09-14T16:00:00Z",
- "next_run_local": "September 14th, 11:00 am CT",
+ "generated_at": "2026-09-14T16:06:00Z",
+ "generated_at_local": "September 14th, 11:06 am CT",
+ "last_run": "2026-09-14T16:00:00Z",
+ "last_run_local": "September 14th, 11:00 am CT",
+ "next_run": "2026-09-14T18:00:00Z",
+ "next_run_local": "September 14th, 1:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "444 tests",
+ "tests": "446 tests",
  "ops": {
   "overall": "WARN",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 8 min, last activity 1 min ago"
+    "detail": "session running 5 min, last activity 1 min ago"
    },
    {
     "name": "shelf",
@@ -23,22 +23,22 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T14:09"
+    "detail": "last cycle closed cleanly at 2026-09-14T16:05"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1}"
+    "detail": "last cycle moved=True delta={'studies': 1}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 49 min ago"
+    "detail": "refreshed 117 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "60 reports, latest 2026-09-14-1400.md well-formed"
+    "detail": "61 reports, latest 2026-09-14-1600.md well-formed"
    },
    {
     "name": "new-information",
@@ -63,12 +63,12 @@
    {
     "name": "awaiting-jason",
     "status": "WARN",
-    "detail": "1 item(s) blocked on Jason: H118 FORWARD VALIDATION: the one open position predates the forward anchor. YOUR CALL."
+    "detail": "5 item(s) blocked on Jason: STAFF MEETING 2026-09-14 \"what to do\" -- CORRECTED 2026-09-14 ~10:00 am CT, ITS CENTRAL; SUPERSEDED (kept for the record): the original fork text. Full record:"
    },
    {
     "name": "preflight",
     "status": "PASS",
-    "detail": "opening sequence ran 8 min ago, all steps ok -- SOURCING OWED (shelf at/below floor)"
+    "detail": "opening sequence ran 5 min ago, all steps ok"
    },
    {
     "name": "git-sync",
@@ -235,6 +235,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-14-1600.md",
+   "ts": "2026-09-14T16:00:00Z",
+   "new_information": "",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 14th, 11:00 am CT"
+  },
+  {
    "file": "2026-09-14-1400.md",
    "ts": "2026-09-14T14:00:00Z",
    "new_information": "",
@@ -255,17 +266,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 14th, 7:00 am CT"
-  },
-  {
-   "file": "2026-09-14-1000.md",
-   "ts": "2026-09-14T10:00:00Z",
-   "new_information": "**hyp-000142 passes the mechanical suite cleanly** (5 green, 0 red) \u2014 the first independent structural audit of a promoted fact in this project, and it holds up: not concentrated in a few days (top 5% carry 43%), stable across chronological halves, not roll-contaminated, sign survives the correct null (the unconditional range ratio, not zero), and the inverted-signal placebo fails as it should.",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 14th, 5:00 am CT"
   }
  ],
  "bot_milestones": [
@@ -307,7 +307,7 @@
   {
    "component": "Continuous paper run",
    "id": "B7",
-   "status": "LIVE (thin first version). BLOCKED ON DATA, NOT CODE: price data ends 2026-09-08 and new data is a purchase (standing NO PURCHASE decision). Ran clean, nothing new."
+   "status": "LIVE (thin first version). BLOCKED ON DATA, NOT CODE: prices end 2026-09-08, new data is a purchase (standing NO PURCHASE). Ran clean, nothing new."
   },
   {
    "component": "Live-Limited",
@@ -355,7 +355,7 @@
    {
     "id": "U6",
     "status": "DONE -- 7-check mechanical suite, run before every Gate",
-    "what": "integrity_checks.py. Found the blocking finding on hyp-000162 one cycle after being built."
+    "what": "integrity_checks.py. Its hyp-000162 placebo flag forced the Director test that cleared the candidate."
    }
   ],
   "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
@@ -381,13 +381,13 @@
   "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
   "total": 30
  },
- "latest_survivor_note": "hyp-000162 (M30): STATISTICAL STAGE PASS 2026-09-14. diff +0.5193 ci_90 (+0.4475,+0.5975) n=555/556; stable across halves; credible in BOTH volatility regimes; survives the BINDING Sidak correction at N=467 with the whole adjusted interval (+0.3511,+0.6875) above zero; Validation power 0.815 even at HALF the effect. The doubt is NOT statistical. The U6 placebo red (yesterday's opening range does ~74% of the work) goes to the blind Gate UNCHANGED -- what is unknown is what the association is WITH, not whether it exists. OWED: Director capital call at the Validation gate.",
- "binding_constraint": "DIRECTOR CAPITAL CALL at the Validation gate, owed on TWO candidates: hyp-000162 (Statistical PASS, one integrity red, well-powered Validation available) and hyp-000156 (Statistical PASS x4, Validation blocked on the 6E data pull parked on Jason). Nothing advances past it.",
+ "latest_survivor_note": "hyp-000162 (M30): Statistical PASS, then DIRECTOR RE-EVALUATION = ADVANCE (2026-09-14). Separable from every validated volatility fact AND from its own lagged self: VXN level 79.8% retained, overnight coil 75.3%, prior-day range 83.6%, opening range at t-1 87.2% -- all vs a 50% bar. The U6 placebo red is EXPLAINED, not dismissed: yesterday's value is informative (vol persists) AND today's adds beyond it. Effect is largest in the HIGH tercile of every stratum -- it SCALES WITH volatility, so magnitude is conditional. OWED: Monetization, then the blind Gate.",
+ "binding_constraint": "Monetization then the blind Integrity Gate for hyp-000162 -- hand the Gate the NARROWED question (the effect scales with volatility; is the mechanism doc's story still right?), not 'is this real'. hyp-000156's Director call is also owed and is NOT blocked on our side.",
  "cycle_review_today": {
   "date_ct": "2026-09-14",
-  "cycles_recorded": 1,
-  "fully_complete": 1,
-  "moved_the_pipeline": 0,
+  "cycles_recorded": 2,
+  "fully_complete": 2,
+  "moved_the_pipeline": 1,
   "due_but_no_recorded_close": [
    1,
    3,
@@ -401,17 +401,29 @@
     "failing": [],
     "moved": false,
     "delta": {}
+   },
+   {
+    "ct": "09:11",
+    "label": "9:00 am cycle",
+    "complete": true,
+    "failing": [],
+    "moved": true,
+    "delta": {
+     "mechanism_docs": 1,
+     "studies": 1,
+     "inventory_entries": 1
+    }
    }
   ],
-  "note": "One row per cycle from src/cycle_close.py. A cycle that fired and died leaves NO row, so `due_but_no_recorded_close` is the field that matters. Cycles before ~8:20 am CT predate this log and show as missing -- expected, not a failure.",
+  "note": "One row per cycle from src/cycle_close.py. A cycle that fired and died leaves NO row, so `due_but_no_recorded_close` is the field that matters. Cycles before ~8:20 am CT predate this log.",
   "how_to_read_it_yourself": "python3 src/cycle_review.py"
  },
  "schedule_today": {
   "cadence": "every 2 hours on the odd Central hour",
-  "booking": "pre-booked as independent one-shots -- not a chain, so one failed cycle cannot end the day",
+  "booking": "pre-booked as independent one-shots -- not a chain",
   "booked": [
    "9:00 am (ran)",
-   "11:00 am",
+   "11:00 am (ran)",
    "1:00 pm",
    "3:00 pm",
    "5:00 pm",
