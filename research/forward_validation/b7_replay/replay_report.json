@@ -1,0 +1,170 @@
+{
+  "ran_at_utc": "2026-09-14T17:32:28.211638+00:00",
+  "label": "REPLAY -- not the live execution record",
+  "sessions": [
+    "2026-09-08"
+  ],
+  "outcomes": {
+    "blocked": 1
+  },
+  "n_order_intents": 0,
+  "n_fills": 0,
+  "mechanical_checks": [
+    {
+      "check": "R1 one row per session",
+      "n": 1,
+      "passed": 1,
+      "status": "PASS",
+      "note": "1 rows for 1 sessions"
+    },
+    {
+      "check": "R2 at most one order per session",
+      "n": 1,
+      "passed": 1,
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check": "R3 unique order ids",
+      "n": 0,
+      "passed": 0,
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check": "R4 every order terminal",
+      "n": 0,
+      "passed": 0,
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check": "R5 no hanging positions",
+      "n": 0,
+      "passed": 0,
+      "status": "PASS",
+      "note": "no fills in replay"
+    },
+    {
+      "check": "R6 requested price == spec price",
+      "n": 0,
+      "passed": 0,
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check": "R7 quantity within cap",
+      "n": 0,
+      "passed": 0,
+      "status": "PASS",
+      "note": ""
+    },
+    {
+      "check": "R8 signal timing / exactly-once (base_entry_b3.audit)",
+      "n": 1,
+      "passed": 1,
+      "status": "PASS",
+      "note": "{\"n_signals\": 1, \"duplicate_days\": 0, \"lookahead_violations\": 0, \"non_placeholder_labels\": 0, \"pass\": true}"
+    }
+  ],
+  "execution_measurement_replay": {
+    "journal_dir": "/sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/forward_validation/b7_replay/journal",
+    "n_order_intents": 0,
+    "n_fills": 0,
+    "n_rejected": 0,
+    "n_recovery_actions": 0,
+    "checks": [
+      {
+        "check": "1-2. Signal timing / exactly-once",
+        "status": "SEE base_entry_b3.audit()",
+        "note": "run `python3 src/base_entry_b3.py` -- this tool does not duplicate that proof"
+      },
+      {
+        "check": "3. Correct order generated",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "4. Correct quantity generated",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "5. Entry/exit instructions correct",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "6. Orders reach the broker",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "7. Fills are recorded",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "8. Expected vs. actual fill measured",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "9. Slippage measured, not assumed",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "10. Latency measured",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "11. Rejected/missed/duplicate orders detected",
+        "status": "PASS (by construction)",
+        "n_rejected_observed": 0,
+        "note": "duplicate-order protection is a construction guarantee (SimulatedBroker.submit_order raises ValueError on a reused order_id); see tests/test_simulated_broker.py, not a journal statistic"
+      },
+      {
+        "check": "12. Position state reconciled",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      },
+      {
+        "check": "13. Crash cannot silently leave a position open",
+        "status": "PASS (by construction)",
+        "recovery_action_records": 0,
+        "note": "OrderPath.recover() is the construction guarantee; see tests/test_order_path.py's crash-recovery and escalation cases"
+      },
+      {
+        "check": "14. Everything logged for reconstruction",
+        "status": "INSUFFICIENT SAMPLE",
+        "n": 0,
+        "passed": 0,
+        "note": ""
+      }
+    ],
+    "stage_3_qualified": false,
+    "note": "stage 3 (EXECUTION-QUALIFIED) requires a pre-registered minimum sample, set separately once B7's continuous run is producing one -- this tool measures, it does not itself authorize a stage transition"
+  },
+  "defects": [],
+  "step_a_clean": true
+}

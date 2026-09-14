@@ -1,0 +1,1 @@
+{"ts": "2026-09-14T17:32:27.688269+00:00", "event": "blocked", "strategy": "base_entry_b3_orb_placeholder", "reasons": ["per-trade swing $468 outside $50-150"], "divergences": ["slippage not yet measurable (< 20 fills)"], "signal": "2026-09-08 10:10:00-04:00"}
