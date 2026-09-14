@@ -222,3 +222,30 @@ def test_awaiting_jason_passes_when_the_section_is_empty(tmp_path, monkeypatch):
     _next_up(tmp_path, monkeypatch, "## Blocked — needs Jason\n\nNothing right now.\n")
     r = oc.check_awaiting_jason()
     assert r.status == oc.PASS
+
+
+def test_preflight_fails_when_the_receipt_predates_the_current_cycle(tmp_path, monkeypatch):
+    """The bug in the first version of this very check: a bare age bound would
+    let a cycle inherit the PREVIOUS cycle's preflight and pass -- which is the
+    exact failure mode the check was built to close."""
+    research = tmp_path / "research"; research.mkdir()
+    receipt_time = datetime.now(timezone.utc) - timedelta(minutes=100)
+    (research / "_cycle_preflight.json").write_text(json.dumps(
+        {"ran_at": receipt_time.isoformat(), "failed": [], "ok": True, "steps": {}}))
+    (research / "_cycle_checkpoint.json").write_text(json.dumps(
+        {"status": "running", "started": (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()}))
+    monkeypatch.setattr(oc, "RESEARCH", research)
+    r = oc.check_preflight()
+    assert r.status == oc.FAIL
+    assert "PREVIOUS cycle" in r.detail
+
+
+def test_preflight_passes_when_the_receipt_follows_the_cycle_start(tmp_path, monkeypatch):
+    research = tmp_path / "research"; research.mkdir()
+    (research / "_cycle_checkpoint.json").write_text(json.dumps(
+        {"status": "running", "started": (datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat()}))
+    (research / "_cycle_preflight.json").write_text(json.dumps(
+        {"ran_at": (datetime.now(timezone.utc) - timedelta(minutes=9)).isoformat(),
+         "failed": [], "ok": True, "steps": {}}))
+    monkeypatch.setattr(oc, "RESEARCH", research)
+    assert oc.check_preflight().status == oc.PASS

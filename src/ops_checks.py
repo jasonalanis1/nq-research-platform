@@ -595,7 +595,24 @@ def check_preflight() -> Result:
     failed = d.get("failed") or []
     if failed:
         return Result("preflight", FAIL, f"preflight ran but these steps FAILED: {', '.join(failed)}")
-    # a cycle is 2 hours; a receipt older than that belongs to a previous cycle
+    # Bind the receipt to THIS cycle, not to a clock. A bare age bound repeats
+    # the blind spot this check exists to close: at a 2-hour cadence a 150-min
+    # bound lets a cycle inherit the PREVIOUS cycle's preflight and pass, which
+    # is exactly what happened on 2026-09-14 with the daily checkers. The
+    # budget clock records when the current cycle started; a receipt older than
+    # that belongs to a previous cycle, whatever its absolute age.
+    ckpt = RESEARCH / "_cycle_checkpoint.json"
+    if ckpt.exists() and ran_at:
+        try:
+            c = json.loads(ckpt.read_text())
+            if c.get("status") == "running" and c.get("started"):
+                if datetime.fromisoformat(ran_at) < datetime.fromisoformat(c["started"]):
+                    return Result("preflight", FAIL,
+                                  "preflight receipt predates this cycle's start -- it belongs to a "
+                                  "PREVIOUS cycle; this one has not run its opening sequence")
+        except Exception:  # noqa: BLE001
+            pass
+    # fallback when no cycle is open: a receipt older than one cycle is stale
     if age_min is not None and age_min > 150:
         return Result("preflight", FAIL,
                       f"preflight receipt is {age_min/60:.1f}h old -- this cycle has not run its "
