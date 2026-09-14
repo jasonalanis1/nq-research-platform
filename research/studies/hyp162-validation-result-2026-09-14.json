@@ -1,0 +1,82 @@
+{
+  "spec_sha256": "7a32377d74cf306f43c950f93a4a5fbaa8c64a0b3a04364961c39a14ea142462",
+  "slice": "validation 2021-10-04 -> 2024-01-03",
+  "block_sessions": 10,
+  "n_boot": 20000,
+  "seed": 20260914,
+  "sidak_N": 20,
+  "edge_window_sessions": 250,
+  "V1_spread_sidak_above_zero": true,
+  "V2_retained_lower_bound_ge_bar": true,
+  "verdict": "PASS",
+  "main": {
+    "n_replicates": 20000,
+    "point": 0.3222919617749759,
+    "ci_90": [
+      0.22855574694729136,
+      0.4164866659139193
+    ],
+    "ci_sidak_N20": [
+      0.16734964101576927,
+      0.4856269705041349
+    ],
+    "stratified_point": 0.32078065451226184,
+    "retained_share": {
+      "point": 0.995855951678114,
+      "ci_90": [
+        0.9141106630439163,
+        1.075350841789987
+      ],
+      "lower_90_bound": 0.9141106630439163,
+      "bar": 0.5
+    }
+  },
+  "D1_original_full_sample_edges": {
+    "n_replicates": 20000,
+    "point": 0.3125520011193097,
+    "ci_90": [
+      0.21894613485281364,
+      0.4053336040520051
+    ],
+    "ci_sidak_N20": [
+      0.16011638559986377,
+      0.4722998851932786
+    ]
+  },
+  "D2_by_prior_day_range": {
+    "prior_LOW": {
+      "n_high": 48,
+      "n_low": 93,
+      "ratio_spread": 0.3861,
+      "points_spread": 23.751
+    },
+    "prior_MID": {
+      "n_high": 54,
+      "n_low": 67,
+      "ratio_spread": 0.2409,
+      "points_spread": 12.696
+    },
+    "prior_HIGH": {
+      "n_high": 75,
+      "n_low": 41,
+      "ratio_spread": 0.2719,
+      "points_spread": 15.709
+    }
+  },
+  "D3_coverage": {
+    "n_scored": 571,
+    "n_high": 177,
+    "n_low": 201,
+    "by_year": {
+      "2021": 63,
+      "2022": 254,
+      "2023": 253,
+      "2024": 1
+    },
+    "short_midday_sessions_dropped": 544
+  },
+  "permanent_disclosures": [
+    "P1 at Discovery was selection-confirmatory (1,045-cell sweep); promotion rests on this test.",
+    "The discriminating separability test was post-hoc at Discovery; V2 is its pre-registered out-of-sample form."
+  ]
+}

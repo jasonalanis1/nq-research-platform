@@ -1,435 +1,379 @@
 {
- "generated_at": "2026-09-14T16:06:00Z",
- "generated_at_local": "September 14th, 11:06 am CT",
- "last_run": "2026-09-14T16:00:00Z",
- "last_run_local": "September 14th, 11:00 am CT",
- "next_run": "2026-09-14T18:00:00Z",
- "next_run_local": "September 14th, 1:00 pm CT",
- "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "446 tests",
- "ops": {
-  "overall": "WARN",
-  "checks": [
-   {
-    "name": "lock",
-    "status": "PASS",
-    "detail": "session running 5 min, last activity 1 min ago"
-   },
-   {
-    "name": "shelf",
-    "status": "PASS",
-    "detail": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldes"
-   },
-   {
-    "name": "checkpoint",
-    "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T16:05"
-   },
-   {
-    "name": "value",
-    "status": "PASS",
-    "detail": "last cycle moved=True delta={'studies': 1}"
-   },
-   {
-    "name": "console",
-    "status": "PASS",
-    "detail": "refreshed 117 min ago"
-   },
-   {
-    "name": "reports",
-    "status": "PASS",
-    "detail": "61 reports, latest 2026-09-14-1600.md well-formed"
-   },
-   {
-    "name": "new-information",
-    "status": "PASS",
-    "detail": "latest run recorded new information"
-   },
-   {
-    "name": "ledger",
-    "status": "PASS",
-    "detail": "120 idea families, no stale statuses"
-   },
-   {
-    "name": "mechanism-gate",
-    "status": "PASS",
-    "detail": "37 mechanism doc(s) cover every advanced candidate"
-   },
-   {
-    "name": "data-currency",
-    "status": "PASS",
-    "detail": "price data through 2026-09-08 (4 sessions behind)"
-   },
-   {
-    "name": "awaiting-jason",
-    "status": "WARN",
-    "detail": "5 item(s) blocked on Jason: STAFF MEETING 2026-09-14 \"what to do\" -- CORRECTED 2026-09-14 ~10:00 am CT, ITS CENTRAL; SUPERSEDED (kept for the record): the original fork text. Full record:"
-   },
-   {
-    "name": "preflight",
-    "status": "PASS",
-    "detail": "opening sequence ran 5 min ago, all steps ok"
-   },
-   {
-    "name": "git-sync",
-    "status": "PASS",
-    "detail": "working tree committed and pushed"
-   }
-  ]
- },
- "progress": {
-  "trials_since_last_survivor": 159,
-  "trials_total": 468,
-  "survivors_alive": 2,
-  "trials_per_survivor": 234.0,
-  "last_survivor": {
-   "hypothesis_id": "hyp-000151",
-   "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
-   "date": "2026-09-13"
+  "generated_at": "2026-09-14T18:11:00Z",
+  "generated_at_local": "September 14th, 1:11 pm CT",
+  "last_run": "2026-09-14T18:00:00Z",
+  "last_run_local": "September 14th, 1:00 pm CT",
+  "next_run": "2026-09-14T20:00:00Z",
+  "next_run_local": "September 14th, 3:00 pm CT",
+  "cadence": "Every 2 hours, on the odd Central hour",
+  "tests": "461 tests",
+  "ops": {
+    "overall": "WARN",
+    "checks": [
+      {
+        "name": "lock",
+        "status": "PASS",
+        "detail": "free since 2026-09-14 18:11:16"
+      },
+      {
+        "name": "shelf",
+        "status": "PASS",
+        "detail": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldes"
+      },
+      {
+        "name": "checkpoint",
+        "status": "WARN",
+        "detail": "UNFINISHED work to resume: item=hyp-000162 Monetization + blind Gate step=closed files=[] (started 2026-09-14T18:00)"
+      },
+      {
+        "name": "value",
+        "status": "PASS",
+        "detail": "last cycle moved=True delta={'studies': 1}"
+      },
+      {
+        "name": "console",
+        "status": "PASS",
+        "detail": "refreshed 126 min ago"
+      },
+      {
+        "name": "reports",
+        "status": "PASS",
+        "detail": "62 reports, latest 2026-09-14-1800.md well-formed"
+      },
+      {
+        "name": "new-information",
+        "status": "PASS",
+        "detail": "latest run recorded new information"
+      },
+      {
+        "name": "ledger",
+        "status": "PASS",
+        "detail": "120 idea families, no stale statuses"
+      },
+      {
+        "name": "mechanism-gate",
+        "status": "PASS",
+        "detail": "37 mechanism doc(s) cover every advanced candidate"
+      },
+      {
+        "name": "data-currency",
+        "status": "PASS",
+        "detail": "price data through 2026-09-08 (4 sessions behind)"
+      },
+      {
+        "name": "awaiting-jason",
+        "status": "WARN",
+        "detail": "5 item(s) blocked on Jason: STAFF MEETING 2026-09-14 \"what to do\" -- CORRECTED 2026-09-14 ~10:00 am CT, ITS CENTRAL; SUPERSEDED (kept for the record): the original fork text. Full record:"
+      },
+      {
+        "name": "preflight",
+        "status": "PASS",
+        "detail": "opening sequence ran 11 min ago, all steps ok"
+      },
+      {
+        "name": "git-sync",
+        "status": "PASS",
+        "detail": "working tree committed and pushed"
+      }
+    ]
   },
-  "scan_cells_total": 362,
-  "standalone_total": 106,
-  "scans_run": 36,
-  "scans_with_no_survivor": 30
- },
- "ledger_rows": 201,
- "distinct_hypotheses": 155,
- "funnel": {
-  "closed": 115,
-  "discovery": 2,
-  "validation": 0,
-  "holdout": 2,
-  "forward": 3,
-  "paper": 0,
-  "live": 0
- },
- "sweep": {
-  "shelf": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
-  "rows": [
-   {
-    "tier": "OPEN",
-    "id": "hyp-000156",
-    "name": "London open volatility burst 6e m23",
-    "stage_reached": "Statistical",
-    "next_owed": "Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?",
-    "legacy": false
-   },
-   {
-    "tier": "OPEN",
-    "id": "hyp-000162",
-    "name": "Opening range width midday range excursion nq m30",
-    "stage_reached": "Statistical",
-    "next_owed": "Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
-    "id": "EXP047",
-    "name": "EXP-047 \u00b7 weekly momentum tracker",
-    "stage_reached": "FORWARD VALIDATION",
-    "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
-    "id": "hyp-000105",
-    "name": "Midday lull \u2192 afternoon expansion",
-    "stage_reached": "HOLDOUT PASSED",
-    "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
-    "legacy": false
-   },
-   {
-    "tier": "FROZEN",
-    "id": "hyp-000142",
-    "name": "Vxn level vs trailing high next day range",
-    "stage_reached": "HOLDOUT PASSED",
-    "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
-    "legacy": false
-   }
-  ],
-  "counts": {
-   "OPEN": 2,
-   "GATED": 0,
-   "FROZEN": 3
-  }
- },
- "waiting_on_jason": [],
- "h118_forward": {
-  "resolved": 0,
-  "target_trades": 40,
-  "open": 1,
-  "entry": 29538.0,
-  "entry_date": "2026-09-08",
-  "horizon_days": 10,
-  "net_points_resolved": 0
- },
- "shelf": {
-  "floor": 3,
-  "count": 9,
-  "floor_met": true,
-  "live": [
-   {
-    "id": 8,
-    "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 HOLDOUT PASSED, THIRD hypothesis in project history to clear all three stages (hyp-000142/143/144/151; Scan 014 -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> Validation PASS: HIGH 1.120 [1.066,1.177] -> Holdout PASS, September 12th ~9:45 pm CT, Jason's sign-off (slot 3 of 5): HIGH 1.239 [1.170,1.313], Sidak [1.154,1.324], effect strengthened Validation->Holdout, disclosed as unusual. Portfolio review (research/studies/portfolio-hyp142-separability-2026-09-13.md): SEPARABLE, 53-66% retained residualized on the existing conditioning facts -- higher overlap than the other three, must combine by RESIDUAL not product if integrated into volatility_conditioning.py, deferred to Sept 19th product-build decision. KNOWN TRUE, conditioning fact."
-   },
-   {
-    "id": 15,
-    "name": "M9: Nasdaq-100 quarterly rebalance close-window volume/move -> next-day reaction (map-ranked #7, September 11th, 11:37 pm CT) \u2014 INDETERMINATE, RE-PARKED September 12th, 12:20 am CT (Scan 018)"
-   },
-   {
-    "id": 28,
-    "name": "M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) \u2014 CLOSED, P1_FAIL"
-   },
-   {
-    "id": 29,
-    "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 CLOSED, P1_FAIL"
-   },
-   {
-    "id": 32,
-    "name": "M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) \u2014 SOURCED, DRAWABLE"
-   },
-   {
-    "id": 33,
-    "name": "M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) \u2014 SOURCED, DRAWABLE (Stage 0 free-look first)"
-   },
-   {
-    "id": 34,
-    "name": "M30: Opening-range width \u2192 midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) \u2014 DRAWN 2026-09-14, Scan 036, hyp-000162: ALL THREE PREDICTIONS PASSED, one INTEGRITY RED owed to the Gate"
-   },
-   {
-    "id": 35,
-    "name": "M31: Prior-day volume vs expected \u2192 first-30-minute range, NQ (observatory channel / Idea Factory queue, September 13th, ~7:17 pm CT test cycle) \u2014 SOURCED, DRAWABLE"
-   },
-   {
-    "id": 36,
-    "name": "M32: Open's location in the prior day's range \u2192 later-session range, NQ (observatory channel / Idea Factory queue, September 14th, ~9:25 am CT cycle) \u2014 SOURCED, DRAWABLE"
-   }
-  ]
- },
- "recent_closures": [
-  {
-   "id": "hyp-000161",
-   "name": "Stack a b2 expected range context x b3 orb break nq",
-   "date": "2026-09-14"
+  "progress": {
+    "trials_since_last_survivor": 159,
+    "trials_total": 468,
+    "survivors_alive": 2,
+    "trials_per_survivor": 234.0,
+    "last_survivor": {
+      "hypothesis_id": "hyp-000151",
+      "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
+      "date": "2026-09-13"
+    },
+    "scan_cells_total": 362,
+    "standalone_total": 106,
+    "scans_run": 36,
+    "scans_with_no_survivor": 30
   },
-  {
-   "id": "hyp-000160",
-   "name": "Tokyo open volatility burst 6e m27",
-   "date": "2026-09-14"
+  "ledger_rows": 202,
+  "distinct_hypotheses": 155,
+  "funnel": {
+    "closed": 115,
+    "discovery": 2,
+    "validation": 0,
+    "holdout": 2,
+    "forward": 3,
+    "paper": 0,
+    "live": 0
   },
-  {
-   "id": "hyp-000159",
-   "name": "Level-sweep-reversal-prior-day-narrow-m26",
-   "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000158",
-   "name": "Monthly-opex-week-delta-hedge-unwind-nq-m25",
-   "date": "2026-09-13"
-  },
-  {
-   "id": "hyp-000157",
-   "name": "Month-end-payment-cycle-reversal-nq-m24",
-   "date": "2026-09-13"
-  }
- ],
- "sessions": [
-  {
-   "file": "2026-09-14-1600.md",
-   "ts": "2026-09-14T16:00:00Z",
-   "new_information": "",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 14th, 11:00 am CT"
-  },
-  {
-   "file": "2026-09-14-1400.md",
-   "ts": "2026-09-14T14:00:00Z",
-   "new_information": "",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 14th, 9:00 am CT"
-  },
-  {
-   "file": "2026-09-14-1200.md",
-   "ts": "2026-09-14T12:00:00Z",
-   "new_information": "",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 14th, 7:00 am CT"
-  }
- ],
- "bot_milestones": [
-  {
-   "component": "Signal contract",
-   "id": "B0",
-   "status": "DONE"
-  },
-  {
-   "component": "Signal engine",
-   "id": "B1",
-   "status": "DONE for B3"
-  },
-  {
-   "component": "Risk/State Engine",
-   "id": "B2",
-   "status": "BUILT (sizing + permission only -- Stack A showed it is not an entry filter)"
-  },
-  {
-   "component": "Base entry, frozen",
-   "id": "B3",
-   "status": "DONE (placeholder, never an edge)"
-  },
-  {
-   "component": "Order path",
-   "id": "B4",
-   "status": "B4a DONE; B4b blocked on the IBKR futures-permission cooldown (~Oct 13th)"
-  },
-  {
-   "component": "Execution measurement",
-   "id": "B5",
-   "status": "FIRST CUT 11:00 pm CT (src/execution_measurement.py; the 14 checks vs the order_path journal; reports INSUFFICIENT SAMPLE honestly, does not self-authorize stage 3; 4 tests)"
-  },
-  {
-   "component": "Kill switches wired",
-   "id": "B6",
-   "status": "WIRED 11:00 pm CT -- capital_protection.pre_order_check called before every order in src/order_path.py"
-  },
-  {
-   "component": "Continuous paper run",
-   "id": "B7",
-   "status": "LIVE (thin first version). BLOCKED ON DATA, NOT CODE: prices end 2026-09-08, new data is a purchase (standing NO PURCHASE). Ran clean, nothing new."
-  },
-  {
-   "component": "Live-Limited",
-   "id": "B8",
-   "status": "MISSING \u2014 Jason's authorization alone"
-  },
-  {
-   "component": "Scale behind evidence",
-   "id": "B9",
-   "status": "MISSING"
-  }
- ],
- "methodology": {
-  "build": [
-   {
-    "id": "U25",
-    "status": "DONE ~9:08 pm CT",
-    "what": "Stack spec schema + hash-at-registration + attempt counter"
-   },
-   {
-    "id": "U26",
-    "status": "DONE ~9:12 pm CT",
-    "what": "Mechanism template 4a/4b/9a + UNDERPOWERED closure status + Gate brief"
-   },
-   {
-    "id": "U27",
-    "status": "DONE ~9:20 pm CT",
-    "what": "Stack scan runner (layers in time order, paired mode, difference CI)"
-   },
-   {
-    "id": "U29",
-    "status": "DONE ~9:30 pm CT",
-    "what": "Stack A \u2014 B2 context x B3 break: POWERED NULL, +0.0247R, CI90 (-0.050,+0.098)"
-   },
-   {
-    "id": "U28",
-    "status": "DONE -- K=9,910 distinct cells, ZERO clear the |z|~4.56 yardstick",
-    "what": "Idea Factory --interactions (state x state cross-tabs, timing rule on both layers)"
-   },
-   {
-    "id": "U30",
-    "status": "QUEUED -- U28 and U6 both say NOT YET",
-    "what": "Stack B \u2014 ICC pullback shape, deterministic; only after a sourced look"
-   },
-   {
-    "id": "U6",
-    "status": "DONE -- 7-check mechanical suite, run before every Gate",
-    "what": "integrity_checks.py. Its hyp-000162 placebo flag forced the Director test that cleared the candidate."
-   }
-  ],
-  "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
-  "rules": [
-   "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
-   "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
-   "Both formats run; at most one stack in flight at a time.",
-   "Floor 100 occurrences + minimum detectable effect pre-registered by Statistical. Below the floor \u2192 UNDERPOWERED: an attempt spent, definition never loosened.",
-   "One mechanism per layer plus an explicit interaction claim. 'It filters out losers' is rejected as fitting.",
-   "Every layer known before the trigger fires, context before location (the timing rule, per layer).",
-   "Full spec hashed into the trial registry before any look; a different hash is a different trial. Cells looked at are recorded with it.",
-   "A stacks_attempted counter makes the format accountable.",
-   "A stack of already-closed variables is a resurrection unless the interaction is the stated novel claim.",
-   "Format kill: two powered nulls close the format. One so far."
-  ],
-  "source": "research/infrastructure/staff-meeting-conditional-stack-2026-09-13.md",
-  "stacks_attempted": 1,
-  "summary": "Two admissible hypothesis shapes: FLAT (one state, one window) and CONDITIONAL STACK (context -> location -> trigger), both under the same promotion bar, splits and trial accounting. Adopted Sept 13th ~9:00 pm CT, disposition MODIFY, ten binding rules."
- },
- "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)",
- "upgrade_queue": {
-  "done_or_specd": 19,
-  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
-  "total": 30
- },
- "latest_survivor_note": "hyp-000162 (M30): Statistical PASS, then DIRECTOR RE-EVALUATION = ADVANCE (2026-09-14). Separable from every validated volatility fact AND from its own lagged self: VXN level 79.8% retained, overnight coil 75.3%, prior-day range 83.6%, opening range at t-1 87.2% -- all vs a 50% bar. The U6 placebo red is EXPLAINED, not dismissed: yesterday's value is informative (vol persists) AND today's adds beyond it. Effect is largest in the HIGH tercile of every stratum -- it SCALES WITH volatility, so magnitude is conditional. OWED: Monetization, then the blind Gate.",
- "binding_constraint": "Monetization then the blind Integrity Gate for hyp-000162 -- hand the Gate the NARROWED question (the effect scales with volatility; is the mechanism doc's story still right?), not 'is this real'. hyp-000156's Director call is also owed and is NOT blocked on our side.",
- "cycle_review_today": {
-  "date_ct": "2026-09-14",
-  "cycles_recorded": 2,
-  "fully_complete": 2,
-  "moved_the_pipeline": 1,
-  "due_but_no_recorded_close": [
-   1,
-   3,
-   5
-  ],
-  "rows": [
-   {
-    "ct": "08:19",
-    "label": "audit cycle",
-    "complete": true,
-    "failing": [],
-    "moved": false,
-    "delta": {}
-   },
-   {
-    "ct": "09:11",
-    "label": "9:00 am cycle",
-    "complete": true,
-    "failing": [],
-    "moved": true,
-    "delta": {
-     "mechanism_docs": 1,
-     "studies": 1,
-     "inventory_entries": 1
+  "sweep": {
+    "shelf": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
+    "rows": [
+      {
+        "tier": "OPEN",
+        "id": "hyp-000156",
+        "name": "London open volatility burst 6e m23",
+        "stage_reached": "Statistical",
+        "next_owed": "Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?",
+        "legacy": false
+      },
+      {
+        "tier": "OPEN",
+        "id": "hyp-000162",
+        "name": "Opening range width midday range excursion nq m30",
+        "stage_reached": "Director CONTINUE",
+        "next_owed": "BLIND Integrity Gate checkpoint (src/integrity_blind_packet.py, fresh context, VETO)",
+        "legacy": false
+      },
+      {
+        "tier": "FROZEN",
+        "id": "EXP047",
+        "name": "EXP-047 \u00b7 weekly momentum tracker",
+        "stage_reached": "FORWARD VALIDATION",
+        "next_owed": "nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only",
+        "legacy": false
+      },
+      {
+        "tier": "FROZEN",
+        "id": "hyp-000105",
+        "name": "Midday lull \u2192 afternoon expansion",
+        "stage_reached": "HOLDOUT PASSED",
+        "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+        "legacy": false
+      },
+      {
+        "tier": "FROZEN",
+        "id": "hyp-000142",
+        "name": "Vxn level vs trailing high next day range",
+        "stage_reached": "HOLDOUT PASSED",
+        "next_owed": "nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+        "legacy": false
+      }
+    ],
+    "counts": {
+      "OPEN": 2,
+      "GATED": 0,
+      "FROZEN": 3
     }
-   }
+  },
+  "waiting_on_jason": [],
+  "h118_forward": {
+    "resolved": 0,
+    "target_trades": 40,
+    "open": 1,
+    "entry": 29538.0,
+    "entry_date": "2026-09-08",
+    "horizon_days": 10,
+    "net_points_resolved": 0
+  },
+  "shelf": {
+    "floor": 3,
+    "count": 9,
+    "floor_met": true,
+    "live": [
+      {
+        "id": 8,
+        "name": "vxn_level_vs_trailing (HIGH), next-day RTH range vs trailing-20d average (map anchor M7, range footprint; map-ranked #4) \u2014 HOLDOUT PASSED, THIRD hypothesis in project history to clear all three stages (hyp-000142/143/144/151; Scan 014 -> Statistical PASS -> Director CONTINUE -> blind Gate CONDITIONAL resolved -> Validation PASS: HIGH 1.120 [1.066,1.177] -> Holdout PASS, September 12th ~9:45 pm CT, Jason's sign-off (slot 3 of 5): HIGH 1.239 [1.170,1.313], Sidak [1.154,1.324], effect strengthened Validation->Holdout, disclosed as unusual. Portfolio review (research/studies/portfolio-hyp142-separability-2026-09-13.md): SEPARABLE, 53-66% retained residualized on the existing conditioning facts -- higher overlap than the other three, must combine by RESIDUAL not product if integrated into volatility_conditioning.py, deferred to Sept 19th product-build decision. KNOWN TRUE, conditioning fact."
+      },
+      {
+        "id": 15,
+        "name": "M9: Nasdaq-100 quarterly rebalance close-window volume/move -> next-day reaction (map-ranked #7, September 11th, 11:37 pm CT) \u2014 INDETERMINATE, RE-PARKED September 12th, 12:20 am CT (Scan 018)"
+      },
+      {
+        "id": 28,
+        "name": "M24: month-end payment-cycle reversal, NQ (literature channel, September 13th, ~3:10 am CT cycle) \u2014 CLOSED, P1_FAIL"
+      },
+      {
+        "id": 29,
+        "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 CLOSED, P1_FAIL"
+      },
+      {
+        "id": 32,
+        "name": "M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) \u2014 SOURCED, DRAWABLE"
+      },
+      {
+        "id": 33,
+        "name": "M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) \u2014 SOURCED, DRAWABLE (Stage 0 free-look first)"
+      },
+      {
+        "id": 34,
+        "name": "M30: Opening-range width \u2192 midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) \u2014 DRAWN 2026-09-14, Scan 036, hyp-000162: ALL THREE PREDICTIONS PASSED, one INTEGRITY RED owed to the Gate"
+      },
+      {
+        "id": 35,
+        "name": "M31: Prior-day volume vs expected \u2192 first-30-minute range, NQ (observatory channel / Idea Factory queue, September 13th, ~7:17 pm CT test cycle) \u2014 SOURCED, DRAWABLE"
+      },
+      {
+        "id": 36,
+        "name": "M32: Open's location in the prior day's range \u2192 later-session range, NQ (observatory channel / Idea Factory queue, September 14th, ~9:25 am CT cycle) \u2014 SOURCED, DRAWABLE"
+      }
+    ]
+  },
+  "recent_closures": [
+    {
+      "id": "hyp-000161",
+      "name": "Stack a b2 expected range context x b3 orb break nq",
+      "date": "2026-09-14"
+    },
+    {
+      "id": "hyp-000160",
+      "name": "Tokyo open volatility burst 6e m27",
+      "date": "2026-09-14"
+    },
+    {
+      "id": "hyp-000159",
+      "name": "Level-sweep-reversal-prior-day-narrow-m26",
+      "date": "2026-09-13"
+    },
+    {
+      "id": "hyp-000158",
+      "name": "Monthly-opex-week-delta-hedge-unwind-nq-m25",
+      "date": "2026-09-13"
+    },
+    {
+      "id": "hyp-000157",
+      "name": "Month-end-payment-cycle-reversal-nq-m24",
+      "date": "2026-09-13"
+    }
   ],
-  "note": "One row per cycle from src/cycle_close.py. A cycle that fired and died leaves NO row, so `due_but_no_recorded_close` is the field that matters. Cycles before ~8:20 am CT predate this log.",
-  "how_to_read_it_yourself": "python3 src/cycle_review.py"
- },
- "schedule_today": {
-  "cadence": "every 2 hours on the odd Central hour",
-  "booking": "pre-booked as independent one-shots -- not a chain",
-  "booked": [
-   "9:00 am (ran)",
-   "11:00 am (ran)",
-   "1:00 pm",
-   "3:00 pm",
-   "5:00 pm",
-   "7:00 pm",
-   "9:00 pm",
-   "11:00 pm"
-  ]
- }
+  "sessions": [
+    {
+      "file": "2026-09-14-1800.md",
+      "ts": "2026-09-14T18:00:00Z",
+      "new_information": "**The blind Gate earns its cost.** It was handed a masked packet and found two methodological defects that four prior stages \u2014 including a Director Re-Evaluation built specifically to be skeptical \u2014 had all missed, because all of them were reasoning about the *result* and the Gate could only reason about the *procedure*. Blinding is not a formality here; it changed what was noticed.",
+      "agents_ran": 0,
+      "agents_not_run": 0,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": "CONDITIONAL",
+      "ts_local": "September 14th, 1:00 pm CT"
+    },
+    {
+      "file": "2026-09-14-1600.md",
+      "ts": "2026-09-14T16:00:00Z",
+      "new_information": "",
+      "agents_ran": 0,
+      "agents_not_run": 0,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 14th, 11:00 am CT"
+    },
+    {
+      "file": "2026-09-14-1400.md",
+      "ts": "2026-09-14T14:00:00Z",
+      "new_information": "",
+      "agents_ran": 0,
+      "agents_not_run": 0,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 14th, 9:00 am CT"
+    }
+  ],
+  "bot_milestones": [
+    {
+      "component": "Signal contract",
+      "id": "B0",
+      "status": "DONE"
+    },
+    {
+      "component": "Signal engine",
+      "id": "B1",
+      "status": "DONE for B3"
+    },
+    {
+      "component": "Risk/State Engine",
+      "id": "B2",
+      "status": "BUILT (sizing + permission only -- Stack A showed it is not an entry filter)"
+    },
+    {
+      "component": "Base entry, frozen",
+      "id": "B3",
+      "status": "DONE (placeholder, never an edge)"
+    },
+    {
+      "component": "Order path",
+      "id": "B4",
+      "status": "SPLIT -- B4a BUILT 11:00 pm CT (simulated broker; src/broker_interface.py, src/simulated_broker.py, src/order_path.py; 25 tests); B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
+    },
+    {
+      "component": "Execution measurement",
+      "id": "B5",
+      "status": "FIRST CUT 11:00 pm CT (src/execution_measurement.py; the 14 checks vs the order_path journal; reports INSUFFICIENT SAMPLE honestly, does not self-authorize stage 3; 4 tests)"
+    },
+    {
+      "component": "Kill switches wired",
+      "id": "B6",
+      "status": "WIRED 11:00 pm CT -- capital_protection.pre_order_check called before every order in src/order_path.py"
+    },
+    {
+      "component": "Continuous paper run",
+      "id": "B7",
+      "status": "MISSING"
+    },
+    {
+      "component": "Live-Limited",
+      "id": "B8",
+      "status": "MISSING \u2014 Jason's authorization alone"
+    },
+    {
+      "component": "Scale behind evidence",
+      "id": "B9",
+      "status": "MISSING"
+    }
+  ],
+  "methodology": {
+    "build": [
+      {
+        "id": "U25",
+        "status": "DONE ~9:08 pm CT",
+        "what": "Stack spec schema + hash-at-registration + attempt counter"
+      },
+      {
+        "id": "U26",
+        "status": "DONE ~9:12 pm CT",
+        "what": "Mechanism template 4a/4b/9a + UNDERPOWERED closure status + Gate brief"
+      },
+      {
+        "id": "U27",
+        "status": "DONE ~9:20 pm CT",
+        "what": "Stack scan runner (layers in time order, paired mode, difference CI)"
+      },
+      {
+        "id": "U29",
+        "status": "DONE ~9:30 pm CT",
+        "what": "Stack A \u2014 B2 context x B3 break: POWERED NULL, +0.0247R, CI90 (-0.050,+0.098)"
+      },
+      {
+        "id": "U28",
+        "status": "QUEUED \u2014 next stack must be sourced from a look table, not the roadmap",
+        "what": "Idea Factory --interactions (state x state cross-tabs, timing rule on both layers)"
+      },
+      {
+        "id": "U30",
+        "status": "QUEUED",
+        "what": "Stack B \u2014 ICC pullback shape, deterministic; only after a sourced look"
+      }
+    ],
+    "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
+    "rules": [
+      "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
+      "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
+      "Both formats run; at most one stack in flight at a time.",
+      "Floor 100 occurrences + minimum detectable effect pre-registered by Statistical. Below the floor \u2192 UNDERPOWERED: an attempt spent, definition never loosened.",
+      "One mechanism per layer plus an explicit interaction claim. 'It filters out losers' is rejected as fitting.",
+      "Every layer known before the trigger fires, context before location (the timing rule, per layer).",
+      "Full spec hashed into the trial registry before any look; a different hash is a different trial. Cells looked at are recorded with it.",
+      "A stacks_attempted counter makes the format accountable.",
+      "A stack of already-closed variables is a resurrection unless the interaction is the stated novel claim.",
+      "Format kill: two powered nulls close the format. One so far."
+    ],
+    "source": "research/infrastructure/staff-meeting-conditional-stack-2026-09-13.md",
+    "stacks_attempted": 1,
+    "summary": "Two admissible hypothesis shapes: FLAT (one state, one window) and CONDITIONAL STACK (context -> location -> trigger), both under the same promotion bar, splits and trial accounting. Adopted Sept 13th ~9:00 pm CT, disposition MODIFY, ten binding rules."
+  },
+  "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)",
+  "upgrade_queue": {
+    "done_or_specd": 17,
+    "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
+    "total": 30
+  }
 }
