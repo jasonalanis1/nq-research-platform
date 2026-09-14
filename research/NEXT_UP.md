@@ -265,6 +265,21 @@ Three honest caveats, which make discipline MORE important here, not less:
      stays honest.
 
 
+## STAFF MEETING DISPOSITION 2026-09-14 (MODIFY) -- BINDING until Jason answers the fork
+
+1. **THE SIZING QUEUE IS PAUSED AT FOUR INPUTS.** No further SIZING candidate is drawn until the
+   blind Gate answers hyp-000162's regime question, because that answer decides whether B2 has
+   FOUR inputs or ONE wearing four hats (prior-day range, coiled overnight, VXN level, M30 -- and
+   hyp-000162's placebo red says they may all be readings of one volatility regime). Adding a fifth
+   reading of the same regime is not progress. M32/Entry 36 stays DRAWABLE but is NOT drawn under
+   this pause. Entries 32/33/35 are unaffected -- they are not sizing inputs.
+2. **THE IDEA FACTORY MUST REPORT ITS QUEUE SPLIT BY JOB** (entry-edge vs sizing), with the
+   DIRECTION count stated even when it is zero. Today it is zero out of 19 families and nothing in
+   the tooling said so. A ranked list where size always wins looks like a healthy queue right up
+   until someone asks what is feeding the entry slot. Build this into idea_factory.py's output.
+3. Not decided here: hyp-000162's regime question (blind Gate's), and the conditional-stack
+   format's last powered null (U28 found nothing that stands out -- stays "not yet").
+
 ## BOT MILESTONES — THE TRUNK (Jason, September 13th ~6:00 pm CT: "this is an end goal trading bot... our overall goal should be working to that, not being the best research tool")
 
   B4a/B7-EARLY — STATISTICAL FORWARD TEST OF THE BOT STACK, STARTS NOW, COSTS NOTHING
@@ -620,6 +635,33 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 - Alert: ops_checks `value` FAILs on BUSY WORK (3 closed cycles with zero artifact deltas) or QUEUE EXHAUSTED (nothing owed + empty shelf). Either is an IMMEDIATE item: message Jason, do not manufacture work. `checkpoint` WARN = unfinished work to resume.
 
 ## Blocked — needs Jason
+
+- **STAFF MEETING 2026-09-14 "what to do": THE STRATEGIC FORK IS YOURS.** Full record:
+  research/infrastructure/staff-meeting-what-to-do-2026-09-14.md. The finding: the project's ONE
+  directional Holdout-passed edge (H118) is a 10-DAY SWING trade that the intraday bot's own
+  capital rules EXCLUDE BY NAME (capital_protection excluded_strategies, ~$1,000-1,400 swing vs the
+  $50-150 band). The bot's entry slot is still the B3 placeholder, which its own spec says is never
+  an edge -- so B8 (live) is unreachable on the current path. And the generation engine cannot fix
+  it: of 19 candidate families in today's Idea Factory queue, 17 are SIZING and **0 are DIRECTION**,
+  because volatility is predictable and direction is not, so size wins every |z| ranking on merit.
+  OPTIONS: (a) build the live bot around the edge we actually found -- i.e. the swing strategy, D11,
+  currently "awaits Jason -- do not build"; the intraday bot becomes an execution testbed;
+  (b) keep the intraday bot and fund a real hunt for an intraday directional edge, ~200+ more trials
+  on Statistical's numbers with no guarantee, and the generation engine needs rebuilding to even
+  produce candidates; (c) keep both as-is, intraday bot stays paper-only indefinitely, and the
+  project stops describing B8 as reachable. STAFF RECOMMENDS (a), caveat stated: most of the
+  engineering to date becomes infrastructure for a strategy it was not designed around, and the
+  capital model needs rewriting from its band upward.
+- **DATA CURRENCY IS AN OPERATING COST, NOT A RESEARCH PURCHASE -- YOUR CALL.** The NO PURCHASE
+  decision was about buying NEW INSTRUMENTS. Keeping the existing NQ series current is a different
+  thing and costs cents (historical pulls: $4.74 RTY, $8.35 ES, for SEVEN YEARS of 1-minute data,
+  against an untouched $20/mo cap). It is the single blocker on B7 accumulating ANY execution
+  sample: the order path has ZERO FILLS, EVER. Without it the whole back half of the roadmap is
+  frozen no matter how much code gets written.
+- **6E VALIDATION DATA PULL (hyp-000156) -- YOUR CALL, unchanged.** Statistical PASS x4, all five
+  blind-Gate conditions resolved in writing, validate_hyp156.py written and hashed before data
+  exists. Validation cannot run without the 6E validation slice. A standing "no" is a fine answer;
+  it just means hyp-000156 sits where it is indefinitely, and better decided than defaulted.
 
 - **H118 FORWARD VALIDATION: the one open position predates the forward anchor. YOUR CALL.**
   Found by the 2026-09-14 automation audit (research/integrity/automation-audit-2026-09-14.md,
