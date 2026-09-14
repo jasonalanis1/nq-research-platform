@@ -1,0 +1,136 @@
+{
+  "n_sessions": 1666,
+  "tercile_edges_opening_range_vs_atr": {
+    "LOW<=": 0.2767,
+    "HIGH>=": 0.4063
+  },
+  "A_B_by_opening_range_tercile": {
+    "LOW": {
+      "n": 556,
+      "mean_midday_range_pts": 40.063,
+      "median_midday_range_pts": 29.5,
+      "mean_ratio": 0.7945,
+      "multiplier_vs_all": 0.7642
+    },
+    "MID": {
+      "n": 555,
+      "mean_midday_range_pts": 44.032,
+      "median_midday_range_pts": 30.0,
+      "mean_ratio": 1.0112,
+      "multiplier_vs_all": 0.9726
+    },
+    "HIGH": {
+      "n": 555,
+      "mean_midday_range_pts": 54.37,
+      "median_midday_range_pts": 35.25,
+      "mean_ratio": 1.3138,
+      "multiplier_vs_all": 1.2636
+    }
+  },
+  "high_minus_low_midday_range_pts": 14.307,
+  "C_conditional_on_prior_day_range": {
+    "prior_day_range_LOW": {
+      "LOW": {
+        "n": 279,
+        "multiplier": 0.8468,
+        "mean_midday_range_pts": 36.228
+      },
+      "MID": {
+        "n": 167,
+        "multiplier": 1.0337,
+        "mean_midday_range_pts": 38.153
+      },
+      "HIGH": {
+        "n": 110,
+        "multiplier": 1.3375,
+        "mean_midday_range_pts": 42.907
+      },
+      "high_minus_low_pts": 6.679,
+      "high_minus_low_mult": 0.4907
+    },
+    "prior_day_range_MID": {
+      "LOW": {
+        "n": 177,
+        "multiplier": 0.8608,
+        "mean_midday_range_pts": 44.079
+      },
+      "MID": {
+        "n": 213,
+        "multiplier": 0.9977,
+        "mean_midday_range_pts": 43.291
+      },
+      "HIGH": {
+        "n": 164,
+        "multiplier": 1.1532,
+        "mean_midday_range_pts": 40.54
+      },
+      "high_minus_low_pts": -3.539,
+      "high_minus_low_mult": 0.2924
+    },
+    "prior_day_range_HIGH": {
+      "LOW": {
+        "n": 100,
+        "multiplier": 0.7051,
+        "mean_midday_range_pts": 43.655
+      },
+      "MID": {
+        "n": 175,
+        "multiplier": 0.9112,
+        "mean_midday_range_pts": 50.546
+      },
+      "HIGH": {
+        "n": 281,
+        "multiplier": 1.1603,
+        "mean_midday_range_pts": 66.929
+      },
+      "high_minus_low_pts": 23.274,
+      "high_minus_low_mult": 0.4552
+    }
+  },
+  "D_cost_check": {
+    "stop_fraction": 0.5,
+    "fixed_cost_pts": 0.75,
+    "bar": 0.05,
+    "rows": [
+      {
+        "tercile": "LOW",
+        "mean_midday_range_pts": 40.063,
+        "implied_stop_pts": 20.032,
+        "cost_share_of_stop": 0.03744,
+        "clears_5pct_bar": true
+      },
+      {
+        "tercile": "HIGH",
+        "mean_midday_range_pts": 54.37,
+        "implied_stop_pts": 27.185,
+        "cost_share_of_stop": 0.02759,
+        "clears_5pct_bar": true
+      }
+    ],
+    "stop_distance_delta_HIGH_minus_LOW_pts": 7.153,
+    "cost_share_of_that_delta": 0.10485
+  },
+  "E_residual_within_pre_open_multiplier": {
+    "note": "",
+    "levels": {
+      "pre_open_mult_0.9438": {
+        "n": 283,
+        "n_high": 72,
+        "n_low": 114,
+        "high_minus_low_ratio": 0.376
+      },
+      "pre_open_mult_1.0000": {
+        "n": 691,
+        "n_high": 225,
+        "n_low": 223,
+        "high_minus_low_ratio": 0.3621
+      },
+      "pre_open_mult_1.0809": {
+        "n": 360,
+        "n_high": 204,
+        "n_low": 49,
+        "high_minus_low_ratio": 0.6026
+      }
+    }
+  }
+}

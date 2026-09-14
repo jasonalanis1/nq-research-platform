@@ -1,0 +1,79 @@
+{
+  "n_replicates_used": 3000,
+  "raw_spread": {
+    "point": 0.5196316747301698,
+    "ci_90": [
+      0.4488700397356964,
+      0.5923423748685374
+    ],
+    "credible_above_zero": true
+  },
+  "stratified_spread": {
+    "point": 0.4539900213360638,
+    "ci_90": [
+      0.38757222059151064,
+      0.5219243874696649
+    ],
+    "credible_above_zero": true
+  },
+  "retained_share": {
+    "point": 0.87383380851242,
+    "ci_90": [
+      0.8202635599792053,
+      0.9256507008453557
+    ],
+    "lower_90_bound": 0.8202635599792053,
+    "bar": 0.5,
+    "passes_with_interval": true
+  },
+  "sidak_adjusted_raw_spread": {
+    "K_1045_sourcing_sweep": [
+      0.36642029937913523,
+      0.6888842631261983
+    ],
+    "K_467_project_discovery_N": [
+      0.36990850817763876,
+      0.6885735536145473
+    ],
+    "note": "bootstrap quantiles widened to the Sidak per-look level; credible if the lower bound stays above zero"
+  },
+  "condition_6_power": {
+    "se_of_retained_share": 0.03211,
+    "mde_at_80pct_power_vs_bar": 0.5798,
+    "note": "one-sided 5% test, 80% power: the design can distinguish a true retained share above this number from the 50% bar"
+  },
+  "condition_7_trailing_edges": {
+    "n_sessions": 1416,
+    "window_sessions": 250,
+    "n_high": 483,
+    "n_low": 457,
+    "raw_spread": {
+      "point": 0.48720046317277454,
+      "ci_90": [
+        0.41117758129639775,
+        0.5656530100899543
+      ],
+      "credible_above_zero": true
+    },
+    "retained_share": {
+      "point": 0.8836634983671454,
+      "ci_90": [
+        0.8274956229144467,
+        0.9368593605861876
+      ],
+      "lower_90_bound": 0.8274956229144467,
+      "bar": 0.5,
+      "passes_with_interval": true
+    },
+    "note": "tercile edges re-cut as trailing-250-session percentiles, shifted one session, so membership is knowable at 10:00 ET on the day"
+  },
+  "n_sessions": 1666,
+  "block_sessions": 10,
+  "n_boot": 3000,
+  "seed": 20260914,
+  "stratifier": "opening_range_vs_atr at t-1 (the placebo's suspect)",
+  "answers": [
+    "Gate condition 2 (interval on the retention ratio)",
+    "Gate condition 3 (calendar-time block bootstrap)"
+  ]
+}
