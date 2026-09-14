@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-09-13T22:52:00Z",
-  "generated_at_local": "September 13th, 5:52 pm CT",
-  "last_run": "2026-09-13T21:42:00Z",
-  "last_run_local": "September 13th, 4:42 pm CT",
-  "next_run": "2026-09-14T00:00:00Z",
-  "next_run_local": "September 13th, 7:00 pm CT",
+  "generated_at": "2026-09-14T00:21:00Z",
+  "generated_at_local": "September 13th, 7:21 pm CT",
+  "last_run": "2026-09-14T00:03:00Z",
+  "last_run_local": "September 13th, 7:03 pm CT",
+  "next_run": "2026-09-14T02:00:00Z",
+  "next_run_local": "September 13th, 9:00 pm CT",
   "cadence": "Every 2 hours, on the odd Central hour",
-  "tests": "287 tests",
+  "tests": "302 tests",
   "ops": {
     "overall": "PASS",
     "checks": [
       {
         "name": "lock",
         "status": "PASS",
-        "detail": "free since 2026-09-13 22:46:42"
+        "detail": "session running 18 min, last activity 0 min ago"
       },
       {
         "name": "shelf",
         "status": "PASS",
-        "detail": "Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest dr"
+        "detail": "Shelf 4/3 DRAWABLE (Entry 32, 33, 34, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldes"
       },
       {
         "name": "checkpoint",
         "status": "PASS",
-        "detail": "last cycle closed cleanly at 2026-09-13T22:12"
+        "detail": "cycle in progress: opening / -"
       },
       {
         "name": "value",
@@ -33,12 +33,12 @@
       {
         "name": "console",
         "status": "PASS",
-        "detail": "refreshed 41 min ago"
+        "detail": "refreshed 89 min ago"
       },
       {
         "name": "reports",
         "status": "PASS",
-        "detail": "52 reports, latest 2026-09-13-2142.md well-formed"
+        "detail": "53 reports, latest 2026-09-14-0003.md well-formed"
       },
       {
         "name": "new-information",
@@ -48,17 +48,17 @@
       {
         "name": "ledger",
         "status": "PASS",
-        "detail": "117 idea families, no stale statuses"
+        "detail": "118 idea families, no stale statuses"
       },
       {
         "name": "mechanism-gate",
         "status": "PASS",
-        "detail": "33 mechanism doc(s) cover every advanced candidate"
+        "detail": "35 mechanism doc(s) cover every advanced candidate"
       },
       {
         "name": "data-currency",
         "status": "PASS",
-        "detail": "price data through 2026-09-08 (3 sessions behind)"
+        "detail": "price data through 2026-09-08 (4 sessions behind)"
       },
       {
         "name": "awaiting-jason",
@@ -68,24 +68,24 @@
     ]
   },
   "progress": {
-    "trials_since_last_survivor": 143,
-    "trials_total": 452,
+    "trials_since_last_survivor": 148,
+    "trials_total": 457,
     "survivors_alive": 2,
-    "trials_per_survivor": 226.0,
+    "trials_per_survivor": 228.5,
     "last_survivor": {
       "hypothesis_id": "hyp-000151",
       "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
       "date": "2026-09-13"
     },
-    "scan_cells_total": 348,
-    "standalone_total": 104,
-    "scans_run": 33,
-    "scans_with_no_survivor": 28
+    "scan_cells_total": 352,
+    "standalone_total": 105,
+    "scans_run": 34,
+    "scans_with_no_survivor": 29
   },
-  "ledger_rows": 195,
-  "distinct_hypotheses": 152,
+  "ledger_rows": 199,
+  "distinct_hypotheses": 153,
   "funnel": {
-    "closed": 113,
+    "closed": 114,
     "discovery": 1,
     "validation": 0,
     "holdout": 2,
@@ -94,14 +94,14 @@
     "live": 0
   },
   "sweep": {
-    "shelf": "Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest drawable)",
+    "shelf": "Shelf 4/3 DRAWABLE (Entry 32, 33, 34, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
     "rows": [
       {
         "tier": "OPEN",
         "id": "hyp-000156",
         "name": "London open volatility burst 6e m23",
-        "stage_reached": "Mechanism doc",
-        "next_owed": "Statistical stage (4 questions + multiplicity + POWER at the proposed review point)",
+        "stage_reached": "Statistical",
+        "next_owed": "Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?",
         "legacy": false
       },
       {
@@ -147,7 +147,7 @@
   },
   "shelf": {
     "floor": 3,
-    "count": 7,
+    "count": 8,
     "floor_met": true,
     "live": [
       {
@@ -167,20 +167,29 @@
         "name": "M25: monthly options-expiration week delta-hedge unwind, NQ (sourcing, September 13th, ~9:26 am CT, literature channel) \u2014 CLOSED, P1_FAIL"
       },
       {
-        "id": 31,
-        "name": "M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) \u2014 SOURCED, DRAWABLE"
-      },
-      {
         "id": 32,
         "name": "M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) \u2014 SOURCED, DRAWABLE"
       },
       {
         "id": 33,
         "name": "M29: Implied-minus-realized volatility gap (VXN vs NQ realized range), NQ (observatory channel, September 13th, ~5:05 pm CT interactive test cycle) \u2014 SOURCED, DRAWABLE (Stage 0 free-look first)"
+      },
+      {
+        "id": 34,
+        "name": "M30: Opening-range width \u2192 midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) \u2014 SOURCED, DRAWABLE"
+      },
+      {
+        "id": 35,
+        "name": "M31: Prior-day volume vs expected \u2192 first-30-minute range, NQ (observatory channel / Idea Factory queue, September 13th, ~7:17 pm CT test cycle) \u2014 SOURCED, DRAWABLE"
       }
     ]
   },
   "recent_closures": [
+    {
+      "id": "hyp-000160",
+      "name": "Tokyo open volatility burst 6e m27",
+      "date": "2026-09-14"
+    },
     {
       "id": "hyp-000159",
       "name": "Level-sweep-reversal-prior-day-narrow-m26",
@@ -200,14 +209,20 @@
       "id": "hyp-000155",
       "name": "Hedging-demand-gamma-regime-m14",
       "date": "2026-09-13"
-    },
-    {
-      "id": "hyp-000154",
-      "name": "Letf-close-rebalance-m13",
-      "date": "2026-09-13"
     }
   ],
   "sessions": [
+    {
+      "file": "2026-09-14-0003.md",
+      "ts": "2026-09-14T00:03:00Z",
+      "new_information": "",
+      "agents_ran": 10,
+      "agents_not_run": 1,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 13th, 7:03 pm CT"
+    },
     {
       "file": "2026-09-13-2142.md",
       "ts": "2026-09-13T21:42:00Z",
@@ -229,17 +244,6 @@
       "returns": false,
       "disposition": null,
       "ts_local": "September 13th, 3:01 pm CT"
-    },
-    {
-      "file": "2026-09-13-1800.md",
-      "ts": "2026-09-13T18:00:00Z",
-      "new_information": "",
-      "agents_ran": 4,
-      "agents_not_run": 2,
-      "staff_meeting": false,
-      "returns": false,
-      "disposition": null,
-      "ts_local": "September 13th, 1:00 pm CT"
     }
   ],
   "bot_milestones": [
@@ -251,22 +255,22 @@
     {
       "id": "B1",
       "component": "Signal engine",
-      "status": "PARTIAL"
+      "status": "DONE for B3 (Sept 13th, 7:00 pm test cycle)"
     },
     {
       "id": "B2",
       "component": "Risk/State Engine",
-      "status": "SPEC'D (U13)"
+      "status": "BUILT (Sept 13th, 7:00 pm test cycle: `src/risk_state_engine.py`, frozen params, 9 tests, daily log)"
     },
     {
       "id": "B3",
       "component": "Base entry, frozen",
-      "status": "MISSING \u2014 the unlock"
+      "status": "DONE (spec frozen + coded + 6 tests, Sept 13th, 7:00 pm test cycle: `src/base_entry_b3.py`, fires on 75% of sessions, exactly-once, no lookahead, every signal `placeholder`)"
     },
     {
       "id": "B4",
       "component": "Order path",
-      "status": "MISSING"
+      "status": "MISSING \u2014 NEXT; needs Jason (broker paper account: Tradovate per the Sept 11th brief; spend pre-approved, but the account and credentials are his to create)"
     },
     {
       "id": "B5",
@@ -295,8 +299,8 @@
     }
   ],
   "upgrade_queue": {
-    "done_or_specd": 9,
-    "total": 22,
+    "done_or_specd": 12,
+    "total": 23,
     "source": "research/NEXT_UP.md UPGRADE QUEUE v3"
   },
   "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)"

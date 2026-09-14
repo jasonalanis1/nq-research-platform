@@ -173,3 +173,15 @@ re-test without a materially different, independently established condition.
 Answer to Jason's question ("does a pattern that failed on average still work under
 specific conditions") for THIS pattern and THIS condition: no. The methodology
 itself worked as designed -- one pre-chosen condition, one shot, honest answer.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000159 / M26 Level Sweep Reversal x prior-day compression, NQ
+- Closure status: clean null
+- Primary outcome (as registered) and result: P1_FAIL, compressed-day +0.030R ci (-0.109,+0.186) n=131 (Scan 033)
+- Sample adequacy: adequate
+- Mechanism verdict: falsified for this condition
+- Robustness / cost / concentration flags: first sanctioned conditional retest; year-chunked scan
+- What was learned: Conditioning a dead directional pattern on the validated compression state does not resurrect it; the methodology works, the answer here is no.
+- What must NOT be retested: LSR x prior-day compression.
+- Permitted future retest condition: attempt 2 of 2 only with a DIFFERENT independently validated condition
+- Capacity action: hold

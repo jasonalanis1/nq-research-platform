@@ -122,3 +122,15 @@ suggests this should read "2e" (M16). M16 is already closed clean
 corroborating null regardless of which label is correct.
 
 VERDICT: P1_FAIL. hyp-000154 REJECTED. Entry closes.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000154 / M13 LETF close rebalance, RTY/ES/NQ
+- Closure status: clean null
+- Primary outcome (as registered) and result: P1_FAIL on all three instruments (Scan 028, 15 cells)
+- Sample adequacy: adequate (common window, 3 instruments)
+- Mechanism verdict: falsified for this construction
+- Robustness / cost / concentration flags: none
+- What was learned: Leveraged-ETF close rebalancing leaves no detectable close-window footprint in RTY/ES/NQ 1-min bars at this ceiling; the flow is real but competed away or too small vs. close noise.
+- What must NOT be retested: Any 'close rebalance' claim on index futures from price alone.
+- Permitted future retest condition: only with actual LETF AUM/flow data (Data Acquisition Trigger)
+- Capacity action: reduce family

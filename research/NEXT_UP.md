@@ -72,8 +72,8 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 (auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 1, GATED 0, FROZEN 3.)
 
-- SHELF: Shelf 3/3 DRAWABLE (Entry 30, 31, 32; pending: Entry 15) -> next DRAW: Entry 30 (oldest drawable)
-- OPEN hyp-000156 london_open_volatility_burst_6e_m23: reached Mechanism doc -> OWED: Statistical stage (4 questions + multiplicity + POWER at the proposed review point)
+- SHELF: Shelf 4/3 DRAWABLE (Entry 32, 33, 34, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)
+- OPEN hyp-000156 london_open_volatility_burst_6e_m23: reached Statistical -> OWED: Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
 - FROZEN hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144, hyp-000151): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
@@ -242,16 +242,10 @@ item; research fills the remaining budget. If no milestone can move, say which o
 is blocked and why, then fall through.
 
   B0 Signal contract ................ DONE  (src/strategy_contract.py)
-  B1 Signal engine .................. PARTIAL (src/execution_clock_signal_engine.py,
-                                      checks 1-2 PASSED; built around H118's rule,
-                                      which was rejected -- repoint it at B3)
-  B2 Risk/State Engine .............. SPEC'D (= U13; the validated volatility facts
-                                      as a daily size/stop/target/permission decision)
-  B3 Base entry, frozen ............. MISSING -- THE UNLOCK. One ordinary,
-                                      pre-registered, publicly-known entry. NOT an
-                                      edge, never claimed as one. Every signal it
-                                      emits carries validation_status="placeholder".
-  B4 Order path ..................... MISSING (broker paper account; the ~$60-115/mo
+  B1 Signal engine .................. DONE for B3 (src/base_entry_b3.py, walk-forward audit 0 violations)
+  B2 Risk/State Engine .............. BUILT 7:05 pm CT (src/risk_state_engine.py, frozen params, tests, daily log)
+  B3 Base entry, frozen ............. DONE 7:20 pm CT (spec + src/base_entry_b3.py + tests; placeholder, never an edge)
+  B4 Order path ..................... MISSING -- NEXT, NEEDS JASON: broker paper account (the ~$60-115/mo
                                       spend was pre-approved 2026-09-10 conditioned
                                       on reaching this stage -- this IS that stage)
   B5 Execution measurement .......... MISSING (the 14 frozen checks; slippage
@@ -316,8 +310,8 @@ THIS WEEK (no new infrastructure; fits the 2-hour cycles):
       sidak-stacking-diagnosis-2026-09-1X.md -- does the Validation-stage cumulative
       correction re-count Discovery trials against an independent sample? No bar
       change; Jason rules after reading it.
-  U2. M23 Statistical stage (owed anyway; reviews B, C, E).
-  U3. [M26 DONE Sept 13th 5:00 pm CT -- P1_FAIL, hyp-000159; M27 still owed] M26 and M27 exactly as frozen (C, F). M26 = first sanctioned conditional retest.
+  U2. [DONE 7:10 pm CT -- PASS x4 incl. Sidak N=451; VALIDATION CANDIDATE; blind Gate CONDITIONAL (5 conditions); Validation blocked on 6E data] M23 Statistical stage (owed anyway; reviews B, C, E).
+  U3. [M26 DONE 5:00 pm CT -- P1_FAIL, hyp-000159; M27 DONE 7:15 pm CT -- Scan 034 P1_FAIL, Tokyo hour credibly quieter, hyp-000160] M26 and M27 exactly as frozen (C, F). M26 = first sanctioned conditional retest.
   U4. [DONE Sept 13th 5:05 pm CT -- M29 / Entry 33] Source the VXN-minus-realized-range state variable to the shelf as a Layer-0
       primitive (D): VXN daily vs NQ trailing realized range; mechanism = dealer
       positioning dampens (implied >> realized) or amplifies (implied << realized).
@@ -332,7 +326,7 @@ THIS WEEK (no new infrastructure; fits the 2-hour cycles):
   U7. [CHECKLIST DONE 5:18 pm CT -> upgrade-specs; BUILD owed: template Section 8b + scan-result fields] Write the Economic Validity Gate additions as a checklist (B: placebo -- shifted /
       inverted / random entry; concentration by year / regime / event; alternative-
       explanation list: trend, volatility, seasonality, drift, liquidity, beta).
-  U8. [FORM DONE 5:18 pm CT -> upgrade-specs; RETROACTIVE PASS owed: 12 closures + research/ledger/closures.jsonl] Write the closure form (F) and apply it retroactively to this week's eleven
+  U8. [DONE 7:16 pm CT -- 12 closure forms appended (Section 12) + research/ledger/closures.jsonl] Write the closure form (F) and apply it retroactively to this week's eleven
       closures (M13, M14, M17-M25); this seeds the negative-knowledge library.
   U9. Swing-strategy question doc (D11) -- DONE September 13th, see file above; Jason
       takes it out for feedback; nothing built until he returns with an answer.
@@ -354,7 +348,7 @@ WEEKS 2-3 (structural; freeze lifted for these):
        BATTERY -- mean vs drift-null, range ratio, MFE/MAE, time-to-resolution -- cut
        by session window, FDR within the battery, every cell registered up front.
        Extend with B/E/F question dimensions as families get registered.
-  U13. [= BOT MILESTONE B2 -- highest priority item in this queue] [SPEC DONE 5:20 pm CT -> upgrade-specs; BUILD owed: src/risk_state_engine.py + tests + daily log] Risk/State Engine spec (A, B, E): inputs = validated range facts (range
+  U13. [= BOT MILESTONE B2 -- BUILT 7:05 pm CT: src/risk_state_engine.py + frozen params + 9 tests + daily log] Risk/State Engine spec (A, B, E): inputs = validated range facts (range
        contraction, overnight coil, midday-lull/afternoon, VXN level, +U4 if it
        passes); outputs per session = expected range, target distance, stop distance,
        size multiplier, trade-permission flag. Frozen, versioned, NO P&L claim. This is
@@ -991,7 +985,8 @@ introduced. Console pushed live cleanly (write_db). Full:
 research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
-September 13th, 4:42-5:25 pm CT -- INTERACTIVE TEST CYCLE (first under UPGRADE QUEUE v3; Jason asked to run a session and test it): U3 DONE -- drew Entry 30/M26 (Scan 033, 4 cells): P1_FAIL, compressed-day net R +0.030 ci_90 (-0.109,+0.186) n=131 powered; P2 diff not credible; hyp-000159 REJECTED; CLOSED, attempt 1 of 2 for the family. U1 DONE -- Sidak diagnosis (read-only): does NOT double-count (stage-specific N: 451/20/3); the Discovery bar tightens monotonically -- policy decision framed for Jason, no bar change. U4 DONE -- sourced M29/Entry 33 (implied-minus-realized vol gap, state primitive), shelf 3/3 (31, 32, 33). U2 (M23 Statistical) NOT done -- slipped to 7:00 pm cycle (scan hit the device-shell 3-minute limit twice before year-chunking fixed it). Tests 287, ops_checks 8/8 PASS. NEXT: U2 first, then U5 (three conditional families), U6-U8 (specs/forms), U10 (data trigger already in KNOWLEDGE.md).
+September 13th, 7:03-7:35 pm CT -- SCHEDULED 7:00 pm CYCLE, DESIGNATED FULL-PIPELINE TEST (first cycle under the bot-first ordering). BOT: B2 BUILT (src/risk_state_engine.py, frozen params in research/infrastructure/risk-state-engine-frozen-params.json, 9 tests, daily log; found + fixed: the bot layer must load data WITHOUT the research Holdout boundary or its "latest session" is April 6th); B3 SPEC FROZEN + CODED (research/infrastructure/base-entry-b3-spec.md; src/base_entry_b3.py, 6 tests, 2,717 placeholder signals / 3,638 sessions, 0 lookahead, 0 duplicates; found: both legacy ORB/IB detectors open at 08:30 in NY-stamped data = pre-market, not the open); B1 DONE for B3. NEXT MILESTONE B4 (order path) NEEDS JASON: broker paper account. RESEARCH: U2 DONE -- M23/hyp-000156 Statistical PASS on all four incl. Sidak at N=451 -> PROMISING with Validation owed (status label corrected same cycle); blind Gate (fresh subagent, masked) CONDITIONAL with 5 conditions (research/integrity/gate-hyp156-blind-2026-09-13.md) -- FIRST research item next cycle; Validation is BLOCKED ON DATA (6E on disk = Discovery slice only) -> pull request to Jason only after conditions resolved. SOURCING RULE v3: M30/Entry 34 (opening-range width -> midday range/excursion) and M31/Entry 35 (prior-day volume -> first-30 range) docs written from the queue. U3-M27 DONE: Scan 034 P1_FAIL -- Tokyo hour credibly QUIETER than baseline (hyp-000160), London burst is London-specific. U8 DONE: 12 closure forms + research/ledger/closures.jsonl. Portfolio pass on the fact registry written. Observatory: idea-factory queue regenerated. Shelf 4/3 (Entries 32, 33, 34, 35). NEXT: resolve the 5 Gate conditions on hyp-156; draw Entry 32 (M28) or Entry 34 (M30, plugs into B2); U6 integrity_checks.py build; U12 outcome battery is now idea_factory.py.
+Previous: September 13th, 4:42-5:25 pm CT -- INTERACTIVE TEST CYCLE (first under UPGRADE QUEUE v3; Jason asked to run a session and test it): U3 DONE -- drew Entry 30/M26 (Scan 033, 4 cells): P1_FAIL, compressed-day net R +0.030 ci_90 (-0.109,+0.186) n=131 powered; P2 diff not credible; hyp-000159 REJECTED; CLOSED, attempt 1 of 2 for the family. U1 DONE -- Sidak diagnosis (read-only): does NOT double-count (stage-specific N: 451/20/3); the Discovery bar tightens monotonically -- policy decision framed for Jason, no bar change. U4 DONE -- sourced M29/Entry 33 (implied-minus-realized vol gap, state primitive), shelf 3/3 (31, 32, 33). U2 (M23 Statistical) NOT done -- slipped to 7:00 pm cycle (scan hit the device-shell 3-minute limit twice before year-chunking fixed it). Tests 287, ops_checks 8/8 PASS. NEXT: U2 first, then U5 (three conditional families), U6-U8 (specs/forms), U10 (data trigger already in KNOWLEDGE.md).
 Previous: 
 3:00 pm CT scheduled cycle (2026-09-13 20:01 UTC). Drew Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ): Scan 032, 10 cells, calendar-week partition (80 expiration weeks vs. 269 non-expiration weeks). GATING clean fail -- expiration-week return, ATR14-normalized, net of NQ's own unconditional weekly drift, mean=+0.1872, ci_90=(-0.0291,+0.3950), wide interval spanning both signs (not a near-miss like M24, a clean non-credible result). P2 (expiration minus non-expiration) also not credible. Day-of-week cumulative cells (Tue/Wed/Thu/Fri) individually credibly positive but non-gating/descriptive, does not override the failed gate. Director CONCUR with closure. hyp-000158 REJECTED. Entry closed, shelf dropped to 2/3. Sourced Entry 32/M28 (pre-holiday effect, NQ) restoring shelf to 3/3 -- a well-replicated multi-decade, multi-market equity anomaly (Lakonishok-Smidt 1988, Ariel 1990) never before tested against NQ in this project, with an honestly-flagged weaker named-participant mechanism story than this project's usual standard. Mechanism doc written before any scan; not drawn this cycle, budget-use deferral, first in line next cycle. pytest 287/287, ops_checks PASS, console v80->v81. Full: research/sessions/2026-09-13-2001.md.
 

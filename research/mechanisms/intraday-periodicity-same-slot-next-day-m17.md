@@ -130,3 +130,15 @@ does not transfer to the NQ index at daily granularity. Third literature
 entry this cycle to close clean (with M15, M16) -- the pattern across all
 three is the same: well-specified, well-cited cross-sectional or single-
 name equity results do not automatically hold at the index-future level.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000147 / M17 same-slot next-day periodicity, NQ
+- Closure status: clean null
+- Primary outcome (as registered) and result: null in all 3 slots (Scan 022)
+- Sample adequacy: adequate
+- Mechanism verdict: falsified
+- Robustness / cost / concentration flags: none
+- What was learned: Heston-style same-half-hour-next-day return periodicity is not present in NQ futures at 1-min; the equity-microstructure effect does not transfer.
+- What must NOT be retested: Intraday return periodicity on NQ.
+- Permitted future retest condition: none
+- Capacity action: reduce family (literature calendar)

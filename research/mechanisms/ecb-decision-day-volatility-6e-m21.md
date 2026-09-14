@@ -153,3 +153,15 @@ strategy. Entry CLOSED at Monetization (not a Discovery-stage close);
 attempt 1 of 2 spent, though Monetization's disposition is not sample-
 dependent so a second attempt would only be warranted by a genuinely new
 claim, not a retry of this one.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000150 / M21 ECB decision volatility, 6E
+- Closure status: valid-but-non-actionable
+- Primary outcome (as registered) and result: Discovery PASS (+0.534 ATR, Scan 025), Statistical PASS; Monetization no path at the time
+- Sample adequacy: adequate
+- Mechanism verdict: supported
+- Robustness / cost / concentration flags: none
+- What was learned: Largest effect in the M20/M21 family; same reclassification as M20 (2026-09-13).
+- What must NOT be retested: Nothing -- passed.
+- Permitted future retest condition: family-level Monetization (U5c)
+- Capacity action: increase family (as part of U5c)

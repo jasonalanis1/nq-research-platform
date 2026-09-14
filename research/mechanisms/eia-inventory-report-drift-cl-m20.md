@@ -146,3 +146,15 @@ ever built. Full record: research/studies/eia-volatility-m20-statistical-
 2026-09-12.md, -director-reeval-2026-09-12.md, -monetization-2026-09-12.md.
 Attempt 1 of 2 spent (a second attempt would need a different claim, not
 a re-test of magnitude).
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000148 / M20 EIA petroleum report volatility, CL
+- Closure status: valid-but-non-actionable
+- Primary outcome (as registered) and result: Discovery PASS (Scan 023); Monetization: no CL strategy to attach to
+- Sample adequacy: adequate
+- Mechanism verdict: supported
+- Robustness / cost / concentration flags: none
+- What was learned: Scheduled-release volatility bursts are real in crude; reclassified 2026-09-13 into the scheduled-event volatility family with M21/M23 (micro contracts exist).
+- What must NOT be retested: Nothing -- it passed; do not re-scan the same cell.
+- Permitted future retest condition: family-level Monetization (event-volatility family, U5c)
+- Capacity action: increase family (as part of U5c)

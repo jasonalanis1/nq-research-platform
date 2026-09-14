@@ -1,0 +1,25 @@
+{
+  "engine_version": "B2-1.0 (2026-09-13)",
+  "frozen_at": "2026-09-14T00:06:07.272831+00:00",
+  "discovery_slice": "2015-01-02..2021-10-01",
+  "vxn_high_tercile_edge": 0.02545542283434844,
+  "permission_bottom_decile_edge": 0.8944,
+  "within_session_shape": {
+    "first30": 0.446,
+    "morning": 0.538,
+    "midday": 0.446,
+    "afternoon": 0.384,
+    "last_hour": 0.356
+  },
+  "constants": {
+    "VXN_HIGH_RATIO": 1.2389,
+    "VXN_RESIDUAL_RETENTION": 0.53,
+    "STOP_FRACTION": 0.5,
+    "TARGET_FRACTION": 1.0,
+    "RANGE_LOOKBACK": 20,
+    "ATR_WINDOW": 14,
+    "STALE_SESSIONS": 3,
+    "PERMISSION_DECILE": 10
+  },
+  "note": "computed once on the Discovery slice; never refit; no P&L claim anywhere in this engine"
+}

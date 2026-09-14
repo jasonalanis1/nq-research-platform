@@ -175,3 +175,15 @@ the family's 2-attempt budget without a materially different approach
 attempt 2 in Section 8, not run this pass).
 MONETIZATION: NOT RUN -- gating failed, no path to a strategy design
 step.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000158 / M25 opex-week delta-hedge unwind, NQ
+- Closure status: clean null
+- Primary outcome (as registered) and result: P1_FAIL wide interval (Scan 032); day-of-week cells positive but non-gating
+- Sample adequacy: adequate (80 weeks)
+- Mechanism verdict: falsified for NQ
+- Robustness / cost / concentration flags: kill-share construction caveat (moot)
+- What was learned: The equity opex-week premium does not transfer to NQ futures at this ceiling; individually positive weekdays next to a failed gate are not a finding (rule reaffirmed).
+- What must NOT be retested: Opex-week directional claims on NQ.
+- Permitted future retest condition: none
+- Capacity action: reduce family (literature calendar)

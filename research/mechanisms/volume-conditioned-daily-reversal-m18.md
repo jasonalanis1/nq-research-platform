@@ -158,3 +158,15 @@ LOW-MODERATE going in).
 Next owed: none for M18 -- CLOSED. Shelf consumption: Entry 22 drawn,
 scanned, and closed within the same cycle it reached DRAWABLE, per
 SHELF RULE v2 precedent (draw-then-scan once floor is met).
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000152 / M18 volume-conditioned daily reversal, NQ
+- Closure status: near miss
+- Primary outcome (as registered) and result: P1_PASS_P2_FAIL (Scan 026): reversal real, volume adds no gradient
+- Sample adequacy: adequate (n=555)
+- Mechanism verdict: weakened -- the reversal exists, the volume conditioning does not
+- Robustness / cost / concentration flags: none
+- What was learned: NQ has an unconditional daily reversal (next-day sign-adjusted mean credibly negative); volume level does not grade it. The reversal itself is a KNOWN characterization, not an edge (M12/M18 lineage).
+- What must NOT be retested: Volume as a gradient on daily reversal.
+- Permitted future retest condition: none for volume; the unconditional reversal may be conditioned ONCE on a validated state under the 8-condition protocol
+- Capacity action: hold

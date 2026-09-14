@@ -125,3 +125,15 @@ test (which also failed, for all three instruments) -- neither result was
 counted as evidence for the other.
 
 VERDICT: P1_FAIL. hyp-000155 REJECTED. Entry closes.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000155 / M14 hedging-demand gamma regime, NQ/ES
+- Closure status: clean null
+- Primary outcome (as registered) and result: P1_FAIL both instruments (Scan 029, 8 cells)
+- Sample adequacy: adequate
+- Mechanism verdict: untested-by-this-result (proxy too coarse)
+- Robustness / cost / concentration flags: proxy for dealer gamma was price-derived
+- What was learned: A price-only proxy for dealer gamma positioning does not predict intraday momentum; the participant is not visible in OHLCV.
+- What must NOT be retested: Gamma-regime momentum from price-derived proxies.
+- Permitted future retest condition: options open-interest data (trigger)
+- Capacity action: reduce family

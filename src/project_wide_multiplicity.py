@@ -242,7 +242,8 @@ SCAN_REGISTRY = {
     "scan_030_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},  # M23 London-open volatility burst, 6E, Entry 27
     "scan_031_2026-09-13": {"cells_scanned": 10, "promoted_hypothesis_ids": []},  # M24 month-end payment-cycle reversal, NQ, Entry 28
     "scan_032_2026-09-13": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
-    "scan_033_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},  # M25 monthly opex-week delta-hedge unwind, NQ, Entry 29
+    "scan_033_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},
+    "scan_034_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},  # M25 monthly opex-week delta-hedge unwind, NQ, Entry 29
     # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
     # press-conference, pre/post volatility, 6E, open scope -- third open-
     # scope entry, companion/cross-check to M20). 6 cells: decision-hour

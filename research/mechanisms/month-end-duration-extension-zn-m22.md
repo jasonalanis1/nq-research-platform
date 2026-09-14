@@ -152,3 +152,15 @@ null does not rule out a real, smaller effect than the CI's power can
 detect -- it only says the flow is not visible at this data ceiling,
 the same framing already applied to M19's closure.
 Next owed: none for M22 -- CLOSED.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000153 / M22 month-end duration extension, ZN
+- Closure status: data limitation
+- Primary outcome (as registered) and result: P1_FAIL, n=82 thin (Scan 027)
+- Sample adequacy: THIN (n=82)
+- Mechanism verdict: untested-by-this-result
+- Robustness / cost / concentration flags: issuance-direction split omitted (no issuance data)
+- What was learned: Month-end index duration extension does not show in ZN's last-2-session return at n=82; the effect, if real, is smaller than this sample resolves.
+- What must NOT be retested: Same claim, same sample.
+- Permitted future retest condition: issuance-size data or a longer history
+- Capacity action: hold

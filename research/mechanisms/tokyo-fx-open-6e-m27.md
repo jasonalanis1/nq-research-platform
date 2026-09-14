@@ -133,3 +133,26 @@ sourced to restore the shelf floor per SHELF RULE v2 after M24/Entry 28
 closed; drawing deferred to preserve budget for a careful, unhurried
 close-out on top of the M24 disposition already completed this cycle.
 DRAWABLE as of this doc's completion; first in line next cycle.
+
+## 11. Disposition (2026-09-13, Scan 034, hyp-000160) -- 7:00 pm CT test cycle
+GATING P1 FAIL, and informatively so: the Tokyo-open hour is credibly QUIETER than the US-session
+hourly baseline (diff -0.0968 ATR, ci_90 (-0.1056,-0.0861), n=644 days), as is
+the pre-Tokyo hour (-0.1101). Not a print artefact (first-minute share 0.192). 247 Discovery days
+lacked 18:00/19:00 bars and were skipped -- disclosed. VERDICT: P1_FAIL, closed per falsifier (a).
+Director: CONCUR. What this teaches the family: the London-open burst (M23, +0.0537, all four Statistical
+questions passed the same evening) is specific to the London open, not a generic "any session boundary
+gets a burst" effect -- the Tokyo boundary in the euro future is a quiet hour. That sharpens M23's
+mechanism (European real-money flow at THEIR open) rather than weakening it. Attempt 1 of 2; no re-test
+without a materially different construction. Closure form owed (U8).
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000160 / M27 Tokyo FX open, 6E
+- Closure status: clean null (informative)
+- Primary outcome (as registered) and result: P1 credibly NEGATIVE: Tokyo hour quieter than baseline (Scan 034, n=644)
+- Sample adequacy: adequate
+- Mechanism verdict: falsified; sharpens M23
+- Robustness / cost / concentration flags: 247 days skipped for missing bars
+- What was learned: Session-open volatility bursts in 6E are London-specific, not generic to session boundaries; the Tokyo hour is a quiet hour.
+- What must NOT be retested: Tokyo-open magnitude claims on 6E.
+- Permitted future retest condition: none
+- Capacity action: hold (M23 family continues)

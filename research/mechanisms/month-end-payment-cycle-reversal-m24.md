@@ -185,3 +185,15 @@ new information (e.g., a longer data history or a materially different
 instrument).
 MONETIZATION: NOT RUN -- gating failed, no path to a strategy design
 step.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000157 / M24 month-end payment-cycle reversal, NQ
+- Closure status: near miss
+- Primary outcome (as registered) and result: P1 lower CI bound just below zero (Scan 031, +0.0112 ci (-0.0005,+0.0224))
+- Sample adequacy: adequate
+- Mechanism verdict: weakened
+- Robustness / cost / concentration flags: not confounded with M6 (checked)
+- What was learned: Near-miss treated as a miss by rule; monthly-frequency calendar claims on NQ sit right at the noise floor of this data.
+- What must NOT be retested: The same construction.
+- Permitted future retest condition: one pre-registered conditioning variable from a validated state (8-condition protocol), attempt 2 of 2
+- Capacity action: hold

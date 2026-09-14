@@ -1834,7 +1834,7 @@ weeks/year, S&P 100 names).
    research/mechanisms/level-sweep-reversal-range-contraction-m26.md.
    Restores the 3-entry shelf floor (Entry 28, 29, 30).
 
-## ENTRY 31 — M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) — SOURCED, DRAWABLE
+## ENTRY 31 — M27: Tokyo FX session open, 6E (map/practitioner channel, September 13th, ~2:00 pm CT cycle) — CLOSED September 13th, 7:15 pm CT (Scan 034, hyp-000160, P1_FAIL: Tokyo hour credibly QUIETER than baseline, the opposite of London)
 
 Generation (sourcing stage, scheduled cycle): sourced to restore the
 3-entry shelf floor after M24/Entry 28 closed this cycle (P1_FAIL,
@@ -1869,7 +1869,7 @@ real-money accounts, Tokyo-based bank desks, not European dealers).
 3. **HORIZON**: 1 hour (session-boundary anchored, fires daily).
 4. **INTEGRITY GATE RESURRECTION RULING**: NEW, three adjacencies
    disclosed and distinguished (M23, M20/M21, M15). Attempt 1 of 2.
-5. **MAP ANCHOR**: M27. STATUS: DRAWABLE. Mechanism doc:
+5. **MAP ANCHOR**: M27. STATUS: CLOSED (Scan 034 P1_FAIL, diff -0.0968 ci_90 (-0.1056,-0.0861) n=644; see mechanism doc Section 11). Mechanism doc:
    research/mechanisms/tokyo-fx-open-6e-m27.md. Restores the 3-entry
    shelf floor (Entry 29, 30, 31).
 
@@ -1939,3 +1939,31 @@ claim.
    tercile overlaps the VXN-level tercile >80% of days, close as duplicate.
 5. **MAP ANCHOR**: M29. STATUS: DRAWABLE for Stage 0 as soon as U11 (Observatory
    free-look mode) exists. Restores the shelf to 3/3 (Entry 31, 32, 33).
+
+## ENTRY 34 — M30: Opening-range width → midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) — SOURCED, DRAWABLE
+
+Generation (SOURCING RULE v3): taken from the top of research/observatory/idea-factory-2026-09-13.md
+(`opening_range_vs_atr → range/mfe/mae`, strongest family, z ≈ 11 HIGH/midday). LEARN consulted: the
+state has never been a registered conditioning variable; the initial-balance breakout family tested
+DIRECTION after the first 30 minutes and is closed -- this is a SIZE claim and does not reopen it.
+Mechanism doc research/mechanisms/opening-range-width-midday-excursion-nq-m30.md written BEFORE any
+registered test.
+1. **CLAIM**: HIGH-tercile 30-minute opening range (09:30-10:00 ET) → credibly larger midday range and
+   midday MFE/MAE than LOW-tercile; known 10:00, outcome from 11:30 (timing rule satisfied).
+2. **MECHANISM**: market-maker inventory imbalance from an unbalanced open keeps repricing through midday.
+3. **FROZEN SCOPE**: ONE 6-cell scan, block=10 (Section 9).
+4. **RESURRECTION RULING**: NEW. Not exp-028/031 (direction), not F-048 (prior-DAY range; P3 tests it).
+5. **MAP ANCHOR**: M30. STATUS: DRAWABLE. Plugs directly into the Risk/State Engine (an intraday 10:00 ET
+   update) and the B3 placeholder's window.
+
+## ENTRY 35 — M31: Prior-day volume vs expected → first-30-minute range, NQ (observatory channel / Idea Factory queue, September 13th, ~7:17 pm CT test cycle) — SOURCED, DRAWABLE
+
+Generation (SOURCING RULE v3): second family from the queue (`volume_vs_expected → range`, HIGH/first30
+z ≈ 8.4, n=385). LEARN consulted: volume was tested for DIRECTION (hyp-000043 REJECTED; M18 CLOSED
+P1_PASS_P2_FAIL; Scan 002 cells) -- never for next-morning RANGE. Mechanism doc
+research/mechanisms/prior-day-volume-first30-range-nq-m31.md written BEFORE any registered test.
+1. **CLAIM**: HIGH-tercile prior-day volume/expected → credibly larger first-30 range next session.
+2. **MECHANISM**: institutional execution desks finishing worked orders at the open.
+3. **FROZEN SCOPE**: ONE 6-cell scan, block=10; volume-coverage disclosure (falsifier c).
+4. **RESURRECTION RULING**: NEW as a range claim. Attempt 1 of 2.
+5. **MAP ANCHOR**: M31. STATUS: DRAWABLE. First non-volatility input candidate for the Risk/State Engine.

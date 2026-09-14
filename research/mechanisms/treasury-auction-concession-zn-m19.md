@@ -150,3 +150,15 @@ candidate here to advance. Entry CLOSED, attempt 1 of 2 spent. A second
 attempt would need a different forced-flow proxy or event set (e.g. 30-
 year auctions, or bid-to-cover-conditioned sub-samples if that data is
 ever obtained), not a retuned window on the same 40 events.
+
+## 12. Closure form (U8, retroactive pass 2026-09-13 7:00 pm CT)
+- Hypothesis / family: hyp-000149 / M19 Treasury auction concession/rebound, ZN
+- Closure status: data limitation
+- Primary outcome (as registered) and result: both gating legs null vs ZN 3-session drift, n=40 (Scan 024)
+- Sample adequacy: THIN (n=40)
+- Mechanism verdict: untested-by-this-result
+- Robustness / cost / concentration flags: kill-share denominator bug caught and fixed before final
+- What was learned: At 40 auction events the test cannot see an effect smaller than ~0.1 ATR; the literature effect (if any) is below this data's resolution.
+- What must NOT be retested: 10Y auction concession on ZN with this sample.
+- Permitted future retest condition: a longer auction history (more years) -- data, not a new mechanism
+- Capacity action: hold
