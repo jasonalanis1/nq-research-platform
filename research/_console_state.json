@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-14T13:21:00Z",
- "generated_at_local": "September 14th, 8:21 am CT",
- "last_run": "2026-09-14T12:00:00Z",
- "last_run_local": "September 14th, 7:00 am CT",
- "next_run": "2026-09-14T14:00:00Z",
- "next_run_local": "September 14th, 9:00 am CT",
+ "generated_at": "2026-09-14T14:10:00Z",
+ "generated_at_local": "September 14th, 9:10 am CT",
+ "last_run": "2026-09-14T14:00:00Z",
+ "last_run_local": "September 14th, 9:00 am CT",
+ "next_run": "2026-09-14T16:00:00Z",
+ "next_run_local": "September 14th, 11:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "444 tests",
  "ops": {
@@ -13,32 +13,32 @@
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "free since 2026-09-14 13:13:32"
+    "detail": "session running 8 min, last activity 1 min ago"
    },
    {
     "name": "shelf",
     "status": "PASS",
-    "detail": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest dr"
+    "detail": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldes"
    },
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T13:13"
+    "detail": "last cycle closed cleanly at 2026-09-14T14:09"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=False delta={}"
+    "detail": "last cycle moved=True delta={'mechanism_docs': 1, 'studies': 1, 'inventory_entries': 1}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 41 min ago"
+    "detail": "refreshed 49 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "59 reports, latest 2026-09-14-1200.md well-formed"
+    "detail": "60 reports, latest 2026-09-14-1400.md well-formed"
    },
    {
     "name": "new-information",
@@ -53,7 +53,7 @@
    {
     "name": "mechanism-gate",
     "status": "PASS",
-    "detail": "36 mechanism doc(s) cover every advanced candidate"
+    "detail": "37 mechanism doc(s) cover every advanced candidate"
    },
    {
     "name": "data-currency",
@@ -68,7 +68,7 @@
    {
     "name": "preflight",
     "status": "PASS",
-    "detail": "opening sequence ran 14 min ago, all steps ok -- SOURCING OWED (shelf at/below floor)"
+    "detail": "opening sequence ran 8 min ago, all steps ok -- SOURCING OWED (shelf at/below floor)"
    },
    {
     "name": "git-sync",
@@ -104,7 +104,7 @@
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
+  "shelf": "Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
   "rows": [
    {
     "tier": "OPEN",
@@ -118,8 +118,8 @@
     "tier": "OPEN",
     "id": "hyp-000162",
     "name": "Opening range width midday range excursion nq m30",
-    "stage_reached": "Mechanism doc",
-    "next_owed": "Statistical stage (4 questions + multiplicity + POWER at the proposed review point)",
+    "stage_reached": "Statistical",
+    "next_owed": "Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?",
     "legacy": false
    },
    {
@@ -165,7 +165,7 @@
  },
  "shelf": {
   "floor": 3,
-  "count": 8,
+  "count": 9,
   "floor_met": true,
   "live": [
    {
@@ -199,6 +199,10 @@
    {
     "id": 35,
     "name": "M31: Prior-day volume vs expected \u2192 first-30-minute range, NQ (observatory channel / Idea Factory queue, September 13th, ~7:17 pm CT test cycle) \u2014 SOURCED, DRAWABLE"
+   },
+   {
+    "id": 36,
+    "name": "M32: Open's location in the prior day's range \u2192 later-session range, NQ (observatory channel / Idea Factory queue, September 14th, ~9:25 am CT cycle) \u2014 SOURCED, DRAWABLE"
    }
   ]
  },
@@ -231,6 +235,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-14-1400.md",
+   "ts": "2026-09-14T14:00:00Z",
+   "new_information": "",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 14th, 9:00 am CT"
+  },
+  {
    "file": "2026-09-14-1200.md",
    "ts": "2026-09-14T12:00:00Z",
    "new_information": "",
@@ -251,17 +266,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 14th, 5:00 am CT"
-  },
-  {
-   "file": "2026-09-14-0800.md",
-   "ts": "2026-09-14T08:00:00Z",
-   "new_information": "**Out of 14,740 interaction cells looked at, zero clear the multiplicity yardstick.** With K = 14,740 looks, a single cell would need |z| \u2248 4.64 to stand out family-wise. The strongest interaction on the entire Discovery slice, after main effects are removed, is |z_vs_additive| = 4.4 \u2014 below it. 895 pairings were dropped as circular before ranking; 4,405 cells fell below the n \u2265 100 floor.",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 14th, 3:00 am CT"
   }
  ],
  "bot_milestones": [
@@ -288,7 +292,7 @@
   {
    "component": "Order path",
    "id": "B4",
-   "status": "B4a DONE; B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
+   "status": "B4a DONE; B4b blocked on the IBKR futures-permission cooldown (~Oct 13th)"
   },
   {
    "component": "Execution measurement",
@@ -303,7 +307,7 @@
   {
    "component": "Continuous paper run",
    "id": "B7",
-   "status": "LIVE, thin first version -- src/bot_stack_paper_run.py; own anchor 2026-09-08; 1 real session, correctly gate-blocked by B6. Blocked on DATA, not code: price data ends 2026-09-08."
+   "status": "LIVE (thin first version). BLOCKED ON DATA, NOT CODE: price data ends 2026-09-08 and new data is a purchase (standing NO PURCHASE decision). Ran clean, nothing new."
   },
   {
    "component": "Live-Limited",
@@ -341,7 +345,7 @@
    {
     "id": "U28",
     "status": "DONE -- K=9,910 distinct cells, ZERO clear the |z|~4.56 yardstick",
-    "what": "Idea Factory --interactions. The states on disk do not visibly modify one another."
+    "what": "Idea Factory --interactions (state x state cross-tabs, timing rule on both layers)"
    },
    {
     "id": "U30",
@@ -350,7 +354,7 @@
    },
    {
     "id": "U6",
-    "status": "DONE -- 7-check mechanical suite, run on every candidate before the Gate",
+    "status": "DONE -- 7-check mechanical suite, run before every Gate",
     "what": "integrity_checks.py. Found the blocking finding on hyp-000162 one cycle after being built."
    }
   ],
@@ -377,6 +381,8 @@
   "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
   "total": 30
  },
+ "latest_survivor_note": "hyp-000162 (M30): STATISTICAL STAGE PASS 2026-09-14. diff +0.5193 ci_90 (+0.4475,+0.5975) n=555/556; stable across halves; credible in BOTH volatility regimes; survives the BINDING Sidak correction at N=467 with the whole adjusted interval (+0.3511,+0.6875) above zero; Validation power 0.815 even at HALF the effect. The doubt is NOT statistical. The U6 placebo red (yesterday's opening range does ~74% of the work) goes to the blind Gate UNCHANGED -- what is unknown is what the association is WITH, not whether it exists. OWED: Director capital call at the Validation gate.",
+ "binding_constraint": "DIRECTOR CAPITAL CALL at the Validation gate, owed on TWO candidates: hyp-000162 (Statistical PASS, one integrity red, well-powered Validation available) and hyp-000156 (Statistical PASS x4, Validation blocked on the 6E data pull parked on Jason). Nothing advances past it.",
  "cycle_review_today": {
   "date_ct": "2026-09-14",
   "cycles_recorded": 1,
@@ -397,14 +403,14 @@
     "delta": {}
    }
   ],
-  "note": "One row per cycle, written by src/cycle_close.py at the end of each cycle. A cycle that fired and died leaves NO row -- so `due_but_no_recorded_close` is the important field, not the row count. Cycles before 2026-09-14 ~8:20 am CT predate this log and show as missing; that is expected, not a failure.",
+  "note": "One row per cycle from src/cycle_close.py. A cycle that fired and died leaves NO row, so `due_but_no_recorded_close` is the field that matters. Cycles before ~8:20 am CT predate this log and show as missing -- expected, not a failure.",
   "how_to_read_it_yourself": "python3 src/cycle_review.py"
  },
  "schedule_today": {
   "cadence": "every 2 hours on the odd Central hour",
-  "booking": "pre-booked as independent one-shots (changed 2026-09-14) -- not a chain, so one failed cycle cannot end the day",
+  "booking": "pre-booked as independent one-shots -- not a chain, so one failed cycle cannot end the day",
   "booked": [
-   "9:00 am",
+   "9:00 am (ran)",
    "11:00 am",
    "1:00 pm",
    "3:00 pm",
@@ -412,7 +418,6 @@
    "7:00 pm",
    "9:00 pm",
    "11:00 pm"
-  ],
-  "note": "the 11:00 pm cycle books tomorrow's before it finishes"
+  ]
  }
 }

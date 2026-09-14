@@ -1,0 +1,125 @@
+{
+  "hypothesis": "hyp-000162",
+  "scan": "scan_036_2026-09-14",
+  "construction": "reproduced from market_behavior_discovery_scan_036.py",
+  "full_sample": {
+    "n_high": 555,
+    "n_low": 556,
+    "diff": 0.5193006023191964,
+    "ci_90": [
+      0.4475399254134474,
+      0.5975289929886077
+    ]
+  },
+  "questions": {
+    "Q1_stability": {
+      "first_half": {
+        "n_high": 278,
+        "n_low": 278,
+        "diff": 0.46756932556990227,
+        "ci_90": [
+          0.3850869802588191,
+          0.5695656227591749
+        ],
+        "credible": true
+      },
+      "second_half": {
+        "n_high": 278,
+        "n_low": 278,
+        "diff": 0.5793527886182241,
+        "ci_90": [
+          0.47072703396440213,
+          0.6978857626568459
+        ],
+        "credible": true
+      },
+      "pass": true
+    },
+    "Q2_regime": {
+      "median_trailing_rth_points": 95.0875,
+      "low_vol": {
+        "n_high": 278,
+        "n_low": 278,
+        "diff": 0.4559525871215968,
+        "ci_90": [
+          0.36002991648743216,
+          0.533655880674739
+        ],
+        "credible": true
+      },
+      "high_vol": {
+        "n_high": 278,
+        "n_low": 278,
+        "diff": 0.6081753321812093,
+        "ci_90": [
+          0.504703200579604,
+          0.7307958990641547
+        ],
+        "credible": true
+      },
+      "pass": true,
+      "note": "Closest this stage legitimately gets to the U6 placebo red. It shows the effect is not confined to one volatility regime; it does NOT separate 'wide opening range' from 'wide multi-day regime', which needs a new conditioning variable and therefore a new registered trial."
+    },
+    "Q3_multiplicity": {
+      "n_trials_discovery": 467,
+      "adjusted_ci": [
+        0.35112950580927826,
+        0.6874716988291145
+      ],
+      "survives": true,
+      "pass": true
+    },
+    "Q4_selection_sensitivity": {
+      "frozen_1130_1330": {
+        "diff": 0.5193006023191964,
+        "ci_90": [
+          0.4475399254134474,
+          0.5975289929886077
+        ],
+        "n_high": 555,
+        "n_low": 556,
+        "credible": true
+      },
+      "alt_1100_1300": {
+        "diff": 0.4976568274876909,
+        "ci_90": [
+          0.425044860479675,
+          0.567329577196442
+        ],
+        "n_high": 556,
+        "n_low": 556,
+        "credible": true
+      },
+      "alt_1200_1400": {
+        "diff": 0.5141121325943753,
+        "ci_90": [
+          0.43644764836065236,
+          0.5955284645988708
+        ],
+        "n_high": 552,
+        "n_low": 552,
+        "credible": true
+      },
+      "alt_1130_1400": {
+        "diff": 0.5357061329038846,
+        "ci_90": [
+          0.460656974886158,
+          0.6146236391861956
+        ],
+        "n_high": 555,
+        "n_low": 556,
+        "credible": true
+      }
+    }
+  },
+  "power_at_validation": {
+    "n_validation_sessions": 700,
+    "n_per_arm_est": 233,
+    "se_validation_est": 0.07039898927158622,
+    "sidak_z_validation": 2.7910229866735143,
+    "power_at_discovery_effect": 1.0,
+    "power_at_half_effect": 0.8152
+  },
+  "verdict": "PASS",
+  "note": "Q4 is reported, never gating. The U6 placebo red is NOT resolved here and is carried to the blind Integrity Gate unchanged."
+}

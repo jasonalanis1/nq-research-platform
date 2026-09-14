@@ -1977,3 +1977,32 @@ research/mechanisms/prior-day-volume-first30-range-nq-m31.md written BEFORE any 
 3. **FROZEN SCOPE**: ONE 6-cell scan, block=10; volume-coverage disclosure (falsifier c).
 4. **RESURRECTION RULING**: NEW as a range claim. Attempt 1 of 2.
 5. **MAP ANCHOR**: M31. STATUS: DRAWABLE. First non-volatility input candidate for the Risk/State Engine.
+
+## ENTRY 36 — M32: Open's location in the prior day's range → later-session range, NQ (observatory channel / Idea Factory queue, September 14th, ~9:25 am CT cycle) — SOURCED, DRAWABLE
+
+Generation (SOURCING RULE v3, source channel: OBSERVATORY): taken from
+research/observatory/idea-factory-2026-09-13.md (`location_in_range → range`, 9 cells,
+strongest |z| 6.8 at LOW/last_hour). The footprint is MONOTONE -- LOW above all-days in
+every window, HIGH below in every window -- which is why the direction is pre-registered
+rather than fitted. LEARN consulted: `location_in_range` has never been the conditioning
+variable of a registered scan. Restores the shelf to 4/3.
+0. **STATE VARIABLE**: `location_in_range` (frozen in market_state_primitives; known 09:30 ET).
+1. **CLAIM**: sessions opening in the LOW tercile of the prior day's range show a credibly
+   LARGER last-hour (15:00-16:00 ET) range ratio than HIGH-tercile opens. Known 09:30,
+   outcome from 15:00 (timing rule satisfied by 5.5 hours).
+2. **MECHANISM**: volatility asymmetry / leverage effect -- dealers short downside convexity
+   hedging more actively as spot falls, plus vol-control and risk-parity funds cutting
+   mandated exposure as realized vol rises, both concentrating into the close. That is why
+   the gating window is the LAST HOUR and not the morning.
+3. **FROZEN SCOPE**: ONE scan, 5 cell-groups, block=10, SEED=20260914 (Section 9), then
+   integrity_checks.py BEFORE the Gate.
+4. **RESURRECTION RULING**: NEW. Not F-048 (prior-day range SIZE), not M30/hyp-000162
+   (opening-range WIDTH, known at 10:00), not the closed initial-balance direction family.
+5. **MAP ANCHOR**: M32. STATUS: DRAWABLE. Known at 09:30 -- half an hour EARLIER than M30's
+   state, and the earliest intraday sizing input the Risk/State Engine could act on.
+   TWO GATING CONTROLS, both pre-registered: P3 residualizes on the overnight gap (if the
+   whole effect is the gap, this is a duplicate of a known effect), and **P4 requires the
+   shifted-signal placebo to FAIL to reproduce it** -- added directly from what hyp-000162
+   cost this project on 2026-09-14, where a candidate passed every registered prediction and
+   then tripped exactly that check. Pre-registering it means the answer is known before the
+   Gate, not after.
