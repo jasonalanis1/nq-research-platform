@@ -378,6 +378,33 @@ WEEKS 4-8:
        CT; the published console HTML does not display them yet). Add a "Bot" panel at
        the TOP of the console, above the research funnel -- the bot is the goal, the
        funnel is the feeder. Republish the artifact.
+  U24. Status-transition guard in src/research_ledger.py (from the 7pm test cycle): refuse
+       VALIDATION CANDIDATE unless a Validation-slice result is attached; PROMISING is the
+       only pre-Validation status. (hyp-156 was mislabelled and ops_checks flagged a Holdout slot.)
+
+CONDITIONAL STACK FORMAT (ADOPTED at the Sept 13th ~9:00 pm CT staff meeting, disposition MODIFY;
+record: research/infrastructure/staff-meeting-conditional-stack-2026-09-13.md; proposal:
+research/infrastructure/conditional-stack-implementation-proposal-2026-09-13.md). Build order,
+AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
+  U25. [S1] Stack spec schema (JSON: layers with variable/edges/known-at, order, trigger, horizon,
+       exit, cost model, floor, MDE) + spec HASH written into SCAN_REGISTRY at registration
+       (src/project_wide_multiplicity.py). A different hash is a different trial. K look-cells
+       from the free-look interaction table are recorded alongside the hash.
+  U26. [S3+S5] Mechanism template Sections 4a (one mechanism per layer), 4b (interaction claim),
+       9a (floor + minimum detectable effect, set BEFORE Discovery); closure status `underpowered`
+       (distinct from `data limitation`; consumes an attempt); Gate standing brief +2 lines
+       (every layer coded, one mechanism per layer, interaction stated, no layer added after a
+       null, hash matches, look-table attached).
+  U27. [S2] src/stack_scan_runner.py: frozen spec in -> layers evaluated in time order (refuses
+       out-of-order known-at), year-chunked occurrences with entry timestamps, pre-registered
+       cells, PAIRED mode (trigger alone vs trigger inside context; the claim is the difference).
+  U28. [S4] src/idea_factory.py --interactions: pairwise state cross-tabs, timing rule on BOTH
+       layers, same circularity guard; output is a queue table, never evidence.
+  U29. [S6] Stack A, paired, registered as TWO trials: B3 breakout alone vs inside HIGH
+       expected-range context (B2 tercile). Mechanism doc first. Floor 100 occurrences + MDE
+       pre-registered. Ceiling 2 layers until the format has one result. One stack in flight at a time.
+  U30. Stack B (ICC pullback, deterministic 5-min structure turn) only after Stack A closes, on
+       novelty grounds; format KILL = two powered nulls -> close the format, record in KNOWLEDGE.
 
 ## Queue
 

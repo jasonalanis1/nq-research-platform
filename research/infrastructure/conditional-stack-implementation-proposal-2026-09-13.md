@@ -1,7 +1,7 @@
 # Conditional Stack — implementation proposal for staff-meeting review
 
-Written: September 13th, ~8:50 pm CT. Status: **PROPOSAL — nothing changed, nothing built,
-no trial spent.** For review at a staff meeting (Director · Mechanism · Statistical · Integrity
+Written: September 13th, ~8:50 pm CT. Status: **ADOPTED (MODIFY) at the September 13th ~9:00 pm CT staff meeting** — ten binding rules in
+`staff-meeting-conditional-stack-2026-09-13.md`; build queued as U25–U30 in NEXT_UP.md. Nothing built yet, no trial spent. For review at a staff meeting (Director · Mechanism · Statistical · Integrity
 Gate · Operations) with Jason. Inputs: Jason's methodology proposal
 (`conditional-stack-proposal-2026-09-13.pdf`) and the two ICC videos (Indication / Correction /
 Continuation — 4H direction → 1H pullback → 5–15 min structure turn, shown on NQ).
