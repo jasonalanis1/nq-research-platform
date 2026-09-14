@@ -44,7 +44,7 @@ versus the same base without it. Real capital waits for evidence, always.
 | B1 | Signal engine | **DONE for B3** (Sept 13th, 7:00 pm test cycle) | `src/base_entry_b3.py` emits `Signal` objects for the placeholder with a walk-forward audit (exactly-once per day, entry strictly after trigger, all labelled placeholder) — 2,717 signals over 3,638 sessions, 0 violations. The older `execution_clock_signal_engine.py` (H118's rule) is untouched and out of scope. |
 | B2 | Risk/State Engine | **BUILT** (Sept 13th, 7:00 pm test cycle: `src/risk_state_engine.py`, frozen params, 9 tests, daily log) | The validated volatility facts turned into a daily decision: expected range, stop distance, target distance, size multiplier, and a trade-permission flag. This is Tony's only real contribution to a live trade today. |
 | B3 | Base entry, frozen | **DONE** (spec frozen + coded + 6 tests, Sept 13th, 7:00 pm test cycle: `src/base_entry_b3.py`, fires on 75% of sessions, exactly-once, no lookahead, every signal `placeholder`) | One ordinary, pre-registered, publicly-known entry rule. Explicitly NOT claimed as an edge. Labelled `validation_status="placeholder"` in every signal it emits, so it can never be mistaken for a finding. |
-| B4 | Order path | **MISSING — NEXT; needs Jason** (broker paper account: Tradovate per the Sept 11th brief; spend pre-approved, but the account and credentials are his to create) | Broker paper account and the code that turns a `Signal` into an order and records what came back. Spend pre-approved September 10th (~$60–115/mo, Tradovate or IBKR), conditioned on reaching this stage — this milestone is that condition. |
+| B4 | Order path | **SPLIT (Sept 13th, ~10:10 pm CT) — B4a BUILDABLE NOW, B4b needs a broker account** | **B4a (no broker, no money, mine to build):** the whole order path against a simulated broker interface — `Signal` → order construction → submission → acknowledgement → fill record → position reconciliation → crash recovery, plus B6's kill switches wired to it. Every guarantee in the back-half spec is testable here. **B4b (needs Jason):** swap the simulated interface for a real broker's. That is a connector, not a rebuild, once B4a exists. |
 | B5 | Execution measurement | **MISSING** | The 14 frozen checks: signal timing, exactly-once firing, order correctness, fills recorded, expected-vs-actual price, slippage **measured not assumed**, latency, rejects, duplicates, position reconciliation, no orphan positions. |
 | B6 | Kill switches wired | **CODE EXISTS, NOT WIRED** | `src/capital_protection.py` already implements the daily loss cap, trailing kill, slippage kill, signal divergence and catastrophe stop. Nothing calls it, because nothing trades. |
 | B7 | Continuous paper run | **MISSING** | The whole loop running live on real sessions with simulated fills. Ends on evidence — the minimum execution-validation sample — not on a calendar date. |
@@ -94,3 +94,28 @@ So B2 stays exactly where the roadmap already puts it -- size, stop, target and 
 measures something this test did not: whether sizing and permission improve the DISTRIBUTION
 of outcomes (drawdown, variance, days avoided). It now carries a stated prior: expect no
 change in the entry's expectancy.
+
+## B4 split — why, September 13th ~10:10 pm CT
+
+Broker reality check, researched tonight: **Tradovate** will not issue API credentials against a
+free simulation account. It requires a live account funded to **$1,000 equity** plus **$25/month**,
+confirmed by their own staff on their forum. (Once subscribed, the API may be pointed at the
+simulation environment indefinitely, so the $1,000 is a gate, not a cost.) **Interactive Brokers**
+gives a free paper account with the same TWS API the live account uses, but the underlying live
+account must be "approved and funded" — no published minimum, and IBKR has no minimum deposit for
+an individual cash account, so the qualifying deposit is small rather than four figures.
+
+Neither is available this week. The wrong response is to freeze the trunk behind it, so B4 splits:
+
+**B4a is the honest majority of the work and needs nobody.** Order construction, the submit/ack/fill
+state machine, the fill-vs-intended deviation record (points AND R, per side, never assumed zero),
+position reconciliation, crash recovery that proves a position cannot be silently left open, and
+B6's kill switches wired into the path. All of it is written against a `BrokerInterface` that a
+simulated broker implements — one that rejects, partially fills, disconnects mid-order and returns
+late acknowledgements on purpose, because those are the cases that break real systems.
+
+**B4b is a connector.** When a broker account exists, it implements the same interface. The
+integration risk collapses to one adapter with a contract that is already tested.
+
+This ordering is also better engineering than waiting would have been. A first order path written
+directly against a live broker API is a path whose failure modes were never deliberately exercised.

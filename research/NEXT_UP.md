@@ -548,6 +548,19 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 
 ## Blocked — needs Jason
 
+  * BROKER ACCOUNT — REFRAMED September 13th ~10:10 pm CT, NO LONGER BLOCKING THE TRUNK.
+    Researched tonight: Tradovate requires a live account funded to $1,000 equity + $25/mo before
+    it issues API credentials (their own staff, on their forum) -- a free sim account does NOT
+    qualify, and neither does a TradingView account. IBKR gives a free paper account on the same
+    API the live account uses, but the live account must be "approved and funded"; no published
+    minimum and no minimum deposit on an individual cash account, so the qualifying deposit is
+    small. Jason does not have the $1,000 available. DO NOT re-ask, do not nag, do not raise
+    money questions (D12 stays deferred). B4 is now SPLIT in docs/BOT_ROADMAP.md: B4a (the order
+    path against a simulated broker interface, including the deliberate-failure broker and B6's
+    kill switches) is BUILDABLE NOW and is the trunk work; B4b (the real broker adapter) is a
+    connector against an already-tested contract, and waits until an account exists. When Jason
+    raises it, IBKR is the cheaper path to price out first.
+
   * 6E VALIDATION-SLICE DATA PULL (new, September 13th ~9:40 pm CT). hyp-000156's five
     blind-Gate conditions are now resolved in writing and src/validate_hyp156.py is written
     and hashed, so the only thing between this candidate and its one-shot Validation is the
