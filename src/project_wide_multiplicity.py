@@ -193,8 +193,16 @@ Z_90_SINGLE = 1.6448536269514722  # two-sided z for a single-test 90% CI
 # Every stack also gets an ordinary SCAN_REGISTRY entry (below) so its cells
 # flow into the project-wide Discovery count like any other scan.
 STACK_REGISTRY: dict = {
-    # "stack_a_2026-09-13": {"spec_hash": "<sha256>", "trials": 2, "look_cells_k": N,
-    #                        "status": "REGISTERED|RUN|CLOSED", "scan_key": "scan_035_2026-09-13"},
+    # Stack A -- the first conditional stack. Registered September 13th, ~9:45 pm CT,
+    # BEFORE the runner was allowed to execute. Spec: research/stacks/stack_a_2026-09-13.json
+    # (frozen), mechanism research/mechanisms/stack-a-b2-context-x-b3-breakout.md.
+    # look_cells_k = 0: the Idea Factory interaction mode (U28) does not exist yet, so no
+    # interaction table was mined to produce this; the question comes from the bot roadmap
+    # (BASE vs BASE+B2). Paired => 2 trials. Attempt 1 of 2 for this family.
+    "stack_a_2026-09-13": {
+        "spec_hash": "4df7b4089ad891d5ff52043a395150b43cdd8e7e55c0e59cab8c7c755bec3bae",
+        "trials": 2, "look_cells_k": 0, "status": "CLOSED (clean null, powered, 2026-09-13 ~9:12 pm CT, hyp-000161)",
+        "scan_key": "scan_035_2026-09-13"},
 }
 
 
@@ -283,6 +291,7 @@ SCAN_REGISTRY = {
     "scan_032_2026-09-13": {"cells_scanned": 10, "promoted_hypothesis_ids": []},
     "scan_033_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},
     "scan_034_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},  # M25 monthly opex-week delta-hedge unwind, NQ, Entry 29
+    "scan_035_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": ["hyp-000161"]},  # STACK A (first conditional stack): B2 expected-range context x B3 opening-range break, NQ. Paired: IN_CONTEXT vs OUT_CONTEXT (gating difference), ALL reference, sign check. Registered BEFORE the run, spec hash 4df7b408.
     # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
     # press-conference, pre/post volatility, 6E, open scope -- third open-
     # scope entry, companion/cross-check to M20). 6 cells: decision-hour

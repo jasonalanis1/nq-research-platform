@@ -55,14 +55,23 @@ def test_out_of_time_order_layers_rejected():
     assert "timing rule" in str(e.value)
 
 
-def test_third_layer_rejected_until_the_format_has_a_result():
+def test_layer_ceiling_follows_whether_the_format_has_a_result():
+    """Rule 1: 2 layers until the format has produced one result, 3 after.
+    Stack A closed as a powered null on 2026-09-13, so the flag is now True."""
     s = base_spec()
     s["layers"].insert(1, {"role": "location", "variable": "pullback_atr", "edges": ">=0.5 ATR",
                            "known_at": 540, "mechanism": "inventory imbalance"})
+    with pytest.raises(ss.StackSpecError) as e:
+        ss.validate(s, format_has_result=False)
+    assert "ceiling is 2" in str(e.value)
+    ss.validate(s, format_has_result=True)
+    ss.validate(s)  # module default, now that the format has a result
+    four = base_spec()
+    for extra in ("location", "location"):
+        four["layers"].insert(1, {"role": extra, "variable": "x", "edges": "y",
+                                  "known_at": 500, "mechanism": "z"})
     with pytest.raises(ss.StackSpecError):
-        ss.validate(s)
-    ss.validate(s, format_has_result=True)  # allowed once the format has one result
-    assert ss.FORMAT_HAS_RESULT is False    # and it has not, as of today
+        ss.validate(four, format_has_result=True)
 
 
 def test_missing_interaction_claim_or_per_layer_mechanism_rejected():

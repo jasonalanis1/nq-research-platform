@@ -1,0 +1,25 @@
+{
+  "stack_id": "stack_a_2026-09-13",
+  "family": "b2_context_x_b3_breakout_nq",
+  "layers": [
+    {"role": "context", "variable": "expected_range_mult", "edges": "top tercile",
+     "known_at": -480,
+     "mechanism": "volatility persists session to session; the combined expected-range multiplier is known at the prior close"},
+    {"role": "trigger", "variable": "orb_break_b3", "edges": "first close beyond the 09:30-10:00 range, 10:00-11:30 ET",
+     "known_at": 600,
+     "mechanism": "participants keyed to the opening range act on a close beyond it"}
+  ],
+  "trigger_window_start": 600,
+  "interaction_claim": "the context layer changes what the break MEANS (continuation on a day with room to travel, range-edge on a day without), rather than filtering out losing trades",
+  "outcome": "realised R to the first of target / stop / 15:55 time exit",
+  "horizon": "same session",
+  "exit": "stop at the opposite side of the opening range, target 1.0x range width, time exit 15:55 ET; a bar spanning both resolves to the stop",
+  "cost_model": "frozen B3 placeholder mechanics; costs are not netted into R because the GATING number is a DIFFERENCE between two cells of the same entry, where per-trade cost cancels",
+  "floor_occurrences": 100,
+  "mde": "SE of the difference ~0.14R at n=100 per cell (sd~1.0R); smallest resolvable difference ~0.23R at 90% before multiplicity, more after",
+  "paired": true,
+  "data_slice": "discovery",
+  "mechanism_doc": "research/mechanisms/stack-a-b2-context-x-b3-breakout.md",
+  "look_cells_k": 0,
+  "pre_registered_cells": 4
+}

@@ -45,7 +45,10 @@ import json
 from typing import Any
 
 # Flipped ONLY when the first stack closes with adequate power. Rule 1.
-FORMAT_HAS_RESULT = False          # as of 2026-09-13; no stack has run
+FORMAT_HAS_RESULT = True           # 2026-09-13 ~9:12 pm CT: Stack A closed as a POWERED null
+                                   # (hyp-000161). The format has produced one result, so rule 1
+                                   # now admits a third layer. One more powered null closes the
+                                   # format entirely (rule 10).
 MAX_LAYERS_BEFORE_FIRST_RESULT = 2
 MAX_LAYERS_AFTER_FIRST_RESULT = 3
 DEFAULT_FLOOR_OCCURRENCES = 100    # Rule 4 default; Statistical may raise it, never lower it
