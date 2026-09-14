@@ -236,6 +236,22 @@ Three honest caveats, which make discipline MORE important here, not less:
 
 
 ## BOT MILESTONES — THE TRUNK (Jason, September 13th ~6:00 pm CT: "this is an end goal trading bot... our overall goal should be working to that, not being the best research tool")
+
+  B4a/B7-EARLY — STATISTICAL FORWARD TEST OF THE BOT STACK, STARTS NOW, COSTS NOTHING
+  (added September 13th ~10:30 pm CT, Jason: "can we paper trade until we can move to
+  the TradingView option?"). Answer: yes, the FREE half of it. Build
+  `src/bot_forward_log.py` on the H118 forward-validation pattern -- each session, run
+  src/base_entry_b3.py's signal for the day and src/risk_state_engine.py's decision for
+  the day, simulate the fill from the session's own bars, and append one row to
+  research/forward_validation/bot_stack_forward_log.jsonl: date, permission, size
+  multiplier, signal or none, simulated entry/stop/target, simulated R, and the reason
+  for any no-trade. TWO CLOCKS RULE, binding: this is a STATISTICAL forward test and is
+  labelled that way everywhere. It measures whether the stack behaves as expected on
+  unseen days. It measures NOTHING about execution -- no real fills, no slippage, no
+  latency, no rejects -- and its output is never described as paper trading and never
+  compared with a broker paper run. The B3 entry remains a placeholder whose P&L is never
+  evidence; this log is about the MACHINE's behaviour, not about an edge.
+  Blocked on nothing. Start it the first cycle B4a's core is in place.
 Full document: docs/BOT_ROADMAP.md. IT OUTRANKS THIS QUEUE. Every cycle works the
 lowest-numbered incomplete milestone it can actually advance, BEFORE any research
 item; research fills the remaining budget. If no milestone can move, say which one
