@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-09-14T12:06:00Z",
- "generated_at_local": "September 14th, 7:06 am CT",
- "last_run": "2026-09-14T06:00:00Z",
- "last_run_local": "September 14th, 1:00 am CT",
+ "generated_at": "2026-09-14T12:19:00Z",
+ "generated_at_local": "September 14th, 7:19 am CT",
+ "last_run": "2026-09-14T08:00:00Z",
+ "last_run_local": "September 14th, 3:00 am CT",
  "next_run": "2026-09-14T14:00:00Z",
  "next_run_local": "September 14th, 9:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "372 tests",
+ "tests": "385 tests",
  "ops": {
-  "overall": "WARN",
+  "overall": "FAIL",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 362 min, last activity 2 min ago"
+    "detail": "session running 11 min, last activity 0 min ago"
    },
    {
     "name": "shelf",
@@ -23,22 +23,22 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T12:05"
+    "detail": "last cycle closed cleanly at 2026-09-14T12:19"
    },
    {
     "name": "value",
-    "status": "PASS",
-    "detail": "last cycle moved=False delta={}"
+    "status": "FAIL",
+    "detail": "BUSY WORK: last 3 cycles moved nothing (no ledger/scan/doc/inventory change) -- tell Jason, do not keep cycling"
    },
    {
     "name": "console",
-    "status": "WARN",
-    "detail": "console state is 351 min old \u2014 refresh step may be failing"
+    "status": "PASS",
+    "detail": "refreshed 14 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "56 reports, latest 2026-09-14-0600.md well-formed"
+    "detail": "57 reports, latest 2026-09-14-0800.md well-formed"
    },
    {
     "name": "new-information",
@@ -213,6 +213,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-14-0800.md",
+   "ts": "2026-09-14T08:00:00Z",
+   "new_information": "**Out of 14,740 interaction cells looked at, zero clear the multiplicity yardstick.** With K = 14,740 looks, a single cell would need |z| \u2248 4.64 to stand out family-wise. The strongest interaction on the entire Discovery slice, after main effects are removed, is |z_vs_additive| = 4.4 \u2014 below it. 895 pairings were dropped as circular before ranking; 4,405 cells fell below the n \u2265 100 floor.",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 14th, 3:00 am CT"
+  },
+  {
    "file": "2026-09-14-0600.md",
    "ts": "2026-09-14T06:00:00Z",
    "new_information": "",
@@ -233,17 +244,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 13th, 11:00 pm CT"
-  },
-  {
-   "file": "2026-09-14-0202.md",
-   "ts": "2026-09-14T02:02:00Z",
-   "new_information": "The expected-range regime known at the prior close does **not** change the forward outcome of an opening-range breakout on NQ \u2014 a powered null, not a thin one. That is the first thing the project knows about how its two bot components interact, and it says the Risk/State Engine belongs where it already sits (size, stop, permission) and nowhere else.",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 9:02 pm CT"
   }
  ],
  "bot_milestones": [
@@ -270,7 +270,7 @@
   {
    "component": "Order path",
    "id": "B4",
-   "status": "B4a DONE (11:00 pm CT, commit 2949490); B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
+   "status": "B4a DONE (commit 2949490); B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
   },
   {
    "component": "Execution measurement",
@@ -285,7 +285,7 @@
   {
    "component": "Continuous paper run",
    "id": "B7",
-   "status": "LIVE, thin first version (1:00 am CT cycle) -- src/bot_stack_paper_run.py, 14 tests; own execution anchor 2026-09-08. First real run: 1 session (2026-09-08), correctly gate-blocked by B6 (swing too wide) -- proven on real data, not just tests. execution_measurement.py still INSUFFICIENT SAMPLE (0 order_intents) until more sessions land."
+   "status": "LIVE, thin first version -- src/bot_stack_paper_run.py, 14 tests; own execution anchor 2026-09-08. 1 real session run, correctly gate-blocked by B6 (swing too wide). execution_measurement.py still INSUFFICIENT SAMPLE until more sessions land."
   },
   {
    "component": "Live-Limited",
@@ -322,16 +322,16 @@
    },
    {
     "id": "U28",
-    "status": "QUEUED \u2014 next stack must be sourced from a look table, not the roadmap",
-    "what": "Idea Factory --interactions (state x state cross-tabs, timing rule on both layers)"
+    "status": "DONE 7:25 am CT -- K=14,740 cells, ZERO clear the |z|~4.64 yardstick",
+    "what": "Idea Factory --interactions (state x state cross-tabs, timing rule both layers, ranked by the additive interaction contrast). Result: the states on disk do not visibly modify one another beyond their own main effects."
    },
    {
     "id": "U30",
-    "status": "QUEUED",
+    "status": "QUEUED -- but U28's table does NOT license it; Director call before spending the format's last null",
     "what": "Stack B \u2014 ICC pullback shape, deterministic; only after a sourced look"
    }
   ],
-  "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
+  "in_flight": "none -- Stack A closed as a powered null (hyp-000161); U28's look table found no pair that stands out, so a second stack is not sourced. One more powered null closes the format.",
   "rules": [
    "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
    "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
@@ -350,8 +350,8 @@
  },
  "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)",
  "upgrade_queue": {
-  "done_or_specd": 17,
-  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
+  "done_or_specd": 18,
+  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U28 done 2026-09-14)",
   "total": 30
  }
 }

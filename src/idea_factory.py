@@ -53,6 +53,7 @@ import json
 import sys
 from datetime import date as _date
 from pathlib import Path
+from statistics import NormalDist
 
 import numpy as np
 import pandas as pd
@@ -161,7 +162,12 @@ def window_outcomes(disc: pd.DataFrame, days: list) -> pd.DataFrame:
     return out
 
 
-def main() -> None:
+def build_frame():
+    """Load Discovery, build the state x window-outcome frame, normalise the
+    size outcomes by ATR14, and cut every numeric state into terciles.
+    Shared by BOTH the single-state queue (main) and the pairwise
+    interaction table (run_interactions) so the two can never drift apart
+    on definitions, terciles, or the ATR normalisation."""
     df, synthetic = load_price_data(context="idea_factory")
     if synthetic:
         raise SystemExit("synthetic data -- refusing")
@@ -202,8 +208,13 @@ def main() -> None:
     if "day_of_week" in both:
         both["day_of_week_g"] = both["day_of_week"].map({0: "Mon", 1: "Tue", 2: "Wed", 3: "Thu", 4: "Fri"})
 
-    rows, n_circ = [], 0
     group_states = [s for s in NUMERIC_STATES if s in edges] + (["day_of_week"] if "day_of_week_g" in both else [])
+    return both, edges, group_states
+
+
+def main() -> None:
+    both, edges, group_states = build_frame()
+    rows, n_circ = [], 0
     for w in WINDOWS:
         for k in OUTCOMES:
             c = f"{k}_{w}"
@@ -290,5 +301,274 @@ def main() -> None:
         print(f"  {s:26s} best {t['level']:4s}/{t['window']:9s} n={t['n']:4d} mean={t['mean']:+.3f} vs {t['all_mean']:+.3f} z={t['z']:+.1f}")
 
 
+
+
+# ===========================================================================
+# U28 -- PAIRWISE STATE x STATE INTERACTIONS (the look table a conditional
+# stack gets SOURCED from, instead of being invented off the roadmap)
+# ===========================================================================
+#
+# WHY THIS MODE EXISTS
+#   Stack A (hyp-000161, 2026-09-13) was a POWERED NULL: the expected-range
+#   context known at the prior close did not change what an opening-range
+#   break did next. It was also sourced by reasoning ("these two seem like
+#   they should interact"), not by looking. The conditional-stack rules allow
+#   two powered nulls before the whole format is closed, and one is spent, so
+#   the next stack has to be sourced from a look table -- and the number of
+#   cells that table looked at has to be CARRIED with it (`look_cells_k` in
+#   src/stack_spec.py) so the multiplicity is accounted for instead of
+#   forgotten. That count is the whole reason this mode writes K everywhere
+#   it writes anything.
+#
+# THE TIMING RULE, ON BOTH LAYERS
+#   The single-state queue already drops a cell when the state is not known
+#   until at or after the window it is measured against. A pair has TWO
+#   states, so it gets dropped when EITHER is late -- a pairing is only as
+#   legitimate as its worst-timed layer. Beyond that, a conditional stack is
+#   ordered (context -> trigger), and the context has to be known no later
+#   than the trigger, so every surviving pair records which state is eligible
+#   to be the CONTEXT layer: the earlier-known one, or "either" when the two
+#   are known at the same moment (in which case both orderings are emitted,
+#   because either could serve as the context).
+#
+# THE NUMBER THAT MATTERS -- z_vs_trigger, not z_vs_all
+#   A cross-tab cell's distance from the all-days mean (z_vs_all) mixes the
+#   two states' own main effects into the interaction. That is not the
+#   question a conditional stack asks. The stack asks: does the TRIGGER
+#   behave differently INSIDE this context than it does overall? So each cell
+#   also reports its distance from the trigger-level-alone mean
+#   (z_vs_trigger), and the queue is RANKED BY THAT. It is the direct preview
+#   of the paired difference src/stack_scan_runner.py would actually test --
+#   which is exactly the quantity Stack A found to be null.
+#
+#   DISCLOSED APPROXIMATION: z_vs_trigger uses the all-days standard
+#   deviation and ignores that the cell is a SUBSET of the trigger-alone
+#   group it is being compared against, so its standard error is
+#   approximate and mildly conservative-to-wrong in ways a real paired test
+#   would handle properly. That is acceptable here and ONLY here, because
+#   nothing in this file is a test: it is a ranked list of places to go look,
+#   and the looking is what src/stack_scan_runner.py does under pre-
+#   registration. Never quote a z from this table as evidence.
+#
+# FLOOR
+#   MIN_N_PAIR = 100 matches the conditional-stack OCCURRENCE FLOOR, not the
+#   single-state MIN_N of 120. A cell below the stack floor cannot source a
+#   testable stack even if it looks enormous, so ranking it would only invite
+#   a spec that dies as UNDERPOWERED and spends an attempt.
+
+MIN_N_PAIR = 100           # matches the conditional-stack occurrence floor
+INTERACTION_Z = 2.5        # descriptive shortlist threshold, NOT a test
+
+
+def classify_pair(s1: str, s2: str, window: str, outcome: str) -> str:
+    """CIRCULAR if EITHER layer is not known strictly before the window opens.
+    KNOWN if the pair is nothing but already-validated volatility states read
+    out against a size-of-move outcome (a restatement of the Risk/State
+    Engine's own inputs). Otherwise CANDIDATE."""
+    start = WINDOWS[window][0]
+    if KNOWN_AT[s1] >= start or KNOWN_AT[s2] >= start:
+        return "CIRCULAR"
+    if outcome in SIZE_OUTCOMES and s1 in KNOWN_RANGE_STATES and s2 in KNOWN_RANGE_STATES:
+        return "KNOWN"
+    return "CANDIDATE"
+
+
+def context_orderings(s1: str, s2: str) -> list:
+    """(context, trigger) orderings this pair may legitimately support.
+    Context must be known no later than the trigger; a tie supports both."""
+    if KNOWN_AT[s1] < KNOWN_AT[s2]:
+        return [(s1, s2)]
+    if KNOWN_AT[s2] < KNOWN_AT[s1]:
+        return [(s2, s1)]
+    return [(s1, s2), (s2, s1)]
+
+
+def additive_prediction(context_alone_mean, trigger_alone_mean, all_mean):
+    """What the cell's mean would be if the two states' effects simply added,
+    with no interaction at all: all-days mean plus each state's own departure
+    from it. The cell's distance from THIS is the interaction proper; its
+    distance from the all-days mean is mostly the two main effects."""
+    if context_alone_mean is None or trigger_alone_mean is None:
+        return None
+    return context_alone_mean + trigger_alone_mean - all_mean
+
+
+def run_interactions() -> None:
+    from itertools import combinations
+
+    both, edges, group_states = build_frame()
+
+    rows, n_circ, n_below_floor = [], 0, 0
+    for w in WINDOWS:
+        for k in OUTCOMES:
+            c = f"{k}_{w}"
+            if c not in both:
+                continue
+            allv = both[c].replace([np.inf, -np.inf], np.nan).dropna()
+            if len(allv) < 300:
+                continue
+            mu, sd = float(allv.mean()), float(allv.std(ddof=1))
+            if not np.isfinite(sd) or sd == 0:
+                continue
+
+            # trigger-level-alone means, computed once per (state, level) here
+            alone = {}
+            for s in group_states:
+                col = f"{s}_g"
+                for lvl in sorted(set(both[col].dropna())):
+                    sub = both.loc[both[col] == lvl, c].replace([np.inf, -np.inf], np.nan).dropna()
+                    if len(sub) >= MIN_N_PAIR:
+                        alone[(s, str(lvl))] = float(sub.mean())
+
+            for s1, s2 in combinations(group_states, 2):
+                cls = classify_pair(s1, s2, w, k)
+                if cls == "CIRCULAR":
+                    n_circ += 1
+                    continue
+                for ctx, trg in context_orderings(s1, s2):
+                    cc, tc = f"{ctx}_g", f"{trg}_g"
+                    for cl in sorted(set(both[cc].dropna())):
+                        for tl in sorted(set(both[tc].dropna())):
+                            sub = both.loc[(both[cc] == cl) & (both[tc] == tl), c]
+                            sub = sub.replace([np.inf, -np.inf], np.nan).dropna()
+                            if len(sub) < MIN_N_PAIR:
+                                n_below_floor += 1
+                                continue
+                            m, n = float(sub.mean()), len(sub)
+                            se = sd / np.sqrt(n)
+                            tmean = alone.get((trg, str(tl)))
+                            cmean = alone.get((ctx, str(cl)))
+                            # THE INTERACTION PROPER: what the cell does beyond what
+                            # the two states' OWN (already-characterised) main effects
+                            # predict additively. Without this, the table's top is just
+                            # "volatile days have bigger ranges" restated -- observed
+                            # on run 1, 2026-09-14, and the reason this term exists.
+                            add = additive_prediction(cmean, tmean, mu)
+                            rows.append({
+                                "context": ctx, "context_level": str(cl),
+                                "trigger": trg, "trigger_level": str(tl),
+                                "window": w, "outcome": k, "n": int(n),
+                                "mean": round(m, 4), "all_mean": round(mu, 4),
+                                "trigger_alone_mean": None if tmean is None else round(tmean, 4),
+                                "context_alone_mean": None if cmean is None else round(cmean, 4),
+                                "additive_prediction": None if add is None else round(add, 4),
+                                "z_vs_all": round((m - mu) / se, 2),
+                                "z_vs_trigger": None if tmean is None else round((m - tmean) / se, 2),
+                                "z_vs_additive": None if add is None else round((m - add) / se, 2),
+                                "class": cls,
+                            })
+
+    ranked = [r for r in rows if r["z_vs_additive"] is not None]
+    K = len(rows)   # cells LOOKED AT -- carried into any stack spec sourced from this table
+    # A YARDSTICK FOR READING THE TABLE, NOT A TEST: with K cells looked at, this is
+    # roughly where a single cell would have to sit to stand out family-wise. Reported
+    # because a shortlist of 1,000+ cells out of ~15,000 at |z| >= 2.5 is what heavy
+    # overlap between nested windows and terciles produces, and saying so is cheaper
+    # than letting a future cycle mistake the shortlist's length for evidence.
+    z_yardstick = float(NormalDist().inv_cdf(1 - (1 - (1 - 0.05) ** (1 / max(K, 1))) / 2)) if K else float("nan")
+    n_clearing_yardstick = sum(1 for r in ranked if abs(r["z_vs_additive"]) >= z_yardstick)
+    queue = sorted([r for r in ranked if r["class"] == "CANDIDATE" and abs(r["z_vs_additive"]) >= INTERACTION_Z],
+                   key=lambda r: -abs(r["z_vs_additive"]))
+    known = sorted([r for r in ranked if r["class"] == "KNOWN" and abs(r["z_vs_additive"]) >= INTERACTION_Z],
+                   key=lambda r: -abs(r["z_vs_additive"]))
+
+    fams = {}
+    for r in queue:
+        fams.setdefault((r["context"], r["trigger"], r["outcome"]), []).append(r)
+    families = sorted(fams.items(), key=lambda kv: -max(abs(x["z_vs_additive"]) for x in kv[1]))
+
+    res = {"run_date": RUN_DATE, "mode": "interactions", "slice": "discovery",
+           "n_days": int(len(both)), "look_cells_k": K,
+           "cells_dropped_circular": n_circ, "cells_below_floor": n_below_floor,
+           "min_n_pair": MIN_N_PAIR, "interaction_z": INTERACTION_Z,
+           "z_yardstick_sidak_k": round(z_yardstick, 3), "cells_clearing_yardstick": n_clearing_yardstick,
+           "states": group_states, "windows": list(WINDOWS), "outcomes": OUTCOMES,
+           "known_at": KNOWN_AT, "tercile_edges": edges,
+           "rows": rows, "candidate_queue": queue, "known_restatements": known,
+           "rule": "DESCRIPTIVE ONLY. No hypothesis id spent, no scan registered, nothing here "
+                   "is a finding or a result. Ranked by z_vs_additive -- the cell's departure from "
+                   "what the two states' OWN main effects predict additively -- because ranking by "
+                   "distance from the all-days or trigger-alone mean just re-surfaces the already-"
+                   "validated volatility facts (observed on run 1). Every z here uses the all-days "
+                   "sd and ignores that the cell is a subset of the groups it is compared against, "
+                   "so the standard errors are APPROXIMATE: they rank places to look, they never "
+                   f"evidence anything. Any stack sourced from this table must carry look_cells_k={K} "
+                   "into its registered spec."}
+    (ROOT.parent / "data" / f"idea_factory_interactions_{RUN_DATE}.json").write_text(json.dumps(res, indent=2, default=str))
+
+    L = [f"# Idea Factory — pairwise interactions (U28), {RUN_DATE}", "",
+         f"Discovery slice only, {len(both)} days. **K = {K} interaction cells looked at**, "
+         f"**{n_circ} pairings dropped as circular** by the timing rule, "
+         f"**{n_below_floor} cells below the n ≥ {MIN_N_PAIR} floor**, across "
+         f"{len(group_states)} states × {len(WINDOWS)} windows × {len(OUTCOMES)} outcomes.", "",
+         "**Nothing below is a finding.** No hypothesis ID spent, no scan registered. This is a",
+         "ranked list of places to look. Any conditional stack sourced from it must carry",
+         f"`look_cells_k={K}` into its registered spec (src/stack_spec.py) so the multiplicity",
+         "of this look is accounted for rather than forgotten.", "",
+         "**Timing rule, both layers:** a pairing is dropped when *either* state is not known",
+         "strictly before the window opens — a pairing is only as legitimate as its worst-timed",
+         "layer. Surviving pairs record which state may serve as the CONTEXT (the earlier-known",
+         "one; a tie emits both orderings).", "",
+         "**Ranked by `z_vs_additive` — the interaction proper.** A cell's distance from the",
+         "all-days mean (`z_vs_all`) or from the trigger-alone mean (`z_vs_trigger`) still carries",
+         "both states' own main effects inside it. Run 1 of this mode showed exactly why that",
+         "matters: ranked by `z_vs_trigger`, the entire top of the table was `vxn HIGH × anything",
+         "→ range`, which is the already-validated “volatile days have bigger ranges” fact with a",
+         "second state along for the ride. `z_vs_additive` measures the cell against what the two",
+         "states' separate effects predict *additively*, so a main effect cannot masquerade as an",
+         "interaction. All three are reported; the queue is ordered by the third.", "",
+         "> **Disclosed approximation:** every z here uses the all-days standard deviation and",
+         "> ignores that each cell is a subset of the groups it is compared against, so the",
+         "> standard errors are approximate. Acceptable here and only here, because nothing in",
+         "> this table is a test. Never quote a z from it as evidence.", "",
+         f"Shortlist threshold |z_vs_additive| ≥ {INTERACTION_Z}, n ≥ {MIN_N_PAIR}.", "",
+         f"**Multiplicity yardstick (not a test):** with K = {K} cells looked at, a single cell",
+         f"would need |z| ≈ {z_yardstick:.2f} to stand out family-wise; **{n_clearing_yardstick} cells clear that**.",
+         "Read the shortlist's length with that in mind — nested windows and terciles overlap",
+         "heavily, so a long shortlist is expected and is not itself evidence of anything.", "",
+         f"## Candidate queue — {len(queue)} cells in {len(families)} context×trigger families", ""]
+    if families:
+        for (ctx, trg, k), items in families:
+            top = items[0]
+            L += [f"### {ctx} (context) × {trg} (trigger) → {k} "
+                  f"({len(items)} cells, strongest |z_vs_additive| {abs(top['z_vs_additive']):.1f})", "",
+                  "| context | trigger | window | n | cell mean | additive pred. | ctx alone | trg alone | z vs additive | z vs trigger |",
+                  "|---|---|---|---:|---:|---:|---:|---:|---:|---:|"]
+            L += [f"| {r['context_level']} | {r['trigger_level']} | {r['window']} | {r['n']} | "
+                  f"{r['mean']:+.3f} | {r['additive_prediction']:+.3f} | {r['context_alone_mean']:+.3f} | "
+                  f"{r['trigger_alone_mean']:+.3f} | {r['z_vs_additive']:+.1f} | {r['z_vs_trigger']:+.1f} |" for r in items]
+            L.append("")
+    else:
+        L += ["(nothing cleared the threshold — which is itself worth knowing: it would mean the",
+              "states on disk do not visibly modify each other at this resolution, and the",
+              "conditional-stack format has no sourced material waiting for it.)", ""]
+    L += ["## Known restatements (both layers already-validated volatility states, size outcome)", "",
+          "| context | trigger | window | outcome | n | cell mean | additive pred. | z vs additive |",
+          "|---|---|---|---|---:|---:|---:|---:|"]
+    L += [f"| {r['context']} {r['context_level']} | {r['trigger']} {r['trigger_level']} | {r['window']} | "
+          f"{r['outcome']} | {r['n']} | {r['mean']:+.3f} | {r['additive_prediction']:+.3f} | "
+          f"{r['z_vs_additive']:+.1f} |" for r in known[:30]]
+    p = ROOT.parent / "research" / "observatory" / f"interactions-{RUN_DATE}.md"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("\n".join(L) + "\n")
+
+    print(f"days={len(both)} K_cells_looked_at={K} dropped_circular={n_circ} "
+          f"below_floor={n_below_floor} candidates={len(queue)} in {len(families)} families | known={len(known)}")
+    print(f"multiplicity yardstick (NOT a test): |z| ~ {z_yardstick:.2f} for K={K}; "
+          f"{n_clearing_yardstick} cells clear it")
+    print(f"\nlook_cells_k={K}  <-- carry this into any stack spec sourced from this table")
+    print("\nTOP CONTEXT x TRIGGER FAMILIES (descriptive, untested):")
+    for (ctx, trg, k), items in families[:15]:
+        t = items[0]
+        print(f"  {ctx:24s} x {trg:24s} -> {k:5s}  {t['context_level']:4s}/{t['trigger_level']:4s} "
+              f"{t['window']:9s} n={t['n']:4d} {t['mean']:+.3f} vs additive {t['additive_prediction']:+.3f} "
+              f"zAdd={t['z_vs_additive']:+.1f} zTrg={t['z_vs_trigger']:+.1f} ({len(items)} cells)")
+
+
 if __name__ == "__main__":
-    main()
+    import argparse
+    ap = argparse.ArgumentParser(description="Idea Factory -- descriptive generation engine")
+    ap.add_argument("--interactions", action="store_true",
+                    help="pairwise state x state cross-tabs (U28) instead of the single-state queue")
+    a = ap.parse_args()
+    run_interactions() if a.interactions else main()
