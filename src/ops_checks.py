@@ -636,6 +636,21 @@ def check_git_sync() -> Result:
         return Result("git-sync", WARN, f"could not read git status: {exc}")
     m = re.search(r"\[ahead (\d+)", first)
     if m:
+        # "ahead" from the REMOTE-TRACKING REF is not proof of anything: a stale
+        # .git/refs/remotes/origin/main.lock (the device shell cannot delete
+        # files) leaves that ref frozen while the push itself succeeded. Seen
+        # 2026-09-14. So confirm against the actual remote before failing --
+        # a guardrail that cries wolf gets ignored, which is worse than absent.
+        try:
+            local = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(ROOT),
+                                   capture_output=True, text=True, timeout=30).stdout.strip()
+            rem = subprocess.run(["git", "ls-remote", "origin", "HEAD"], cwd=str(ROOT),
+                                 capture_output=True, text=True, timeout=45).stdout.split()
+            if local and rem and local == rem[0]:
+                return Result("git-sync", PASS,
+                              "committed and pushed (tracking ref stale -- verified against the remote)")
+        except Exception:  # noqa: BLE001
+            pass
         return Result("git-sync", FAIL,
                       f"{m.group(1)} commit(s) committed but NOT PUSHED -- the work exists only "
                       "on this machine")

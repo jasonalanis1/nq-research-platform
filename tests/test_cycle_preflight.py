@@ -249,3 +249,45 @@ def test_preflight_passes_when_the_receipt_follows_the_cycle_start(tmp_path, mon
          "failed": [], "ok": True, "steps": {}}))
     monkeypatch.setattr(oc, "RESEARCH", research)
     assert oc.check_preflight().status == oc.PASS
+
+
+def test_git_sync_does_not_false_fail_on_a_stale_tracking_ref(monkeypatch):
+    """A stale .git/refs/remotes/origin/main.lock freezes the tracking ref, so
+    `git status -sb` says "ahead 1" against a remote that already has the work.
+    Seen live 2026-09-14. The check must confirm against the actual remote
+    before failing -- it would otherwise have failed every unattended cycle."""
+    import subprocess
+    sha = "f91a141758e088616d59c4bf99446c01cd943b6f"
+    def fake(argv, **kw):
+        class P: pass
+        p = P()
+        if argv[1] == "status":
+            p.stdout = "## main...origin/main [ahead 1]\n"
+        elif argv[1] == "rev-parse":
+            p.stdout = sha + "\n"
+        else:                                   # ls-remote
+            p.stdout = f"{sha}\tHEAD\n"
+        return p
+    monkeypatch.setattr(subprocess, "run", fake)
+    r = oc.check_git_sync()
+    assert r.status == oc.PASS
+    assert "tracking ref stale" in r.detail
+
+
+def test_git_sync_still_fails_when_the_remote_really_is_behind(monkeypatch):
+    """The guard must not become a blanket excuse for unpushed work."""
+    import subprocess
+    def fake(argv, **kw):
+        class P: pass
+        p = P()
+        if argv[1] == "status":
+            p.stdout = "## main...origin/main [ahead 2]\n"
+        elif argv[1] == "rev-parse":
+            p.stdout = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
+        else:
+            p.stdout = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\tHEAD\n"
+        return p
+    monkeypatch.setattr(subprocess, "run", fake)
+    r = oc.check_git_sync()
+    assert r.status == oc.FAIL
+    assert "NOT PUSHED" in r.detail
