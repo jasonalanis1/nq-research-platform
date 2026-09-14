@@ -80,3 +80,17 @@ base entry by name every time; and no report to Jason describes paper P&L from a
 placeholder entry as evidence of an edge. If the volatility layer improves that
 base's risk-adjusted behaviour, *that* is the finding worth reporting — not the
 P&L.
+
+## Note added September 13th, ~9:55 pm CT (first conditional stack)
+
+Stack A asked the roadmap's own question ahead of the paper run: does B2's expected-range
+context change what the B3 opening-range break MEANS? Answer, on Discovery, as a powered
+null (hyp-000161): no. The difference between breaks inside and outside the top-tercile
+expected-range regime is +0.0247R with a 90% interval of (-0.0496, +0.0976), and the
+Sidak-adjusted interval excludes anything above +0.19R.
+
+So B2 stays exactly where the roadmap already puts it -- size, stop, target and permission
+-- and is NOT an entry filter. B5's BASE vs BASE+B2 paper comparison still runs, because it
+measures something this test did not: whether sizing and permission improve the DISTRIBUTION
+of outcomes (drawdown, variance, days avoided). It now carries a stated prior: expect no
+change in the entry's expectancy.
