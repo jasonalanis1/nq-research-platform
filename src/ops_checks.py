@@ -404,6 +404,33 @@ def check_awaiting_jason() -> Result:
     # any GATED row in the sweep table that says it is waiting on him.
     for m in re.finditer(r"^WAITING ON JASON[^\n]*\n([^\n]{0,90})", text, re.MULTILINE):
         waiting.append("WAITING ON JASON: " + m.group(1).strip())
+    # 2026-09-14 audit: the section literally titled "## Blocked — needs Jason"
+    # was never read by this check. Everything parked there -- the IBKR broker
+    # question, the 6E data pull, and the H118 anchor decision -- was invisible
+    # to the one check whose job is to watch things parked on him. Bullets in
+    # that section now count, unless they are marked resolved.
+    hdr = re.search(r"^##\s*Blocked\s*[\u2014-]\s*needs Jason\s*$", text, re.MULTILINE)
+    if hdr:
+        # Only the CONTIGUOUS bullet list directly under the heading. Bounding
+        # by "the next ## heading" swept in 21k characters of SHELF RULE v2 and
+        # long-decided notes and reported 10 phantom items -- a check that
+        # cries wolf gets ignored, which is the failure this audit is about.
+        for line in text[hdr.end():].splitlines():
+            if not line.strip():
+                continue
+            if line.startswith(("  ", "\t")):      # continuation of a bullet
+                continue
+            if not line.startswith("- "):            # first non-bullet block ends the list
+                break
+            # Only unambiguous PAST-TENSE resolution markers. "DECISION" was in
+            # this list briefly and silently dropped "H118 anchor decision --
+            # YOUR CALL", an item that is precisely what this check exists to
+            # surface. A false negative here is the worst failure available to
+            # it: the item goes unwatched and nobody knows.
+            if re.search(r"\b(RESOLVED|UNBLOCKED|ANSWERED|DECIDED|NO LONGER)\b", line.upper()):
+                continue
+            waiting.append(re.sub(r"[*`]", "", line[2:]).strip()[:90])
+
     sweep = RESEARCH.parent / "data" / "pipeline_sweep.json"
     if sweep.exists():
         try:
@@ -542,6 +569,64 @@ def check_shelf_starving() -> Result:
     return Result("shelf", WARN, f"below floor, sourcing owed ({shelf[:70]})")
 
 
+def check_preflight() -> Result:
+    """Did this cycle run its standing opening sequence? Added 2026-09-14 after
+    an audit found the H118 daily checker had not run in four consecutive
+    cycles and nothing noticed. src/cycle_preflight.py leaves a receipt; a
+    cycle with no fresh receipt, or one whose receipt lists failed steps, is
+    reported here rather than discovered days later by reading file mtimes."""
+    receipt = RESEARCH / "_cycle_preflight.json"
+    if not receipt.exists():
+        return Result("preflight", FAIL,
+                      "no preflight receipt -- run `python3 src/cycle_preflight.py` at the "
+                      "START of the cycle (sweep + both daily checkers + shelf/sourcing)")
+    try:
+        d = json.loads(receipt.read_text())
+    except Exception as exc:  # noqa: BLE001
+        return Result("preflight", WARN, f"preflight receipt unreadable: {exc}")
+
+    ran_at = d.get("ran_at")
+    age_min = None
+    if ran_at:
+        try:
+            age_min = (_now() - datetime.fromisoformat(ran_at)).total_seconds() / 60.0
+        except Exception:  # noqa: BLE001
+            age_min = None
+    failed = d.get("failed") or []
+    if failed:
+        return Result("preflight", FAIL, f"preflight ran but these steps FAILED: {', '.join(failed)}")
+    # a cycle is 2 hours; a receipt older than that belongs to a previous cycle
+    if age_min is not None and age_min > 150:
+        return Result("preflight", FAIL,
+                      f"preflight receipt is {age_min/60:.1f}h old -- this cycle has not run its "
+                      "opening sequence (sweep + both daily checkers)")
+    shelf = (d.get("steps") or {}).get("shelf") or {}
+    owed = " -- SOURCING OWED (shelf at/below floor)" if shelf.get("sourcing_owed") else ""
+    age_txt = f"{age_min:.0f} min ago" if age_min is not None else "time unknown"
+    return Result("preflight", PASS, f"opening sequence ran {age_txt}, all steps ok{owed}")
+
+
+def check_git_sync() -> Result:
+    """Is the committed work actually pushed? Added 2026-09-14: nothing in this
+    module looked at git at all, so a cycle could commit, fail to push, and
+    report a clean close-out. The work would exist only on this machine."""
+    import subprocess
+    try:
+        st = subprocess.run(["git", "status", "-sb"], cwd=str(ROOT),
+                            capture_output=True, text=True, timeout=30)
+        first = (st.stdout or "").splitlines()[0] if st.stdout else ""
+    except Exception as exc:  # noqa: BLE001
+        return Result("git-sync", WARN, f"could not read git status: {exc}")
+    m = re.search(r"\[ahead (\d+)", first)
+    if m:
+        return Result("git-sync", FAIL,
+                      f"{m.group(1)} commit(s) committed but NOT PUSHED -- the work exists only "
+                      "on this machine")
+    if "[behind" in first:
+        return Result("git-sync", WARN, f"local branch is behind the remote: {first.strip()}")
+    return Result("git-sync", PASS, "working tree committed and pushed")
+
+
 CHECKS = (
     check_lock_health,
     check_shelf_starving,
@@ -554,6 +639,8 @@ CHECKS = (
     check_mechanism_gate,
     check_data_currency,
     check_awaiting_jason,
+    check_preflight,
+    check_git_sync,
 )
 
 

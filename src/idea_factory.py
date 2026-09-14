@@ -459,7 +459,15 @@ def run_interactions() -> None:
                             })
 
     ranked = [r for r in rows if r["z_vs_additive"] is not None]
-    K = len(rows)   # cells LOOKED AT -- carried into any stack spec sourced from this table
+    # K = DISTINCT DATA CELLS looked at, not label-rows. A timing TIE between two
+    # states emits both (A as context, B as trigger) and (B as context, A as
+    # trigger); those two rows are the same tercile x tercile subset of the same
+    # days, examined once, with the labels swapped. Counting both inflated K by
+    # 33% (14,740 vs 9,910) on the first run -- and K is precisely the number
+    # that gets carried into a registered stack spec as look_cells_k, so it has
+    # to count looks at DATA, not labels. Found by audit, 2026-09-14.
+    K = len({(frozenset({(r["context"], r["context_level"]), (r["trigger"], r["trigger_level"])}),
+              r["window"], r["outcome"]) for r in rows})
     # A YARDSTICK FOR READING THE TABLE, NOT A TEST: with K cells looked at, this is
     # roughly where a single cell would have to sit to stand out family-wise. Reported
     # because a shortlist of 1,000+ cells out of ~15,000 at |z| >= 2.5 is what heavy
@@ -478,7 +486,7 @@ def run_interactions() -> None:
     families = sorted(fams.items(), key=lambda kv: -max(abs(x["z_vs_additive"]) for x in kv[1]))
 
     res = {"run_date": RUN_DATE, "mode": "interactions", "slice": "discovery",
-           "n_days": int(len(both)), "look_cells_k": K,
+           "n_days": int(len(both)), "look_cells_k": K, "label_rows_emitted": len(rows),
            "cells_dropped_circular": n_circ, "cells_below_floor": n_below_floor,
            "min_n_pair": MIN_N_PAIR, "interaction_z": INTERACTION_Z,
            "z_yardstick_sidak_k": round(z_yardstick, 3), "cells_clearing_yardstick": n_clearing_yardstick,
@@ -497,7 +505,9 @@ def run_interactions() -> None:
     (ROOT.parent / "data" / f"idea_factory_interactions_{RUN_DATE}.json").write_text(json.dumps(res, indent=2, default=str))
 
     L = [f"# Idea Factory — pairwise interactions (U28), {RUN_DATE}", "",
-         f"Discovery slice only, {len(both)} days. **K = {K} interaction cells looked at**, "
+         f"Discovery slice only, {len(both)} days. **K = {K} distinct interaction cells looked at** "
+         f"({len(rows)} label-rows: a timing tie emits both context/trigger orderings of the same "
+         f"cell, and K counts the DATA looked at, not the labels), "
          f"**{n_circ} pairings dropped as circular** by the timing rule, "
          f"**{n_below_floor} cells below the n ≥ {MIN_N_PAIR} floor**, across "
          f"{len(group_states)} states × {len(WINDOWS)} windows × {len(OUTCOMES)} outcomes.", "",

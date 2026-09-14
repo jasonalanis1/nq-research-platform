@@ -81,6 +81,17 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 ## SESSION HANDOFF RULES (set by Jason 2026-09-11) — binding for every session, interactive or scheduled
 
+- **EVERY CYCLE OPENS WITH `python3 src/cycle_preflight.py --owner cycle --note "<which cycle>"`.**
+  One command: lock, budget clock, pipeline sweep, H118 daily checker, EXP047 weekly checker, and
+  the shelf/sourcing position. It writes a receipt to research/_cycle_preflight.json and
+  ops_checks' `preflight` check FAILS without a fresh clean one. Added 2026-09-14 after an audit
+  found the H118 checker had not run in FOUR consecutive cycles and nothing detected it -- the
+  opening sequence used to be a prose protocol a cycle had to remember, while the headline build
+  was the part that showed. Skipping it is now visible instead of silent. The preflight makes no
+  judgments: choosing the work item (BOT_ROADMAP before research) is still the cycle's own call,
+  and SOURCING is still a judgment the cycle performs -- the preflight only reports that it is owed.
+
+
 - Lock ONLY through `python3 src/worksession_lock.py acquire|heartbeat|release|status`
   (owner = interactive | cycle). Never write research/_worksession.lock by hand.
 - Heartbeat before anything slow and at least every 15 min; a holder silent 30+ min
@@ -591,6 +602,22 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 - Alert: ops_checks `value` FAILs on BUSY WORK (3 closed cycles with zero artifact deltas) or QUEUE EXHAUSTED (nothing owed + empty shelf). Either is an IMMEDIATE item: message Jason, do not manufacture work. `checkpoint` WARN = unfinished work to resume.
 
 ## Blocked — needs Jason
+
+- **H118 FORWARD VALIDATION: the one open position predates the forward anchor. YOUR CALL.**
+  Found by the 2026-09-14 automation audit (research/integrity/automation-audit-2026-09-14.md,
+  finding 1). `forward_validate_h118_daily.py` sets FORWARD_VALIDATION_ANCHOR = 2026-09-09 and
+  refuses to log any signal before it, on the stated grounds that an earlier session is Holdout
+  Generation 1 data, not genuinely forward. The forward log's ONE row is signal_date 2026-09-08 --
+  a day before the anchor. Git shows why: commit c1dc7b2 (Sept 9th 22:57) fixed the boundary bug,
+  and a3d6730 (23:02, five minutes later) committed the log still containing the row the bug wrote.
+  The guard was never applied retroactively to the one row that predated it. Options: (1) void the
+  row and start forward validation clean at the anchor, costing 1 of the 40 trades; (2) keep it,
+  annotated as pre-anchor and excluded from the 40-trade count, resolving for information only;
+  (3) keep it as-is with the reasoning recorded. NOT ACTED ON: H118 is frozen and an automated
+  cycle must never edit a forward-validation evidence log on its own initiative. Until decided,
+  H118's honest forward record is "zero genuinely-forward observations, one pre-anchor position
+  open" (resolves ~2026-09-22).
+
 
   * BROKER ACCOUNT — UPDATE September 13th ~11:15 pm CT: Jason opened an INTERACTIVE BROKERS
     (IBKR Pro) individual account tonight and funded it; the PAPER TRADING ACCOUNT was created

@@ -1,10 +1,10 @@
 # Idea Factory — pairwise interactions (U28), 2026-09-14
 
-Discovery slice only, 1703 days. **K = 14740 interaction cells looked at**, **895 pairings dropped as circular** by the timing rule, **4405 cells below the n ≥ 100 floor**, across 11 states × 8 windows × 5 outcomes.
+Discovery slice only, 1703 days. **K = 9910 distinct interaction cells looked at** (14740 label-rows: a timing tie emits both context/trigger orderings of the same cell, and K counts the DATA looked at, not the labels), **895 pairings dropped as circular** by the timing rule, **4405 cells below the n ≥ 100 floor**, across 11 states × 8 windows × 5 outcomes.
 
 **Nothing below is a finding.** No hypothesis ID spent, no scan registered. This is a
 ranked list of places to look. Any conditional stack sourced from it must carry
-`look_cells_k=14740` into its registered spec (src/stack_spec.py) so the multiplicity
+`look_cells_k=9910` into its registered spec (src/stack_spec.py) so the multiplicity
 of this look is accounted for rather than forgotten.
 
 **Timing rule, both layers:** a pairing is dropped when *either* state is not known
@@ -28,8 +28,8 @@ interaction. All three are reported; the queue is ordered by the third.
 
 Shortlist threshold |z_vs_additive| ≥ 2.5, n ≥ 100.
 
-**Multiplicity yardstick (not a test):** with K = 14740 cells looked at, a single cell
-would need |z| ≈ 4.64 to stand out family-wise; **0 cells clear that**.
+**Multiplicity yardstick (not a test):** with K = 9910 cells looked at, a single cell
+would need |z| ≈ 4.56 to stand out family-wise; **0 cells clear that**.
 Read the shortlist's length with that in mind — nested windows and terciles overlap
 heavily, so a long shortlist is expected and is not itself evidence of anything.
 

@@ -1,0 +1,65 @@
+{
+ "ran_at": "2026-09-14T13:08:01.038199+00:00",
+ "owner": "cycle",
+ "note": "preflight self-test",
+ "steps": {
+  "lock": {
+   "ok": true,
+   "returncode": 0,
+   "tail": [
+    "BUSY owner=cycle last_heartbeat=0min_ago note='preflight self-test'"
+   ],
+   "stderr_tail": []
+  },
+  "budget": {
+   "ok": true,
+   "returncode": 0,
+   "tail": [
+    "budget started: 105 min"
+   ],
+   "stderr_tail": []
+  },
+  "sweep": {
+   "ok": true,
+   "returncode": 0,
+   "tail": [
+    "- FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+    "- FROZEN hyp-000142 vxn_level_vs_trailing_high_next_day_range (re-expressions: hyp-000143, hyp-000144, hyp-000151): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only",
+    "[written: data/pipeline_sweep.json, NEXT_UP.md section]"
+   ],
+   "stderr_tail": []
+  },
+  "h118": {
+   "ok": true,
+   "returncode": 0,
+   "tail": [
+    "No new signal today (2026-09-08 bucket=low).",
+    "Log: 1 total signals, 1 open, 0 closed, 0 resolved today.",
+    "Log saved to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/forward_validation/h118_forward_log.jsonl"
+   ],
+   "stderr_tail": []
+  },
+  "exp047": {
+   "ok": true,
+   "returncode": 0,
+   "tail": [
+    "  Second half: {'n': 2, 'mean_net_pnl': 21.125, 'ci_90': (-22.0, 64.25), 'statistically_credible': False, 'n_flips': 0, 'total_cost_points': 0.0, 'avg_daily_cost_drag': 0.0, 'economic_threshold_points': 0.0, 'economically_meaningful': True}",
+    "Saved current status snapshot to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/data/study_prospective_exp047_status.json.",
+    "Prospective log (append-only, git-commit each run): /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/ledger/prospective_exp047_log.jsonl"
+   ],
+   "stderr_tail": []
+  },
+  "shelf": {
+   "ok": true,
+   "known": true,
+   "count": 3,
+   "floor": 3,
+   "sourcing_owed": true,
+   "line": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
+   "note": "shelf is AT OR BELOW the floor -- SOURCING IS OWED this cycle, before the work item"
+  }
+ },
+ "failed": [],
+ "ok": true,
+ "rule": "ops_checks reads this receipt. A cycle with no fresh receipt, or one with failed steps, fails the `preflight` check -- skipping the opening sequence is visible, not silent. See this file's header for why it exists."
+}
