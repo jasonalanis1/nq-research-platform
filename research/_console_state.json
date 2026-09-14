@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-09-14T12:41:00Z",
- "generated_at_local": "September 14th, 7:41 am CT",
+ "generated_at": "2026-09-14T13:21:00Z",
+ "generated_at_local": "September 14th, 8:21 am CT",
  "last_run": "2026-09-14T12:00:00Z",
  "last_run_local": "September 14th, 7:00 am CT",
  "next_run": "2026-09-14T14:00:00Z",
  "next_run_local": "September 14th, 9:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "409 tests",
+ "tests": "444 tests",
  "ops": {
-  "overall": "PASS",
+  "overall": "WARN",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 9 min, last activity 1 min ago"
+    "detail": "free since 2026-09-14 13:13:32"
    },
    {
     "name": "shelf",
@@ -23,17 +23,17 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T12:41"
+    "detail": "last cycle closed cleanly at 2026-09-14T13:13"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1}"
+    "detail": "last cycle moved=False delta={}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 10 min ago"
+    "detail": "refreshed 41 min ago"
    },
    {
     "name": "reports",
@@ -62,8 +62,18 @@
    },
    {
     "name": "awaiting-jason",
+    "status": "WARN",
+    "detail": "1 item(s) blocked on Jason: H118 FORWARD VALIDATION: the one open position predates the forward anchor. YOUR CALL."
+   },
+   {
+    "name": "preflight",
     "status": "PASS",
-    "detail": "nothing parked on Jason in the queue"
+    "detail": "opening sequence ran 14 min ago, all steps ok -- SOURCING OWED (shelf at/below floor)"
+   },
+   {
+    "name": "git-sync",
+    "status": "PASS",
+    "detail": "working tree committed and pushed"
    }
   ]
  },
@@ -278,7 +288,7 @@
   {
    "component": "Order path",
    "id": "B4",
-   "status": "B4a DONE (commit 2949490); B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
+   "status": "B4a DONE; B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
   },
   {
    "component": "Execution measurement",
@@ -293,7 +303,7 @@
   {
    "component": "Continuous paper run",
    "id": "B7",
-   "status": "LIVE, thin first version -- src/bot_stack_paper_run.py, 14 tests; own anchor 2026-09-08; 1 real session, correctly gate-blocked by B6. execution_measurement still INSUFFICIENT SAMPLE."
+   "status": "LIVE, thin first version -- src/bot_stack_paper_run.py; own anchor 2026-09-08; 1 real session, correctly gate-blocked by B6. Blocked on DATA, not code: price data ends 2026-09-08."
   },
   {
    "component": "Live-Limited",
@@ -330,21 +340,21 @@
    },
    {
     "id": "U28",
-    "status": "DONE -- K=14,740 cells, ZERO clear the |z|~4.64 yardstick",
-    "what": "Idea Factory --interactions. The states on disk do not visibly modify one another beyond their own main effects -- so a second conditional stack is NOT sourced."
+    "status": "DONE -- K=9,910 distinct cells, ZERO clear the |z|~4.56 yardstick",
+    "what": "Idea Factory --interactions. The states on disk do not visibly modify one another."
    },
    {
     "id": "U30",
-    "status": "QUEUED -- U28 and U6 both say NOT YET; Director call before spending the format's last null",
+    "status": "QUEUED -- U28 and U6 both say NOT YET",
     "what": "Stack B \u2014 ICC pullback shape, deterministic; only after a sourced look"
    },
    {
     "id": "U6",
-    "status": "DONE -- 24 tests; 3 false verdicts caught on its own first runs, then a real one on hyp-000162",
-    "what": "integrity_checks.py: the Gate's 7-check mechanical suite, run on every candidate BEFORE the Gate."
+    "status": "DONE -- 7-check mechanical suite, run on every candidate before the Gate",
+    "what": "integrity_checks.py. Found the blocking finding on hyp-000162 one cycle after being built."
    }
   ],
-  "in_flight": "none -- Stack A closed as a powered null; U28 found no pair that stands out and U6 finds Stack A era-dependent and 188%-concentrated. A second stack is not sourced. One powered null left.",
+  "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
   "rules": [
    "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
    "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
@@ -364,8 +374,45 @@
  "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)",
  "upgrade_queue": {
   "done_or_specd": 19,
-  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U28, U6 done 2026-09-14)",
+  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
   "total": 30
  },
- "latest_survivor_note": "hyp-000162 (M30, Scan 036, 2026-09-14): opening-range width -> midday range/excursion. All three registered predictions PASSED (P1 +0.5193 ci90 (+0.4475,+0.5975); P3 83.6% retained vs prior-day range). First Discovery survivor since hyp-000151 and the first ever sourced from the Idea Factory queue. BLOCKING FINDING for the blind Gate: U6's placebo check is RED -- yesterday's opening range does ~74% of the same work, so this may be a multi-day volatility REGIME effect rather than an opening-range effect. P3 does not cover that (prior-day RANGE is a different variable). Statistical (+POWER) owed first."
+ "cycle_review_today": {
+  "date_ct": "2026-09-14",
+  "cycles_recorded": 1,
+  "fully_complete": 1,
+  "moved_the_pipeline": 0,
+  "due_but_no_recorded_close": [
+   1,
+   3,
+   5
+  ],
+  "rows": [
+   {
+    "ct": "08:19",
+    "label": "audit cycle",
+    "complete": true,
+    "failing": [],
+    "moved": false,
+    "delta": {}
+   }
+  ],
+  "note": "One row per cycle, written by src/cycle_close.py at the end of each cycle. A cycle that fired and died leaves NO row -- so `due_but_no_recorded_close` is the important field, not the row count. Cycles before 2026-09-14 ~8:20 am CT predate this log and show as missing; that is expected, not a failure.",
+  "how_to_read_it_yourself": "python3 src/cycle_review.py"
+ },
+ "schedule_today": {
+  "cadence": "every 2 hours on the odd Central hour",
+  "booking": "pre-booked as independent one-shots (changed 2026-09-14) -- not a chain, so one failed cycle cannot end the day",
+  "booked": [
+   "9:00 am",
+   "11:00 am",
+   "1:00 pm",
+   "3:00 pm",
+   "5:00 pm",
+   "7:00 pm",
+   "9:00 pm",
+   "11:00 pm"
+  ],
+  "note": "the 11:00 pm cycle books tomorrow's before it finishes"
+ }
 }
