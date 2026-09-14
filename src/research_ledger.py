@@ -87,6 +87,32 @@ VALID_STATUSES = {
     "PAPER VERIFIED",
 }
 
+# WHAT EACH STATUS MEANS IN THIS LEDGER (U24, written 2026-09-13 after hyp-000156
+# was mislabelled and ops_checks flagged a Holdout slot that was not owed):
+#   PROMISING            passed Discovery/Statistical; Validation is still OWED.
+#                        This is the ONLY correct pre-Validation status.
+#   VALIDATION CANDIDATE PASSED the one-shot Validation on the validation slice and is
+#                        queued for a Holdout slot. It does NOT mean "a candidate for
+#                        Validation" -- that reading is what caused the mislabel.
+#   HOLDOUT PASSED / FORWARD VALIDATION / PAPER VERIFIED  as named, in that order.
+#   REJECTED             closed, at any stage, for any reason.
+# A hypothesis may only reach VALIDATION CANDIDATE if a ledger row for the same
+# hypothesis_id records data_slice_used == "validation". requires_validation_row()
+# below is the guard; update_status() enforces it.
+_STATUSES_REQUIRING_VALIDATION_ROW = {"VALIDATION CANDIDATE", "HOLDOUT PASSED",
+                                      "FORWARD VALIDATION", "PAPER VERIFIED"}
+
+
+def has_validation_row(hypothesis_id: str, ledger_path=None) -> bool:
+    """True if this hypothesis has ANY ledger row run on the validation slice."""
+    path = LEDGER_PATH if ledger_path is None else ledger_path
+    try:
+        rows = _read_all(path)
+    except Exception:
+        return False
+    return any(r.get("hypothesis_id") == hypothesis_id
+               and (r.get("data_slice_used") or "").startswith("validation") for r in rows)
+
 # Live Authorization -- earned eligibility ONLY. Never a substitute for
 # CLAUDE.md's real-time per-trade approval requirement. This module
 # never sets anything but "not_authorized" on its own.
@@ -285,6 +311,14 @@ def update_status(
     to see its full history -- the latest one is its current state."""
     if new_status not in VALID_STATUSES:
         raise ValueError(f"new_status must be one of {VALID_STATUSES}, got {new_status!r}")
+    # U24 status-transition guard: a post-Validation status requires a Validation-slice
+    # row. Without this, "VALIDATION CANDIDATE" reads as "candidate FOR Validation" and a
+    # pre-Validation hypothesis silently queues itself for a Holdout slot.
+    if new_status in _STATUSES_REQUIRING_VALIDATION_ROW and not has_validation_row(hypothesis_id, ledger_path):
+        raise ValueError(
+            f"{hypothesis_id} has no ledger row with data_slice_used='validation', so it cannot be "
+            f"set to {new_status!r}. In this ledger VALIDATION CANDIDATE means 'PASSED Validation, "
+            f"Holdout next'. Pre-Validation candidates are PROMISING.")
 
     original = get_latest(hypothesis_id, ledger_path)
     if original is None:
