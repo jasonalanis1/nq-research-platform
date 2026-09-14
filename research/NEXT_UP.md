@@ -564,7 +564,17 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 
 ## Blocked — needs Jason
 
-  * BROKER ACCOUNT — REFRAMED September 13th ~10:10 pm CT, NO LONGER BLOCKING THE TRUNK.
+  * BROKER ACCOUNT — UPDATE September 13th ~11:15 pm CT: Jason opened an INTERACTIVE BROKERS
+    (IBKR Pro) individual account tonight and funded it; the PAPER TRADING ACCOUNT was created
+    at ~11:10 pm CT (assisted in his browser, manual-approve mode). FUTURES trading permission
+    was DECLINED on the application and is IN COOLDOWN -- retry not possible before ~October
+    13th. Options/warrants "more info needed" -- not needed, ignore. So B4b's real adapter is
+    IBKR (TWS API / IB Gateway on Jason's Mac, paper port 4002/7497), and real-broker futures
+    paper trading waits for the permission. OPEN QUESTION to verify at gateway-connect time:
+    whether the IBKR paper account simulates futures without the live permission. Do NOT
+    re-raise the permission with Jason before mid-October; do NOT touch the financial profile.
+    B4a proceeds regardless.
+  * (superseded, kept for history) BROKER ACCOUNT — REFRAMED September 13th ~10:10 pm CT, NO LONGER BLOCKING THE TRUNK.
     Researched tonight: Tradovate requires a live account funded to $1,000 equity + $25/mo before
     it issues API credentials (their own staff, on their forum) -- a free sim account does NOT
     qualify, and neither does a TradingView account. IBKR gives a free paper account on the same

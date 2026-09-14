@@ -119,3 +119,12 @@ integration risk collapses to one adapter with a contract that is already tested
 
 This ordering is also better engineering than waiting would have been. A first order path written
 directly against a live broker API is a path whose failure modes were never deliberately exercised.
+
+## Broker chosen — September 13th, ~11:15 pm CT
+
+Interactive Brokers (IBKR Pro). Live individual account opened and funded by Jason tonight;
+paper trading account created ~11:10 pm CT. B4b's adapter target is therefore the IBKR TWS API
+via IB Gateway on Jason's Mac (paper trading port), reached through the device bridge -- no
+credentials leave his machine. Futures permission was declined on the application and is in a
+30-day cooldown (retry ~October 13th); until it is granted, the paper account may or may not
+simulate futures -- to be verified at first gateway connection, never assumed. B4a is unaffected.
