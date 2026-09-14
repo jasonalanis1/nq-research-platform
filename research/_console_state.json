@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-09-14T02:18:00Z",
- "generated_at_local": "September 13th, 9:18 pm CT",
- "last_run": "2026-09-14T02:02:00Z",
- "last_run_local": "September 13th, 9:02 pm CT",
+ "generated_at": "2026-09-14T03:56:00Z",
+ "generated_at_local": "September 13th, 10:56 pm CT",
+ "last_run": "2026-09-14T04:00:00Z",
+ "last_run_local": "September 13th, 11:00 pm CT",
  "next_run": "2026-09-14T04:00:00Z",
  "next_run_local": "September 13th, 11:00 pm CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "320 tests",
+ "tests": "358 tests",
  "ops": {
   "overall": "PASS",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "free since 2026-09-14 00:21:11"
+    "detail": "session running 18 min, last activity 0 min ago"
    },
    {
     "name": "shelf",
@@ -23,7 +23,7 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T02:18"
+    "detail": "cycle in progress: B5 execution_measurement first cut / built + tested (4/4); full suite 358/358; moving to close-out"
    },
    {
     "name": "value",
@@ -33,12 +33,12 @@
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 117 min ago"
+    "detail": "refreshed 98 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "54 reports, latest 2026-09-14-0202.md well-formed"
+    "detail": "55 reports, latest 2026-09-14-0400.md well-formed"
    },
    {
     "name": "new-information",
@@ -213,6 +213,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-14-0400.md",
+   "ts": "2026-09-14T04:00:00Z",
+   "new_information": "",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 13th, 11:00 pm CT"
+  },
+  {
    "file": "2026-09-14-0202.md",
    "ts": "2026-09-14T02:02:00Z",
    "new_information": "The expected-range regime known at the prior close does **not** change the forward outcome of an opening-range breakout on NQ \u2014 a powered null, not a thin one. That is the first thing the project knows about how its two bot components interact, and it says the Risk/State Engine belongs where it already sits (size, stop, permission) and nowhere else.",
@@ -233,125 +244,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 13th, 7:03 pm CT"
-  },
-  {
-   "file": "2026-09-13-2142.md",
-   "ts": "2026-09-13T21:42:00Z",
-   "new_information": "",
-   "agents_ran": 4,
-   "agents_not_run": 2,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 4:42 pm CT"
   }
- ],
- "bot_milestones": [
-  {
-   "id": "B0",
-   "component": "Signal contract",
-   "status": "DONE"
-  },
-  {
-   "id": "B1",
-   "component": "Signal engine",
-   "status": "DONE for B3"
-  },
-  {
-   "id": "B2",
-   "component": "Risk/State Engine",
-   "status": "BUILT (sizing + permission only -- Stack A showed it is not an entry filter)"
-  },
-  {
-   "id": "B3",
-   "component": "Base entry, frozen",
-   "status": "DONE (placeholder, never an edge)"
-  },
-  {
-   "id": "B4",
-   "component": "Order path",
-   "status": "MISSING \u2014 NEXT; needs Jason (broker paper account; spend pre-approved, the account is his to create)"
-  },
-  {
-   "id": "B5",
-   "component": "Execution measurement",
-   "status": "MISSING"
-  },
-  {
-   "id": "B6",
-   "component": "Kill switches wired",
-   "status": "CODE EXISTS, NOT WIRED"
-  },
-  {
-   "id": "B7",
-   "component": "Continuous paper run",
-   "status": "MISSING"
-  },
-  {
-   "id": "B8",
-   "component": "Live-Limited",
-   "status": "MISSING \u2014 Jason's authorization alone"
-  },
-  {
-   "id": "B9",
-   "component": "Scale behind evidence",
-   "status": "MISSING"
-  }
- ],
- "upgrade_queue": {
-  "done_or_specd": 17,
-  "total": 30,
-  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)"
- },
- "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)",
- "methodology": {
-  "summary": "Two admissible hypothesis shapes: FLAT (one state, one window) and CONDITIONAL STACK (context -> location -> trigger), both under the same promotion bar, splits and trial accounting. Adopted Sept 13th ~9:00 pm CT, disposition MODIFY, ten binding rules.",
-  "stacks_attempted": 1,
-  "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
-  "build": [
-   {
-    "id": "U25",
-    "what": "Stack spec schema + hash-at-registration + attempt counter",
-    "status": "DONE ~9:08 pm CT"
-   },
-   {
-    "id": "U26",
-    "what": "Mechanism template 4a/4b/9a + UNDERPOWERED closure status + Gate brief",
-    "status": "DONE ~9:12 pm CT"
-   },
-   {
-    "id": "U27",
-    "what": "Stack scan runner (layers in time order, paired mode, difference CI)",
-    "status": "DONE ~9:20 pm CT"
-   },
-   {
-    "id": "U29",
-    "what": "Stack A \u2014 B2 context x B3 break: POWERED NULL, +0.0247R, CI90 (-0.050,+0.098)",
-    "status": "DONE ~9:30 pm CT"
-   },
-   {
-    "id": "U28",
-    "what": "Idea Factory --interactions (state x state cross-tabs, timing rule on both layers)",
-    "status": "QUEUED \u2014 next stack must be sourced from a look table, not the roadmap"
-   },
-   {
-    "id": "U30",
-    "what": "Stack B \u2014 ICC pullback shape, deterministic; only after a sourced look",
-    "status": "QUEUED"
-   }
-  ],
-  "rules": [
-   "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
-   "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
-   "Both formats run; at most one stack in flight at a time.",
-   "Floor 100 occurrences + minimum detectable effect pre-registered by Statistical. Below the floor \u2192 UNDERPOWERED: an attempt spent, definition never loosened.",
-   "One mechanism per layer plus an explicit interaction claim. 'It filters out losers' is rejected as fitting.",
-   "Every layer known before the trigger fires, context before location (the timing rule, per layer).",
-   "Full spec hashed into the trial registry before any look; a different hash is a different trial. Cells looked at are recorded with it.",
-   "A stacks_attempted counter makes the format accountable.",
-   "A stack of already-closed variables is a resurrection unless the interaction is the stated novel claim.",
-   "Format kill: two powered nulls close the format. One so far."
-  ],
-  "source": "research/infrastructure/staff-meeting-conditional-stack-2026-09-13.md"
- }
+ ]
 }
