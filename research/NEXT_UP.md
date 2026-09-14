@@ -10,9 +10,23 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 ## In forward validation (paper only, no capital) — DO NOT TOUCH, see scope boundary below
 
-- **H118** vwap_dist_vs_atr LOW tercile, 10-day drift. Holdout passed, one
-  open paper position (opened 2026-09-08 at 29538.00, exits ~2026-09-22).
-  Frozen, no retuning. Daily checker handles it. A project-wide multiplicity
+- **H118** vwap_dist_vs_atr LOW tercile, 10-day drift. **REJECTED AS AN EDGE
+  September 12th** (Jason, 10:25 am CT, "just apply that and move on") on
+  hyp-000121/122/123/126/130/134. The baseline diagnostic
+  (research/studies/h118-baseline-diagnostic-2026-09-12.md) showed the
+  LOW-tercile 10-day drift is NOT distinguishable from NQ's OWN 10-day drift:
+  LOW minus ALL-days is +0.1162 on Discovery with a block-bootstrap CI of
+  (-0.2630, +0.4895), and +0.0481 on Validation with (-0.5851, +0.6255).
+  Neither clears zero. It made money because NQ went up over 10 days, not
+  because the signal knew anything. **Retained as knowledge (failure mode #7),
+  no capital, NO PROMOTION PATH, do not re-raise.** The forward log and the one
+  open paper position (opened 2026-09-08 at 29538.00, exits ~2026-09-22) keep
+  running FOR INFORMATION ONLY -- they are not evidence for anything and the
+  position is not a validated trade. Daily checker handles it.
+  THIS BULLET SAID "Holdout passed" UNTIL 2026-09-14 and that stale line caused
+  a staff meeting to recommend building the live bot around a rejected
+  hypothesis. Anything reading this file: the LEDGER's latest row per
+  hypothesis_id is the status of record, not prose written before it. A project-wide multiplicity
   check (2026-09-09) found H118's Validation leg alone doesn't survive a
   Sidak correction at N=18 (Discovery and Holdout legs both do) — disclosed
   diagnostic only, no status change. Detail: research/studies/project-wide-multiplicity-2026-09-09.md.
@@ -636,7 +650,16 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 
 ## Blocked — needs Jason
 
-- **STAFF MEETING 2026-09-14 "what to do": THE STRATEGIC FORK IS YOURS.** Full record:
+- **STAFF MEETING 2026-09-14 "what to do" -- **CORRECTED 2026-09-14 ~10:00 am CT, ITS CENTRAL
+  PREMISE WAS FALSE.** The meeting said the project has one directional Holdout-passed edge
+  (H118) and recommended building the live bot around it. **H118 WAS REJECTED ON SEPTEMBER
+  12TH** and the note said "do not re-raise". The project has ZERO validated directional
+  edges. Option (a) as written is VOID -- there is nothing to build a live bot around.
+  What survives: Jason's scope decision that the project should hunt LARGER (multi-day /
+  swing) trades only, and the finding that the generation engine produces 0 direction
+  candidates out of 19 families. See the CORRECTION section of
+  research/infrastructure/staff-meeting-what-to-do-2026-09-14.md.
+- **SUPERSEDED (kept for the record):** the original fork text. Full record:
   research/infrastructure/staff-meeting-what-to-do-2026-09-14.md. The finding: the project's ONE
   directional Holdout-passed edge (H118) is a 10-DAY SWING trade that the intraday bot's own
   capital rules EXCLUDE BY NAME (capital_protection excluded_strategies, ~$1,000-1,400 swing vs the

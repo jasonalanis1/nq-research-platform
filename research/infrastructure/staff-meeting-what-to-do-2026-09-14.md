@@ -1,3 +1,52 @@
+# CORRECTION — issued ~10:00 am CT, same day, before any of this was built
+
+**The central premise of this meeting was false, and the recommendation built on
+it is void.**
+
+The meeting asserted that the project has "one directional, Holdout-passed edge:
+H118." It does not. **H118 was REJECTED on September 12th** — two days before
+this meeting — on hyp-000121/122/123/126/130/134, by Jason's own decision after
+a baseline diagnostic. The note in `NEXT_UP.md` ends: *"closed as an edge,
+retained as knowledge (failure mode #7). Forward log keeps running for
+information only; no capital, no promotion path. **Do not re-raise.**"*
+
+The diagnostic (`research/studies/h118-baseline-diagnostic-2026-09-12.md`) asked
+whether the LOW-tercile 10-day drift beats NQ's own 10-day drift. It does not:
+LOW minus ALL-days is +0.1162 on Discovery, block-bootstrap CI (−0.2630,
++0.4895); +0.0481 on Validation, CI (−0.5851, +0.6255). Neither clears zero.
+H118 made money in backtest because NQ rose over 10 days, not because the signal
+carried information.
+
+**So the project has ZERO validated directional edges — not one.** Option (a)
+("build the live bot around the edge we actually found") is void: there is no
+such edge.
+
+**How the error happened**, because it should not recur: the ledger is
+append-only, and a hypothesis's status is the *latest* row for its
+`hypothesis_id`. The query behind this meeting deduplicated by strategy name
+keeping the *first* row, so six superseded "HOLDOUT PASSED" rows from September
+9th were read as current while the "REJECTED" rows from September 12th were
+discarded. `NEXT_UP.md`'s own top section also still described H118 as "Holdout
+passed" — stale prose written before the rejection, in the first section every
+cycle reads. Both are now fixed.
+
+**What survives this correction:**
+- The second finding stands and is now the *whole* finding: of 19 candidate
+  families in the Idea Factory queue, 17 are sizing and **0 are direction**. The
+  entry slot has nothing feeding it.
+- The two binding disposition items stand (sizing queue paused; queue must
+  report its split by job).
+- Jason's scope decision — hunt **larger/multi-day trades only** — stands on its
+  own merits and does not depend on H118.
+- H118 is not a loss to the project. It is the single most valuable lesson
+  available to a multi-day program: **any long-horizon directional claim must be
+  measured against the instrument's own drift over the same horizon, with a
+  block bootstrap because overlapping windows are autocorrelated.** A swing
+  program that skips that control will keep rediscovering beta and calling it
+  alpha. That control is now mandatory for every multi-day claim.
+
+---
+
 # Staff meeting — "What to do" (September 14th, ~9:40 am CT)
 
 Convened at Jason's request. Present: Director, Statistical, Mechanism, LEARN,
