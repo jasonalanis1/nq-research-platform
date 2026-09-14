@@ -59,6 +59,12 @@ Closure status: clean null | near miss | data limitation | execution limitation 
                 valid-but-non-actionable | invalid premise | duplicate
 Primary outcome (as registered) and result:
 Sample adequacy (n vs thin-sample threshold):
+Closure status: clean null | near miss | data limitation | execution limitation |
+  valid-but-non-actionable | invalid premise | duplicate | UNDERPOWERED
+  (UNDERPOWERED, added 2026-09-13: the frozen definition yielded fewer occurrences
+   than the pre-registered floor. Distinct from `data limitation`, which is about the
+   data not existing; underpowered is the format's own failure mode, the definition is
+   never loosened to fix it, and it CONSUMES one of the candidate's two attempts.)
 Mechanism verdict: falsified | weakened | untested-by-this-result
 Robustness / cost / concentration flags:
 Data-quality checks passed:

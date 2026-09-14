@@ -183,6 +183,45 @@ import research_ledger as rl
 FAMILYWISE_ALPHA = 0.10          # matches this project's existing 90%-CI single-test convention
 Z_90_SINGLE = 1.6448536269514722  # two-sided z for a single-test 90% CI
 
+# ---------------------------------------------------------------------------
+# CONDITIONAL STACK REGISTRY (U25 / S1, adopted 2026-09-13 ~9:00 pm CT).
+# A stack may not be RUN until its full frozen spec has been hashed into this
+# registry. A different hash is a different trial -- that is the whole guard
+# against layer shopping. `look_cells_k` is DISCLOSURE, not a trial count: it
+# records how many interaction cells the descriptive free-look examined before
+# this spec was written, so the blind Integrity Gate can see what was looked at.
+# Every stack also gets an ordinary SCAN_REGISTRY entry (below) so its cells
+# flow into the project-wide Discovery count like any other scan.
+STACK_REGISTRY: dict = {
+    # "stack_a_2026-09-13": {"spec_hash": "<sha256>", "trials": 2, "look_cells_k": N,
+    #                        "status": "REGISTERED|RUN|CLOSED", "scan_key": "scan_035_2026-09-13"},
+}
+
+
+def stacks_attempted(registry: dict | None = None) -> int:
+    """Rule 8: the format is accountable to itself. Two POWERED nulls close the
+    format (rule 10) -- this is the counter that makes that checkable."""
+    return len(STACK_REGISTRY if registry is None else registry)
+
+
+def register_stack(stack_id: str, spec: dict, *, scan_key: str, registry: dict | None = None) -> str:
+    """Validates, hashes and records a stack BEFORE it may run. Returns the hash.
+    Re-registering the same stack_id with a different spec is refused: that is a
+    new trial and needs its own id."""
+    import stack_spec as _ss
+    reg = STACK_REGISTRY if registry is None else registry
+    _ss.validate(spec)
+    h = _ss.spec_hash(spec)
+    prior = reg.get(stack_id)
+    if prior and prior.get("spec_hash") != h:
+        raise ValueError(
+            f"{stack_id} is already registered with hash {prior['spec_hash'][:12]}; this spec hashes to "
+            f"{h[:12]}. A changed spec is a DIFFERENT trial -- register it under a new stack_id.")
+    reg[stack_id] = {"spec_hash": h, "trials": _ss.trials_cost(spec),
+                     "look_cells_k": spec["look_cells_k"], "status": "REGISTERED", "scan_key": scan_key}
+    return h
+
+
 # Discovery-Engine scan registry -- see module docstring. (scanned_cells, promoted_hypothesis_ids)
 SCAN_REGISTRY = {
     "scan_001_2026-09-09": {"cells_scanned": 48, "promoted_hypothesis_ids": ["hyp-000117", "hyp-000119"]},
