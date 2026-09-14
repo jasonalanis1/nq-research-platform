@@ -655,9 +655,13 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
   (H118) and recommended building the live bot around it. **H118 WAS REJECTED ON SEPTEMBER
   12TH** and the note said "do not re-raise". The project has ZERO validated directional
   edges. Option (a) as written is VOID -- there is nothing to build a live bot around.
-  What survives: Jason's scope decision that the project should hunt LARGER (multi-day /
-  swing) trades only, and the finding that the generation engine produces 0 direction
-  candidates out of 19 families. See the CORRECTION section of
+  What survives: the finding that the generation engine produces 0 direction candidates out
+  of 19 families -- the entry slot has nothing feeding it, at ANY horizon.
+  **SCOPE, corrected by Jason 2026-09-14 ~10:10 am CT (an earlier line in this file said
+  "larger trades only" -- that was my overreading and is WRONG):** INTRADAY REMAINS THE
+  PRIMARY SEARCH TARGET AND THE PROJECT'S DIRECTION. Larger / multi-day candidates are NOT
+  disqualified for being larger -- if one appears it is legitimate and gets worked. NO
+  HORIZON BOUNDARY IS IMPOSED YET; we are still looking and the search stays open. See the CORRECTION section of
   research/infrastructure/staff-meeting-what-to-do-2026-09-14.md.
 - **SUPERSEDED (kept for the record):** the original fork text. Full record:
   research/infrastructure/staff-meeting-what-to-do-2026-09-14.md. The finding: the project's ONE

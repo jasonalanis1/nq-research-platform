@@ -36,14 +36,20 @@ cycle reads. Both are now fixed.
   entry slot has nothing feeding it.
 - The two binding disposition items stand (sizing queue paused; queue must
   report its split by job).
-- Jason's scope decision — hunt **larger/multi-day trades only** — stands on its
-  own merits and does not depend on H118.
+- **SCOPE (corrected by Jason the same morning — the line this document first
+  carried, "larger trades only", was an overreading and is wrong): INTRADAY
+  REMAINS PRIMARY.** It is the project's direction and the bot's design. Larger
+  and multi-day candidates are *not disqualified for being larger* — if one
+  appears it is legitimate and gets worked. **No horizon boundary is imposed
+  yet.** The search stays open; narrowing it now would be a constraint nobody
+  has evidence to justify.
 - H118 is not a loss to the project. It is the single most valuable lesson
   available to a multi-day program: **any long-horizon directional claim must be
   measured against the instrument's own drift over the same horizon, with a
-  block bootstrap because overlapping windows are autocorrelated.** A swing
-  program that skips that control will keep rediscovering beta and calling it
-  alpha. That control is now mandatory for every multi-day claim.
+  block bootstrap because overlapping windows are autocorrelated.** The control
+  is mandatory wherever the instrument's own drift could explain the result —
+  which bites hardest at long horizons but is a general principle, not a
+  multi-day-only rule.
 
 ---
 
