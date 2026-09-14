@@ -1,0 +1,100 @@
+{
+  "candidate": "hyp-000142",
+  "n_observations": 565,
+  "null_value": 1.0,
+  "null_label": "unconditional range ratio (1.0 = no change vs trailing average)",
+  "checks": [
+    {
+      "check": "1. drift_null",
+      "status": "GREEN",
+      "n": 565,
+      "raw_mean": 1.284099,
+      "null_value": 1.0,
+      "null_label": "unconditional range ratio (1.0 = no change vs trailing average)",
+      "effect_vs_null": 0.284099,
+      "detail": "sign survives the correct null"
+    },
+    {
+      "check": "2. overnight_intraday_split",
+      "status": "NOT APPLICABLE",
+      "n": 0,
+      "detail": "observations carry no overnight/rth decomposition (e.g. an intraday effect, which has no overnight leg)"
+    },
+    {
+      "check": "3. cost_sensitivity",
+      "status": "NOT APPLICABLE",
+      "n": 0,
+      "detail": "no per-observation risk_points, so a points cost cannot be converted into the candidate's own units (a non-trade outcome, e.g. a range ratio, has no round-trip cost at all)"
+    },
+    {
+      "check": "4. roll_date_contamination",
+      "status": "GREEN",
+      "n": 565,
+      "n_contaminated": 13,
+      "share": 0.023,
+      "calendar_base_rate": 0.0316,
+      "mean_all": 1.284099,
+      "mean_excluding": 1.293849,
+      "verdict_flips_when_excluded": "False",
+      "detail": "2.3% of observations on roll/short sessions (calendar base rate 3.2%; red above 5%)"
+    },
+    {
+      "check": "5. subperiod_stability",
+      "status": "GREEN",
+      "n": 565,
+      "first_half": {
+        "n": 282,
+        "mean": 1.287773,
+        "ci90": [
+          1.212403,
+          1.370063
+        ],
+        "credible": true
+      },
+      "second_half": {
+        "n": 283,
+        "mean": 1.280438,
+        "ci90": [
+          1.219791,
+          1.341819
+        ],
+        "credible": true
+      },
+      "signs_differ": false,
+      "detail": "halves are not in contradiction"
+    },
+    {
+      "check": "6. concentration",
+      "status": "GREEN",
+      "n": 565,
+      "top_k": 28,
+      "top_frac": 0.05,
+      "share_of_effect": 0.426,
+      "detail": "top 5% of observations carry 43% of the effect (red above 50%)"
+    },
+    {
+      "check": "7. placebo",
+      "status": "GREEN",
+      "n": 565,
+      "real_effect": 0.284099,
+      "placebo_effects": {
+        "shifted_t+1": 0.22826,
+        "inverted": -0.085617
+      },
+      "gating_legs": [
+        "inverted"
+      ],
+      "threshold_fraction": 0.5,
+      "shifted_overlap_with_real": 0.789,
+      "detail": "no gating placebo comes close to the real effect [shifted_t+1 reported but NOT gating: it re-selects 79% of the real sample, so it is not an independent placebo for a persistent state]"
+    }
+  ],
+  "reds": [],
+  "any_red": false,
+  "not_run": [
+    "2. overnight_intraday_split",
+    "3. cost_sensitivity"
+  ],
+  "rule": "A RED is a BLOCKING FINDING for the Integrity Gate, not an automatic close (U6 spec). A check that reports NOT APPLICABLE or INSUFFICIENT has NOT passed -- it did not run, and the Gate must be told which ones those were.",
+  "session_report_row": "integrity_checks[hyp-000142]: 5 green, 0 red, 2 not run (n=565)"
+}

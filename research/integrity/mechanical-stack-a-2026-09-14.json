@@ -1,0 +1,103 @@
+{
+  "candidate": "stack_a (hyp-000161)",
+  "n_observations": 1543,
+  "null_value": 0.0,
+  "null_label": "zero",
+  "checks": [
+    {
+      "check": "1. drift_null",
+      "status": "GREEN",
+      "n": 1543,
+      "raw_mean": -0.026599,
+      "null_value": 0.0,
+      "null_label": "zero",
+      "effect_vs_null": -0.026599,
+      "detail": "sign survives the correct null"
+    },
+    {
+      "check": "2. overnight_intraday_split",
+      "status": "NOT APPLICABLE",
+      "n": 0,
+      "detail": "observations carry no overnight/rth decomposition (e.g. an intraday effect, which has no overnight leg)"
+    },
+    {
+      "check": "3. cost_sensitivity",
+      "status": "GREEN",
+      "n": 1543,
+      "cost_multiplier": 2.0,
+      "round_trip_cost_points": 1.5,
+      "mean_1x": -0.026599,
+      "mean_2x": -0.084494,
+      "ci90_2x": [
+        -0.119738,
+        -0.048661
+      ],
+      "ci_crosses_null": false,
+      "sign_flips": false,
+      "detail": "survives 2x costs"
+    },
+    {
+      "check": "4. roll_date_contamination",
+      "status": "GREEN",
+      "n": 1543,
+      "n_contaminated": 27,
+      "share": 0.0175,
+      "calendar_base_rate": 0.0307,
+      "mean_all": -0.026599,
+      "mean_excluding": -0.025268,
+      "verdict_flips_when_excluded": "False",
+      "detail": "1.7% of observations on roll/short sessions (calendar base rate 3.1%; red above 5%)"
+    },
+    {
+      "check": "5. subperiod_stability",
+      "status": "RED",
+      "n": 1543,
+      "first_half": {
+        "n": 771,
+        "mean": -0.06029,
+        "ci90": [
+          -0.110462,
+          -0.010518
+        ],
+        "credible": true
+      },
+      "second_half": {
+        "n": 772,
+        "mean": 0.007048,
+        "ci90": [
+          -0.042987,
+          0.057022
+        ],
+        "credible": false
+      },
+      "signs_differ": true,
+      "detail": "only one half is credible AND the halves disagree in sign"
+    },
+    {
+      "check": "6. concentration",
+      "status": "RED",
+      "n": 1543,
+      "top_k": 77,
+      "top_frac": 0.05,
+      "share_of_effect": 1.8761,
+      "detail": "top 5% of observations carry 188% of the effect (red above 50%)"
+    },
+    {
+      "check": "7. placebo",
+      "status": "NOT APPLICABLE",
+      "n": 0,
+      "detail": "needs the full population and the selector mask; a shifted/inverted signal cannot be built from the selected rows alone"
+    }
+  ],
+  "reds": [
+    "5. subperiod_stability",
+    "6. concentration"
+  ],
+  "any_red": true,
+  "not_run": [
+    "2. overnight_intraday_split",
+    "7. placebo"
+  ],
+  "rule": "A RED is a BLOCKING FINDING for the Integrity Gate, not an automatic close (U6 spec). A check that reports NOT APPLICABLE or INSUFFICIENT has NOT passed -- it did not run, and the Gate must be told which ones those were.",
+  "session_report_row": "integrity_checks[stack_a (hyp-000161)]: 3 green, 2 red, 2 not run (n=1543) -- RED: 5. subperiod_stability, 6. concentration"
+}
