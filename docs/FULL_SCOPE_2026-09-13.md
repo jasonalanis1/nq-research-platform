@@ -13,6 +13,8 @@ I am not a statistician or a programmer. I direct this project; an AI agent team
 
 This version is dated September 13, 2026 and supersedes the September 12 version. On September 13 I gathered six independent outside reviews of the September 12 scope, held the checkpoint that had been scheduled for the 19th, lifted the change freeze, and made one correction that reorders everything else: **the goal is a trading bot, not the best research tool.** Section 3 says what changed; Section 4 shows how every piece connects; Section 7 is the roadmap that now outranks the research queue.
 
+**Revision, September 13 evening (v2).** At a ~9:00 pm staff meeting I added a second hypothesis format — the **conditional stack** (context → location → trigger, tested as one pre-registered hypothesis). It was adopted with modifications and ten binding rules. Section 4 shows where it sits on the loop; Section 6 has the format and its guards; Section 7 notes that the first stack is the bot's own question. Nothing else in the system changed.
+
 # 1. The vision
 
 I'm trying to build an automated system that actually makes money trading NQ futures. Not a good backtest — a real system, running itself, that I can trust with capital.
@@ -66,6 +68,10 @@ Everything in this document is one closed loop. Read it once end to end before t
     │  LEARN: has this been closed before? Mechanism: who is forced to       │
     │  trade, and what would prove it wrong — written BEFORE any test.       │
     │  Director: is it worth a slot? Grade A–F. Freeze the scope.            │
+    │  Two shapes leave this box: a FLAT hypothesis (one state, one window)  │
+    │  or a STACK (context → location → trigger, ≤2 layers for now, one      │
+    │  mechanism per layer + an interaction claim, floor + MDE set here,     │
+    │  whole spec hashed into the registry before anyone looks).            │
     └──────────────────────────────┬────────────────────────────────────────┘
                                    │ one registered scan, every cell counted forever
                                    ▼
@@ -73,7 +79,10 @@ Everything in this document is one closed loop. Read it once end to end before t
     │  TEST (Discovery → Statistical → blind Gate → Validation → Gate →      │
     │        Holdout [Jason])                                                │
     │  Mechanical integrity suite runs before the Gate. One shot per stage.  │
-    │  Most candidates die here. Every death produces a CLOSURE FORM.        │
+    │  A stack runs PAIRED: trigger alone vs trigger inside context; the     │
+    │  claim is the difference. Below the floor → UNDERPOWERED (an attempt   │
+    │  spent, never loosened). Most candidates die here. Every death         │
+    │  produces a CLOSURE FORM.                                              │
     └───────┬──────────────────────────────────────────┬────────────────────┘
             │ died                                      │ survived
             ▼                                           ▼
@@ -88,7 +97,9 @@ Everything in this document is one closed loop. Read it once end to end before t
                ▼                                            ▼
     ┌───────────────────────────────────────────────────────────────────────┐
     │  THE BOT (Section 6)                                                   │
-    │  signal (B3 placeholder, or a real edge if research ever supplies one) │
+    │  signal (B3 placeholder, or a real edge if research ever supplies one; │
+    │  a stack that passes is the first shape that hands the bot a complete  │
+    │  entry — context + location + trigger — i.e. a real B3 replacement)    │
     │  → size / stop / target / permission (B2 Risk/State Engine, built from │
     │    the fact registry)                                                  │
     │  → order (B4) → fill measured (B5) → kill switches (B6)                │
@@ -100,6 +111,8 @@ Everything in this document is one closed loop. Read it once end to end before t
                                    ▼
                         back to LOOK and EXPLAIN as new state variables,
                         exit-rule evidence, and cost reality
+
+The Idea Factory's interaction mode (state × state cross-tabs, timing rule on both layers) is where stacks are *seen* before they are *asked*; looking there produces a queue entry and a count of cells looked at, never a registered stack. The first stack on the loop is Stack A: the bot's own B2-versus-B3 question — does the B3 breakout behave differently inside a high-expected-range day than it does alone? A powered null there is the cheapest way to learn that B2 does not earn its place.
 
 Three things make it a loop and not a line. **Failures are stored, not discarded** — a closure form says what was learned and the one condition under which the idea may return, and LEARN checks it by name before the next idea is written. **Facts are stored as assets, not trophies** — the fact registry is the Risk/State Engine's input, so every validated fact immediately changes how the bot sizes and stops. **Execution feeds back without contaminating** — what the bot measures in real time becomes new questions for the Observatory and new evidence for exit design, but never enters Validation or Holdout, which stay sealed.
 
@@ -179,6 +192,25 @@ Entries are still ranked by **expected information gain × edge potential**, wit
 
 **Conditional retests** of dead ideas are now a formal channel with an eight-condition protocol: a documented null; the condition chosen before rerunning; the condition drawn from an independently established mechanism or validated fact; one new variable; both versions reported; a new ID linked to the original; fresh Validation and Holdout; the family's attempt count incremented. The first sanctioned one — Level Sweep Reversal only after a compressed prior day — ran September 13 and closed clean (131 trades, no credible gap). The methodology worked; the answer for that pattern was no.
 
+## Two hypothesis formats — flat and stacked (adopted September 13, ~9:00 pm staff meeting)
+
+Until September 13 every hypothesis was **flat**: one market state, bucketed, one forward outcome. That instrument may be too blunt to see an effect that only exists when several conditions hold at once. The second format, the **conditional stack**, is a 2–3 layer hypothesis — *context* (a regime known before the session), *location* (where price sits inside a structure), *trigger* (the deterministic event that fires the entry) — evaluated in that fixed order, pre-registered as ONE hypothesis, frozen as a whole, costing ONE trial (a paired family costs two). The source of the shape was an "indication / correction / continuation" pullback setup; the setup itself is an ordinary trend pullback with a poor prior, and it is second in line, not first.
+
+The trap is layer shopping: three layers with five candidate variables each is 125 stacks; test them, pick the winner, and 125 trials were spent while one was registered. The cost is sample starvation: three thirds is 1/27 of the data. The ten binding rules exist for those two problems.
+
+1. Two layers maximum until the format has produced one result; three after.
+2. The first test of any stack is paired: trigger alone vs trigger inside the context. The claim is the difference.
+3. Both formats run; at most one stack in flight at a time.
+4. A floor (default 100 occurrences on Discovery) and a minimum detectable effect are pre-registered by Statistical before the scan. Below the floor the stack closes UNDERPOWERED — it consumes one of the two attempts and the definition is never loosened to reach the floor.
+5. One mechanism per layer plus an explicit interaction claim (why together ≠ separately). "It filters out losers" is rejected at Mechanism as fitting.
+6. Every layer must be known before the trigger fires, context before location — the timing rule applied per layer; the runner refuses out-of-order stacks.
+7. The full spec (variables, edges, order, trigger, horizon, exit, cost model) is hashed and the hash written into the trial registry before the runner will execute. A different hash is a different trial. The number of cells looked at in the interaction table is recorded with it and goes in the blind packet.
+8. A `stacks_attempted` counter makes the format itself accountable.
+9. A stack built from variables that were each already closed is a resurrection unless the interaction is the stated novel claim.
+10. Format kill: two powered nulls close the format.
+
+Nothing in the promotion bar, the chronological splits, the two-attempt limit, the one-shot Validation, or the Holdout rule changes. The stack is a richer object under the same rules. Build order: spec schema and hash → mechanism-template and Gate additions → the stack runner → Stack A (the bot's own question) → Stack B (the pullback shape, deterministic, only if A closes).
+
 ## The shelf — why we don't draw thin
 
 A ranked list of vetted, unscanned entries sits in front of the pipeline. Three rules make it honest:
@@ -205,6 +237,8 @@ After eleven forced-participant entries produced nine clean nulls, one near-miss
 I considered buying the data that would see them and decided, on September 12, **not to** — the cost was real and the return wasn't demonstrable. So the ceiling is fixed and acknowledged: one-minute bars on four instruments. Five otherwise-good entries are parked against it and are listed as parked, not quietly abandoned. The rule is now written down as a **Data Acquisition Trigger**: buy only when an existing price-based discovery establishes a credible mechanism, the missing variable is specifically required to test it, expected information gain is high, the candidate cannot be falsified with current data, the likely edge justifies the cost, and the purchase resolves a defined decision. All six, or no.
 
 # 7. The bot — the product roadmap (added September 13)
+
+*Note (evening revision): the first conditional stack, Stack A, is the bot's own B2-versus-B3 question — the same BASE vs BASE+B2 comparison the paper run requires. It is research, so it still runs behind any bot milestone that can move; B4 remains blocked on the broker paper account.*
 
 This section outranks the research queue. `docs/BOT_ROADMAP.md` is the working copy; when the two conflict, the roadmap wins.
 
@@ -331,7 +365,7 @@ One review claimed the project-wide correction double-counts. It does not: the c
 
 ## What was added to the learning system on September 13
 
-**The closure form.** Every closed hypothesis now gets a fixed record: closure status (clean null · near miss · data limitation · execution limitation · valid-but-non-actionable · invalid premise · duplicate), the primary outcome as registered, sample adequacy, the mechanism verdict (falsified · weakened · untested-by-this-result), robustness and cost flags, what was learned in one searchable sentence, what must not be retested, the one permitted future condition, and a capacity action for its family. Filed as Section 12 of the mechanism document and mirrored in an append-only closures ledger. This is what turns "FAILED" into knowledge LEARN can actually consult; a retroactive pass over this week's twelve closures is owed.
+**The closure form.** Every closed hypothesis now gets a fixed record: closure status (clean null · near miss · data limitation · execution limitation · valid-but-non-actionable · invalid premise · duplicate · underpowered — the stack format's own failure mode, distinct from data limitation), the primary outcome as registered, sample adequacy, the mechanism verdict (falsified · weakened · untested-by-this-result), robustness and cost flags, what was learned in one searchable sentence, what must not be retested, the one permitted future condition, and a capacity action for its family. Filed as Section 12 of the mechanism document and mirrored in an append-only closures ledger. This is what turns "FAILED" into knowledge LEARN can actually consult; a retroactive pass over this week's twelve closures is owed.
 
 **The fact registry** (`research/registry/facts.md`). One row per validated fact: what it says in plain language, instrument, horizon, mechanism, stage reached, stability, which facts it relates to, and which strategies use it. Seeded with the four validated facts and the three event-volatility passes. The Risk/State Engine reads from it; every strategy must link back to the fact IDs it uses. A feature library — definition cards for every state variable, with its exact calculation and the moment it is known — sits beside it, and is where the timing rule's register lives.
 
