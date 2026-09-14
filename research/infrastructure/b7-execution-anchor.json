@@ -1,0 +1,5 @@
+{
+  "anchor": "2026-09-08",
+  "set_by": "bot_stack_paper_run.py, first run",
+  "note": "B7's OWN execution anchor -- see bot_stack_paper_run.py choice 1. NOT the same as bot_forward_log.py's BOT_FORWARD_ANCHOR (statistical)."
+}

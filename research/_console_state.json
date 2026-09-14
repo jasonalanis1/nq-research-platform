@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-09-14T03:56:00Z",
- "generated_at_local": "September 13th, 10:56 pm CT",
- "last_run": "2026-09-14T04:00:00Z",
- "last_run_local": "September 13th, 11:00 pm CT",
- "next_run": "2026-09-14T04:00:00Z",
- "next_run_local": "September 13th, 11:00 pm CT",
+ "generated_at": "2026-09-14T12:06:00Z",
+ "generated_at_local": "September 14th, 7:06 am CT",
+ "last_run": "2026-09-14T06:00:00Z",
+ "last_run_local": "September 14th, 1:00 am CT",
+ "next_run": "2026-09-14T14:00:00Z",
+ "next_run_local": "September 14th, 9:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
- "tests": "358 tests",
+ "tests": "372 tests",
  "ops": {
-  "overall": "PASS",
+  "overall": "WARN",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 18 min, last activity 0 min ago"
+    "detail": "session running 362 min, last activity 2 min ago"
    },
    {
     "name": "shelf",
@@ -23,22 +23,22 @@
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "cycle in progress: B5 execution_measurement first cut / built + tested (4/4); full suite 358/358; moving to close-out"
+    "detail": "last cycle closed cleanly at 2026-09-14T12:05"
    },
    {
     "name": "value",
     "status": "PASS",
-    "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1, 'mechanism_docs': 1, 'studies': 1}"
+    "detail": "last cycle moved=False delta={}"
    },
    {
     "name": "console",
-    "status": "PASS",
-    "detail": "refreshed 98 min ago"
+    "status": "WARN",
+    "detail": "console state is 351 min old \u2014 refresh step may be failing"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "55 reports, latest 2026-09-14-0400.md well-formed"
+    "detail": "56 reports, latest 2026-09-14-0600.md well-formed"
    },
    {
     "name": "new-information",
@@ -213,6 +213,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-14-0600.md",
+   "ts": "2026-09-14T06:00:00Z",
+   "new_information": "",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 14th, 1:00 am CT"
+  },
+  {
    "file": "2026-09-14-0400.md",
    "ts": "2026-09-14T04:00:00Z",
    "new_information": "",
@@ -233,17 +244,114 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 13th, 9:02 pm CT"
+  }
+ ],
+ "bot_milestones": [
+  {
+   "component": "Signal contract",
+   "id": "B0",
+   "status": "DONE"
   },
   {
-   "file": "2026-09-14-0003.md",
-   "ts": "2026-09-14T00:03:00Z",
-   "new_information": "",
-   "agents_ran": 10,
-   "agents_not_run": 1,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 13th, 7:03 pm CT"
+   "component": "Signal engine",
+   "id": "B1",
+   "status": "DONE for B3"
+  },
+  {
+   "component": "Risk/State Engine",
+   "id": "B2",
+   "status": "BUILT (sizing + permission only -- Stack A showed it is not an entry filter)"
+  },
+  {
+   "component": "Base entry, frozen",
+   "id": "B3",
+   "status": "DONE (placeholder, never an edge)"
+  },
+  {
+   "component": "Order path",
+   "id": "B4",
+   "status": "B4a DONE (11:00 pm CT, commit 2949490); B4b blocked on Jason's IBKR futures-permission cooldown (~Oct 13th)"
+  },
+  {
+   "component": "Execution measurement",
+   "id": "B5",
+   "status": "FIRST CUT 11:00 pm CT (src/execution_measurement.py; the 14 checks vs the order_path journal; reports INSUFFICIENT SAMPLE honestly, does not self-authorize stage 3; 4 tests)"
+  },
+  {
+   "component": "Kill switches wired",
+   "id": "B6",
+   "status": "WIRED 11:00 pm CT -- capital_protection.pre_order_check called before every order in src/order_path.py"
+  },
+  {
+   "component": "Continuous paper run",
+   "id": "B7",
+   "status": "LIVE, thin first version (1:00 am CT cycle) -- src/bot_stack_paper_run.py, 14 tests; own execution anchor 2026-09-08. First real run: 1 session (2026-09-08), correctly gate-blocked by B6 (swing too wide) -- proven on real data, not just tests. execution_measurement.py still INSUFFICIENT SAMPLE (0 order_intents) until more sessions land."
+  },
+  {
+   "component": "Live-Limited",
+   "id": "B8",
+   "status": "MISSING \u2014 Jason's authorization alone"
+  },
+  {
+   "component": "Scale behind evidence",
+   "id": "B9",
+   "status": "MISSING"
   }
- ]
+ ],
+ "methodology": {
+  "build": [
+   {
+    "id": "U25",
+    "status": "DONE ~9:08 pm CT",
+    "what": "Stack spec schema + hash-at-registration + attempt counter"
+   },
+   {
+    "id": "U26",
+    "status": "DONE ~9:12 pm CT",
+    "what": "Mechanism template 4a/4b/9a + UNDERPOWERED closure status + Gate brief"
+   },
+   {
+    "id": "U27",
+    "status": "DONE ~9:20 pm CT",
+    "what": "Stack scan runner (layers in time order, paired mode, difference CI)"
+   },
+   {
+    "id": "U29",
+    "status": "DONE ~9:30 pm CT",
+    "what": "Stack A \u2014 B2 context x B3 break: POWERED NULL, +0.0247R, CI90 (-0.050,+0.098)"
+   },
+   {
+    "id": "U28",
+    "status": "QUEUED \u2014 next stack must be sourced from a look table, not the roadmap",
+    "what": "Idea Factory --interactions (state x state cross-tabs, timing rule on both layers)"
+   },
+   {
+    "id": "U30",
+    "status": "QUEUED",
+    "what": "Stack B \u2014 ICC pullback shape, deterministic; only after a sourced look"
+   }
+  ],
+  "in_flight": "none \u2014 Stack A closed as a powered null (hyp-000161); one more powered null closes the format",
+  "rules": [
+   "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
+   "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
+   "Both formats run; at most one stack in flight at a time.",
+   "Floor 100 occurrences + minimum detectable effect pre-registered by Statistical. Below the floor \u2192 UNDERPOWERED: an attempt spent, definition never loosened.",
+   "One mechanism per layer plus an explicit interaction claim. 'It filters out losers' is rejected as fitting.",
+   "Every layer known before the trigger fires, context before location (the timing rule, per layer).",
+   "Full spec hashed into the trial registry before any look; a different hash is a different trial. Cells looked at are recorded with it.",
+   "A stacks_attempted counter makes the format accountable.",
+   "A stack of already-closed variables is a resurrection unless the interaction is the stated novel claim.",
+   "Format kill: two powered nulls close the format. One so far."
+  ],
+  "source": "research/infrastructure/staff-meeting-conditional-stack-2026-09-13.md",
+  "stacks_attempted": 1,
+  "summary": "Two admissible hypothesis shapes: FLAT (one state, one window) and CONDITIONAL STACK (context -> location -> trigger), both under the same promotion bar, splits and trial accounting. Adopted Sept 13th ~9:00 pm CT, disposition MODIFY, ten binding rules."
+ },
+ "ordering_principle": "docs/BOT_ROADMAP.md outranks the research queue (Jason, Sept 13th ~6:00 pm CT)",
+ "upgrade_queue": {
+  "done_or_specd": 17,
+  "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U24-U27, U29 done this cycle)",
+  "total": 30
+ }
 }
