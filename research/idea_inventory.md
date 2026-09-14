@@ -1940,7 +1940,7 @@ claim.
 5. **MAP ANCHOR**: M29. STATUS: DRAWABLE for Stage 0 as soon as U11 (Observatory
    free-look mode) exists. Restores the shelf to 3/3 (Entry 31, 32, 33).
 
-## ENTRY 34 — M30: Opening-range width → midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) — SOURCED, DRAWABLE
+## ENTRY 34 — M30: Opening-range width → midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) — DRAWN 2026-09-14, Scan 036, hyp-000162: ALL THREE PREDICTIONS PASSED, one INTEGRITY RED owed to the Gate
 
 Generation (SOURCING RULE v3): taken from the top of research/observatory/idea-factory-2026-09-13.md
 (`opening_range_vs_atr → range/mfe/mae`, strongest family, z ≈ 11 HIGH/midday). LEARN consulted: the
@@ -1948,13 +1948,23 @@ state has never been a registered conditioning variable; the initial-balance bre
 DIRECTION after the first 30 minutes and is closed -- this is a SIZE claim and does not reopen it.
 Mechanism doc research/mechanisms/opening-range-width-midday-excursion-nq-m30.md written BEFORE any
 registered test.
+0. **STATE VARIABLE**: `opening_range_vs_atr` (frozen in market_state_primitives; known 10:00 ET).
 1. **CLAIM**: HIGH-tercile 30-minute opening range (09:30-10:00 ET) → credibly larger midday range and
    midday MFE/MAE than LOW-tercile; known 10:00, outcome from 11:30 (timing rule satisfied).
 2. **MECHANISM**: market-maker inventory imbalance from an unbalanced open keeps repricing through midday.
 3. **FROZEN SCOPE**: ONE 6-cell scan, block=10 (Section 9).
 4. **RESURRECTION RULING**: NEW. Not exp-028/031 (direction), not F-048 (prior-DAY range; P3 tests it).
-5. **MAP ANCHOR**: M30. STATUS: DRAWABLE. Plugs directly into the Risk/State Engine (an intraday 10:00 ET
-   update) and the B3 placeholder's window.
+5. **MAP ANCHOR**: M30. STATUS: **DRAWN 2026-09-14** (7:00 am CT catch-up cycle) over the older Entry 32
+   under SHELF RULE v2's ranking rule (information gain x edge potential), because Stack A established
+   B2 needs SIZING material and this is the only drawable entry that produces it.
+   Scan 036 -> **hyp-000162, PROMISING**: P1 gating diff +0.5193 ci_90 (+0.4475,+0.5975) n=555/556 PASS;
+   P2 MFE +0.0886 and MAE +0.1108 ATR, both credibly positive; P3 83.6% retained after residualizing on
+   the prior-day range tercile (bar 50%) PASS. Statistical (+POWER) owed, then the BLIND Integrity Gate.
+   **BLOCKING FINDING for that Gate:** U6's mechanical suite is RED on the PLACEBO check -- the shifted
+   (t+1) signal reaches 74% of the real effect, so yesterday's opening range predicts today's midday
+   range nearly as well as today's does. P3 does NOT cover this (it residualized on prior-day RANGE, a
+   different variable from prior-day OPENING range). Overlap 48.56%, just under the 50% guard, so the
+   verdict is near a boundary and is disclosed as such. Attempt 1 of 2 for the family.
 
 ## ENTRY 35 — M31: Prior-day volume vs expected → first-30-minute range, NQ (observatory channel / Idea Factory queue, September 13th, ~7:17 pm CT test cycle) — SOURCED, DRAWABLE
 

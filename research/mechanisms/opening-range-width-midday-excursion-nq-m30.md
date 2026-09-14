@@ -62,4 +62,28 @@ reference; (6) alignment/coverage disclosure. Block=10, N_BOOT=3000, SEED=202609
 One shot. No new cells, no retuning after seeing results.
 
 ## 10. Prediction status
-P1–P3 untested. DRAWABLE.
+DRAWN and SCANNED 2026-09-14 (7:00 am CT catch-up cycle), Scan 036, hyp-000162.
+- **P1 (GATING): PASS.** HIGH−LOW midday range-ratio difference +0.5193, CI90
+  (+0.4475, +0.5975), n = 555/556. Credibly positive.
+- **P2: both positive.** MFE difference +0.0886 ATR, CI90 (+0.0741, +0.1047);
+  MAE difference +0.1108 ATR, CI90 (+0.0908, +0.1307). Larger excursions in
+  both directions, as predicted.
+- **P3: PASS.** Stratified on the prior-day range tercile (F-048): +0.4342 vs
+  the raw +0.5193, **83.6% retained** against a 50% bar. Not a restatement of
+  F-048.
+- Status: **PROMISING**, Statistical (+POWER) owed, then the BLIND Integrity Gate.
+
+**BLOCKING FINDING FOR THE GATE (U6 mechanical suite, 4 green / 1 RED / 2 not
+run — research/integrity/mechanical-scan036-2026-09-14.json).** The PLACEBO
+check is red: the shifted-signal (t+1) placebo reaches 0.2040 against the real
+0.2741 — **74% of the effect**. Yesterday's opening range predicts today's
+midday range nearly as well as today's own does, so the claim's specificity to
+the same session is in question; this may be a multi-day volatility-regime
+effect rather than an opening-range effect. **P3 does not cover this**: it
+residualized on prior-day RANGE (`range_vs_atr`), which is a different variable
+from prior-day OPENING range. Disclosed: the shifted leg's overlap with the real
+selection is 48.56%, just under the 50% guard above which that leg stops gating
+— roughly 1.5 points from not being raised at all, so the Gate should weigh it
+as a near-boundary verdict. The inverted placebo behaves correctly (−0.1369,
+opposite sign). Per the U6 spec a RED is a blocking finding, **not** an
+automatic close, and nothing here is retuned in response to it.

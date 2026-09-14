@@ -292,6 +292,7 @@ SCAN_REGISTRY = {
     "scan_033_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},
     "scan_034_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": []},  # M25 monthly opex-week delta-hedge unwind, NQ, Entry 29
     "scan_035_2026-09-13": {"cells_scanned": 4, "promoted_hypothesis_ids": ["hyp-000161"]},  # STACK A (first conditional stack): B2 expected-range context x B3 opening-range break, NQ. Paired: IN_CONTEXT vs OUT_CONTEXT (gating difference), ALL reference, sign check. Registered BEFORE the run, spec hash 4df7b408.
+    "scan_036_2026-09-14": {"cells_scanned": 6, "promoted_hypothesis_ids": []},  # M30 opening-range width -> midday range and excursion, NQ, Entry 34. SIX cells, 1 gating (HIGH-LOW midday range-ratio difference); P3 residualizes on the prior-day range tercile (F-048). Registered BEFORE the run, per the standing rule.
     # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
     # press-conference, pre/post volatility, 6E, open scope -- third open-
     # scope entry, companion/cross-check to M20). 6 cells: decision-hour

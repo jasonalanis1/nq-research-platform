@@ -1,44 +1,44 @@
 {
- "generated_at": "2026-09-14T12:32:00Z",
- "generated_at_local": "September 14th, 7:32 am CT",
- "last_run": "2026-09-14T10:00:00Z",
- "last_run_local": "September 14th, 5:00 am CT",
+ "generated_at": "2026-09-14T12:41:00Z",
+ "generated_at_local": "September 14th, 7:41 am CT",
+ "last_run": "2026-09-14T12:00:00Z",
+ "last_run_local": "September 14th, 7:00 am CT",
  "next_run": "2026-09-14T14:00:00Z",
  "next_run_local": "September 14th, 9:00 am CT",
  "cadence": "Every 2 hours, on the odd Central hour",
  "tests": "409 tests",
  "ops": {
-  "overall": "FAIL",
+  "overall": "PASS",
   "checks": [
    {
     "name": "lock",
     "status": "PASS",
-    "detail": "session running 11 min, last activity -0 min ago"
+    "detail": "session running 9 min, last activity 1 min ago"
    },
    {
     "name": "shelf",
     "status": "PASS",
-    "detail": "Shelf 4/3 DRAWABLE (Entry 32, 33, 34, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldes"
+    "detail": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest dr"
    },
    {
     "name": "checkpoint",
     "status": "PASS",
-    "detail": "last cycle closed cleanly at 2026-09-14T12:31"
+    "detail": "last cycle closed cleanly at 2026-09-14T12:41"
    },
    {
     "name": "value",
-    "status": "FAIL",
-    "detail": "BUSY WORK: last 3 cycles moved nothing (no ledger/scan/doc/inventory change) -- tell Jason, do not keep cycling"
+    "status": "PASS",
+    "detail": "last cycle moved=True delta={'ledger_rows': 1, 'scans_registered': 1}"
    },
    {
     "name": "console",
     "status": "PASS",
-    "detail": "refreshed 13 min ago"
+    "detail": "refreshed 10 min ago"
    },
    {
     "name": "reports",
     "status": "PASS",
-    "detail": "58 reports, latest 2026-09-14-1000.md well-formed"
+    "detail": "59 reports, latest 2026-09-14-1200.md well-formed"
    },
    {
     "name": "new-information",
@@ -48,7 +48,7 @@
    {
     "name": "ledger",
     "status": "PASS",
-    "detail": "119 idea families, no stale statuses"
+    "detail": "120 idea families, no stale statuses"
    },
    {
     "name": "mechanism-gate",
@@ -65,29 +65,28 @@
     "status": "PASS",
     "detail": "nothing parked on Jason in the queue"
    }
-  ],
-  "busy_work_alert": "FIRED at the 5:00 am cycle close: last 3 cycles (B7, U28, U6) moved no ledger/scan/doc/inventory. All real infrastructure, none pipeline movement. Next cycle's shelf draw is the corrective action."
+  ]
  },
  "progress": {
-  "trials_since_last_survivor": 152,
-  "trials_total": 461,
+  "trials_since_last_survivor": 159,
+  "trials_total": 468,
   "survivors_alive": 2,
-  "trials_per_survivor": 230.5,
+  "trials_per_survivor": 234.0,
   "last_survivor": {
    "hypothesis_id": "hyp-000151",
    "name": "vxn_level_vs_trailing_high_next_day_range_holdout",
    "date": "2026-09-13"
   },
-  "scan_cells_total": 356,
-  "standalone_total": 105,
-  "scans_run": 35,
-  "scans_with_no_survivor": 29
+  "scan_cells_total": 362,
+  "standalone_total": 106,
+  "scans_run": 36,
+  "scans_with_no_survivor": 30
  },
- "ledger_rows": 200,
- "distinct_hypotheses": 154,
+ "ledger_rows": 201,
+ "distinct_hypotheses": 155,
  "funnel": {
   "closed": 115,
-  "discovery": 1,
+  "discovery": 2,
   "validation": 0,
   "holdout": 2,
   "forward": 3,
@@ -95,7 +94,7 @@
   "live": 0
  },
  "sweep": {
-  "shelf": "Shelf 4/3 DRAWABLE (Entry 32, 33, 34, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
+  "shelf": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)",
   "rows": [
    {
     "tier": "OPEN",
@@ -103,6 +102,14 @@
     "name": "London open volatility burst 6e m23",
     "stage_reached": "Statistical",
     "next_owed": "Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?",
+    "legacy": false
+   },
+   {
+    "tier": "OPEN",
+    "id": "hyp-000162",
+    "name": "Opening range width midday range excursion nq m30",
+    "stage_reached": "Mechanism doc",
+    "next_owed": "Statistical stage (4 questions + multiplicity + POWER at the proposed review point)",
     "legacy": false
    },
    {
@@ -131,7 +138,7 @@
    }
   ],
   "counts": {
-   "OPEN": 1,
+   "OPEN": 2,
    "GATED": 0,
    "FROZEN": 3
   }
@@ -177,7 +184,7 @@
    },
    {
     "id": 34,
-    "name": "M30: Opening-range width \u2192 midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) \u2014 SOURCED, DRAWABLE"
+    "name": "M30: Opening-range width \u2192 midday range and excursion, NQ (observatory channel / Idea Factory queue, September 13th, ~7:15 pm CT test cycle) \u2014 DRAWN 2026-09-14, Scan 036, hyp-000162: ALL THREE PREDICTIONS PASSED, one INTEGRITY RED owed to the Gate"
    },
    {
     "id": 35,
@@ -214,6 +221,17 @@
  ],
  "sessions": [
   {
+   "file": "2026-09-14-1200.md",
+   "ts": "2026-09-14T12:00:00Z",
+   "new_information": "",
+   "agents_ran": 0,
+   "agents_not_run": 0,
+   "staff_meeting": false,
+   "returns": false,
+   "disposition": null,
+   "ts_local": "September 14th, 7:00 am CT"
+  },
+  {
    "file": "2026-09-14-1000.md",
    "ts": "2026-09-14T10:00:00Z",
    "new_information": "**hyp-000142 passes the mechanical suite cleanly** (5 green, 0 red) \u2014 the first independent structural audit of a promoted fact in this project, and it holds up: not concentrated in a few days (top 5% carry 43%), stable across chronological halves, not roll-contaminated, sign survives the correct null (the unconditional range ratio, not zero), and the inverted-signal placebo fails as it should.",
@@ -234,17 +252,6 @@
    "returns": false,
    "disposition": null,
    "ts_local": "September 14th, 3:00 am CT"
-  },
-  {
-   "file": "2026-09-14-0600.md",
-   "ts": "2026-09-14T06:00:00Z",
-   "new_information": "",
-   "agents_ran": 0,
-   "agents_not_run": 0,
-   "staff_meeting": false,
-   "returns": false,
-   "disposition": null,
-   "ts_local": "September 14th, 1:00 am CT"
   }
  ],
  "bot_milestones": [
@@ -323,8 +330,8 @@
    },
    {
     "id": "U28",
-    "status": "DONE 7:25 am CT -- K=14,740 cells, ZERO clear the |z|~4.64 yardstick",
-    "what": "Idea Factory --interactions (state x state, timing rule both layers, ranked by the additive interaction contrast). The states on disk do not visibly modify one another."
+    "status": "DONE -- K=14,740 cells, ZERO clear the |z|~4.64 yardstick",
+    "what": "Idea Factory --interactions. The states on disk do not visibly modify one another beyond their own main effects -- so a second conditional stack is NOT sourced."
    },
    {
     "id": "U30",
@@ -333,11 +340,11 @@
    },
    {
     "id": "U6",
-    "status": "DONE 7:45 am CT -- 24 tests; 3 false verdicts caught on its own first runs and fixed",
-    "what": "integrity_checks.py: the Gate's 7-check mechanical suite. Stack A 3 green/2 RED; hyp-000142 5 GREEN/0 red."
+    "status": "DONE -- 24 tests; 3 false verdicts caught on its own first runs, then a real one on hyp-000162",
+    "what": "integrity_checks.py: the Gate's 7-check mechanical suite, run on every candidate BEFORE the Gate."
    }
   ],
-  "in_flight": "none -- Stack A closed as a powered null; U28's look table found no pair that stands out and U6 finds Stack A era-dependent and 188%-concentrated. A second stack is not sourced. One powered null left.",
+  "in_flight": "none -- Stack A closed as a powered null; U28 found no pair that stands out and U6 finds Stack A era-dependent and 188%-concentrated. A second stack is not sourced. One powered null left.",
   "rules": [
    "Two layers max until the format has produced one result; three after (Stack A produced one on Sept 13th).",
    "First test is paired: trigger alone vs trigger inside the context. The claim is the difference.",
@@ -359,5 +366,6 @@
   "done_or_specd": 19,
   "source": "research/NEXT_UP.md UPGRADE QUEUE v3 (U28, U6 done 2026-09-14)",
   "total": 30
- }
+ },
+ "latest_survivor_note": "hyp-000162 (M30, Scan 036, 2026-09-14): opening-range width -> midday range/excursion. All three registered predictions PASSED (P1 +0.5193 ci90 (+0.4475,+0.5975); P3 83.6% retained vs prior-day range). First Discovery survivor since hyp-000151 and the first ever sourced from the Idea Factory queue. BLOCKING FINDING for the blind Gate: U6's placebo check is RED -- yesterday's opening range does ~74% of the same work, so this may be a multi-day volatility REGIME effect rather than an opening-range effect. P3 does not cover that (prior-day RANGE is a different variable). Statistical (+POWER) owed first."
 }
