@@ -71,15 +71,41 @@ def test_continuity_junction_price_jump_fails_and_thin_session_only_warns():
 # --------------------------------------------------------------------- topup
 def test_topup_window_starts_one_minute_after_last_bar_in_utc():
     old = _series("2026-09-08 19:55", 5)   # ends 19:59 NY = 23:59 UTC
-    start, end = topup.topup_window(old, now_utc=dt.datetime(2026, 9, 14, 18, 30, 45))
+    start, end = topup.topup_window(old, now_utc=dt.datetime(2026, 9, 14, 18, 30, 45),
+                                    available_end=dt.datetime(2026, 9, 14, 23, 0))
     assert start == dt.datetime(2026, 9, 9, 0, 0)
     assert end == dt.datetime(2026, 9, 14, 18, 30)
+
+
+def test_topup_window_clamps_to_the_dataset_available_end():
+    """Regression, 2026-09-14: asking for end="now" is rejected outright with
+    422 data_end_after_available_end -- GLBX.MDP3's historical end lags real time
+    by ~20 minutes. The window must never run past the dataset's own end."""
+    old = _series("2026-09-08 19:55", 5)
+    start, end = topup.topup_window(old, now_utc=dt.datetime(2026, 9, 14, 23, 12),
+                                    available_end=dt.datetime(2026, 9, 14, 22, 50, 31))
+    assert start == dt.datetime(2026, 9, 9, 0, 0)
+    assert end == dt.datetime(2026, 9, 14, 22, 50)
+
+
+def test_topup_window_falls_back_to_a_lag_when_available_end_unknown():
+    old = _series("2026-09-08 19:55", 5)
+    _, end = topup.topup_window(old, now_utc=dt.datetime(2026, 9, 14, 23, 12))
+    assert end == dt.datetime(2026, 9, 14, 23, 12) - dt.timedelta(minutes=topup.AVAILABLE_LAG_MINUTES)
+
+
+def test_topup_window_refuses_when_available_end_is_behind_the_file():
+    old = _series("2026-09-08 19:55", 5)
+    with pytest.raises(SystemExit):
+        topup.topup_window(old, now_utc=dt.datetime(2026, 9, 14, 23, 12),
+                           available_end=dt.datetime(2026, 9, 8, 22, 0))
 
 
 def test_topup_window_refuses_when_nothing_to_add():
     old = _series("2026-09-08 19:55", 5)
     with pytest.raises(SystemExit):
-        topup.topup_window(old, now_utc=dt.datetime(2026, 9, 8, 23, 0))
+        topup.topup_window(old, now_utc=dt.datetime(2026, 9, 8, 23, 0),
+                           available_end=dt.datetime(2026, 9, 8, 23, 0))
 
 
 def test_merge_keeps_old_bars_authoritative_and_appends_only_after_end():

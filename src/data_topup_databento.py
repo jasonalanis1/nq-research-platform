@@ -45,18 +45,50 @@ from data_fetch_databento import DATASET, SCHEMA, SYMBOL, NY_TIMEZONE, get_api_k
 from data_continuity_check import check_continuity  # noqa: E402
 
 DEFAULT_CAP_USD = 15.00
+AVAILABLE_LAG_MINUTES = 30   # fallback only; the real end is read from the API
 COLS = ["Open", "High", "Low", "Close", "Volume"]
 
 
-def topup_window(old: pd.DataFrame, now_utc: dt.datetime | None = None) -> tuple[dt.datetime, dt.datetime]:
-    """start = one minute after the old file's last bar (UTC, tz-naive);
-    end = now, floored to the minute. Both tz-naive UTC for the API."""
+def topup_window(old: pd.DataFrame, now_utc: dt.datetime | None = None,
+                  available_end: dt.datetime | None = None) -> tuple[dt.datetime, dt.datetime]:
+    """start = one minute after the old file's last bar (UTC, tz-naive).
+    end   = the EARLIEST of: now, and the dataset's own available end.
+
+    Why the clamp (2026-09-14, caught on the first real run): asking for
+    end = "now" is rejected outright with 422 data_end_after_available_end --
+    GLBX.MDP3's historical end lags real time by roughly 20 minutes, so a
+    request that runs past it fails rather than returning what exists. The
+    available end is read from the API (main() passes it); if that read fails
+    we fall back to now minus AVAILABLE_LAG_MINUTES, which is conservative in
+    the right direction -- it asks for less, never more."""
     last_utc = old.index[-1].tz_convert("UTC").to_pydatetime().replace(tzinfo=None)
     start = last_utc + dt.timedelta(minutes=1)
-    end = (now_utc or dt.datetime.utcnow()).replace(second=0, microsecond=0)
+    now = (now_utc or dt.datetime.now(dt.timezone.utc).replace(tzinfo=None))
+    end = now.replace(second=0, microsecond=0)
+    if available_end is None:
+        end = end - dt.timedelta(minutes=AVAILABLE_LAG_MINUTES)
+    else:
+        end = min(end, available_end.replace(second=0, microsecond=0))
     if end <= start:
-        raise SystemExit(f"nothing to top up: file already ends {old.index[-1]}")
+        raise SystemExit(f"nothing to top up: file already ends {old.index[-1]} "
+                         f"(data available through {end} UTC)")
     return start, end
+
+
+def dataset_available_end(client) -> dt.datetime | None:
+    """The dataset's own historical end, tz-naive UTC, or None if unreadable."""
+    try:
+        rng = client.metadata.get_dataset_range(dataset=DATASET)
+    except Exception as e:
+        print(f"(could not read the dataset's available range: {type(e).__name__}: {e} -- "
+              f"falling back to now minus {AVAILABLE_LAG_MINUTES} minutes)")
+        return None
+    for key in ("end", "available_end", "end_date"):
+        if isinstance(rng, dict) and rng.get(key):
+            ts = pd.Timestamp(rng[key])
+            return (ts.tz_convert("UTC") if ts.tzinfo else ts).to_pydatetime().replace(tzinfo=None)
+    print(f"(dataset range came back in an unexpected shape: {rng!r} -- using the lag fallback)")
+    return None
 
 
 def to_pipeline_frame(raw: pd.DataFrame) -> pd.DataFrame:
@@ -87,11 +119,14 @@ def main(argv=None) -> int:
 
     old_path = find_active_data_file("NQ")
     old = read_price_csv(old_path)
-    start, end = topup_window(old)
     print(f"Active file: {old_path.name} (ends {old.index[-1]})")
-    print(f"Top-up window (UTC): {start} -> {end}")
 
     client = db.Historical(key=get_api_key())
+    avail = dataset_available_end(client)
+    if avail is not None:
+        print(f"{DATASET} has data through {avail} UTC")
+    start, end = topup_window(old, available_end=avail)
+    print(f"Top-up window (UTC): {start} -> {end}")
     quote = float(client.metadata.get_cost(dataset=DATASET, symbols=[SYMBOL], schema=SCHEMA,
                                            stype_in="continuous", start=start, end=end))
     print(f"Quoted cost: ${quote:.4f} (cap ${args.cap:.2f})")
