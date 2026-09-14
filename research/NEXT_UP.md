@@ -378,6 +378,10 @@ WEEKS 4-8:
        CT; the published console HTML does not display them yet). Add a "Bot" panel at
        the TOP of the console, above the research funnel -- the bot is the goal, the
        funnel is the feeder. Republish the artifact.
+       CONSOLE v25 (Sept 13th ~9:15 pm CT, Jason's request): the two 'How it works' diagrams are now
+       interactive -- every stage in the idea-journey diagram and every box in the work-sourcing diagram has
+       a tap target that opens a written expander below it (what happens there, who runs it, what kills it).
+       Keep those expanders in sync when a stage's rules change.
        CONSOLE v24 (Sept 13th ~9:05 pm CT): new 'How hypotheses are shaped' card driven by a `methodology`
        key in the state doc (summary, build U25-U30 with statuses, stacks_attempted, in_flight, rules). Every
        console push must PRESERVE and update that key (tick U25-U30 statuses; bump stacks_attempted when a
