@@ -1,0 +1,249 @@
+{
+  "per_hour": [
+    {
+      "hour_et": 0,
+      "point": -0.09899,
+      "ci_90": [
+        -0.10657,
+        -0.09258
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 1,
+      "point": -0.06822,
+      "ci_90": [
+        -0.07815,
+        -0.0603
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 2,
+      "point": 0.00546,
+      "ci_90": [
+        -0.0096,
+        0.02109
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 3,
+      "point": 0.0502,
+      "ci_90": [
+        0.03492,
+        0.06802
+      ],
+      "credible_above_zero": true
+    },
+    {
+      "hour_et": 4,
+      "point": 0.01336,
+      "ci_90": [
+        0.00114,
+        0.02308
+      ],
+      "credible_above_zero": true
+    },
+    {
+      "hour_et": 5,
+      "point": -0.01521,
+      "ci_90": [
+        -0.02734,
+        -0.00398
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 6,
+      "point": -0.00674,
+      "ci_90": [
+        -0.01957,
+        0.00571
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 7,
+      "point": 0.00696,
+      "ci_90": [
+        -0.00513,
+        0.01693
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 8,
+      "point": 0.0745,
+      "ci_90": [
+        0.05628,
+        0.09158
+      ],
+      "credible_above_zero": true
+    },
+    {
+      "hour_et": 9,
+      "point": 0.07001,
+      "ci_90": [
+        0.05422,
+        0.08565
+      ],
+      "credible_above_zero": true
+    },
+    {
+      "hour_et": 10,
+      "point": 0.08353,
+      "ci_90": [
+        0.06788,
+        0.09999
+      ],
+      "credible_above_zero": true
+    },
+    {
+      "hour_et": 11,
+      "point": 0.02219,
+      "ci_90": [
+        0.01093,
+        0.03453
+      ],
+      "credible_above_zero": true
+    },
+    {
+      "hour_et": 12,
+      "point": -0.00495,
+      "ci_90": [
+        -0.016,
+        0.00534
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 13,
+      "point": -0.01258,
+      "ci_90": [
+        -0.02292,
+        -0.00162
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 14,
+      "point": -0.0162,
+      "ci_90": [
+        -0.02863,
+        -0.0035
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 15,
+      "point": -0.05493,
+      "ci_90": [
+        -0.06401,
+        -0.04666
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 16,
+      "point": -0.09338,
+      "ci_90": [
+        -0.10112,
+        -0.08627
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 18,
+      "point": -0.10212,
+      "ci_90": [
+        -0.11027,
+        -0.0936
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 19,
+      "point": -0.08589,
+      "ci_90": [
+        -0.09391,
+        -0.07748
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 20,
+      "point": -0.05888,
+      "ci_90": [
+        -0.06998,
+        -0.04926
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 21,
+      "point": -0.06387,
+      "ci_90": [
+        -0.07459,
+        -0.05243
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 22,
+      "point": -0.07535,
+      "ci_90": [
+        -0.09077,
+        -0.05766
+      ],
+      "credible_above_zero": false
+    },
+    {
+      "hour_et": 23,
+      "point": -0.09446,
+      "ci_90": [
+        -0.10366,
+        -0.08608
+      ],
+      "credible_above_zero": false
+    }
+  ],
+  "london_rank": 4,
+  "best_other_hour_et": 10,
+  "london_minus_best_other": {
+    "point": -0.03333,
+    "ci_90": [
+      -0.05701,
+      -0.00836
+    ],
+    "separable": false
+  },
+  "n_hours_credible_above_zero": 6,
+  "n_sessions": 536,
+  "hours_evaluated": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "note": "Discovery only. The frozen statistic re-computed for every hour of the ET clock with the candidate's own ATR and bootstrap conventions."
+}

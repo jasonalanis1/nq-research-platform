@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-14T22:01:08.408668+00:00",
+ "ran_at": "2026-09-15T00:01:34.446974+00:00",
  "owner": "cycle",
- "note": "5:00 pm cycle",
+ "note": "7:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='5:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='7:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -33,7 +33,7 @@
    "ok": true,
    "returncode": 0,
    "tail": [
-    "No new signal today (2026-09-08 bucket=low).",
+    "No new signal today (2026-09-14 bucket=mid).",
     "Log: 1 total signals, 1 open, 0 closed, 0 resolved today.",
     "Log saved to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/forward_validation/h118_forward_log.jsonl"
    ],
@@ -43,7 +43,7 @@
    "ok": true,
    "returncode": 0,
    "tail": [
-    "  Second half: {'n': 2, 'mean_net_pnl': 21.125, 'ci_90': (-22.0, 64.25), 'statistically_credible': False, 'n_flips': 0, 'total_cost_points': 0.0, 'avg_daily_cost_drag': 0.0, 'economic_threshold_points': 0.0, 'economically_meaningful': True}",
+    "  Second half: {'n': 2, 'mean_net_pnl': -191.0, 'ci_90': (-360.0, -22.0), 'statistically_credible': False, 'n_flips': 0, 'total_cost_points': 0.0, 'avg_daily_cost_drag': 0.0, 'economic_threshold_points': 0.0, 'economically_meaningful': False}",
     "Saved current status snapshot to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/data/study_prospective_exp047_status.json.",
     "Prospective log (append-only, git-commit each run): /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/ledger/prospective_exp047_log.jsonl"
    ],
