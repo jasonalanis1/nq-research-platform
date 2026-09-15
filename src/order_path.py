@@ -126,11 +126,14 @@ class OrderPathLedger:
 
 class OrderPath:
     def __init__(self, broker: BrokerInterface, journal_dir: str | Path,
-                 instrument: str = "MNQ"):
+                 instrument: str = "MNQ", cfg=None):
         self.broker = broker
         self.journal = OrderPathJournal(journal_dir)
         self.ledger = OrderPathLedger(self.journal)
         self.instrument = instrument
+        # capital config: CONFIG (live dollars) by default; the paper loop passes
+        # capital_protection.PAPER_CONFIG (R-denominated, 2026-09-14 staff meeting)
+        self.cfg = cfg if cfg is not None else capital_protection.CONFIG
 
     # ------------------------------------------------------------------
     # check 13 -- a crash cannot silently leave an unintended position open
@@ -216,10 +219,10 @@ class OrderPath:
         positions = self._safe_positions()
         open_positions = sum(1 for p in positions.values() if p.quantity != 0)
         contracts = max(1, int(size_multiplier)) if size_multiplier and size_multiplier > 0 else 1
-        contracts = min(contracts, capital_protection.CONFIG.max_contracts)
+        contracts = min(contracts, self.cfg.max_contracts)
 
         state = self.ledger.build_state(today, open_positions=open_positions, contracts=contracts)
-        decision = capital_protection.pre_order_check(state)
+        decision = capital_protection.pre_order_check(state, self.cfg)
         if not decision.allow:
             record = self.journal.append("blocked", strategy=today.get("strategy"),
                                           reasons=decision.reasons, divergences=decision.divergences,

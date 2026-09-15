@@ -123,6 +123,14 @@ MNQ_MULTIPLIER = 2.0    # dollars per index point, MNQ -- see backtest.py's CONT
 # stay exercised on every real run, not just in tests/test_order_path.py's
 # one-shot hooks. Module-level so tests can override them to 0 for a
 # deterministic fill outcome without touching SimulatedBroker itself.
+# Capital model for the paper loop: R-denominated (research/infrastructure/
+# staff-meeting-swing-band-2026-09-14.md). Jason's dollar band and budget are
+# live rules and belong to B8. Pre-registered 2026-09-14 ~8:30 pm CT, applied
+# to sessions scored from then on; the four sessions already logged as blocked
+# under the dollar band stay in the log as history and are NOT re-scored.
+CAPITAL_CFG = capital_protection.PAPER_CONFIG
+PAPER_MODE_SINCE = "2026-09-14"
+
 BROKER_REJECT_RATE = 0.03
 BROKER_PARTIAL_FILL_RATE = 0.05
 BROKER_DISCONNECT_RATE = 0.01
@@ -271,9 +279,13 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
     state = running_state(prior_rows)
     stop_distance_pts = abs(signal.entry - signal.stop)
     n_fills_so_far = sum(1 for r in prior_rows for _ in r.get("order_path", {}).get("fills", []))
-    paper_slippage_measured = n_fills_so_far >= capital_protection.CONFIG.slippage_window_fills
+    paper_slippage_measured = n_fills_so_far >= CAPITAL_CFG.slippage_window_fills
+    # R-denominated paper capital model (2026-09-14 staff meeting): the budget
+    # is computed against THIS trade's own swing as 1R, never against live dollars
+    swing_usd = round(stop_distance_pts * MNQ_MULTIPLIER, 2)   # ONE rounded figure, used everywhere below
+    eff = capital_protection.effective_config(CAPITAL_CFG, swing_usd)
     budget = capital_protection.budget_allowed(STRATEGY_NAME, state["paper_trades"],
-                                                paper_slippage_measured, state["paper_net_usd"])
+                                                paper_slippage_measured, state["paper_net_usd"], eff)
     remaining_budget_usd = max(0.0, budget + min(0.0, state["equity_usd"]))
 
     today = {
@@ -281,7 +293,10 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
         "paper_trades": state["paper_trades"],
         "paper_slippage_measured": paper_slippage_measured,
         "paper_net_usd": state["paper_net_usd"],
-        "per_trade_swing_usd": round(stop_distance_pts * MNQ_MULTIPLIER, 2),
+        "per_trade_swing_usd": swing_usd,
+        "capital_model": "paper_R" if CAPITAL_CFG.paper_mode else "live_usd",
+        "one_r_usd": swing_usd,
+        "paper_budget_r": CAPITAL_CFG.paper_starting_budget_r if CAPITAL_CFG.paper_mode else None,
         "equity_usd": state["equity_usd"],
         "peak_profit_usd": state["peak_profit_usd"],
         "remaining_budget_usd": remaining_budget_usd,
@@ -295,7 +310,7 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
                               reject_rate=BROKER_REJECT_RATE, partial_fill_rate=BROKER_PARTIAL_FILL_RATE,
                               disconnect_rate=BROKER_DISCONNECT_RATE, late_ack_rate=BROKER_LATE_ACK_RATE)
     broker.connect()
-    path = OrderPath(broker, journal_dir=JOURNAL_DIR, instrument=signal.instrument)
+    path = OrderPath(broker, journal_dir=JOURNAL_DIR, instrument=signal.instrument, cfg=CAPITAL_CFG)
     path.recover()
     result = path.submit_signal(signal, today=today, size_multiplier=decision["size_multiplier"],
                                  price_source=signal.entry)

@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-09-14T22:06:00Z",
-  "generated_at_local": "September 14th, 5:06 pm CT",
-  "last_run": "2026-09-14T22:00:00Z",
-  "last_run_local": "September 14th, 5:00 pm CT",
-  "next_run": "2026-09-15T00:00:00Z",
-  "next_run_local": "September 14th, 7:00 pm CT",
+  "generated_at": "2026-09-15T00:06:00Z",
+  "generated_at_local": "September 14th, 7:06 pm CT",
+  "last_run": "2026-09-15T00:00:00Z",
+  "last_run_local": "September 14th, 7:00 pm CT",
+  "next_run": "2026-09-15T02:00:00Z",
+  "next_run_local": "September 14th, 9:00 pm CT",
   "cadence": "Every 2 hours, on the odd Central hour",
-  "tests": "461 tests",
+  "tests": "467 tests",
   "ops": {
     "overall": "WARN",
     "checks": [
       {
         "name": "lock",
         "status": "PASS",
-        "detail": "free since 2026-09-14 22:06:12"
+        "detail": "free since 2026-09-15 00:05:22"
       },
       {
         "name": "shelf",
@@ -23,7 +23,7 @@
       {
         "name": "checkpoint",
         "status": "WARN",
-        "detail": "UNFINISHED work to resume: item=hyp-000162 Portfolio step=closed files=[] (started 2026-09-14T22:00)"
+        "detail": "UNFINISHED work to resume: item=hyp-000156 Director Re-Evaluation step=closed files=[] (started 2026-09-15T00:00)"
       },
       {
         "name": "value",
@@ -38,7 +38,7 @@
       {
         "name": "reports",
         "status": "PASS",
-        "detail": "64 reports, latest 2026-09-14-2200.md well-formed"
+        "detail": "65 reports, latest 2026-09-15-0000.md well-formed"
       },
       {
         "name": "new-information",
@@ -58,17 +58,17 @@
       {
         "name": "data-currency",
         "status": "PASS",
-        "detail": "price data through 2026-09-08 (4 sessions behind)"
+        "detail": "price data through 2026-09-14 (1 sessions behind)"
       },
       {
         "name": "awaiting-jason",
         "status": "WARN",
-        "detail": "5 item(s) blocked on Jason: STAFF MEETING 2026-09-14 \"what to do\" -- CORRECTED 2026-09-14 ~10:00 am CT, ITS CENTRAL; SUPERSEDED (kept for the record): the original fork text. Full record:"
+        "detail": "6 item(s) blocked on Jason: THE $50-150 PER-TRADE SWING BAND HAS GONE STALE AGAINST NQ'S PRICE LEVEL -- YOUR CALL.; STAFF MEETING 2026-09-14 \"what to do\" -- CORRECTED 2026-09-14 ~10:00 am CT, ITS CENTRAL"
       },
       {
         "name": "preflight",
         "status": "PASS",
-        "detail": "opening sequence ran 6 min ago, all steps ok"
+        "detail": "opening sequence ran 5 min ago, all steps ok"
       },
       {
         "name": "git-sync",
@@ -92,11 +92,11 @@
     "scans_run": 36,
     "scans_with_no_survivor": 30
   },
-  "ledger_rows": 204,
+  "ledger_rows": 205,
   "distinct_hypotheses": 155,
   "funnel": {
-    "closed": 115,
-    "discovery": 1,
+    "closed": 116,
+    "discovery": 0,
     "validation": 1,
     "holdout": 2,
     "forward": 3,
@@ -208,6 +208,11 @@
   },
   "recent_closures": [
     {
+      "id": "hyp-000156",
+      "name": "London open volatility burst 6e m23",
+      "date": "2026-09-15"
+    },
+    {
       "id": "hyp-000161",
       "name": "Stack a b2 expected range context x b3 orb break nq",
       "date": "2026-09-14"
@@ -226,14 +231,20 @@
       "id": "hyp-000158",
       "name": "Monthly-opex-week-delta-hedge-unwind-nq-m25",
       "date": "2026-09-13"
-    },
-    {
-      "id": "hyp-000157",
-      "name": "Month-end-payment-cycle-reversal-nq-m24",
-      "date": "2026-09-13"
     }
   ],
   "sessions": [
+    {
+      "file": "2026-09-15-0000.md",
+      "ts": "2026-09-15T00:00:00Z",
+      "new_information": "**A candidate that had already passed Statistical and cleared a blind Gate was closed by a ten-second test nobody had run.** The full hour-of-day profile costs almost nothing and answers the novelty question outright. It was not run earlier because the Tokyo comparison *felt* like the same test \u2014 one alternative hour checked, the conclusion generalised to the whole clock.",
+      "agents_ran": 0,
+      "agents_not_run": 0,
+      "staff_meeting": false,
+      "returns": false,
+      "disposition": null,
+      "ts_local": "September 14th, 7:00 pm CT"
+    },
     {
       "file": "2026-09-14-2200.md",
       "ts": "2026-09-14T22:00:00Z",
@@ -255,17 +266,6 @@
       "returns": false,
       "disposition": null,
       "ts_local": "September 14th, 3:00 pm CT"
-    },
-    {
-      "file": "2026-09-14-1800.md",
-      "ts": "2026-09-14T18:00:00Z",
-      "new_information": "**The blind Gate earns its cost.** It was handed a masked packet and found two methodological defects that four prior stages \u2014 including a Director Re-Evaluation built specifically to be skeptical \u2014 had all missed, because all of them were reasoning about the *result* and the Gate could only reason about the *procedure*. Blinding is not a formality here; it changed what was noticed.",
-      "agents_ran": 0,
-      "agents_not_run": 0,
-      "staff_meeting": false,
-      "returns": false,
-      "disposition": "CONDITIONAL",
-      "ts_local": "September 14th, 1:00 pm CT"
     }
   ],
   "bot_milestones": [

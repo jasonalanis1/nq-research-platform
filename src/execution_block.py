@@ -43,6 +43,18 @@ def _cycle_start() -> str | None:
         return None
 
 
+def _last_one_r() -> float | None:
+    try:
+        rows = bpr.load_log()
+        for r in reversed(rows):
+            v = r.get("gate", {}).get("one_r_usd")
+            if v:
+                return float(v)
+    except Exception:
+        pass
+    return None
+
+
 def live_stats(journal_dir: Path = None, since: str | None = None) -> dict:
     journal_dir = journal_dir or bpr.JOURNAL_DIR
     fills = [r for r in OrderPathJournal(journal_dir).all_records() if r.get("event") == "fill"] \
@@ -66,6 +78,11 @@ def render(replay_report: dict | None = None, live: dict | None = None, since: s
     lines.append(f"- Fills this cycle: {n_live_cycle} (LIVE paper)")
     lines.append(f"- Cumulative live fills: {live['fills_total']} / {TARGET_SAMPLE} "
                  f"(slippage measurable at {CAPITAL_CONFIG.slippage_window_fills})")
+    if bpr.CAPITAL_CFG.paper_mode:
+        last_r = _last_one_r()
+        lines.append(f"- Capital model: PAPER, R-denominated (budget {bpr.CAPITAL_CFG.paper_starting_budget_r:g}R"
+                     f"{f', 1R = ${last_r:,.0f} on the latest session' if last_r else ''}); "
+                     f"Jason's $50-150 band is a LIVE rule (B8) and is not applied to paper")
     if live["fills_total"]:
         lines.append(f"- Measured cost so far: avg slippage {live['avg_slippage_pts']:+.4f} pts/fill, "
                      f"max |spec-vs-actual| {live['max_abs_deviation_pts']:.4f} pts, "

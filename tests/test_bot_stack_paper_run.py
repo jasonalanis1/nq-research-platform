@@ -123,17 +123,53 @@ def test_run_session_no_signal():
     assert row["outcome"] == "no_signal"
 
 
-def test_run_session_wide_stop_blocked_by_capital_protection(monkeypatch):
-    """Mirrors the real 2026-09-08 session: a real signal fires, the
-    risk_state_engine permits trading, but the stop (~230pts here) is far
-    outside the $50-150 swing band -- capital_protection blocks it
-    fail-closed rather than silently sizing it down."""
+def test_run_session_wide_stop_blocked_under_LIVE_dollar_config(monkeypatch):
+    """Mirrors the real 2026-09-08 session under the LIVE capital model: a real
+    signal fires, the risk_state_engine permits trading, but the stop (~230pts
+    here, $460) is far outside Jason's $50-150 swing band -- capital_protection
+    blocks it fail-closed rather than silently sizing it down. That band is a
+    live rule (B8); the paper loop no longer applies it -- see the next test."""
+    import capital_protection as cp
     monkeypatch.setattr(bpr, "decision_for", _permit())
+    monkeypatch.setattr(bpr, "CAPITAL_CFG", cp.CONFIG)
     df = _orb_day(range_width=230, stop_pts=230, direction="long")
     row = bpr.run_session(pd.Timestamp("2026-01-06").date(), df, [])
     assert row["outcome"] == "blocked"
     assert any("swing" in r for r in row["order_path"]["reasons"])
     assert "pnl_usd" not in row
+
+
+def test_run_session_wide_stop_TRADES_under_paper_R_config(monkeypatch):
+    """The 2026-09-14 staff-meeting change: in paper the capital model is
+    R-denominated, so the same $460 swing that the live band blocks is a
+    legitimate 1R paper trade with a 4R budget behind it."""
+    import capital_protection as cp
+    monkeypatch.setattr(bpr, "decision_for", _permit())
+    assert bpr.CAPITAL_CFG is cp.PAPER_CONFIG        # the loop's default IS paper mode
+    df = _orb_day(range_width=230, stop_pts=230, direction="long")
+    row = bpr.run_session(pd.Timestamp("2026-01-06").date(), df, [])
+    assert row["outcome"] in ("filled", "partial")
+    assert row["gate"]["capital_model"] == "paper_R"
+    assert row["gate"]["one_r_usd"] == pytest.approx(460.1)
+    assert row["gate"]["remaining_budget_usd"] == pytest.approx(4 * 460.1)
+    assert "pnl_usd" in row
+
+
+def test_paper_mode_still_blocks_a_nonpositive_R():
+    import capital_protection as cp
+    assert not cp.swing_fits_budget(0.0, cp.PAPER_CONFIG)
+    assert not cp.swing_fits_budget(float("nan"), cp.PAPER_CONFIG)
+    assert cp.swing_fits_budget(460.0, cp.PAPER_CONFIG)
+    assert not cp.swing_fits_budget(460.0, cp.CONFIG)      # live band unchanged
+
+
+def test_effective_config_keeps_every_ratio_jason_set():
+    import capital_protection as cp
+    eff = cp.effective_config(cp.PAPER_CONFIG, 100.0)
+    assert eff.starting_budget_usd == 400.0 and eff.raised_budget_usd == 600.0
+    assert eff.trailing_floor_usd == 400.0
+    assert eff.trailing_giveback_fraction == cp.CONFIG.trailing_giveback_fraction
+    assert cp.effective_config(cp.CONFIG, 100.0) is cp.CONFIG   # live: untouched
 
 
 def test_run_session_blocked_by_risk_state_engine(monkeypatch):

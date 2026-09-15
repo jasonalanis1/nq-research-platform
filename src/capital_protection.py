@@ -53,9 +53,45 @@ class CapitalConfig:
     max_contracts: int = 1
     max_open_positions: int = 1
     max_orders_per_day: int = 4
+    # 7. PAPER MODE -- R-denominated (staff meeting, September 14th 2026,
+    #    research/infrastructure/staff-meeting-swing-band-2026-09-14.md;
+    #    Jason: "available to add more money if the ROI on the trade is there").
+    #    The dollar figures above (1.) are Jason's LIVE appetite from the
+    #    September 11th brief and they belong to B8. In paper, one R is whatever
+    #    the strategy's own stop is worth in dollars, and every budget ratio he
+    #    set is kept as a multiple of R: $300 at a $50-150 trade is 2-6R
+    #    (midpoint 4R); $500 is 3-10R (6R). The dollar swing band is NOT
+    #    applied in paper -- 1R only has to be positive and finite -- so the
+    #    paper record can exist at the strategy's real stop size. Every
+    #    Execution block that cites a paper drawdown states the current dollar
+    #    value of 1R. paper -> live comparisons are comparisons of EXECUTION,
+    #    never of kill-switch behaviour (Gate condition 3 of that meeting).
+    paper_mode: bool = False
+    paper_starting_budget_r: float = 4.0
+    paper_raised_budget_r: float = 6.0
+    paper_trailing_floor_r: float = 4.0
 
 
 CONFIG = CapitalConfig()
+PAPER_CONFIG = CapitalConfig(paper_mode=True)
+
+
+def effective_config(cfg: CapitalConfig, per_trade_swing_usd: float) -> CapitalConfig:
+    """In paper mode, express the dollar rules in R for THIS trade: 1R is the
+    trade's own swing. Outside paper mode, returns cfg unchanged, so every live
+    rule keeps Jason's dollars exactly as written."""
+    if not cfg.paper_mode:
+        return cfg
+    r = float(per_trade_swing_usd)
+    if not (r > 0 and r == r and r != float("inf")):
+        return cfg      # a non-positive/non-finite R is blocked by swing_fits_budget below
+    from dataclasses import replace
+    return replace(cfg,
+                   starting_budget_usd=cfg.paper_starting_budget_r * r,
+                   raised_budget_usd=cfg.paper_raised_budget_r * r,
+                   trailing_floor_usd=cfg.paper_trailing_floor_r * r,
+                   per_trade_swing_min_usd=1e-9,
+                   per_trade_swing_max_usd=float("inf"))
 
 
 @dataclass
@@ -85,9 +121,13 @@ def budget_allowed(strategy: str, paper_trades: int, paper_slippage_measured: bo
 
 
 def swing_fits_budget(per_trade_swing_usd: float, cfg: CapitalConfig = CONFIG) -> bool:
-    """The starting budget is reserved for candidates whose one-micro swing
-    is $50-150. H118 (~$1,000-1,400 per trade) fails this by construction."""
-    return cfg.per_trade_swing_min_usd <= per_trade_swing_usd <= cfg.per_trade_swing_max_usd
+    """LIVE: the starting budget is reserved for candidates whose one-micro swing
+    is $50-150. H118 (~$1,000-1,400 per trade) fails this by construction.
+    PAPER (cfg.paper_mode): 1R only has to be positive and finite."""
+    r = float(per_trade_swing_usd)
+    if cfg.paper_mode:
+        return r > 0 and r == r and r != float("inf")
+    return cfg.per_trade_swing_min_usd <= r <= cfg.per_trade_swing_max_usd
 
 
 # --------------------------------------------------------------------------
@@ -182,15 +222,19 @@ def pre_order_check(state: dict, cfg: CapitalConfig = CONFIG) -> Decision:
     if missing:
         d.block("fail-closed: missing " + ", ".join(missing))
         return d
+    if cfg.paper_mode and not swing_fits_budget(state["per_trade_swing_usd"], cfg):
+        d.block(f"paper mode: 1R must be positive and finite, got {state['per_trade_swing_usd']!r}")
+        return d
+    cfg = effective_config(cfg, state["per_trade_swing_usd"])
 
     budget = budget_allowed(state["strategy"], state["paper_trades"],
                             state["paper_slippage_measured"], state["paper_net_usd"], cfg)
     if budget <= 0:
         d.block(f"{state['strategy']} is not fundable at this budget")
-    if not swing_fits_budget(state["per_trade_swing_usd"], cfg):
+    if not cfg.paper_mode and not swing_fits_budget(state["per_trade_swing_usd"], cfg):
         d.block(f"per-trade swing ${state['per_trade_swing_usd']:.0f} outside "
                 f"${cfg.per_trade_swing_min_usd:.0f}-{cfg.per_trade_swing_max_usd:.0f}")
-    if state["remaining_budget_usd"] > budget:
+    if state["remaining_budget_usd"] > budget + 1e-6:   # tolerance: float rounding, not a real breach
         d.block(f"remaining budget ${state['remaining_budget_usd']:.0f} exceeds allowed ${budget:.0f}")
     if trailing_kill(state["equity_usd"], state["peak_profit_usd"], cfg):
         d.block(f"TRAILING KILL: equity ${state['equity_usd']:.0f} <= "
