@@ -104,6 +104,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 from base_entry_b3 import STRATEGY_NAME as B3_NAME, generate_signals as b3_signals  # noqa: E402
 import execution_dummy  # noqa: E402
 
@@ -177,6 +178,7 @@ def _b7_execution_anchor(all_dates: list) -> object:
         return pd.Timestamp(json.loads(B7_ANCHOR_PATH.read_text())["anchor"]).date()
     anchor = max(all_dates)
     B7_ANCHOR_PATH.parent.mkdir(parents=True, exist_ok=True)
+    assert_writable(B7_ANCHOR_PATH, "B7 execution anchor")
     B7_ANCHOR_PATH.write_text(json.dumps({
         "anchor": str(anchor),
         "set_by": "bot_stack_paper_run.py, first run",
@@ -233,6 +235,7 @@ def load_log() -> list[dict]:
 
 def append_row(row: dict) -> None:
     LOG_DIR.mkdir(parents=True, exist_ok=True)
+    assert_writable(LOG_PATH, "live execution log")
     with LOG_PATH.open("a") as f:
         f.write(json.dumps(row, default=str) + "\n")
 
@@ -465,4 +468,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    enable_production()   # command-line entry point: the live paper loop may write its record
     main(sys.argv[1:])

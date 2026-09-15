@@ -97,6 +97,7 @@ from study_nq_trend_following import (  # reused unmodified
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LOG_PATH = PROJECT_ROOT / "research" / "ledger" / "prospective_exp047_log.jsonl"
+from production_paths import assert_writable, enable_production  # noqa: E402  (write guard, refocus 7.3)
 
 # Frozen spec Section 3 -- exact last on-disk bar timestamp at v2 sign-off (2026-09-06).
 # NOT a calendar date. Only weeks entirely after this instant are eligible to log.
@@ -130,6 +131,7 @@ def append_new_rows(new_rows: list):
     Section 5)."""
     if not new_rows:
         return
+    assert_writable(LOG_PATH, "EXP047 prospective log")
     with open(LOG_PATH, "a") as f:
         for row in new_rows:
             f.write(json.dumps(row) + "\n")
@@ -316,4 +318,5 @@ def main():
 
 
 if __name__ == "__main__":
+    enable_production()
     main()

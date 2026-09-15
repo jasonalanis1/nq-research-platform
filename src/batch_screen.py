@@ -216,6 +216,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 import idea_factory as IF          # noqa: E402  build_frame(), WINDOWS, KNOWN_AT -- reused, not reimplemented
 import integrity_checks as IC      # noqa: E402  check_placebo()
 
@@ -356,6 +357,7 @@ def load_state() -> dict:
 
 
 def save_state(state: dict) -> None:
+    assert_writable(STATE_FILE, "batch-screen state")
     STATE_FILE.write_text(json.dumps(state, indent=2, default=str))
 
 
@@ -656,6 +658,7 @@ def append_inventory_entries(survivors: list, batch_k: int) -> list:
         text_to_append.append(build_inventory_entry(r, entry_no, batch_k))
         numbers.append(entry_no)
         entry_no += 1
+    assert_writable(INVENTORY_FILE, "idea inventory append")
     with INVENTORY_FILE.open("a") as f:
         f.write("\n" + "\n".join(text_to_append))
     return numbers
@@ -714,4 +717,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    enable_production()   # NOTE: batch screening is FROZEN (refocus s.3) -- do not run this
     raise SystemExit(main())

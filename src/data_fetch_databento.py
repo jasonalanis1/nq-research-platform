@@ -83,6 +83,8 @@ import pandas as pd
 import databento as db
 from pathlib import Path
 from datetime import datetime, timedelta
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from production_paths import assert_writable, enable_production  # noqa: E402
 
 DATASET = "GLBX.MDP3"        # CME Globex MDP 3.0 -- the exchange feed NQ futures trade on
 SYMBOL = "NQ.c.0"             # continuous front-month NQ futures (Databento's equivalent of Yahoo's NQ=F)
@@ -320,6 +322,7 @@ def save_to_csv(df: pd.DataFrame) -> Path:
     """
     today_str = datetime.now().strftime("%Y-%m-%d")
     out_path = DATA_DIR / f"NQ_1min_databento_{today_str}.csv"
+    assert_writable(out_path, "NQ 1-minute series (full fetch)")
     df.to_csv(out_path)
     return out_path
 
@@ -345,4 +348,5 @@ def main():
 
 
 if __name__ == "__main__":
+    enable_production()
     main()

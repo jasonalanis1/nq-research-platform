@@ -63,6 +63,9 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from production_paths import assert_writable  # noqa: E402  (write guard, refocus 7.3)
 
 LEDGER_PATH = Path("research/ledger/hypotheses.jsonl")
 
@@ -292,6 +295,7 @@ def log_hypothesis(
         notes=notes,
     )
     ledger_path.parent.mkdir(parents=True, exist_ok=True)
+    assert_writable(ledger_path, "ledger append")
     with open(ledger_path, "a") as f:
         f.write(json.dumps(record.as_dict()) + "\n")
     return record
@@ -343,6 +347,7 @@ def update_status(
         search_batch_id=original.get("search_batch_id"),
         notes=notes,
     )
+    assert_writable(ledger_path, "ledger status update")
     with open(ledger_path, "a") as f:
         f.write(json.dumps(updated.as_dict()) + "\n")
     return updated

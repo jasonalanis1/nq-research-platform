@@ -51,6 +51,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -64,6 +65,8 @@ COMPLIANCE = RESEARCH / "_cycle_compliance.jsonl"
 PREFLIGHT = RESEARCH / "_cycle_preflight.json"
 CHECKPOINT = RESEARCH / "_cycle_checkpoint.json"
 HISTORY = RESEARCH / "_cycle_history.jsonl"
+sys.path.insert(0, str(SRC))
+from production_paths import assert_writable, enable_production, FLAG as _PROD_FLAG  # noqa: E402
 
 TESTS_TIMEOUT = 170
 
@@ -73,8 +76,9 @@ def _now() -> datetime:
 
 
 def _run(argv, timeout=60) -> tuple:
+    env = {k: v for k, v in os.environ.items() if k != _PROD_FLAG}   # children (pytest!) never inherit production
     try:
-        p = subprocess.run(argv, cwd=str(ROOT), capture_output=True, text=True, timeout=timeout)
+        p = subprocess.run(argv, cwd=str(ROOT), capture_output=True, text=True, timeout=timeout, env=env)
         return p.returncode, (p.stdout or ""), (p.stderr or "")
     except subprocess.TimeoutExpired:
         return None, "", f"timed out after {timeout}s"
@@ -211,6 +215,7 @@ def main() -> int:
         "delta": {k: v for k, v in delta.items() if v},
     }
     COMPLIANCE.parent.mkdir(parents=True, exist_ok=True)
+    assert_writable(COMPLIANCE, "cycle compliance record")
     with COMPLIANCE.open("a") as f:
         f.write(json.dumps(row, default=str) + "\n")
 
@@ -225,4 +230,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    enable_production()
     raise SystemExit(main())

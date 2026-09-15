@@ -23,6 +23,7 @@ HOW TO RUN (daily):
 """
 
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -38,6 +39,8 @@ from study_vwap_dist_low_10d_drift_h118 import VAR, BUCKET, HORIZON_DAYS, comput
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LOG_DIR = PROJECT_ROOT / "research" / "forward_validation"
 LOG_PATH = LOG_DIR / "h118_forward_log.jsonl"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from production_paths import assert_writable, enable_production  # noqa: E402
 
 # --- Forward Generation boundary (added 2026-09-09, bug fix) ---------------
 # data_holdout.py's ALLOW_HOLDOUT_DATA=1 bypass (used below to see recent
@@ -77,6 +80,7 @@ def load_log():
 
 def save_log(rows):
     LOG_DIR.mkdir(parents=True, exist_ok=True)
+    assert_writable(LOG_PATH, "H118 forward log (rewritten whole)")
     with open(LOG_PATH, "w") as f:
         for r in rows:
             f.write(json.dumps(r, default=str) + "\n")
@@ -178,4 +182,5 @@ def main():
 
 
 if __name__ == "__main__":
+    enable_production()
     main()

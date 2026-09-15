@@ -50,6 +50,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 import bot_stack_paper_run as bpr  # noqa: E402
 from base_entry_b3 import audit, generate_signals  # noqa: E402
 from capital_protection import CONFIG as CAPITAL_CONFIG  # noqa: E402
@@ -63,6 +64,7 @@ REPLAY_REPORT = REPLAY_DIR / "replay_report.json"
 
 
 def _reset(replay_dir: Path) -> None:
+    assert_writable(replay_dir, "B7 replay tree")
     """Truncate, never delete (device shell cannot rm)."""
     (replay_dir / "journal").mkdir(parents=True, exist_ok=True)
     (replay_dir / "replay_log.jsonl").write_text("")
@@ -189,6 +191,7 @@ def main(argv=None) -> int:
         "defects": [c for c in checks if c["status"] == "FAIL"],
         "step_a_clean": all(c["status"] == "PASS" for c in checks),
     }
+    assert_writable(REPLAY_REPORT, "B7 replay report")
     REPLAY_REPORT.write_text(json.dumps(report, indent=2, default=str))
     for c in checks:
         print(f"  {c['status']:<4} {c['check']} ({c['passed']}/{c['n']}) {c['note']}")
@@ -200,4 +203,5 @@ def main(argv=None) -> int:
 
 
 if __name__ == "__main__":
+    enable_production()
     raise SystemExit(main())

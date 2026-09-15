@@ -67,6 +67,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 from volatility_conditioning import (  # noqa: E402
     build_conditioning_frame, get_volatility_conditioning, position_size_multiplier,
     build_midday_afternoon_frame, get_afternoon_conditioning,
@@ -151,6 +152,7 @@ def freeze_params() -> dict:
         "note": "computed once on the Discovery slice; never refit; no P&L claim anywhere in this engine",
     }
     PARAMS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    assert_writable(PARAMS_PATH, "frozen risk/state params")
     PARAMS_PATH.write_text(json.dumps(params, indent=2))
     return params
 
@@ -275,10 +277,12 @@ def main():
     print(json.dumps(out, indent=2, default=str))
     if a.log:
         LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        assert_writable(LOG_PATH, "risk/state daily log")
         with LOG_PATH.open("a") as f:
             f.write(json.dumps(out, default=str) + "\n")
         print(f"logged -> {LOG_PATH}")
 
 
 if __name__ == "__main__":
+    enable_production()
     main()

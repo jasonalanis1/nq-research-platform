@@ -54,6 +54,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 from base_entry_b3 import STRATEGY_NAME, STRATEGY_VERSION, TIME_EXIT, signal_for_day  # noqa: E402
 from risk_state_engine import decision_for  # noqa: E402
 
@@ -81,6 +82,7 @@ def load_log() -> list[dict]:
 
 def append_row(row: dict) -> None:
     LOG_DIR.mkdir(parents=True, exist_ok=True)
+    assert_writable(LOG_PATH, "bot statistical forward log")
     with LOG_PATH.open("a") as f:
         f.write(json.dumps(row, default=str) + "\n")
 
@@ -195,4 +197,5 @@ def main():
 
 
 if __name__ == "__main__":
+    enable_production()
     main()

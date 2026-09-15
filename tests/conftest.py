@@ -40,3 +40,23 @@ def _never_touch_the_live_execution_record(tmp_path, monkeypatch):
     monkeypatch.setattr(_bpr, "JOURNAL_DIR", tmp_path / "order_path_journal")
     monkeypatch.setattr(_bpr, "B7_ANCHOR_PATH", tmp_path / "anchor.json")
     yield
+
+
+# ---------------------------------------------------------------------------
+# PRODUCTION WRITE GUARD (Jason, refocus memo 7.3, 2026-09-15). The fixture
+# above redirects ONE writer. src/production_paths.py refuses EVERY protected
+# production path unless TONY_PRODUCTION=1 is set, and the test session strips
+# that flag at start and asserts it stays absent for every test -- so even
+# with the fixture above deleted, no test can write the ledger, the execution
+# record, the forward logs, the inventory or the price series.
+# ---------------------------------------------------------------------------
+import os  # noqa: E402
+
+os.environ.pop("TONY_PRODUCTION", None)
+
+
+@pytest.fixture(autouse=True)
+def _production_flag_is_never_set_in_tests():
+    assert os.environ.get("TONY_PRODUCTION") != "1", "a test set TONY_PRODUCTION=1 -- never do that"
+    yield
+    assert os.environ.get("TONY_PRODUCTION") != "1", "a test left TONY_PRODUCTION=1 set"

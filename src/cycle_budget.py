@@ -36,6 +36,9 @@ import argparse, json, re, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from production_paths import assert_writable, enable_production  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 R = ROOT / "research"
 CKPT = R / "_cycle_checkpoint.json"
@@ -165,6 +168,7 @@ def cmd_done(_a):
     CKPT.write_text(json.dumps(c, indent=1))
     s0, s1 = c.get("snapshot_at_start", {}), c["snapshot_at_end"]
     moved, delta = movement(s0, s1)
+    assert_writable(HIST, "cycle history")
     with HIST.open("a") as f:
         f.write(json.dumps({"started": c["started"], "finished": c["finished"], "delta": delta, "moved": moved,
                             "movement_rule": "stage-change (refocus 7.1, 2026-09-15)"}) + "\n")
@@ -190,4 +194,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    enable_production()
     sys.exit(main())

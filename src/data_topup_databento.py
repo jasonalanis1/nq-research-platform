@@ -40,6 +40,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 from data_loader import DATA_DIR, find_active_data_file, read_price_csv  # noqa: E402
 from data_fetch_databento import DATASET, SCHEMA, SYMBOL, NY_TIMEZONE, get_api_key, log_cost_entry  # noqa: E402
 from data_continuity_check import check_continuity  # noqa: E402
@@ -147,6 +148,7 @@ def main(argv=None) -> int:
     out_path = DATA_DIR / f"NQ_1min_databento_{end.date().isoformat()}.csv"
     if out_path == old_path:
         out_path = DATA_DIR / f"NQ_1min_databento_{end.date().isoformat()}b.csv"
+    assert_writable(out_path, "NQ 1-minute series (top-up)")
     new.to_csv(out_path)
     print(f"Wrote {out_path.name}: {len(new)} rows ({len(new) - len(old)} added), ends {new.index[-1]}")
 
@@ -158,4 +160,5 @@ def main(argv=None) -> int:
 
 
 if __name__ == "__main__":
+    enable_production()
     raise SystemExit(main())

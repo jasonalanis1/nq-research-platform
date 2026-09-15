@@ -40,6 +40,7 @@ from typing import Optional
 import sys
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from production_paths import assert_writable, enable_production
 
 import capital_protection  # noqa: E402
 from broker_interface import BrokerDisconnected, BrokerInterface, Order  # noqa: E402
@@ -69,7 +70,7 @@ class OrderPathJournal:
 
     def append(self, event: str, **fields) -> dict:
         record = {"ts": _now().isoformat(), "event": event, **fields}
-        with self._path_for(_now()).open("a") as f:
+        with assert_writable(self._path_for(_now()), "order-path journal").open("a") as f:
             f.write(json.dumps(record, default=str) + "\n")
         return record
 
