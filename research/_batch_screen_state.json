@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "screened": {
+    "opening_range_vs_atr|HIGH|midday|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|LOW|midday|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|HIGH|next_rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|HIGH|last_hour|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|LOW|first30|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "volume_vs_expected|HIGH|first30|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|LOW|morning|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|HIGH|afternoon|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "volume_vs_expected|HIGH|morning|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|LOW|rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|LOW|next_rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "volume_vs_expected|HIGH|midday|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|LOW|next_rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|HIGH|morning|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|HIGH|rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|HIGH|first30|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "volume_vs_expected|HIGH|overnight|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|HIGH|next_rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|LOW|last_hour|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "volume_vs_expected|HIGH|rth|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|LOW|afternoon|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|HIGH|last_hour|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "vxn_minus_realized|LOW|midday|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "GREEN",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "location_in_range|LOW|last_hour|range": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    },
+    "opening_range_vs_atr|HIGH|midday|mfe": {
+      "screened_date": "2026-09-15",
+      "batch_k": 25,
+      "survived": true,
+      "gate1_credible_sidak": true,
+      "placebo_status": "RED",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md"
+    }
+  },
+  "history": [
+    {
+      "run_date": "2026-09-15",
+      "report_file": "research/observatory/batch-screen-2026-09-15.md",
+      "n_screened": 25,
+      "batch_k": 25,
+      "n_survivors": 25,
+      "n_placebo_red": 18,
+      "cumulative_screened": 25
+    }
+  ]
+}
