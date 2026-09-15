@@ -41,6 +41,51 @@ by" says an interactive session, that work is done; continue, don't redo.
   anyway). Week 3/260. Cumulative +153.5 pts, CI [6.75, 95.58]. Next
   checkpoint week 104. Needs a fresh week of data to advance.
 
+## REFOCUS (Jason, September 15th) — standing, supersedes the Sept 14th acceleration
+Memo verbatim: research/infrastructure/refocus-2026-09-15.md (received ~10:00 pm CT). Nothing in it is
+optional. It replaces research/infrastructure/acceleration-plan-2026-09-14.md's Levers C and D and the
+"push this as fast as possible" direction; Levers A and B (execution sample, broker) stand as facts.
+
+1. **NO PROFIT DEADLINE — rule that never bends.** A date by which Jason needs trading income is NOT
+   an input to scheduling, promotion or the bot roadmap. If he ever states one, treat it as a flag
+   that he is under pressure, say so, and do not plan around it. His to set, his alone to reverse,
+   in writing.
+2. **CADENCE: daytime 2-hour cycles.** SUPERSEDED: the 24-hour / 12-cycles-a-day acceleration
+   (Lever D) and the 1/3/5/7 am cycles. Standing day is 9 am, 11 am, 1 pm, 3 pm, 5 pm, 7 pm, 9 pm,
+   11 pm CT again; the 11 pm cycle still books the next day (see SCHEDULING IS TONY'S JOB). His
+   reason, recorded as his: the acceleration window produced 16 fills from a placeholder that proves
+   no edge, 25 screen survivors of which 18 flagged placebo RED, seven operational defects including
+   a contaminated live execution journal, and zero directional candidates.
+   **A cycle with no real queue item CLOSES EARLY and says so.** Open budget is not a reason to find
+   work. Batch screening is not filler.
+3. **MAGNITUDE RESEARCH FROZEN.** No new magnitude hypotheses, no new batch screens, until the
+   directional question is answered. SUPERSEDED: queue item 0-ACCEL / Lever C -- do NOT run
+   `src/batch_screen.py` again. The 25 survivors (Entries 37-61) stay shelved and UNWORKED, marked
+   PARKED in research/idea_inventory.md, NOT drawable until the 72% placebo-RED rate has a real
+   explanation (not a logged note). Entries 33/35/36 (sourced magnitude ideas) are PARKED under the
+   same freeze. Existing validated facts stay where they are; the Risk/State Engine keeps using them.
+4. **DIRECTIONAL LANE -- 20 trials, hard stop.** Queue item 0-DIR, its own slot count that magnitude
+   cannot outrank; sourced ONLY from non-state ideas (mechanism, calendar, structure -- never the
+   Idea Factory state library); count kept in research/ledger/directional_lane.json. If 20 return
+   null, direction is closed by evidence and what Tony becomes is Jason's call, not a cycle's.
+5. **CONSOLE RETIRED.** `src/generate_console_state.py`, `research/_console_state.json`, the push
+   sequence and the artifact are gone (git rm, September 15th). The session report carries every
+   number it showed. Do not maintain, port, or rebuild a replacement.
+6. **OVERHEAD.** Full Scope is WEEKLY or on request only, never per-window (docs/FULL_SCOPE_*.md not
+   touched by cycles). Every daily wrap states cycles run and minutes actually used -- read from
+   the budget clock and research/_cycle_compliance.jsonl by `src/session_report.py`, never estimated.
+7. **OPERATIONAL GAPS.** 7.1 busy-work alarm measures STAGE CHANGES, shelf/inventory additions count
+   zero (src/cycle_budget.py `done`, src/ops_checks.py `value`). 7.2 queue item 1-VERIFY, one weekly
+   verification cycle, checklist research/infrastructure/weekly-verification-checklist.md. 7.3
+   production write guard: src/production_paths.py, default-deny, audit
+   research/integrity/write-path-audit-2026-09-15.md. 7.4(a) factual claims in reports cite
+   `path:line` (SESSION REPORT FORMAT); 7.4(b) Jason pastes project state to an outside model on a
+   cadence -- his, not a cycle's. 7.5 GitHub push verified at every close (`git` check in
+   cycle_close.py); confirmed September 15th, origin/main == HEAD.
+8. What this buys: a real directional answer by roughly late October, when IBKR futures permission
+   can be re-requested (~October 13th). A null is a definitive result and is reported as a good
+   outcome, not a failure.
+
 ## UPGRADE BRIEF ADOPTED (September 11th, 6:48 pm CT, Jason's direction) — read AMENDMENT v2.5 + v3.2 before working
 
 - Pipeline order CHANGED: Director (absorbs Triage + Re-Eval, one capital call at
@@ -86,7 +131,7 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 (auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 1, GATED 0, FROZEN 3.)
 
-- SHELF: Shelf 29/3 DRAWABLE (Entry 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)
+- SHELF: Shelf 1/3 DRAWABLE (Entry 32; pending on data/Jason: Entry 15, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61) -> SOURCING OWED (read + scope from every channel); no draw, no invented scope
 - OPEN hyp-000162 opening_range_width_midday_range_excursion_nq_m30: reached Director CONTINUE -> OWED: BLIND Integrity Gate checkpoint (src/integrity_blind_packet.py, fresh context, VETO)
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
@@ -260,6 +305,11 @@ No staff-meeting trigger met (checked all 4). Test suite 202/202 green
 Holdout slot used.
 
 ## STANDING RESEARCH PRIORITY — favor fast-resolving candidates
+
+**MAGNITUDE RESEARCH FROZEN (Jason, September 15th, REFOCUS s.3):** no new magnitude hypotheses and no
+batch screens until the directional question (queue 0-DIR) is answered. Existing validated facts stay
+in the Risk/State Engine. Everything below still governs HOW a candidate is judged; it no longer picks
+magnitude work over the directional lane.
 
 **REINFORCED AND SHARPENED (Jason, September 14th ~9:00 pm CT, after the swing-band staff
 meeting): "I'm okay with experimenting with the paper trading. I'm most interested in what works
@@ -520,7 +570,7 @@ WEEKS 4-8:
   U21. Metrics dashboard on the ten yield metrics / weekly scorecard shape (C, F).
   U22. Day-60 review: Data Acquisition Trigger check; D12 goal/capital conversation
        once paper trading has a record.
-  U23. [DONE Sept 13th ~6:05 pm CT -- console v23 published: Bot panel at the top of the Now tab, H118 card corrected to rejected/information-only, budget copy 90->105 min] Console: render the bot-milestone table (research/_console_state.json now carries
+  U23. [CONSOLE RETIRED September 15th (REFOCUS s.5) -- historical record only] [DONE Sept 13th ~6:05 pm CT -- console v23 published: Bot panel at the top of the Now tab, H118 card corrected to rejected/information-only, budget copy 90->105 min] Console: render the bot-milestone table (research/_console_state.json now carries
        `bot_milestones`, `upgrade_queue`, `ordering_principle` as of Sept 13th ~5:55 pm
        CT; the published console HTML does not display them yet). Add a "Bot" panel at
        the TOP of the console, above the research funnel -- the bot is the goal, the
@@ -563,18 +613,54 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 
 ## Queue
 
-   0-ACCEL. BATCH SCREENING -- BUILT, FIRST BATCH RUN, ONGOING (Jason, Sept 14th ~8 pm CT: "push
+   0-DIR. DIRECTIONAL LANE -- 20 TRIALS, HARD STOP (Jason, September 15th, REFOCUS s.4). Its own
+      slot count; magnitude cannot outrank it and the entry slot is never empty by sorting again.
+      SOURCING: non-state ideas only -- mechanism, calendar, structure. NEVER the Idea Factory's
+      state library (Jason's numbers: 87 directional nulls and ~9,910 state combinations say that
+      space is exhausted). The count is a file: research/ledger/directional_lane.json
+      {"cap": 20, "used": 0, "trials": []} -- a cycle that spends a trial appends the trial
+      object there in the same commit as its ledger row. Each trial = one pre-registered
+      directional Discovery scan through the normal Mechanism-first pipeline (mechanism doc ->
+      map row -> inventory entry -> frozen spec -> scan -> Statistical -> Gate ...); a trial is
+      spent when the scan is registered, whatever it returns.
+      FIRST CANDIDATE (memo): the overnight-versus-intraday return split. VERIFIED AGAINST THE
+      LEDGER September 15th: the memo says it was only ever an integrity check; the ledger says
+      it WAS tested as a hypothesis once -- hyp-000145 (research/ledger/hypotheses.jsonl:178),
+      Entry 19 / M15 (research/idea_inventory.md:1348), Scan 020, September 12th, Lou-Polk-
+      Skouras "night leg carries the drift" form: night-minus-day +0.006 ATR, block CI
+      (-0.028,+0.038), night carries 55% of drift, clean null, attempt 1 of 2, not killed
+      (open-print share 1%). The integrity suite's overnight/intraday check is a separate thing.
+      So trial 1 is NOT a first look: it is either attempt 2 of the M15 family under a genuinely
+      different claim (the Integrity Gate resurrection rule requires new information -- e.g. the
+      night leg as a TRADE conditioned on a non-state calendar/structure fact, not the
+      unconditional split already rejected) or the next non-state directional idea (Entry 32 /
+      M28 pre-holiday effect is sourced, drawable and directional). The cycle that owns trial 1
+      makes that call through Mechanism-first and REPORTS THE DISCREPANCY to Jason; nothing
+      was run September 15th. HARD STOP: at used == 20 with every trial null, direction is
+      closed by evidence, the lane closes, and what Tony is instead of a directional bot is
+      Jason's decision -- a cycle never makes it.
+   1-VERIFY. WEEKLY VERIFICATION CYCLE (memo 7.2). One cycle a week whose ONLY job is checking
+      Tony against itself: numbers in the docs vs numbers in the code, registry counts vs
+      actual files, booked triggers vs the standing schedule, ledger latest-row status vs prose.
+      NO research in that cycle. Checklist: research/infrastructure/weekly-verification-checklist.md.
+      Jason books the trigger; the cycle writes research/integrity/verification-YYYY-MM-DD.md
+      and every discrepancy is a queue item or a fix, never a note.
+
+   0-ACCEL. **SUPERSEDED September 15th (REFOCUS s.3) -- BATCH SCREENING FROZEN. Do not run
+      `src/batch_screen.py`. Entries 37-61 PARKED, unworked, not drawable until the 72%
+      placebo-RED rate has a real explanation.** Original text kept for the record:
+      BATCH SCREENING -- BUILT, FIRST BATCH RUN, ONGOING (Jason, Sept 14th ~8 pm CT: "push
       this as fast as possible"). src/batch_screen.py built per
       research/infrastructure/acceleration-plan-2026-09-14.md Lever C (15 tests,
       tests/test_batch_screen.py). First real run 2026-09-15: 25/143 candidate cells screened,
       25 survivors (idea_inventory.md ENTRY 37-61, screened only, not scanned), 18/25 (72%)
       placebo RED (flagged, carried forward per the hyp-000162 precedent, not auto-rejected).
       Detail: research/infrastructure/batch-screen-build-2026-09-15.md,
-      research/observatory/batch-screen-2026-09-15.md. ONGOING: overnight cycles own this --
+      research/observatory/batch-screen-2026-09-15.md. (WAS: overnight cycles own this --
       run `python3 src/batch_screen.py` once per cycle to pick up the next 25 cells
-      (research/_batch_screen_state.json tracks progress; 118/143 remain). Full pipeline
+      (research/_batch_screen_state.json tracks progress; 118/143 remain) -- FROZEN.) Full pipeline
       (Director/Mechanism/Statistical/Gate/Validation) is UNCHANGED for every survivor.
-   1-ACCEL. B4b IBKR ADAPTER, built NOW against the paper account with a permitted instrument so the
+   1-ACCEL. (pace per REFOCUS: daytime cycles, no deadline) B4b IBKR ADAPTER, built against the paper account with a permitted instrument so the
       integration is proven before the futures permission lands (~Oct 13th). Bot milestone; outranks
       research once the dummy's 20-fill sample is complete. Spec first (b4b-ibkr-adapter-spec.md),
       then code, then a connectivity test Jason can run from his Mac in one command.
@@ -721,7 +807,7 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 ## BUDGET CLOCK / RESUME / BUSY-WORK ALERT (Jason, September 11th ~9:55 pm CT; PERMANENT)
 - Budget is 105 of the 120-minute cadence. `python3 src/cycle_budget.py start --minutes 105` right after the lock; `checkpoint --item --step [--files]` after EVERY stage artifact lands; `remaining` BEFORE starting any new stage (exit 3 = <=15 min left: close out now; exit 4 = over: checkpoint and close out immediately); `done` at close (writes the value snapshot).
 - Resume: step 2 of every cycle runs `python3 src/cycle_budget.py status`. UNFINISHED = the prior cycle hit budget mid-task: resume THAT item at THAT step first. Never re-register a scan that is already in SCAN_REGISTRY; never re-run a stage whose artifact exists; a file listed under `files` is half-written until its stage's artifact says otherwise.
-- Alert: ops_checks `value` FAILs on BUSY WORK (3 closed cycles with zero artifact deltas) or QUEUE EXHAUSTED (nothing owed + empty shelf). Either is an IMMEDIATE item: message Jason, do not manufacture work. `checkpoint` WARN = unfinished work to resume.
+- Alert: ops_checks `value` FAILs on BUSY WORK (3 closed cycles with NO STAGE CHANGE -- redefined September 15th, REFOCUS 7.1: movement = a candidate changing stage in the ledger, a scan registered, or a bot milestone flipped; shelf/inventory additions, studies and mechanism docs count ZERO) or QUEUE EXHAUSTED (nothing owed + empty shelf). Either is an IMMEDIATE item: message Jason, do not manufacture work. `checkpoint` WARN = unfinished work to resume.
 
 ## Blocked — needs Jason
 - **BROKER FOR THE COST NUMBER -- ONE-TIME ACTION, JASON'S (he said "look for brokers, doesn't
@@ -844,16 +930,8 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
     Discovery file; expected cost in the band of the September 12th quotes. $5+ rule: his
     call. NOT a purchase anyone else may make.
 
-CONSOLE PUSH PATHS (binding, corrected live with Jason September 12th,
-8:09 am CT -- this supersedes any cycle prompt wording that says "a
-scratchpad path"): the Artifact tool is given ONLY paths inside the cloud
-workspace. read_db out_dir = /home/claude/console_version_check (exactly).
-write_db file_path = /home/claude/console_state.json (exactly, after the
-cloud-Bash cp from the staged upload). Never /tmp, never /mnt/user-data.
-Verified live: both calls complete with no approval request. The full
-sequence is: device_stage_files the console JSON -> cloud Bash cp to
-/home/claude/console_state.json -> read_db get with that out_dir (version
-only) -> write_db set with if_version pinned.
+CONSOLE PUSH PATHS: RETIRED September 15th (REFOCUS s.5). There is no console, no state doc, no
+push sequence. Do not rebuild one.
 
 CHANGE FREEZE -- LIFTED (Jason, September 13th, ~4:55 pm CT): the checkpoint was held
 today instead of the 19th (research/weekly/2026-09-13.md). The named list is
@@ -1455,6 +1533,12 @@ Settled with him the same evening:
 - INTERRUPT HIM BETWEEN SESSIONS ONLY FOR: (1) a decision only he can make, or (2) a
   capital-protection trip. Not for a rejection, not for a defect found and fixed, not for a
   candidate advancing a stage — those wait for the next session report.
+- CITE FILE AND LINE (Jason, September 15th, REFOCUS 7.4a -- binding): every factual claim in a
+  session report or cycle write-up that rests on a number, a status or a rule cites its source as
+  `path:line` (e.g. research/ledger/hypotheses.jsonl:178, src/capital_protection.py:41) so he can
+  verify rather than trust. A claim with no citable source is labelled as the cycle's own judgment.
+- ACTUAL USAGE (REFOCUS s.6): OPERATIONS prints this cycle's minutes used (budget clock) and the
+  day's cycles run + total minutes (research/_cycle_compliance.jsonl). Read, never estimated.
 
 ## SCHEDULING IS TONY'S JOB, NOT JASON'S (Jason, September 14th ~7:50 pm CT) — binding
 "I think you should be scheduling your cycles automatically without me."
@@ -1466,6 +1550,9 @@ because nobody booked them.
   be used: it starts a FRESH session with none of this context, and errors with
   `missing_worker_target`). Booking them raises no approval prompt.
 - Standing day: **9:00 am, 11:00 am, 1:00 pm, 3:00 pm, 5:00 pm, 7:00 pm, 9:00 pm, 11:00 pm CT.**
+  (The September 14th acceleration added 1/3/5/7 am cycles -- 12 a day, acceleration plan Lever D.
+  SUPERSEDED September 15th by REFOCUS s.2: those triggers are deleted; the eight daytime cycles above
+  are the standing day again. A cycle with no real queue item closes early and says so.)
 - **THE 11:00 PM CYCLE BOOKS THE WHOLE NEXT DAY**, including the next 11:00 pm carrying this same
   instruction. That is the chain. If an 11:00 pm cycle ever fails to book, the next cycle to notice
   an empty schedule books the remainder of the day itself and records the gap in its session report.
