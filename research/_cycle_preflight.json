@@ -1,23 +1,18 @@
 {
- "ran_at": "2026-09-15T20:08:13.404528+00:00",
+ "ran_at": "2026-09-15T22:37:45.325969+00:00",
  "owner": "cycle",
- "note": "3:00 pm cycle",
+ "note": "Day One -- standing directive 2026-09-15",
  "steps": {
   "lock": {
    "ok": true,
-   "returncode": 0,
+   "skipped": true,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='3:00 pm cycle'"
-   ],
-   "stderr_tail": []
+    "--skip-lock"
+   ]
   },
   "budget": {
    "ok": true,
-   "returncode": 0,
-   "tail": [
-    "budget started: 105 min"
-   ],
-   "stderr_tail": []
+   "skipped": true
   },
   "sweep": {
    "ok": true,
