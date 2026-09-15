@@ -24,14 +24,16 @@ import ops_checks as oc  # noqa: E402
 # shelf / sourcing reporting
 # ---------------------------------------------------------------------------
 
-def test_shelf_status_flags_sourcing_owed_at_the_floor(tmp_path, monkeypatch):
+def test_shelf_status_at_the_floor_no_longer_owes_sourcing(tmp_path, monkeypatch):
+    """Shelf floor rule RETIRED September 15th (standing directive s.12): the
+    position is still read for information, but nothing is ever 'owed' by it."""
     d = tmp_path / "data"; d.mkdir()
     (d / "pipeline_sweep.json").write_text(json.dumps(
         {"shelf": "Shelf 3/3 DRAWABLE (Entry 32, 33, 35; pending: Entry 15)"}))
     monkeypatch.setattr(cp, "ROOT", tmp_path)
     s = cp.shelf_status()
     assert s["known"] is True and s["count"] == 3 and s["floor"] == 3
-    assert s["sourcing_owed"] is True
+    assert s["sourcing_owed"] is False and "RETIRED" in s["note"]
 
 
 def test_shelf_status_above_the_floor_is_not_owed(tmp_path, monkeypatch):
@@ -291,3 +293,41 @@ def test_git_sync_still_fails_when_the_remote_really_is_behind(monkeypatch):
     r = oc.check_git_sync()
     assert r.status == oc.FAIL
     assert "NOT PUSHED" in r.detail
+
+
+# --- standing directive (2026-09-15) Step 1: preflight reports the PAPER BOOK ---
+
+def test_preflight_paper_book_status_reports_trades_days_and_judgment(tmp_path, monkeypatch):
+    import json
+    from datetime import date
+    import cycle_preflight as cp
+    import paper_book as pb
+    import strategy_registry as srg
+    log = tmp_path / "log.jsonl"; reg = tmp_path / "reg.jsonl"
+    monkeypatch.setattr(pb, "LOG", log); monkeypatch.setattr(srg, "REGISTRY", reg)
+    assert cp.paper_book_status()["note"] == "no strategy in paper yet"
+    rows = [{"date": f"2026-08-{d:02d}", "strategy": "s001", "outcome": "filled", "pnl_usd": 10.0,
+             "bookkeeping": {"risk_points": 20.0, "r_multiple": 0.25}, "order_path": {"filled_qty": 1}} for d in range(1, 6)]
+    log.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    srg.append({"strategy_id": "S001", "name": "LSR", "stage": "PAPER", "paper_log_name": "s001"}, reg)
+    st = cp.paper_book_status(today=date(2026, 8, 20))
+    assert st["n_in_paper"] == 1 and st["strategies"][0]["trades"] == 5 and st["strategies"][0]["days_elapsed"] == 19
+    assert st["at_judgment"] == [] and "S001 5 trades / 19 days" in st["note"]
+    st = cp.paper_book_status(today=date(2026, 9, 20))       # > 6 weeks, 5 trades -> judgment point
+    assert st["at_judgment"] == ["S001"] and "AT JUDGMENT POINT" in st["note"]
+
+
+def test_preflight_shelf_floor_is_retired_and_queue_is_reported(tmp_path, monkeypatch):
+    import json
+    import cycle_preflight as cp
+    import strategy_registry as srg
+    monkeypatch.setattr(cp, "ROOT", tmp_path)
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"shelf": "Shelf 0/3 DRAWABLE (Entry none) -> SOURCING OWED"}))
+    s = cp.shelf_status()
+    assert s["sourcing_owed"] is False and "RETIRED" in s["note"]
+    monkeypatch.setattr(srg, "REGISTRY", tmp_path / "reg.jsonl")
+    assert cp.queue_status()["empty"] is True
+    srg.append({"strategy_id": "S001", "name": "LSR", "stage": "SOURCE"}, tmp_path / "reg.jsonl")
+    q = cp.queue_status()
+    assert q["queue"] == ["S001 SOURCE"] and "next candidate: S001" in q["note"]

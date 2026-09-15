@@ -466,15 +466,16 @@ def _value_ack(entries: list) -> dict | None:
 def check_value_per_cycle() -> Result:
     """Quality-control indicator (Jason, 2026-09-11): are cycles MOVING
     anything, or spinning? Reads research/_cycle_history.jsonl (written by
-    cycle_budget.py done). MOVEMENT = a candidate CHANGING STAGE (ledger
-    latest-row status/slice changed or a new hypothesis logged), a scan
-    registered, or a bot milestone flipped -- redefined September 15th
-    (Jason's refocus 7.1): batch screening added 25 shelf rows while
-    discovering nothing and the old activity rule passed it. Shelf and
-    inventory additions, studies and mechanism docs count ZERO. Three
-    closed cycles in a row with no movement = BUSY WORK -> FAIL.
-    Separately: queue exhausted (sweep owes nothing automated AND the shelf
-    is empty) -> FAIL, because only Jason can add map entries or data."""
+    cycle_budget.py done). MOVEMENT = the STANDING OPERATING DIRECTIVE's s.3
+    definition (September 15th, replacing refocus 7.1): a candidate changing
+    STAGE in the loop (strategy registry), a paper trade recorded for a
+    candidate, a verdict issued, or a Salvage check completed. Mechanism docs,
+    shelf entries, study files, inventory rows count ZERO. Three closed cycles
+    in a row with no movement = BUSY WORK -> FAIL.
+    An empty candidate queue is NOT an alert here: directive s.3 Step 4 says
+    Discovery sources the next candidate; only when queue, revamp list, Salvage
+    queue and priority sources are ALL empty is it s.10 interrupt reason 2,
+    and that is a judgment the cycle makes, not this check."""
     hist = RESEARCH / "_cycle_history.jsonl"
     entries = []
     if hist.exists():
@@ -484,70 +485,43 @@ def check_value_per_cycle() -> Result:
                     entries.append(json.loads(line))
                 except Exception:
                     continue
-    # queue exhaustion, from the sweep + shelf
-    sweep = RESEARCH.parent / "data" / "pipeline_sweep.json"
-    exhausted = False
-    if sweep.exists():
-        try:
-            s = json.loads(sweep.read_text())
-            owed = [r for r in s.get("rows", []) if r.get("tier") in ("OPEN", "GATED") and not (r.get("next_owed") or "").startswith("nothing")]
-            shelf = s.get("shelf", "") or ""
-            live = re.search(r"Shelf (\d+)/", shelf)
-            exhausted = (not owed) and live is not None and int(live.group(1)) == 0
-        except Exception:
-            pass
     # ACKNOWLEDGED STATE (Jason, September 12th, ~1:55 am CT, "make sure the
     # sessions run smoothly moving forward as normal"): once Jason has been
     # told the queue is empty and has chosen to leave it that way for now,
     # every further cycle re-raising it as FAIL is noise, not a signal. A
-    # research/_value_ack.json {"by","at","reason"} downgrades BOTH the
-    # QUEUE EXHAUSTED and BUSY WORK conditions to WARN. The ack expires on
-    # its own the moment any cycle finished after ack.at actually MOVES
-    # something -- a later stall is then a NEW event and FAILs again.
+    # research/_value_ack.json {"by","at","reason"} downgrades BUSY WORK to
+    # WARN. The ack expires on its own the moment any cycle finished after
+    # ack.at actually MOVES something -- a later stall is then a NEW event.
     ack = _value_ack(entries)
-    # SHELF RULE v2 (2026-09-12): an empty shelf is no longer "exhausted" --
-    # it means SOURCING is owed, and check_shelf_starving() owns the alert
-    # (FAIL only after 3 closed cycles fail to restock). This check keeps
-    # BUSY WORK only.
-    if exhausted:
-        return Result("value", PASS, "shelf empty -> sourcing owed (see shelf check); not an exhaustion alert under shelf rule v2")
     if not entries:
         return Result("value", PASS, "no cycle history yet (first budget-clock cycle pending)")
     recent = entries[-BUSY_WORK_LIMIT:]
     stalled = len(recent) >= BUSY_WORK_LIMIT and not any(e.get("moved") for e in recent)
     if stalled:
         if ack:
-            return Result("value", WARN, f"no movement for {BUSY_WORK_LIMIT}+ cycles, acknowledged by {ack['by']} {ack['at'][:10]}: {ack['reason']} -- expected while the map is empty, do not re-alert")
-        return Result("value", FAIL, f"BUSY WORK: last {BUSY_WORK_LIMIT} cycles moved nothing (no candidate changed stage, no scan registered, no bot milestone flipped; shelf/inventory additions count zero) -- tell Jason, do not keep cycling")
+            return Result("value", WARN, f"no movement for {BUSY_WORK_LIMIT}+ cycles, acknowledged by {ack['by']} {ack['at'][:10]}: {ack['reason']} -- do not re-alert")
+        return Result("value", FAIL, f"BUSY WORK: last {BUSY_WORK_LIMIT} cycles moved nothing (no candidate changed stage in the loop, no paper trade recorded, no verdict, no Salvage check; docs/shelf/studies count zero) -- tell Jason, do not keep cycling")
     last = entries[-1]
     return Result("value", PASS, f"last cycle moved={last.get('moved')} delta={ {k: v for k, v in last.get('delta', {}).items() if v} }")
 
 
 def check_shelf_starving() -> Result:
-    """SHELF RULE v2 (Jason, 2026-09-12): the shelf counts drawable entries
-    only. If it is below the floor AND the last 3 closed cycles added no
-    inventory entries, sourcing is failing to restock -> tell Jason. This
-    is a sourcing problem, never a reason to draw thin or invent a scope."""
-    sweep = RESEARCH.parent / "data" / "pipeline_sweep.json"
-    hist = RESEARCH / "_cycle_history.jsonl"
+    """RETIRED as a gate September 15th (standing directive s.12: the shelf
+    floor rule and the "draw thin" rule are gone; the candidate queue lives in
+    research/ledger/strategies.jsonl and is never allowed to sit empty while
+    sources exist -- directive s.3 Step 4). This check is INFORMATIONAL only:
+    it always PASSES and reports the registry's queue, so nothing here ever
+    drives behaviour or fails a close-out."""
     try:
-        shelf = json.loads(sweep.read_text()).get("shelf", "") if sweep.exists() else ""
-    except Exception:
-        shelf = ""
-    if "SOURCING OWED" not in shelf:
-        return Result("shelf", PASS, shelf[:90] if shelf else "no sweep yet")
-    entries = []
-    if hist.exists():
-        for line in hist.read_text().splitlines():
-            try:
-                entries.append(json.loads(line))
-            except Exception:
-                continue
-    recent = entries[-3:]
-    restocked = any((e.get("delta") or {}).get("inventory_entries", 0) for e in recent)
-    if len(recent) >= 3 and not restocked:
-        return Result("shelf", FAIL, "SHELF STARVING: below the floor and 3 closed cycles added no entries -- tell Jason; sourcing problem, do not draw thin")
-    return Result("shelf", WARN, f"below floor, sourcing owed ({shelf[:70]})")
+        import strategy_registry as sr
+        rows = sr.read_rows()
+        q = sr.queue(rows); p = sr.in_paper(rows); s = sr.salvage_queue(rows)
+        head = (f"candidate queue {len(q)} (next: {q[0]['strategy_id']} at {q[0]['stage']})" if q
+                else "candidate queue EMPTY -- Discovery sources next (s.3 Step 4)")
+        return Result("queue", PASS, head + f"; in paper {len(p)}; salvage owed {len(s)} "
+                                           "(shelf floor / draw-thin rules retired, directive s.12)")
+    except Exception as exc:  # noqa: BLE001
+        return Result("queue", PASS, f"registry unreadable ({exc}); shelf floor rule retired, informational only")
 
 
 def check_preflight() -> Result:

@@ -78,18 +78,18 @@ def _run(argv: list, timeout: int = TIMEOUT_S) -> dict:
 
 
 def shelf_status() -> dict:
-    """Read the shelf position the sweep just wrote. Sourcing is a JUDGMENT
-    (read the map, the literature, practitioner practice, the observatory) and
-    is not automatable -- so this reports the position and whether sourcing is
-    OWED, and the cycle still has to do it. Reporting it is what makes
-    forgetting it visible."""
+    """The shelf FLOOR rule and the "draw thin" rule were RETIRED September 15th
+    (standing directive s.12). The old shelf line from the sweep is still
+    reported for information, but sourcing is never "owed" by a floor any more:
+    the candidate queue in research/ledger/strategies.jsonl is what must not sit
+    empty (directive s.3 Step 4), and queue_status() below reports that."""
     p = ROOT / "data" / "pipeline_sweep.json"
     if not p.exists():
-        return {"known": False, "note": "no pipeline_sweep.json -- run the sweep first"}
+        return {"known": False, "sourcing_owed": False, "note": "no pipeline_sweep.json -- run the sweep first"}
     try:
         d = json.loads(p.read_text())
     except Exception as exc:  # noqa: BLE001
-        return {"known": False, "note": f"unreadable: {exc}"}
+        return {"known": False, "sourcing_owed": False, "note": f"unreadable: {exc}"}
     shelf = d.get("shelf") or d.get("SHELF") or ""
     if isinstance(shelf, dict):
         count, floor = shelf.get("count"), shelf.get("floor", 3)
@@ -97,11 +97,49 @@ def shelf_status() -> dict:
         import re
         m = re.search(r"Shelf\s+(\d+)\s*/\s*(\d+)", str(shelf))
         count, floor = (int(m.group(1)), int(m.group(2))) if m else (None, 3)
-    owed = None if count is None else count <= floor
     return {"known": count is not None, "count": count, "floor": floor,
-            "sourcing_owed": owed, "line": str(shelf)[:200],
-            "note": ("shelf is AT OR BELOW the floor -- SOURCING IS OWED this cycle, before the work item"
-                     if owed else "shelf above the floor -- sourcing still runs every cycle per SHELF RULE v2")}
+            "sourcing_owed": False, "line": str(shelf)[:200],
+            "note": "shelf floor rule RETIRED (directive s.12) -- informational; the candidate queue is the thing that must not be empty"}
+
+
+def queue_status() -> dict:
+    """Directive s.3 Step 4: the candidate queue (registry stages SOURCE..SCREEN)
+    must never sit empty while sources exist. Reported, not judged."""
+    try:
+        import strategy_registry as sr
+        rows = sr.read_rows()
+        q = sr.queue(rows); s = sr.salvage_queue(rows)
+        return {"ok": True, "queue": [f"{r['strategy_id']} {r['stage']}" for r in q],
+                "salvage_owed": [r["strategy_id"] for r in s], "empty": not q,
+                "note": ("candidate queue EMPTY -- Discovery sources the next candidate this cycle (s.3 Step 4)"
+                         if not q else f"next candidate: {q[0]['strategy_id']} {q[0].get('name','')} at {q[0]['stage']}")}
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "note": f"registry unreadable: {exc}"}
+
+
+def paper_book_status(today=None) -> dict:
+    """Directive s.3 Step 1 (NEW): preflight reports the paper book -- how many
+    strategies are live in paper, each one's trade count and days elapsed, and
+    whether any has hit its 40-trade or 6-week judgment point."""
+    try:
+        import paper_book as pb
+        bk = pb.book(today=today)
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "note": f"paper book unreadable: {exc}", "strategies": [], "at_judgment": []}
+    strategies = [{"strategy_id": s["strategy_id"], "name": s["name"], "stage": s["stage"], "trades": s["trades"],
+                   "days_elapsed": s["days_elapsed"], "trades_to_judgment": s["trades_to_judgment"],
+                   "weeks_to_judgment": s["weeks_to_judgment"], "at_judgment_point": s["at_judgment_point"],
+                   "judgment_reason": s["judgment_reason"]} for s in bk["strategies"]]
+    at = [s["strategy_id"] for s in strategies if s["at_judgment_point"]]
+    if not strategies:
+        note = "no strategy in paper yet"
+    else:
+        note = "; ".join(f"{s['strategy_id']} {s['trades']} trades / {s['days_elapsed']} days"
+                         + (f" -- AT JUDGMENT POINT ({s['judgment_reason']})" if s["at_judgment_point"] else
+                            f" ({s['trades_to_judgment']} trades or {s['weeks_to_judgment']} wk to judgment)")
+                         for s in strategies)
+    return {"ok": True, "n_in_paper": len(strategies), "strategies": strategies, "at_judgment": at,
+            "plumbing": [p["paper_log_name"] for p in bk["plumbing"]], "note": note}
 
 
 def main() -> int:
@@ -160,9 +198,17 @@ def main() -> int:
                                               (r["stderr_tail"][-1][:90] if r["stderr_tail"] else "")))
 
     shelf = shelf_status()
-    steps["shelf"] = {"ok": shelf.get("known", False), **shelf}
-    print(f"  [{'ok' if shelf.get('known') else 'warn'}]   shelf/sourcing  {shelf.get('line','?')[:80]}")
-    print(f"         -> {shelf.get('note','')}")
+    steps["shelf"] = {"ok": True, **shelf}
+    print(f"  [info] shelf (retired)  {shelf.get('line','?')[:80]}")
+    q = queue_status()
+    steps["queue"] = {"ok": q.get("ok", False), **q}
+    print(f"  [{'ok' if q.get('ok') else 'warn'}]   candidate queue {', '.join(q.get('queue', [])) or 'EMPTY'}")
+    print(f"         -> {q.get('note','')}")
+    pbk = paper_book_status()
+    steps["paper_book"] = {"ok": pbk.get("ok", False), **pbk}
+    print(f"  [{'ok' if pbk.get('ok') else 'warn'}]   PAPER BOOK      {pbk.get('n_in_paper', 0)} strateg{'y' if pbk.get('n_in_paper', 0) == 1 else 'ies'} in paper"
+          + (f"; AT JUDGMENT POINT: {', '.join(pbk['at_judgment'])} -- Director verdict THIS cycle (s.6)" if pbk.get("at_judgment") else ""))
+    print(f"         -> {pbk.get('note','')}")
 
     failed = [k for k, (_, _, _, req) in {s[0]: s for s in STEPS}.items()
               if req and not steps.get(k, {}).get("ok")]
@@ -182,7 +228,7 @@ def main() -> int:
         print(f"PREFLIGHT INCOMPLETE -- failed: {', '.join(failed)}")
         print("Do NOT proceed to the work item until these are resolved or explicitly waived in the report.")
     else:
-        print("PREFLIGHT COMPLETE -- proceed to the ordering principle (BOT_ROADMAP before research).")
+        print("PREFLIGHT COMPLETE -- Step 2 data check, Step 3 advance the paper book, Step 4 advance one candidate (directive s.3).")
     print(f"receipt -> {RECEIPT}")
     return 1 if failed else 0
 

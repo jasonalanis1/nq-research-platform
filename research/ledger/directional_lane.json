@@ -1,4 +1,5 @@
 {
+  "retired": "2026-09-15 standing directive s.12 -- direction is closed by strategies failing in paper, not by a counter",
   "_doc": "DIRECTIONAL LANE (Jason, September 15th, research/infrastructure/refocus-2026-09-15.md section 4). cap=20 trials, hard stop, pre-committed. used = number of trials spent; trials = one object per trial {n, hypothesis_id, entry, source_channel, claim, result, closed_at}. A trial is one pre-registered directional Discovery scan sourced from mechanism/calendar/structure (never the Idea Factory state library). The count lives in this file, not in memory: a cycle that spends a trial appends here in the same commit as the ledger row. If used reaches 20 with every result null, direction is closed by evidence and the next step is Jason's call, not a cycle's.",
   "cap": 20,
   "used": 5,

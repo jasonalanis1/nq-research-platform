@@ -14,15 +14,20 @@ Files (research/):
                              studies, inventory entries, closed entries) plus
                              `moved`, which ops_checks reads for BUSY WORK.
 
-MOVEMENT (redefined September 15th, Jason's refocus memo 7.1): a cycle MOVED
-only if a candidate CHANGED STAGE -- a ledger row whose (status, data slice)
-differs from that hypothesis's previous latest row, or a hypothesis appearing
-in the ledger for the first time -- or a scan was registered, or a bot
-milestone in docs/BOT_ROADMAP.md flipped. Shelf/inventory additions, new
-studies and new mechanism docs count ZERO: batch screening added 25 inventory
-rows while discovering nothing and the old activity-based rule passed it.
-The counts are still recorded for information; only `stage_changes`,
-`scans_registered` and `bot_milestones_flipped` decide `moved`.
+MOVEMENT (redefined AGAIN September 15th by the STANDING OPERATING DIRECTIVE,
+research/infrastructure/standing-directive-2026-09-15.md s.3, which replaces
+the refocus memo's 7.1 rule): a cycle MOVED only if
+  * a candidate CHANGED STAGE in the loop -- its latest row in
+    research/ledger/strategies.jsonl (the strategy registry) has a different
+    stage than before, or a strategy appears in the registry for the first time;
+  * a PAPER TRADE was recorded -- a new bookkept fill (pnl_usd row) for a
+    CANDIDATE strategy in research/forward_validation/bot_stack_paper_log.jsonl
+    (plumbing rows -- execution dummy, B3 -- count zero);
+  * a VERDICT was issued (a KEEP / FIX_ONCE / KILL registry row); or
+  * a SALVAGE CHECK was completed (a SALVAGE registry row carrying its result).
+Mechanism docs, shelf entries, study files, inventory rows, hypothesis-ledger
+rows and scan registrations still count ZERO. Every count is recorded for
+information; only MOVEMENT_KEYS decide `moved`.
 
 Usage:
   python3 src/cycle_budget.py start --minutes 105 [--note "..."]
@@ -50,8 +55,29 @@ def _now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-MOVEMENT_KEYS = ("stage_changes", "scans_registered", "bot_milestones_flipped")
+MOVEMENT_KEYS = ("stage_changes", "paper_trades_recorded", "verdicts_issued", "salvage_checks_completed")
+MOVEMENT_RULE = "standing directive s.3 (2026-09-15): stage change / paper trade / verdict / salvage check"
 _MILESTONE_DONE_WORDS = ("DONE", "LIVE", "WIRED", "BUILT")
+
+
+def registry_state() -> dict:
+    """The strategy registry's stage map and event counts, plus the candidate
+    paper-trade count -- the four things movement is judged on."""
+    try:
+        import strategy_registry as sr
+        rows = sr.read_rows()
+        stages = sr.stage_map(rows)
+        ev = sr.count_events(rows)
+    except Exception:  # noqa: BLE001
+        stages, ev = {}, {"verdicts": 0, "salvage_checks": 0, "rows": 0}
+    try:
+        import paper_book as pb
+        log = pb.load_log()
+        trades = sum(1 for r in log if "pnl_usd" in r and pb.log_name(r) not in pb.PLUMBING_LOG_NAMES)
+    except Exception:  # noqa: BLE001
+        trades = 0
+    return {"registry_stages": stages, "registry_rows": ev["rows"], "verdicts": ev["verdicts"],
+            "salvage_checks": ev["salvage_checks"], "candidate_paper_trades": trades}
 
 
 def ledger_stage_map(ledger: Path) -> dict:
@@ -109,21 +135,32 @@ def snapshot() -> dict:
         "inventory_closed": len(re.findall(r"^## ENTRY \d+ — .*CLOSED", inv, re.M)),
         "ledger_stages": ledger_stage_map(ledger),
         "bot_milestones": bot_milestone_map(ROOT / "docs" / "BOT_ROADMAP.md"),
+        **registry_state(),
     }
 
 
 def movement(s0: dict, s1: dict) -> tuple:
-    """(moved, delta) under the stage-change rule. `delta` carries every
-    count for information; `moved` reads only MOVEMENT_KEYS."""
-    counts = {k: s1[k] - s0.get(k, s1[k]) for k in s1 if isinstance(s1[k], int)}
-    if "ledger_stages" in s0:
-        counts["stage_changes"] = stage_changes(s0.get("ledger_stages"), s1.get("ledger_stages"))
-    else:
-        # a checkpoint started before the stage-change rule existed (2026-09-15)
-        # has no stage map; rows added is the only honest proxy for that one cycle
-        counts["stage_changes"] = max(counts.get("ledger_rows", 0), 0)
+    """(moved, delta) under the standing directive's s.3 rule. `delta` carries
+    every count for information; `moved` reads only MOVEMENT_KEYS:
+      stage_changes            candidates whose REGISTRY stage differs / new strategies
+      paper_trades_recorded    new candidate fills bookkept in the paper log
+      verdicts_issued          new KEEP / FIX_ONCE / KILL rows
+      salvage_checks_completed new SALVAGE rows with a result
+    Hypothesis-ledger stage changes, scan registrations and bot-milestone flips
+    are still counted (ledger_stage_changes, scans_registered,
+    bot_milestones_flipped) for information only."""
+    counts = {k: s1[k] - s0.get(k, s1[k]) for k in s1 if isinstance(s1[k], int) and not isinstance(s1[k], bool)}
+    counts["ledger_stage_changes"] = stage_changes(s0.get("ledger_stages"), s1.get("ledger_stages")) if "ledger_stages" in s0 else 0
     b0, b1 = s0.get("bot_milestones") or {}, s1.get("bot_milestones") or {}
     counts["bot_milestones_flipped"] = sum(1 for k, v in b1.items() if b0.get(k, v) != v)
+    # the four movement counts (a snapshot taken before the registry existed has
+    # no registry_* keys; every s1 count is then measured against zero)
+    counts["stage_changes"] = stage_changes(s0.get("registry_stages"), s1.get("registry_stages"))
+    counts["paper_trades_recorded"] = max(0, s1.get("candidate_paper_trades", 0) - s0.get("candidate_paper_trades", 0))
+    counts["verdicts_issued"] = max(0, s1.get("verdicts", 0) - s0.get("verdicts", 0))
+    counts["salvage_checks_completed"] = max(0, s1.get("salvage_checks", 0) - s0.get("salvage_checks", 0))
+    for k in ("candidate_paper_trades", "verdicts", "salvage_checks", "registry_rows"):
+        counts.pop(k, None)
     moved = any(counts.get(k, 0) > 0 for k in MOVEMENT_KEYS)
     return moved, counts
 
@@ -171,8 +208,8 @@ def cmd_done(_a):
     assert_writable(HIST, "cycle history")
     with HIST.open("a") as f:
         f.write(json.dumps({"started": c["started"], "finished": c["finished"], "delta": delta, "moved": moved,
-                            "movement_rule": "stage-change (refocus 7.1, 2026-09-15)"}) + "\n")
-    print(f"cycle done; moved={moved} (stage-change rule) delta={delta}")
+                            "movement_rule": MOVEMENT_RULE}) + "\n")
+    print(f"cycle done; moved={moved} ({MOVEMENT_RULE}) delta={ {k: v for k, v in delta.items() if v} }")
 
 
 def cmd_status(_a):
