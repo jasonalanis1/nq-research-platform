@@ -2766,3 +2766,110 @@ to test its own claim, so the honest label is "inconclusive at this
 data ceiling," not "refuted."
 
 ---
+## ENTRY 65 — M35: Semi-monthly effect, NQ RTH return direction (literature channel, September 16th, ~3:00 pm CT cycle) — CLOSED (Directional Lane trial 5, Scan 041, September 16th ~3:00 pm CT, hyp-000167): Discovery P1 FAIL, CLEAN NULL (diff -0.2047 pts, block CI (-5.1809,+5.2432), n=730 first-half sessions, best-powered directional-lane entry so far). Write-up: research/studies/hyp-000167-directional-lane-trial5-2026-09-16.md
+
+Generation (sourcing stage, scheduled cycle): sourced to restore the
+3-entry shelf floor after Entry 64/M34 closed last cycle as directional
+lane trial 4 (hyp-000166, thin-sample-disclosed) and the shelf fell to
+0/3. Magnitude research stays FROZEN (research/infrastructure/refocus-2026-09-15.md
+s.3); this entry is sourced for the reserved directional lane (s.4)
+only, from the literature channel, non-state. Full mechanism doc
+research/mechanisms/semi-monthly-effect-nq-m35.md, written BEFORE any
+scan. Literature: Ariel (1987, Journal of Financial Economics, "A
+Monthly Effect in Stock Returns"); Lakonishok and Smidt (1988, Review
+of Financial Studies, "Are Seasonal Anomalies Real? A Ninety-Year
+Perspective"). Never tested against NQ, or any instrument, in this
+project.
+- Candidates considered before this one (recorded, not just the first
+  pick): a post-FOMC/CPI/NFP announcement-window drift was checked
+  first and found already spent -- M3a (CPI/NFP release-day reaction)
+  CLOSED, M3b (FOMC post-statement continuation) one attempt spent
+  (a second attempt exists but needs a genuinely different window, not
+  a new candidate), M4 (pre-FOMC drift) CLOSED FOR GOOD, 2-attempt
+  limit exhausted. Turn-of-quarter/quarter-end rebalancing was checked
+  next and found to overlap M5 (month-end/quarter-end NQ-vs-ZN relative
+  performance) too closely -- same participant (pension/balanced-fund
+  rebalancers), same anchor (last 2 sessions of month/quarter), attempt
+  1 already spent. A triple/quad-witching-specific effect was checked
+  and found blocked by a known DATA DEFECT, not merely tested: Entry 2's
+  LEARN note and M9's own Scan 018 both confirm the continuous NQ 1-min
+  series has ZERO usable RTH bars on quarterly witching Fridays (the
+  continuous-contract roll splices exactly on those dates) -- any
+  witching-day-specific direction claim on NQ is unrunnable at this
+  data ceiling without a new purchase, out of scope this cycle. A
+  January-effect / small-cap-rotation adaptation was checked and set
+  aside: its classic mechanism (tax-loss-selling reversal in small-cap
+  names) is a near-duplicate of M34's already-CLOSED Santa Claus Rally
+  mechanism (same Reinganum 1983 tax-loss-unwind citation, overlapping
+  December/January window), and NQ (mega-cap Nasdaq-100) is a poor
+  instrument match for a small-cap-rotation claim regardless. The
+  semi-monthly effect (Ariel 1987) was selected as the best-motivated,
+  genuinely untried candidate: a distinct participant (twice-monthly
+  payroll/pension flow, not once-monthly), a distinct window (9-session
+  first half vs. the rest of the month, not a 3-session start-of-month
+  or 2-session boundary window), and the best expected power of any
+  directional-lane entry sourced so far (~9 sessions/month, ~81 months).
+- LEARN/Integrity: NEW. Disclosed against M6/hyp-000108 (turn-of-month,
+  spent, 3-session window, once-a-month mechanism — different window
+  length and mechanism from this 9-session, twice-a-month claim), M24
+  (month-end payment-cycle reversal, CLOSED, cross-month conditioning,
+  forced-selling — this entry is unconditional and same-month), M22
+  (ZN month-end duration, CLOSED, different instrument), M25 (opex
+  week, CLOSED, unrelated anchor/mechanism), M5 (NQ-vs-ZN relative
+  performance, spent, cross-asset conditioning, boundary-only window),
+  M28/M32/M33/M34 (unrelated calendar anchors/mechanisms, all
+  closed/spent), the FOMC/CPI/NFP family (scheduled-announcement
+  mechanism, unrelated), and `days_to_monthly_opex` (Entries 1-2,
+  2-attempt limit exhausted, different outcome statistic and anchor).
+  Attempt 1 of 2.
+- Discovery: NQ daily RTH aggregation, already on disk, existing
+  trading-day-of-month count (computable from the session index, no new
+  data or descriptor code). 6 cells, 1 gating.
+- Statistical: block bootstrap (block=9, window length, "block =
+  overlap length" rule); NULL 1 = NQ's own unconditional daily RTH
+  return (same convention as M33's Monday test).
+- Mechanism honesty flag: named, recurring, price-insensitive flow
+  (semi-monthly/biweekly payroll and pension contribution cycles),
+  same disclosure category already accepted for M1/M22/M24.
+- Power: BEST-POWERED directional-lane entry sourced so far — n=730
+  first-half sessions (vs. M33's 348, the previous best), fires ~9x per
+  month across ~81 Discovery months, well clear of the n=40 floor with
+  no thin-sample override needed.
+- Director: drawn same cycle as sourced (memo's own source-then-draw
+  precedent, used for trials 1-4 already).
+
+1. **STATE VARIABLE**: none — trading-day-of-month count (1-indexed RTH
+   session order within each calendar month), computable trivially from
+   the existing session index.
+2. **MECHANISM CLAIM**: semi-monthly/biweekly payroll and pension
+   contribution cycles (Ariel 1987) land price-insensitive buying demand
+   into the market twice a month, concentrated in the first half.
+3. **HORIZON**: 9 RTH sessions per month (calendar-anchored, fires
+   12x/year, ~9x per month's sessions).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, nine adjacencies
+   disclosed and distinguished (M6, M24, M22, M25, M5, M28, M32, M33,
+   M34, FOMC family, days_to_monthly_opex). Attempt 1 of 2.
+5. **MAP ANCHOR**: M35. STATUS: CLOSED (Scan 041, September 16th ~3:00
+   pm CT). Mechanism doc: research/mechanisms/semi-monthly-effect-nq-m35.md.
+
+**RESULT (Scan 041, hyp-000167)**: CLEAN NULL, well-powered. P1 FAIL:
+first-half-of-month (trading-day-of-month 1-9) mean RTH return vs NQ's
+own unconditional daily RTH return, diff=-0.2047 pts, block CI
+(-5.1809,+5.2432), includes zero -- not credible (predicted POSITIVE
+per Ariel 1987, point estimate runs marginally negative). n=730 first-
+half sessions, clears the n=40 floor by a wide margin, the best-powered
+directional-lane entry sourced so far. P2 (second-half specificity,
+reported, moot given P1 fail): diff=+0.1563 pts, CI (-4.1744,+4.3845),
+also not credible -- both halves of the month are statistically
+indistinguishable from NQ's ordinary unconditional daily return. P3
+(first-half years 2015-2017 vs. second-half years 2018-2021 of the
+first-half-of-month effect, descriptive): diff=-1.1227 CI
+(-5.1745,+3.0994) and diff=+0.5279 CI (-8.0103,+8.6933) respectively,
+both null -- no decay pattern to report since neither half shows a
+credible effect to begin with. CLOSED per the pre-registered falsifier
+(a): the well-replicated semi-monthly/Ariel effect does not transfer to
+NQ futures RTH sessions at this data ceiling, and unlike the thin-sample
+trial 4, this is a genuinely well-powered clean null.
+
+---
+

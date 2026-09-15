@@ -297,6 +297,7 @@ SCAN_REGISTRY = {
     "scan_038_2026-09-16": {"cells_scanned": 6, "promoted_hypothesis_ids": []},  # DIRECTIONAL LANE TRIAL 2: Entry 62 / map M32, US DST transition anomaly, NQ, hyp-000164. P1 FAIL, clean null, wrong-signed. RETROACTIVELY REGISTERED (11:00 am cycle, Sept 16th, same fix as scan_037 above).
     "scan_039_2026-09-16": {"cells_scanned": 6, "promoted_hypothesis_ids": []},  # DIRECTIONAL LANE TRIAL 3: Entry 63 / map M33, weekend/Monday effect, NQ. Registered BEFORE the run, per the standing rule. Mechanism doc research/mechanisms/weekend-effect-nq-m33.md.
     "scan_040_2026-09-16": {"cells_scanned": 7, "promoted_hypothesis_ids": []},  # DIRECTIONAL LANE TRIAL 4: Entry 64 / map M34, Santa Claus Rally / turn-of-year effect, NQ. Registered BEFORE the run, per the standing rule. Mechanism doc research/mechanisms/santa-claus-rally-nq-m34.md.
+    "scan_041_2026-09-16": {"cells_scanned": 6, "promoted_hypothesis_ids": []},  # DIRECTIONAL LANE TRIAL 5: Entry 65 / map M35, semi-monthly effect (Ariel 1987), NQ. Registered BEFORE the run, per the standing rule. Mechanism doc research/mechanisms/semi-monthly-effect-nq-m35.md.
     # Scan 025 (Entry 25 / map M21: ECB Governing Council rate decision
     # press-conference, pre/post volatility, 6E, open scope -- third open-
     # scope entry, companion/cross-check to M20). 6 cells: decision-hour

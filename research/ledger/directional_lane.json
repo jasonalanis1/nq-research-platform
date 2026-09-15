@@ -1,7 +1,7 @@
 {
   "_doc": "DIRECTIONAL LANE (Jason, September 15th, research/infrastructure/refocus-2026-09-15.md section 4). cap=20 trials, hard stop, pre-committed. used = number of trials spent; trials = one object per trial {n, hypothesis_id, entry, source_channel, claim, result, closed_at}. A trial is one pre-registered directional Discovery scan sourced from mechanism/calendar/structure (never the Idea Factory state library). The count lives in this file, not in memory: a cycle that spends a trial appends here in the same commit as the ledger row. If used reaches 20 with every result null, direction is closed by evidence and the next step is Jason's call, not a cycle's.",
   "cap": 20,
-  "used": 4,
+  "used": 5,
   "trials": [
     {
       "n": 1,
@@ -38,6 +38,15 @@
       "claim": "NQ's Santa Claus Rally window (last 5 December RTH sessions + first 2 January RTH sessions) cumulative RTH return is credibly positive relative to NQ's own unconditional 7-session rolling RTH return (Discovery slice).",
       "result": "THIN_SAMPLE_DISCLOSED (pre-registered override). n=6 complete window-years (2015-2020), well below the n=40 floor. P1 point estimate positive (predicted direction), diff +15.9750 pts, block CI (-71.7472,+110.4496), wide and includes zero -- not credible, consistent with severe underpowering rather than a clean null. P2 (Dec-leg/Jan-leg specificity, reported): both null. P3 (first-half/second-half decay, descriptive): both null, n=3 each.",
       "closed_at": "2026-09-16T18:00:00Z"
+    },
+    {
+      "n": 5,
+      "hypothesis_id": "hyp-000167",
+      "entry": "Entry 65 / M35",
+      "source_channel": "literature (calendar-anchored, semi-monthly/biweekly payroll-pension flow, Ariel 1987 JFE)",
+      "claim": "NQ's first-half-of-month (trading-day-of-month 1-9) mean RTH return is credibly positive relative to NQ's own unconditional daily RTH return (Discovery slice).",
+      "result": "NULL. P1 FAIL: diff -0.2047 pts, block CI (-5.1809,+5.2432), includes zero. n=730 first-half sessions (best-powered directional-lane entry so far). P2 (second-half specificity, reported, moot given P1 fail): diff +0.1563 pts, CI (-4.1744,+4.3845), also not credible.",
+      "closed_at": "2026-09-16T20:00:00Z"
     }
   ]
 }
