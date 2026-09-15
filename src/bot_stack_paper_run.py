@@ -129,9 +129,13 @@ STRATEGIES = {
 PLUMBING_KEYS = ("b3", "dummy")
 
 
+STRATEGY_MODULES: dict = {}
+
+
 def register_strategy(key: str, module) -> None:
     """Add a frozen strategy module (STRATEGY_NAME + generate_signals) to the book."""
     STRATEGIES[key] = (module.STRATEGY_NAME, module.generate_signals)
+    STRATEGY_MODULES[key] = module
 
 
 def _strategy():
@@ -462,6 +466,9 @@ def main(argv=None):
 
     all_dates = sorted(set(df.index.date))
     anchor = _b7_execution_anchor(all_dates)
+    mod = STRATEGY_MODULES.get(STRATEGY)
+    if mod is not None and hasattr(mod, "precompute"):
+        mod.precompute(df)          # trailing state variables, built once, no lookahead (see the module)
     print(f"\nB7 execution anchor: {anchor} (see choice 1 in the file header)")
 
     rows = load_log()
