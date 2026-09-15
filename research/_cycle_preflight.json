@@ -1,18 +1,23 @@
 {
- "ran_at": "2026-09-15T03:02:30.313137+00:00",
- "owner": "interactive",
- "note": "refocus verification",
+ "ran_at": "2026-09-15T04:03:22.878937+00:00",
+ "owner": "cycle",
+ "note": "11:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
-   "skipped": true,
+   "returncode": 2,
    "tail": [
-    "--skip-lock"
-   ]
+    "BUSY owner=cycle last_heartbeat=2min_ago note='11:00 pm cycle'"
+   ],
+   "stderr_tail": []
   },
   "budget": {
    "ok": true,
-   "skipped": true
+   "returncode": 0,
+   "tail": [
+    "budget started: 105 min"
+   ],
+   "stderr_tail": []
   },
   "sweep": {
    "ok": true,

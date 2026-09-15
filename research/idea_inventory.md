@@ -1873,7 +1873,7 @@ real-money accounts, Tokyo-based bank desks, not European dealers).
    research/mechanisms/tokyo-fx-open-6e-m27.md. Restores the 3-entry
    shelf floor (Entry 29, 30, 31).
 
-## ENTRY 32 — M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) — SOURCED, DRAWABLE
+## ENTRY 32 — M28: Pre-holiday effect, NQ (literature channel, September 13th, ~3:15 pm CT cycle) — CLOSED (Directional Lane trial 1, Scan 037, September 15th ~11:00 pm CT, hyp-000163): Discovery P1 FAIL, CLEAN NULL (diff -2.41 pts, block CI (-15.62,+4.42), n=60). Write-up: research/studies/hyp-000163-directional-lane-trial1-2026-09-15.md
 
 Generation (sourcing stage, scheduled cycle): sourced to restore the
 3-entry shelf floor after M25/Entry 29 closed this cycle (P1_FAIL,

@@ -1,6 +1,16 @@
 {
   "_doc": "DIRECTIONAL LANE (Jason, September 15th, research/infrastructure/refocus-2026-09-15.md section 4). cap=20 trials, hard stop, pre-committed. used = number of trials spent; trials = one object per trial {n, hypothesis_id, entry, source_channel, claim, result, closed_at}. A trial is one pre-registered directional Discovery scan sourced from mechanism/calendar/structure (never the Idea Factory state library). The count lives in this file, not in memory: a cycle that spends a trial appends here in the same commit as the ledger row. If used reaches 20 with every result null, direction is closed by evidence and the next step is Jason's call, not a cycle's.",
   "cap": 20,
-  "used": 0,
-  "trials": []
+  "used": 1,
+  "trials": [
+    {
+      "n": 1,
+      "hypothesis_id": "hyp-000163",
+      "entry": "Entry 32 / M28",
+      "source_channel": "literature (calendar-anchored, NYSE exchange-holiday boundary)",
+      "claim": "NQ's RTH return on the session immediately before an NYSE full-closure holiday is credibly positive relative to NQ's own unconditional daily RTH return (Discovery slice).",
+      "result": "NULL. P1 FAIL: diff -2.41 pts, block CI (-15.62,+4.42), includes zero. n=60 pre-holiday sessions (clears 40-session thin-sample floor). P2 (post-holiday specificity, reported, moot given P1 fail): diff +9.58 pts, CI (-3.94,+24.91), also not credible.",
+      "closed_at": "2026-09-15T04:20:00Z"
+    }
+  ]
 }
