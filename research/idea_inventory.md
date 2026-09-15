@@ -2681,3 +2681,88 @@ weekend/Monday equity effect does not transfer to NQ futures RTH
 sessions at this data ceiling. Closes per mechanism doc falsifier (a).
 
 ---
+
+## ENTRY 64 — M34: Santa Claus Rally / turn-of-year effect, NQ RTH return direction (literature channel, September 16th, ~1:00 pm CT cycle) — CLOSED (Directional Lane trial 4, Scan 040, September 16th ~1:00 pm CT, hyp-000166): THIN_SAMPLE_DISCLOSED (pre-registered override, n=6 window-years), P1 point estimate positive (predicted direction) but not credible, diff +15.9750 pts, block CI (-71.7472,+110.4496). Write-up: research/studies/hyp-000166-directional-lane-trial4-2026-09-16.md
+
+Generation (sourcing stage, scheduled cycle): sourced to restore the
+3-entry shelf floor after Entry 63/M33 closed last cycle as directional
+lane trial 3 (hyp-000165, clean null) and the shelf fell to 0/3.
+Magnitude research stays FROZEN (research/infrastructure/refocus-2026-09-15.md
+s.3); this entry is sourced for the reserved directional lane (s.4)
+only, from the literature channel, non-state. Full mechanism doc
+research/mechanisms/santa-claus-rally-nq-m34.md, written BEFORE any
+scan. Literature: Hirsch (1972, Stock Trader's Almanac); Bhabra,
+Dhillon and Ramirez (1999, Financial Review, "A November Effect?
+Revisiting the Tax-Loss-Selling Hypothesis"). Never tested against NQ,
+or any instrument, in this project.
+- Preflight this cycle (owed by this cycle's task, not routine): before
+  sourcing trial 4, scan_037/038/039 were read side by side and checked
+  against the house return convention (market_state_primitives.py:116,
+  data_loader.py:66) — clean, no bug found. Three wrong-signed nulls in
+  a row (M28, M32, M33) is read as consistent with those being
+  decades-old, heavily arbitraged, no-forced-counterparty anomalies
+  rather than a code defect.
+- LEARN/Integrity: NEW. Disclosed against M6/hyp-000108 (turn-of-month,
+  spent, monthly/12x-year, payroll mechanism — different anchor and
+  mechanism from this once-a-year turn-of-YEAR window), M24 (month-end
+  payment-cycle reversal, CLOSED, monthly, opposite-direction selling
+  mechanism), M28 (pre-holiday, CLOSED trial 1, single-session/10x-year,
+  reduced-hedging mechanism — this entry is a 7-session once-a-year
+  window, not a single pre-holiday session), M32 (DST transition,
+  CLOSED trial 2, unrelated anchor/mechanism), M33 (weekend/Monday,
+  CLOSED trial 3, unrelated anchor/mechanism), M22 (ZN month-end
+  duration, CLOSED, different instrument), M25 (opex week, CLOSED,
+  unrelated anchor/mechanism), M5 (NQ-vs-ZN relative performance,
+  spent, cross-asset conditioning, different claim shape). Attempt 1 of
+  2.
+- Discovery: NQ daily RTH aggregation, already on disk, existing NYSE
+  holiday/session calendar (used for M20, M28), no new data. 7 cells,
+  1 gating.
+- Statistical: block bootstrap (block=7, window length, "block =
+  overlap length" rule); NULL 1 = NQ's own unconditional 7-session
+  rolling RTH return (P1).
+- Mechanism honesty flag: no single named forced counterparty (same
+  disclosure precedent already accepted for M28/M32/M33) — included
+  given the length and consistency of Hirsch's documented track record.
+- Power: THINNEST directional-lane entry sourced so far — fires 1x/year
+  vs. M28's ~10x/year or M32's 2x/year; the mechanism doc pre-registered
+  (Section 5c) that the Discovery slice would yield only ~6 complete
+  window-years, well below the ordinary n=40 floor, and built a
+  THIN-SAMPLE OVERRIDE into the scan's own verdict logic so the result
+  would be honestly labeled underpowered rather than misread as a clean
+  null.
+- Director: drawn same cycle as sourced (memo's own source-then-draw
+  precedent, used for trials 1-3 already).
+
+1. **STATE VARIABLE**: none — fixed calendar window (last 5 December
+   RTH sessions + first 2 January RTH sessions), NYSE holiday/session
+   calendar already implemented project-wide.
+2. **MECHANISM CLAIM**: tax-loss-selling unwind (Reinganum 1983) and/or
+   institutional light-volume/window-dressing (Haugen and Lakonishok
+   1988) produce a small positive drift across the turn-of-year window.
+3. **HORIZON**: 7 RTH sessions (calendar-anchored, fires 1x/year).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, eight adjacencies
+   disclosed and distinguished (M6, M24, M28, M32, M33, M22, M25, M5).
+   Attempt 1 of 2.
+5. **MAP ANCHOR**: M34. STATUS: CLOSED (Scan 040, September 16th ~1:00
+   pm CT). Mechanism doc: research/mechanisms/santa-claus-rally-nq-m34.md.
+
+**RESULT (Scan 040, hyp-000166)**: THIN_SAMPLE_DISCLOSED (pre-registered
+override, mechanism doc Section 5c). n=6 complete window-years
+(2015-2020), well below the n=40 floor. P1 point estimate POSITIVE
+(the predicted direction, unlike trials 2 and 3), diff=+15.9750 pts vs
+NQ's own unconditional 7-session rolling RTH return, block CI
+(-71.7472,+110.4496) -- very wide, includes zero, not credible;
+consistent with severe underpowering rather than a clean refutation.
+P2 (December leg vs. January leg, reported): December diff=-8.2015 CI
+(-67.0348,+74.6735) null; January diff=+25.3611 CI (-34.4806,+77.8611)
+null. P3 (first-half years 2015-2017 vs. second-half years 2018-2020,
+descriptive): diff=-36.2750 CI (-89.3562,+24.3534) and
+diff=+68.2250 CI (-73.1969,+209.5608) respectively, both null, n=3
+each -- uninformative at this sample size, no decay pattern reportable.
+CLOSED per the pre-registered thin-sample override, distinct in kind
+from trials 1-3's clean nulls: this entry was never adequately powered
+to test its own claim, so the honest label is "inconclusive at this
+data ceiling," not "refuted."
+
+---
