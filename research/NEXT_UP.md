@@ -8,6 +8,64 @@ docs/BACKLOG.md. Do NOT read BACKLOG.md unless choosing a genuinely new
 research direction. Jason also works this project ad hoc — if "Last updated
 by" says an interactive session, that work is done; continue, don't redo.
 
+## STANDING OPERATING DIRECTIVE (Jason, September 15th) — the standing process; read research/infrastructure/standing-directive-2026-09-15.md first
+Verbatim copy (md5 aa496b87cc93a407229153754adb0aee, never edited by Tony): research/infrastructure/standing-directive-2026-09-15.md.
+Effective September 15th. SUPERSEDES the refocus memo below and every prior research-mode rule where they conflict
+(directive s.12). The evidence for a strategy is its PAPER TRADING RECORD, not a CI and not a holdout slot.
+
+THE LOOP (s.2): SOURCE -> SPECIFY -> FREEZE -> SCREEN -> PAPER -> JUDGE -> KEEP (PROMOTE P1..P5, s.8) / FIX ONCE (back to
+SPECIFY, one fix per strategy ever) / KILL (-> SALVAGE check, s.7 -> new candidate at SPECIFY, or LEARN).
+  SOURCE   Discovery names a candidate + one-paragraph reason. Priority: market mechanics, market structure, Observatory,
+           Salvage queue, revamp list; published calendar anomalies LAST (0 for 4).
+  SPECIFY  Mechanism + Monetization write the WHOLE trade: entry, exit, stop, sizing, costs stated. Validated magnitude
+           facts (VXN -> next-session range; quiet midday -> expanded afternoon; wide open -> wider midday) size stops/size.
+           Mechanism also names "where this should fail" = that candidate's Salvage menu later.
+  FREEZE   Integrity hashes the spec + module into research/ledger/strategies.jsonl BEFORE any data is touched.
+  SCREEN   Statistical, one pass on the Discovery slice, ONE number: net result after ASSUMED costs. Lost money -> Salvage.
+           Made money -> PAPER. No CI gate, no multiplicity gate, no holdout (exposure counts logged for information only).
+  PAPER    B7 paper engine (src/bot_stack_paper_run.py --strategy <id>), one micro, simulated fills (slippage ASSUMED 1 tick
+           until B4b). Several strategies at once is encouraged. A strategy in PAPER is the product accumulating a record.
+  JUDGE    Director, at 40 trades or 6 weeks, whichever first (s.6): KEEP = avg R > 0 after costs AND worst streak inside a
+           daily limit of three average winners; FIX ONCE = near break-even or wasteful exit/stop; KILL = lost money or
+           < 15 trades in 6 weeks. Integrity verifies the record before any KEEP stands.
+  SALVAGE  (s.7, mandatory before any KILL is final) Statistical splits results by the FIXED menu: (1) VXN high/low vs
+           trailing, (2) trend vs range (prior-day range contraction / own range vs trailing), (3) time of day,
+           (4) scheduled-news day or not, + the Mechanism's named failure conditions. Menu only; one salvage per strategy;
+           result written to LEARN either way. First two through Salvage: Level Sweep Reversal (M26) and the
+           overnight-vs-intraday split (hyp-000145).
+RECORDS: research/ledger/strategies.jsonl (append-only, production-guarded, one row per stage event; src/strategy_registry.py);
+research/ledger/revamp_list.json (s.9 ranking, src/revamp_list.py); paper record = research/forward_validation/
+bot_stack_paper_log.jsonl per `strategy` (src/paper_book.py measures it; execution_dummy + B3 rows are PLUMBING, never judged).
+Frozen specs: research/infrastructure/strategy-specs/S###-*.md + src/strategy_s###_*.py -- never edited after FREEZE.
+
+EVERY CYCLE, IN THIS ORDER (s.3): Step 1 PREFLIGHT (`python3 src/cycle_preflight.py`, now prints the Paper Book: strategies
+in paper, trades, days, judgment point). Step 2 DATA CHECK (new bars since last cycle? if not, do NOT idle: go to Step 4 on
+historical data and say paper scoring is waiting on data; stuck > 48 h = interrupt reason 3). Step 3 ADVANCE THE PAPER BOOK
+(`TONY_PRODUCTION=1 python3 src/bot_stack_paper_run.py --strategy <id>` for every strategy in PAPER; any strategy at its
+judgment point gets a Director verdict THIS cycle; any KILL -> Salvage this cycle or next). Step 4 ADVANCE ONE CANDIDATE one
+stage (highest-priority not yet in PAPER; queue never sits empty while sources exist). Step 5 CLOSE-OUT (tests, ops_checks,
+cycle_close.py, session_report.py with its PAPER BOOK section, commit + push verified, lock released). A cycle with genuinely
+nothing to do closes early and says so.
+MOVEMENT (s.3, replaces refocus 7.1): a candidate changing STAGE in the loop, a paper trade recorded, a verdict issued, or a
+Salvage check completed. Mechanism docs, shelf entries, study files count ZERO (src/cycle_budget.py movement()).
+
+INTERRUPT JASON FOR THREE REASONS ONLY (s.10): (1) a strategy reached P3 (hand-off page attached); (2) Tony is out of
+candidates -- queue, revamp list, Salvage queue and priority sources all empty, state what was tried and stop; (3) something
+broken Tony cannot fix -- price data stuck > 48 h, broker access, a code defect tests cannot isolate, a $5+ spend. Everything
+else runs silently. No rule-change, lane, guard or cadence proposals; if the directive is failing, report under reason 2.
+
+NEVER BEND (s.13): frozen strategy never edited mid-test (disappointment -> new candidate or FIX ONCE); paper record never
+adjusted/deleted/re-scored (Integrity veto); Salvage from the menu, one per strategy; costs labeled MEASURED or ASSUMED, never
+hidden; no date is an input to any decision; real capital and scaling need Jason's written authorization; production write
+guard stays; Sunday 1-VERIFY stays; Tony does not modify the directive.
+RETIRED (s.12): the 90% CI / 0.05R / sealed-Holdout bar as a gate (3 Holdout slots preserved, unused); the magnitude freeze
+(except s.9's 25-survivor question); the 20-trial directional cap (research/ledger/directional_lane.json retired, trials kept
+as history); the shelf floor, "draw thin" and old busy-work rules; Director Re-Evaluation and Candidate Triage as separate
+steps; multiplicity/Sidak as gates; "one shot at Validation" (replaced by FIX ONCE).
+SURVIVES from the refocus memo: no profit deadline (s.1), daytime cadence (s.2), console retired (s.5), Full Scope weekly/on
+request and actual minutes (s.6), 1-VERIFY (7.2), production write guard (7.3), path:line citations (7.4a), push verified (7.5).
+DAY ONE (s.14) executed September 15th: see "Last updated by". From then on s.3 governs every cycle.
+
 ## In forward validation (paper only, no capital) — DO NOT TOUCH, see scope boundary below
 
 - **H118** vwap_dist_vs_atr LOW tercile, 10-day drift. **REJECTED AS AN EDGE
@@ -41,7 +99,7 @@ by" says an interactive session, that work is done; continue, don't redo.
   anyway). Week 3/260. Cumulative +153.5 pts, CI [6.75, 95.58]. Next
   checkpoint week 104. Needs a fresh week of data to advance.
 
-## REFOCUS (Jason, September 15th) — standing, supersedes the Sept 14th acceleration
+## REFOCUS (Jason, September 15th) — standing where not superseded by the STANDING OPERATING DIRECTIVE above (items 3, 4, 7.1 SUPERSEDED; the rest survives)
 Memo verbatim: research/infrastructure/refocus-2026-09-15.md (received ~10:00 pm CT). Nothing in it is
 optional. It replaces research/infrastructure/acceleration-plan-2026-09-14.md's Levers C and D and the
 "push this as fast as possible" direction; Levers A and B (execution sample, broker) stand as facts.
@@ -58,13 +116,13 @@ optional. It replaces research/infrastructure/acceleration-plan-2026-09-14.md's 
    a contaminated live execution journal, and zero directional candidates.
    **A cycle with no real queue item CLOSES EARLY and says so.** Open budget is not a reason to find
    work. Batch screening is not filler.
-3. **MAGNITUDE RESEARCH FROZEN.** No new magnitude hypotheses, no new batch screens, until the
+3. **SUPERSEDED September 15th by the standing directive s.12 (magnitude freeze lifted, except s.9: the 25 batch-screen survivors are explained once -- research/integrity/placebo-red-explanation-2026-09-15.md -- then used as stop/sizing inputs or closed; batch_screen.py is still never run). Original text: MAGNITUDE RESEARCH FROZEN.** No new magnitude hypotheses, no new batch screens, until the
    directional question is answered. SUPERSEDED: queue item 0-ACCEL / Lever C -- do NOT run
    `src/batch_screen.py` again. The 25 survivors (Entries 37-61) stay shelved and UNWORKED, marked
    PARKED in research/idea_inventory.md, NOT drawable until the 72% placebo-RED rate has a real
    explanation (not a logged note). Entries 33/35/36 (sourced magnitude ideas) are PARKED under the
    same freeze. Existing validated facts stay where they are; the Risk/State Engine keeps using them.
-4. **DIRECTIONAL LANE -- 20 trials, hard stop.** Queue item 0-DIR, its own slot count that magnitude
+4. **SUPERSEDED September 15th by the standing directive s.12: the 20-trial cap is retired; direction is closed by strategies failing in paper, not by a counter (research/ledger/directional_lane.json marked retired, 5 trials kept as history). Original text: DIRECTIONAL LANE -- 20 trials, hard stop.** Queue item 0-DIR, its own slot count that magnitude
    cannot outrank; sourced ONLY from non-state ideas (mechanism, calendar, structure -- never the
    Idea Factory state library); count kept in research/ledger/directional_lane.json. If 20 return
    null, direction is closed by evidence and what Tony becomes is Jason's call, not a cycle's.
@@ -74,8 +132,9 @@ optional. It replaces research/infrastructure/acceleration-plan-2026-09-14.md's 
 6. **OVERHEAD.** Full Scope is WEEKLY or on request only, never per-window (docs/FULL_SCOPE_*.md not
    touched by cycles). Every daily wrap states cycles run and minutes actually used -- read from
    the budget clock and research/_cycle_compliance.jsonl by `src/session_report.py`, never estimated.
-7. **OPERATIONAL GAPS.** 7.1 busy-work alarm measures STAGE CHANGES, shelf/inventory additions count
-   zero (src/cycle_budget.py `done`, src/ops_checks.py `value`). 7.2 queue item 1-VERIFY, one weekly
+7. **OPERATIONAL GAPS.** 7.1 SUPERSEDED by directive s.3: movement = a candidate changing stage in the loop, a paper
+   trade recorded, a verdict issued, or a Salvage check completed (src/cycle_budget.py movement(), src/ops_checks.py `value`);
+   mechanism docs / shelf entries / studies still count zero. 7.2 queue item 1-VERIFY, one weekly
    verification cycle, checklist research/infrastructure/weekly-verification-checklist.md. 7.3
    production write guard: src/production_paths.py, default-deny, audit
    research/integrity/write-path-audit-2026-09-15.md. 7.4(a) factual claims in reports cite
@@ -613,7 +672,9 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
 
 ## Queue
 
-   0-DIR. DIRECTIONAL LANE -- 20 TRIALS, HARD STOP (Jason, September 15th, REFOCUS s.4). Its own
+   0-DIR. **RETIRED September 15th (standing directive s.12): the 20-trial cap is gone; direction closes by strategies failing in
+      paper. The five trials (hyp-000163..167, all null) stay as history in research/ledger/directional_lane.json. Nothing
+      reads the cap. Original text kept for the record:** DIRECTIONAL LANE -- 20 TRIALS, HARD STOP (Jason, September 15th, REFOCUS s.4). Its own
       slot count; magnitude cannot outrank it and the entry slot is never empty by sorting again.
       SOURCING: non-state ideas only -- mechanism, calendar, structure. NEVER the Idea Factory's
       state library (Jason's numbers: 87 directional nulls and ~9,910 state combinations say that
@@ -672,7 +733,9 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
       Jason books the trigger; the cycle writes research/integrity/verification-YYYY-MM-DD.md
       and every discrepancy is a queue item or a fix, never a note.
 
-   0-ACCEL. **SUPERSEDED September 15th (REFOCUS s.3) -- BATCH SCREENING FROZEN. Do not run
+   0-ACCEL. **RETIRED September 15th (standing directive s.9/s.12). batch_screen.py is never run again. The 72% placebo-RED
+      rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md and Entries 37-61 are dispositioned
+      there (SIZING-INPUT CANDIDATE or CLOSED). Earlier note (REFOCUS s.3): BATCH SCREENING FROZEN. Do not run
       `src/batch_screen.py`. Entries 37-61 PARKED, unworked, not drawable until the 72%
       placebo-RED rate has a real explanation.** Original text kept for the record:
       BATCH SCREENING -- BUILT, FIRST BATCH RUN, ONGOING (Jason, Sept 14th ~8 pm CT: "push
