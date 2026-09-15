@@ -2513,6 +2513,72 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ## ENTRY 61 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / midday -> mfe (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
 
+## ENTRY 62 — M32: Daylight-saving-time transition anomaly, NQ (literature channel, September 16th, ~9:00 am CT cycle) — CLOSED (Directional Lane trial 2, Scan 038, September 16th ~9:00 am CT, hyp-000164): Discovery P1 FAIL, CLEAN NULL and wrong-signed (diff +51.75 pts, block CI (-13.09,+73.88), n=13 transition weeks). Write-up: research/studies/hyp-000164-directional-lane-trial2-2026-09-16.md
+
+Generation (sourcing stage, scheduled cycle): sourced to restore the
+3-entry shelf floor after Entry 32/M28 closed last cycle as directional
+lane trial 1 (hyp-000163, clean null) and the shelf fell to 0/3.
+Magnitude research stays FROZEN (research/infrastructure/refocus-2026-09-15.md
+s.3); this entry is sourced for the reserved directional lane (s.4)
+only, from the literature channel, non-state. Full mechanism doc
+research/mechanisms/dst-anomaly-nq-m32.md, written BEFORE any scan.
+Literature: Kamstra, Kramer and Levi (2000, American Economic Review,
+"Losing Sleep at the Market: The Daylight Saving Anomaly"; 2002 AER
+reply to Pinegar's critique) -- a robust, multi-country equity-index
+calendar anomaly around US daylight-saving-time transitions, attributed
+to synchronized sleep-cycle disruption reducing risk tolerance. Never
+tested against NQ, or any instrument, in this project.
+- LEARN/Integrity: NEW. Disclosed against M28 (pre-holiday, CLOSED --
+  exchange-closure anchor, reduced-hedging mechanism, different from
+  this entry's clock-change anchor and circadian/behavioral mechanism),
+  M6/hyp-000108 (turn-of-month, spent, different anchor/participant),
+  M24 (month-end payment-cycle reversal, CLOSED, different anchor and
+  mechanism), M15/hyp-000145 (overnight-vs-intraday split, spent, clean
+  null -- unconditional decomposition with no calendar conditioning at
+  all, vs. this entry's 2x/year clock-change condition), and M5
+  (month-end/quarter-end NQ-vs-ZN relative performance, spent --
+  different anchor and signal construction). Attempt 1 of 2.
+- Discovery: NQ daily RTH aggregation, already on disk, no new data.
+  DST transition dates computed from the fixed statutory rule (2nd
+  Sunday of March, 1st Sunday of November, unchanged since the Energy
+  Policy Act of 2005) -- no new calendar file needed. 5 cells, 1
+  gating.
+- Statistical: week-level unit (5 RTH sessions per transition); block
+  bootstrap (block=5, matching the M19/M22/M25/M28 thin-annual-event
+  convention); NULL 1 = NQ's own unconditional 5-session rolling
+  return baseline.
+- Mechanism honesty flag: weaker named-participant story than this
+  project's other open-scope entries (M19-M28 all name a specific
+  forced participant, or M28's own already-disclosed weaker story) --
+  included anyway given the cross-country replication strength of the
+  underlying empirical regularity, same disclosure precedent as M28.
+- THIN-SAMPLE flag (falsifier c, pre-disclosed): 2 transitions/year
+  over the ~6.75-year Discovery slice yields roughly 13-14 transition
+  weeks (~65-70 usable RTH sessions at the week level) -- thinner than
+  M28's n=60 pre-holiday sessions but comparable to M19's accepted
+  n=40 precedent; disclosed in advance, not discovered after the scan.
+- Director: not yet reached -- entry sourced and filed DRAWABLE, not
+  drawn this cycle unless budget and judgment favor drawing it same-
+  cycle as directional lane trial 2 (memo's own source-then-draw
+  precedent, Entry 32 itself).
+
+1. **STATE VARIABLE**: calendar week following a US daylight-saving-
+   time transition (spring-forward, 2nd Sunday of March; fall-back,
+   1st Sunday of November) vs. an ordinary week, NQ.
+2. **MECHANISM CLAIM**: synchronized sleep-cycle disruption from the
+   one-hour clock shift, across a large population of US-based traders,
+   reduces risk tolerance and produces a small negative drift in the
+   week following the transition (Kamstra, Kramer and Levi 2000 AER).
+3. **HORIZON**: 1 calendar week / 5 RTH sessions (transition-Sunday
+   anchored, fires 2x/year).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, five adjacencies
+   disclosed and distinguished (M28, M6/hyp-000108, M24, M15/hyp-000145,
+   M5). Attempt 1 of 2.
+5. **MAP ANCHOR**: M32. STATUS: DRAWABLE, no scan run yet (sourced to
+   restore the 3-entry shelf floor after Entry 32/M28 closed as
+   directional lane trial 1). Mechanism doc:
+   research/mechanisms/dst-anomaly-nq-m32.md.
+
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=558, mean=+0.2214 vs all-days +0.1757, z=+6.71. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0457, Sidak-adjusted 90%-family interval [+0.0291, +0.0631]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
 1. **STATE VARIABLE**: `opening_range_vs_atr` (already implemented in market_state_primitives*.py; known at 10:00 ET).
