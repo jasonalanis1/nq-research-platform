@@ -84,10 +84,9 @@ by" says an interactive session, that work is done; continue, don't redo.
 
 ## Pipeline sweep
 
-(auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 2, GATED 0, FROZEN 3.)
+(auto-built by src/pipeline_sweep.py -- do not hand-edit; rebuilt every cycle. Counts: OPEN 1, GATED 0, FROZEN 3.)
 
-- SHELF: Shelf 4/3 DRAWABLE (Entry 32, 33, 35, 36; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)
-- OPEN hyp-000156 london_open_volatility_burst_6e_m23: reached Statistical -> OWED: Director capital call at the Validation gate (separability first): worth a one-shot Validation attempt?
+- SHELF: Shelf 29/3 DRAWABLE (Entry 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61; pending: Entry 15) -> next DRAW: Entry 32 (oldest drawable)
 - OPEN hyp-000162 opening_range_width_midday_range_excursion_nq_m30: reached Director CONTINUE -> OWED: BLIND Integrity Gate checkpoint (src/integrity_blind_packet.py, fresh context, VETO)
 - FROZEN EXP047 prospective_validation_weekly_trend_exp047: reached FORWARD VALIDATION -> OWED: nothing -- evidence window open (H118: 40 trades AND 12 months); daily checker only
 - FROZEN hyp-000105 midday_lull_afternoon_expansion (re-expressions: hyp-000106, hyp-000133, hyp-000141): reached HOLDOUT PASSED -> OWED: nothing -- Portfolio review complete (see research/studies/, KNOWN TRUE); daily checker only
