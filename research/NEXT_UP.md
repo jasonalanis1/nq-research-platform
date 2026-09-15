@@ -751,7 +751,7 @@ AFTER any bot milestone that is unblocked and AFTER the hyp-156 Gate conditions:
   project stops describing B8 as reachable. STAFF RECOMMENDS (a), caveat stated: most of the
   engineering to date becomes infrastructure for a strategy it was not designed around, and the
   capital model needs rewriting from its band upward.
-- **DATA REFRESH -- APPROVED (Jason, September 14th, queue item). ONE COMMAND OWED FROM YOUR TERMINAL:**
+- **~~DATA REFRESH~~ -- DONE September 14th ~6:45 pm CT. Jason ran it; cost $0.0185; the NQ series is current through 2026-09-14. NOTHING OWED. Original text kept for the record:**
   `cd ~/Documents/nq-research-platform-live && python3 src/data_topup_databento.py` -- quotes the exact
   cost first, refuses above $15 (top of the approved $5-15 estimate; `--cap` to raise), writes a NEW
   NQ file (old one untouched), logs the real dollar figure to data/_databento_cost_log.json, runs the
@@ -1396,16 +1396,29 @@ research/sessions/2026-09-12-0027.md.
 Jason's framing: "Think of this as I'm the owner of this business and I want to know how my
 business is running from top to bottom. And this is for after each session is ran."
 
+REVISED the same evening, after he read the first draft: SPEND is no longer a standing section
+(it surfaces on YOUR DESK only when it needs him -- past 75% of the data cap, or anything crossing
+the $5 rule); section 2 is renamed THE BOT and labelled "build status, not results", because
+"product" read as results (results are in MONEY and PIPELINE); and PIPELINE was expanded from four
+summary lines to the named stage-by-stage view he asked for -- "I can handle more specifics."
+
 `python3 src/session_report.py --label "<H:MM am/pm>" --moved "..." --agents "..."` is the LAST
 step of every cycle, after `cycle_close.py`. Its six sections are fixed and in this order because
-that is the order an owner asks: MONEY → THE PRODUCT → PIPELINE → OPERATIONS → SPEND → YOUR DESK.
+that is the order an owner asks: MONEY -> THE BOT -> PIPELINE -> OPERATIONS -> YOUR DESK.
 Every figure is read from the project's own files at run time, so the scoreboard cannot drift from
 reality or be mis-remembered. The cycle writes only two things: `--moved` (a few sentences on what
 actually changed — not a reasoning trail) and `--agents` (who ran, who was idle and why).
 
 Settled with him the same evening:
 - DEPTH: fixed scoreboard every time, prose only on what moved. Stages that did not run get one
-  line, not a paragraph.
+  line, not a paragraph -- EXCEPT the pipeline, which is the section he wants specifics in: every
+  candidate that moved a stage this session by name, every candidate in flight with its stage /
+  status / age / what is owed next, what is next off the shelf, and the odds.
+- DATES IN THE LEDGER ARE NOT THROUGHPUT. Two "this week" counts were built and both were wrong:
+  a bulk audit rewrites old rows' timestamps, so counting by last row reads backfills as closures
+  and counting by first row reads them as new work. The odds line is date-independent on purpose
+  (reached out-of-sample / reached sealed data / cleared the bar). Do not reintroduce a "this week"
+  count from the ledger without a source that a backfill cannot move.
 - MONEY: honest zeros plus the distance to a real number. Never dress up a placeholder strategy's
   P&L, and always say that the simulated broker's zero slippage is a fact about the simulator.
 - INTERRUPT HIM BETWEEN SESSIONS ONLY FOR: (1) a decision only he can make, or (2) a
