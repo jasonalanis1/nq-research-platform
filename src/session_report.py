@@ -260,6 +260,60 @@ def pipeline(closed_today: int | None = None) -> list[str]:
     return lines
 
 
+def _parse_ts(x):
+    try:
+        t = datetime.fromisoformat(str(x))
+    except Exception:
+        return None
+    return t if t.tzinfo else t.replace(tzinfo=ZoneInfo("UTC"))
+
+
+def cycle_minutes_used(now=None) -> dict | None:
+    """This cycle's ACTUAL minutes, from the budget clock's checkpoint
+    (research/_cycle_checkpoint.json, written by cycle_budget.py start/done):
+    started -> finished if the cycle is done, else started -> now. Read, not
+    estimated (Jason, refocus s.6: 'I want to see the number')."""
+    p = PROJ / "research" / "_cycle_checkpoint.json"
+    if not p.exists():
+        return None
+    try:
+        c = json.loads(p.read_text())
+    except Exception:
+        return None
+    start = _parse_ts(c.get("started"))
+    if start is None:
+        return None
+    now = now or datetime.now(ZoneInfo("UTC"))
+    end = _parse_ts(c.get("finished")) if c.get("status") == "done" else None
+    end = end or now
+    return {"minutes": max((end - start).total_seconds() / 60.0, 0.0),
+            "budget": c.get("budget_minutes"), "status": c.get("status"),
+            "closed": c.get("status") == "done"}
+
+
+def day_usage(now=None) -> dict:
+    """Cycles run today (CT) and the minutes they actually used, from
+    research/_cycle_compliance.jsonl: one cycle per distinct `cycle_started`
+    (a re-run close appends a second row for the same cycle; the LAST row
+    wins), minutes = closed_at - cycle_started."""
+    now = now or datetime.now(CT)
+    today = now.astimezone(CT).date()
+    rows = _load_jsonl(PROJ / "research" / "_cycle_compliance.jsonl")
+    by_start: dict = {}
+    for r in rows:
+        closed = _parse_ts(r.get("closed_at"))
+        started = _parse_ts(r.get("cycle_started"))
+        if closed is None or closed.astimezone(CT).date() != today:
+            continue
+        key = r.get("cycle_started") or r.get("closed_at")
+        mins = (closed - started).total_seconds() / 60.0 if started else None
+        by_start[key] = {"label": r.get("label"), "minutes": mins, "complete": bool(r.get("complete"))}
+    cycles = list(by_start.values())
+    known = [c["minutes"] for c in cycles if c["minutes"] is not None]
+    return {"cycles": len(cycles), "minutes": sum(known), "unknown": len(cycles) - len(known),
+            "labels": [c["label"] for c in cycles if c["label"]]}
+
+
 def operations() -> list[str]:
     comp = _load_jsonl(PROJ / "research" / "_cycle_compliance.jsonl")
     lines = ["**4. OPERATIONS**"]
@@ -273,6 +327,19 @@ def operations() -> list[str]:
             lines.append(f"- Test suite: **{t}**")
         lines.append(f"- Work committed and pushed to GitHub: "
                      f"**{'yes' if checks.get('git', {}).get('ok') else 'NO'}**")
+    used = cycle_minutes_used()
+    if used:
+        budget = f" of the {used['budget']}-minute budget" if used.get("budget") else ""
+        state = "" if used["closed"] else " (clock still running at report time)"
+        lines.append(f"- This session used: **{used['minutes']:.0f} minutes**{budget}{state} "
+                     f"— read from the budget clock (research/_cycle_checkpoint.json), not estimated")
+    else:
+        lines.append("- This session used: **unknown** — no budget-clock checkpoint was written")
+    d = day_usage()
+    extra = f" ({d['unknown']} without a recorded start)" if d["unknown"] else ""
+    lines.append(f"- Today so far: **{d['cycles']} cycle(s) run, {d['minutes']:.0f} minutes used**{extra} "
+                 f"— from research/_cycle_compliance.jsonl"
+                 + (f"; cycles: {', '.join(d['labels'])}" if d["labels"] else ""))
     return lines
 
 

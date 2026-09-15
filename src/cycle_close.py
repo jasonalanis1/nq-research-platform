@@ -27,8 +27,10 @@ WHAT IT CHECKS
   preflight    this cycle's preflight receipt exists, is clean, and is NEWER
                than this cycle's start (i.e. it is THIS cycle's, not the
                previous one's)
-  moved        what the cycle actually changed, from the budget clock's own
-               delta -- ledger rows, scans, docs, inventory
+  moved        whether a candidate CHANGED STAGE (ledger), a scan was
+               registered, or a bot milestone flipped -- from the budget
+               clock's own delta. Shelf/inventory additions, studies and
+               mechanism docs are listed but count zero (refocus 7.1).
 
 WHAT IT DOES NOT DO
   It does not write the session report, NEXT_UP, or KNOWLEDGE. Those carry

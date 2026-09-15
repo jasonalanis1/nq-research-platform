@@ -42,12 +42,72 @@ def test_unfinished_checkpoint_is_flagged_for_resume(tmp_path, monkeypatch):
     assert ops_checks.check_unfinished_checkpoint().status == ops_checks.PASS
 
 
+def _row(hid, status, slice_="discovery"):
+    return json.dumps({"hypothesis_id": hid, "strategy_status": status, "data_slice_used": slice_}) + "\n"
+
+
 def test_done_records_whether_anything_moved(tmp_path, monkeypatch):
     r = _wire(tmp_path, monkeypatch)
     cb.main(["start"]); cb.main(["done"])
     assert json.loads(cb.HIST.read_text().splitlines()[-1])["moved"] is False
+    # a study alone is activity, not movement (refocus 7.1) -- recorded, but moved stays False
     cb.main(["start"]); (r / "studies" / "new.md").write_text("x"); cb.main(["done"])
+    last = json.loads(cb.HIST.read_text().splitlines()[-1])
+    assert last["moved"] is False and last["delta"]["studies"] == 1
+    # a candidate changing stage IS movement
+    cb.main(["start"]); (r / "ledger" / "hypotheses.jsonl").open("a").write(_row("hyp-000001", "PROMISING")); cb.main(["done"])
     assert json.loads(cb.HIST.read_text().splitlines()[-1])["moved"] is True
+
+
+def test_inventory_additions_alone_are_not_movement(tmp_path, monkeypatch):
+    """Refocus 7.1 (Jason, Sept 15th): batch screening added 25 shelf rows and
+    discovered nothing; the busy-work guard must NOT count that as movement."""
+    r = _wire(tmp_path, monkeypatch)
+    cb.main(["start"])
+    inv = r / "idea_inventory.md"
+    inv.write_text(inv.read_text() + "".join(f"## ENTRY {n} — survivor\n" for n in range(2, 27)))
+    (r / "mechanisms" / "m1.md").write_text("mechanism doc")
+    cb.main(["done"])
+    last = json.loads(cb.HIST.read_text().splitlines()[-1])
+    assert last["delta"]["inventory_entries"] == 25 and last["delta"]["mechanism_docs"] == 1
+    assert last["delta"]["stage_changes"] == 0
+    assert last["moved"] is False
+    # three such cycles in a row is BUSY WORK
+    (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [{"tier": "OPEN", "next_owed": "Statistical"}], "shelf": "Shelf 3/3 live"}))
+    for _ in range(2):
+        cb.HIST.open("a").write(json.dumps({"moved": False, "delta": {"inventory_entries": 25}}) + "\n")
+    res = ops_checks.check_value_per_cycle()
+    assert res.status == ops_checks.FAIL and "BUSY WORK" in res.detail
+
+
+def test_stage_change_is_movement_but_a_repeated_status_is_not(tmp_path, monkeypatch):
+    r = _wire(tmp_path, monkeypatch)
+    led = r / "ledger" / "hypotheses.jsonl"
+    led.write_text(_row("hyp-000001", "PROMISING"))
+    # same status re-logged on the same slice: a row changed, no stage changed
+    cb.main(["start"]); led.open("a").write(_row("hyp-000001", "PROMISING")); cb.main(["done"])
+    last = json.loads(cb.HIST.read_text().splitlines()[-1])
+    assert last["delta"]["ledger_rows"] == 1 and last["delta"]["stage_changes"] == 0 and last["moved"] is False
+    # Discovery -> Validation slice: stage change
+    cb.main(["start"]); led.open("a").write(_row("hyp-000001", "PROMISING", "validation")); cb.main(["done"])
+    last = json.loads(cb.HIST.read_text().splitlines()[-1])
+    assert last["delta"]["stage_changes"] == 1 and last["moved"] is True
+    # PROMISING -> REJECTED: stage change; a brand-new hypothesis: stage change
+    cb.main(["start"]); led.open("a").write(_row("hyp-000001", "REJECTED", "validation") + _row("hyp-000002", "REJECTED")); cb.main(["done"])
+    assert json.loads(cb.HIST.read_text().splitlines()[-1])["delta"]["stage_changes"] == 2
+
+
+def test_scan_registered_and_bot_milestone_flip_are_movement(tmp_path, monkeypatch):
+    r = _wire(tmp_path, monkeypatch)
+    reg = tmp_path / "src" / "project_wide_multiplicity.py"
+    cb.main(["start"]); reg.write_text(reg.read_text() + '    "scan_002_2026-01-02": {},\n'); cb.main(["done"])
+    assert json.loads(cb.HIST.read_text().splitlines()[-1])["moved"] is True
+    (tmp_path / "docs").mkdir()
+    rm = tmp_path / "docs" / "BOT_ROADMAP.md"
+    rm.write_text("| B8 | Live-Limited | **MISSING** | x |\n")
+    cb.main(["start"]); rm.write_text("| B8 | Live-Limited | **DONE** | x |\n"); cb.main(["done"])
+    last = json.loads(cb.HIST.read_text().splitlines()[-1])
+    assert last["delta"]["bot_milestones_flipped"] == 1 and last["moved"] is True
 
 
 def test_value_check_fails_on_three_stalled_cycles_and_on_exhausted_queue(tmp_path, monkeypatch):

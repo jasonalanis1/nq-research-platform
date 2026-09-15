@@ -466,8 +466,13 @@ def _value_ack(entries: list) -> dict | None:
 def check_value_per_cycle() -> Result:
     """Quality-control indicator (Jason, 2026-09-11): are cycles MOVING
     anything, or spinning? Reads research/_cycle_history.jsonl (written by
-    cycle_budget.py done: objective artifact deltas per cycle). Three closed
-    cycles in a row with zero deltas = BUSY WORK -> FAIL (IMMEDIATE item).
+    cycle_budget.py done). MOVEMENT = a candidate CHANGING STAGE (ledger
+    latest-row status/slice changed or a new hypothesis logged), a scan
+    registered, or a bot milestone flipped -- redefined September 15th
+    (Jason's refocus 7.1): batch screening added 25 shelf rows while
+    discovering nothing and the old activity rule passed it. Shelf and
+    inventory additions, studies and mechanism docs count ZERO. Three
+    closed cycles in a row with no movement = BUSY WORK -> FAIL.
     Separately: queue exhausted (sweep owes nothing automated AND the shelf
     is empty) -> FAIL, because only Jason can add map entries or data."""
     hist = RESEARCH / "_cycle_history.jsonl"
@@ -513,7 +518,7 @@ def check_value_per_cycle() -> Result:
     if stalled:
         if ack:
             return Result("value", WARN, f"no movement for {BUSY_WORK_LIMIT}+ cycles, acknowledged by {ack['by']} {ack['at'][:10]}: {ack['reason']} -- expected while the map is empty, do not re-alert")
-        return Result("value", FAIL, f"BUSY WORK: last {BUSY_WORK_LIMIT} cycles moved nothing (no ledger/scan/doc/inventory change) -- tell Jason, do not keep cycling")
+        return Result("value", FAIL, f"BUSY WORK: last {BUSY_WORK_LIMIT} cycles moved nothing (no candidate changed stage, no scan registered, no bot milestone flipped; shelf/inventory additions count zero) -- tell Jason, do not keep cycling")
     last = entries[-1]
     return Result("value", PASS, f"last cycle moved={last.get('moved')} delta={ {k: v for k, v in last.get('delta', {}).items() if v} }")
 
