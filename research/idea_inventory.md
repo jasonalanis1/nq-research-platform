@@ -2597,3 +2597,87 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 | 4. joint separability (T1) | OK | +0.0205 | 90% [+0.0112, +0.0312] | vs stack ['vxn_level_vs_trailing', 'overnight_range_vs_atr', 'range_vs_atr']; still_credible_after_stack=True |
 
 ---
+
+## ENTRY 63 — M33: Weekend/Monday effect, NQ RTH return direction (literature channel, September 16th, ~11:00 am CT cycle) — CLOSED (Directional Lane trial 3, Scan 039, September 16th ~11:00 am CT, hyp-000165): Discovery P1 FAIL, CLEAN NULL and wrong-signed (diff +3.4269 pts, block CI (-3.8485,+11.8924), n=348 Monday sessions). Write-up: research/studies/hyp-000165-directional-lane-trial3-2026-09-16.md
+
+Generation (sourcing stage, scheduled cycle): sourced to restore the
+3-entry shelf floor after Entry 62/M32 closed last cycle as directional
+lane trial 2 (hyp-000164, clean null) and the shelf fell to 0/3.
+Magnitude research stays FROZEN (research/infrastructure/refocus-2026-09-15.md
+s.3); this entry is sourced for the reserved directional lane (s.4)
+only, from the literature channel, non-state. Full mechanism doc
+research/mechanisms/weekend-effect-nq-m33.md, written BEFORE any scan.
+Literature: French (1980, Journal of Financial Economics, "Stock
+Returns and the Weekend Effect"); Rogalski (1984, Journal of Finance);
+Kamara (1997, Journal of Financial and Quantitative Analysis) -- one of
+the most widely replicated calendar anomalies in the equity-return
+literature. Never tested against NQ, or any instrument, in this project
+as a RETURN-DIRECTION claim (only as one buried, never-isolated
+coefficient in two already-closed joint next-day-sign models,
+hyp-000016/hyp-000042).
+- LEARN/Integrity: NEW. Disclosed against Entry 4/day_of_week(Friday)
+  RTH RANGE (CLOSED -- different weekday, different outcome variable
+  [range vs. signed return], different mechanism family; Entry 4's own
+  text flagged Monday as an untested "natural counterpart," never
+  drawn), hyp-000016/hyp-000042 (joint multi-feature next-day-sign
+  models that never isolated day_of_week, confirmed in Entry 4's own
+  LEARN section), M28 (pre-holiday, CLOSED trial 1, exchange-closure
+  anchor/reduced-hedging mechanism, ~10x/year), M32 (DST transition,
+  CLOSED trial 2, 2x/year clock-change anchor, circadian mechanism),
+  and M6/hyp-000108, M24, M25, M22 (turn-of-month, month-end
+  payment-cycle, opex-week, ZN duration -- all spent or CLOSED,
+  monthly-calendar anchors, unrelated participants). Attempt 1 of 2.
+- Discovery: NQ daily RTH aggregation, already on disk, no new data.
+  `day_of_week` already implemented (market_state_primitives.py);
+  applied here for the first time to a return-direction outcome. 6
+  cells, 1 gating.
+- Statistical: block bootstrap (block=5, standard weekly-cycle block,
+  matching Entry 4's own weekly framing); NULL 1 = NQ's own
+  unconditional daily RTH return baseline (P1), unconditional overnight
+  return baseline (P2).
+- Mechanism honesty flag: no single named forced counterparty (same
+  disclosure precedent already accepted for M28 and M32) -- included
+  given the depth of replication of the underlying empirical
+  regularity.
+- Power: best-powered directional-lane entry sourced so far -- fires
+  ~52x/year (weekly) vs. M28's ~10x/year or M32's 2x/year; n=348 Monday
+  sessions in the Discovery slice, clears the ordinary n=40 floor by a
+  wide margin, no thin-sample disclosure needed.
+- Director: drawn same cycle as sourced (memo's own source-then-draw
+  precedent, used for both trial 1 and trial 2 already).
+
+1. **STATE VARIABLE**: `day_of_week` (already implemented,
+   market_state_primitives.py), restricted to the first trading day of
+   each calendar week (Rogalski 1984 convention, robust to Monday NYSE
+   holidays).
+2. **MECHANISM CLAIM**: bad-news-timing (firms release bad news over
+   weekends, digested into Monday's session) and/or investor-psychology
+   weekend-sentiment effects (French 1980; Damodaran 1989; Sias and
+   Starks 1995) produce a small negative drift on the week's first
+   trading day.
+3. **HORIZON**: same day (Monday RTH open to close); reported P2 uses
+   the Friday-close-to-Monday-open overnight/gap segment (Rogalski
+   1984's more precise claim).
+4. **INTEGRITY GATE RESURRECTION RULING**: NEW, seven adjacencies
+   disclosed and distinguished (Entry 4, hyp-000016/000042, M28,
+   M32, M6/hyp-000108, M24, M25, M22). Attempt 1 of 2.
+5. **MAP ANCHOR**: M33. STATUS: CLOSED (Scan 039, September 16th
+   ~11:00 am CT). Mechanism doc:
+   research/mechanisms/weekend-effect-nq-m33.md.
+
+**RESULT (Scan 039, hyp-000165)**: P1 FAIL. Monday RTH return
+diff=+3.4269 pts vs NQ's own unconditional daily RTH return, block CI
+(-3.8485,+11.8924) -- includes zero, and the point estimate runs
+POSITIVE against the literature's predicted NEGATIVE direction. n=348
+Monday sessions (well-powered). P2 (Friday-close-to-Monday-open gap,
+reported, moot given P1 fail): diff=-4.7832 pts, CI
+(-12.9000,+3.9585), not credible (though this cell's point estimate
+does run the predicted negative direction, unlike P1). P3 (first-half
+vs. second-half Discovery-slice split, descriptive): both halves null
+(first half diff=+0.9237 CI (-3.5951,+5.7550); second half
+diff=+5.9740 CI (-8.1896,+20.6428)) -- no decay pattern worth reporting
+since neither half shows a credible effect. CLEAN NULL: the classic
+weekend/Monday equity effect does not transfer to NQ futures RTH
+sessions at this data ceiling. Closes per mechanism doc falsifier (a).
+
+---

@@ -1,7 +1,7 @@
 {
   "_doc": "DIRECTIONAL LANE (Jason, September 15th, research/infrastructure/refocus-2026-09-15.md section 4). cap=20 trials, hard stop, pre-committed. used = number of trials spent; trials = one object per trial {n, hypothesis_id, entry, source_channel, claim, result, closed_at}. A trial is one pre-registered directional Discovery scan sourced from mechanism/calendar/structure (never the Idea Factory state library). The count lives in this file, not in memory: a cycle that spends a trial appends here in the same commit as the ledger row. If used reaches 20 with every result null, direction is closed by evidence and the next step is Jason's call, not a cycle's.",
   "cap": 20,
-  "used": 2,
+  "used": 3,
   "trials": [
     {
       "n": 1,
@@ -20,6 +20,15 @@
       "claim": "NQ's 5-session cumulative RTH return in the week following a US daylight-saving-time transition (spring + fall) is credibly negative relative to NQ's own unconditional 5-session rolling return (Discovery slice).",
       "result": "NULL, wrong-signed. P1 FAIL: diff +51.75 pts, block CI (-13.09,+73.88), includes zero (point estimate positive, opposite predicted direction). n=13 transition weeks (clears 12-week thin-sample floor). P2 (Monday-only, reported, moot given P1 fail): diff +16.67 pts, CI (+5.57,+25.22), credible but POSITIVE (opposite literature's predicted sign). P3 (spring vs fall, descriptive): spring null, fall credible positive -- opposite literature's stronger-spring prediction.",
       "closed_at": "2026-09-16T14:30:00Z"
+    },
+    {
+      "n": 3,
+      "hypothesis_id": "hyp-000165",
+      "entry": "Entry 63 / M33",
+      "source_channel": "literature (calendar-anchored, day-of-week, French 1980 JFE 'weekend effect')",
+      "claim": "NQ's Monday (first-trading-day-of-week) RTH return is credibly negative relative to NQ's own unconditional daily RTH return (Discovery slice).",
+      "result": "NULL. P1 FAIL: diff +3.4269 pts, block CI (-3.8485,+11.8924), includes zero and wrong-signed (predicted negative, point estimate positive). n=348 Monday sessions (best-powered directional-lane entry so far). P2 (Friday-close-to-Monday-open gap, reported, moot given P1 fail): diff -4.7832 pts, CI (-12.9000,+3.9585), also not credible. P3 (first-half vs second-half decay check, descriptive): both halves null.",
+      "closed_at": "2026-09-16T16:00:00Z"
     }
   ]
 }
