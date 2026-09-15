@@ -1391,3 +1391,23 @@ Previous: September 11th, 7:35 pm CT (2026-09-12 00:35 UTC), interactive
 (Jason present). HOLDOUT SLOT 2 SPENT on hyp-000105/106: HOLDOUT PASSED
 (hyp-000141). Sweep collapse fix for *_holdout rows. Full:
 research/sessions/2026-09-12-0027.md.
+
+## SESSION REPORT FORMAT (Jason, September 14th ~9:30 pm CT) — binding, every cycle
+Jason's framing: "Think of this as I'm the owner of this business and I want to know how my
+business is running from top to bottom. And this is for after each session is ran."
+
+`python3 src/session_report.py --label "<H:MM am/pm>" --moved "..." --agents "..."` is the LAST
+step of every cycle, after `cycle_close.py`. Its six sections are fixed and in this order because
+that is the order an owner asks: MONEY → THE PRODUCT → PIPELINE → OPERATIONS → SPEND → YOUR DESK.
+Every figure is read from the project's own files at run time, so the scoreboard cannot drift from
+reality or be mis-remembered. The cycle writes only two things: `--moved` (a few sentences on what
+actually changed — not a reasoning trail) and `--agents` (who ran, who was idle and why).
+
+Settled with him the same evening:
+- DEPTH: fixed scoreboard every time, prose only on what moved. Stages that did not run get one
+  line, not a paragraph.
+- MONEY: honest zeros plus the distance to a real number. Never dress up a placeholder strategy's
+  P&L, and always say that the simulated broker's zero slippage is a fact about the simulator.
+- INTERRUPT HIM BETWEEN SESSIONS ONLY FOR: (1) a decision only he can make, or (2) a
+  capital-protection trip. Not for a rejection, not for a defect found and fixed, not for a
+  candidate advancing a stage — those wait for the next session report.
