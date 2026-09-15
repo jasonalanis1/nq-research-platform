@@ -9,7 +9,7 @@ Method: `grep -n "open(\|write_text\|to_csv\|json.dump" src/*.py` (every writer 
 target classified, then the guard wired into every writer of a PRODUCTION RECORD. Guard:
 src/production_paths.py (default-deny; `TONY_PRODUCTION=1` in the environment, set by the
 standing entry points' `if __name__ == "__main__"` blocks or by hand for one-off scripts).
-Tests: tests/test_production_paths.py (8), and tests/conftest.py:46-63 strips the flag at session
+Tests: tests/test_production_paths.py (8), and tests/conftest.py:46-62 strips the flag at session
 start and asserts it is absent around every test. Line numbers below are as of commit time.
 
 ## Tally
