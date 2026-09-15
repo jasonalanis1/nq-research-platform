@@ -31,7 +31,11 @@ import bot_stack_paper_run as bpr  # noqa: E402
 from capital_protection import CONFIG as CAPITAL_CONFIG  # noqa: E402
 from order_path import OrderPathJournal  # noqa: E402
 
-TARGET_SAMPLE = 40
+# The PRE-REGISTERED minimum execution-validation sample is 20 paper trades with
+# slippage measured (back-half-production-integrity-v3.md, Stage 3.5 ENTRY). 40 is
+# a different number -- capital_protection's catastrophe-tail WINDOW -- and the
+# queue item that set up this block conflated the two. Corrected 2026-09-14.
+TARGET_SAMPLE = 20
 CHECKPOINT = bpr.PROJECT_ROOT / "research" / "_cycle_checkpoint.json"
 REPLAY_REPORT = bpr.LOG_DIR / "b7_replay" / "replay_report.json"
 

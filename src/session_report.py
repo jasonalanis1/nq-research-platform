@@ -51,7 +51,7 @@ PROJ = ROOT.parent
 sys.path.insert(0, str(ROOT))
 
 CT = ZoneInfo("America/Chicago")
-TARGET_FILLS = 40
+TARGET_FILLS = 20   # the pre-registered minimum sample; NOT the 40-trade catastrophe window
 DATA_CAP_USD = 20.0
 
 
@@ -94,7 +94,7 @@ def money() -> list[str]:
     else:
         lines.append(f"- Paper P&L: **none yet** — {len(rows)} session(s) logged, "
                      f"{blocked} blocked before an order, 0 resolved trades.")
-    lines.append(f"- Fills toward the 40-trade record: **{fills} / {TARGET_FILLS}** "
+    lines.append(f"- Fills toward the {TARGET_FILLS}-trade record: **{fills} / {TARGET_FILLS}** "
                  f"(slippage becomes measurable at 20)")
     if rep:
         lines.append(f"- Rehearsal on past sessions (not the record): {rep.get('n_fills', 0)} fill(s) "
