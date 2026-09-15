@@ -1,0 +1,232 @@
+{
+ "min_n": 15,
+ "n_trades": 131,
+ "overall": {
+  "n": 131,
+  "net_usd_1": -116.38,
+  "win_rate": 0.466,
+  "avg_r_net": -0.1716,
+  "profitable": false,
+  "thin": false,
+  "positive_but_thin": false
+ },
+ "conditions": [
+  {
+   "condition": "1. volatility: VXN vs trailing (HIGH > trailing, LOW <= trailing)",
+   "sides": {
+    "HIGH": {
+     "n": 21,
+     "net_usd_1": -277.27,
+     "win_rate": 0.429,
+     "avg_r_net": -0.2748,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "LOW": {
+     "n": 110,
+     "net_usd_1": 160.89,
+     "win_rate": 0.473,
+     "avg_r_net": -0.1519,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false
+    }
+   }
+  },
+  {
+   "condition": "2. trend vs range: the day's own RTH range vs trailing-20 average",
+   "sides": {
+    "RANGE": {
+     "n": 95,
+     "net_usd_1": -179.28,
+     "win_rate": 0.442,
+     "avg_r_net": -0.238,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "TREND": {
+     "n": 36,
+     "net_usd_1": 62.9,
+     "win_rate": 0.528,
+     "avg_r_net": 0.0038,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false
+    }
+   }
+  },
+  {
+   "condition": "3. time of day: signal trigger time",
+   "sides": {
+    "OPEN_0930_1000": {
+     "n": 98,
+     "net_usd_1": -140.44,
+     "win_rate": 0.48,
+     "avg_r_net": -0.1282,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "OPEN_PRE0930": {
+     "n": 33,
+     "net_usd_1": 24.06,
+     "win_rate": 0.424,
+     "avg_r_net": -0.3005,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false
+    }
+   }
+  },
+  {
+   "condition": "4. scheduled-news day (FOMC / CPI / NFP) vs quiet",
+   "sides": {
+    "NEWS": {
+     "n": 10,
+     "net_usd_1": -71.54,
+     "win_rate": 0.4,
+     "avg_r_net": -0.3265,
+     "profitable": false,
+     "thin": true,
+     "positive_but_thin": false
+    },
+    "QUIET": {
+     "n": 121,
+     "net_usd_1": -44.84,
+     "win_rate": 0.471,
+     "avg_r_net": -0.1588,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    }
+   }
+  },
+  {
+   "condition": "spec-named: level_source",
+   "sides": {
+    "premarket_high": {
+     "n": 57,
+     "net_usd_1": -247.89,
+     "win_rate": 0.386,
+     "avg_r_net": -0.3401,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "premarket_low": {
+     "n": 34,
+     "net_usd_1": -222.19,
+     "win_rate": 0.471,
+     "avg_r_net": -0.1854,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "prior_day_high": {
+     "n": 23,
+     "net_usd_1": -73.04,
+     "win_rate": 0.435,
+     "avg_r_net": -0.2753,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "prior_day_low": {
+     "n": 17,
+     "net_usd_1": 426.74,
+     "win_rate": 0.765,
+     "avg_r_net": 0.5611,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false
+    }
+   }
+  },
+  {
+   "condition": "spec-named: direction",
+   "sides": {
+    "long": {
+     "n": 51,
+     "net_usd_1": 204.55,
+     "win_rate": 0.569,
+     "avg_r_net": 0.0635,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false
+    },
+    "short": {
+     "n": 80,
+     "net_usd_1": -320.93,
+     "win_rate": 0.4,
+     "avg_r_net": -0.3214,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false
+    }
+   }
+  }
+ ],
+ "profitable_conditions": [
+  {
+   "condition": "1. volatility: VXN vs trailing (HIGH > trailing, LOW <= trailing)",
+   "side": "LOW",
+   "n": 110,
+   "net_usd_1": 160.89,
+   "win_rate": 0.473,
+   "avg_r_net": -0.1519,
+   "profitable": true,
+   "thin": false,
+   "positive_but_thin": false
+  },
+  {
+   "condition": "2. trend vs range: the day's own RTH range vs trailing-20 average",
+   "side": "TREND",
+   "n": 36,
+   "net_usd_1": 62.9,
+   "win_rate": 0.528,
+   "avg_r_net": 0.0038,
+   "profitable": true,
+   "thin": false,
+   "positive_but_thin": false
+  },
+  {
+   "condition": "3. time of day: signal trigger time",
+   "side": "OPEN_PRE0930",
+   "n": 33,
+   "net_usd_1": 24.06,
+   "win_rate": 0.424,
+   "avg_r_net": -0.3005,
+   "profitable": true,
+   "thin": false,
+   "positive_but_thin": false
+  },
+  {
+   "condition": "spec-named: level_source",
+   "side": "prior_day_low",
+   "n": 17,
+   "net_usd_1": 426.74,
+   "win_rate": 0.765,
+   "avg_r_net": 0.5611,
+   "profitable": true,
+   "thin": false,
+   "positive_but_thin": false
+  },
+  {
+   "condition": "spec-named: direction",
+   "side": "long",
+   "n": 51,
+   "net_usd_1": 204.55,
+   "win_rate": 0.569,
+   "avg_r_net": 0.0635,
+   "profitable": true,
+   "thin": false,
+   "positive_but_thin": false
+  }
+ ],
+ "positive_but_thin": [],
+ "verdict": "condition found: 1. volatility: VXN vs trailing (HIGH > trailing, LOW <= trailing) = LOW (n=110, net $+160.89, avg -0.152R); 2. trend vs range: the day's own RTH range vs trailing-20 average = TREND (n=36, net $+62.90, avg +0.004R); 3. time of day: signal trigger time = OPEN_PRE0930 (n=33, net $+24.06, avg -0.300R); spec-named: level_source = prior_day_low (n=17, net $+426.74, avg +0.561R); spec-named: direction = long (n=51, net $+204.55, avg +0.064R)",
+ "strategy_name": "s001_level_sweep_reversal_compressed_prior_day",
+ "screen_source": "data/screen_S001_2026-09-15.json"
+}
