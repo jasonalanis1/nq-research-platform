@@ -106,7 +106,24 @@ class OrderPathLedger:
         devs = [d for d in devs if d is not None]
         return devs[-window:]
 
-    def orders_today(self) -> int:
+    def orders_today(self, session_date: Optional[str] = None) -> int:
+        """Orders already sent for THIS SESSION.
+
+        FIXED 2026-09-14 (found by Step A in dummy mode): this used to count
+        order_intents by the WALL-CLOCK day they were journaled. When the paper
+        loop catches up several sessions in one run -- which it does every time
+        data lands -- every session's orders share one wall-clock day, so the
+        daily cap tripped for every session after the first four orders. In B3
+        mode (one order a session) three sessions fit under the cap and it went
+        unnoticed; four-a-session made it obvious. The session date now comes
+        from `today["session_date"]` when the caller supplies it (the paper loop
+        does), and each intent's own client_tag carries its signal timestamp, so
+        the count is per SESSION regardless of when the run happened. The
+        wall-clock fallback is kept for callers that do not supply a date."""
+        if session_date:
+            return sum(1 for r in self.journal.all_records()
+                       if r.get("event") == "order_intent"
+                       and str(r.get("client_tag", "")).split(":", 1)[-1].strip().startswith(session_date))
         today = _now().date().isoformat()
         return sum(1 for r in self.journal.all_records()
                    if r.get("event") == "order_intent" and str(r.get("ts", "")).startswith(today))
@@ -117,7 +134,7 @@ class OrderPathLedger:
     def build_state(self, today: dict, open_positions: int, contracts: int) -> dict:
         state = dict(today)
         state.setdefault("fill_deviations_pts", self.recent_fill_deviations())
-        state.setdefault("orders_today", self.orders_today())
+        state.setdefault("orders_today", self.orders_today(today.get("session_date")))
         state.setdefault("catastrophe_flags", self.catastrophe_flags())
         state["open_positions"] = open_positions
         state["contracts"] = contracts

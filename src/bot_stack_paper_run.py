@@ -104,7 +104,28 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
-from base_entry_b3 import STRATEGY_NAME, generate_signals  # noqa: E402
+from base_entry_b3 import STRATEGY_NAME as B3_NAME, generate_signals as b3_signals  # noqa: E402
+import execution_dummy  # noqa: E402
+
+# STRATEGY SWITCH (2026-09-14 ~8:45 pm CT, Jason: "push this as fast as possible").
+#   "b3"    -- the frozen one-trade-a-day placeholder (default; unchanged)
+#   "dummy" -- execution_dummy: four orders a session at fixed clock times, so the
+#              pre-registered 20-fill execution sample arrives in ~5 sessions.
+# Both are placeholders with no claimed edge. Rows carry `strategy` so the two
+# are never conflated in the execution record. Set by main(--strategy) or by the
+# replay harness; tests may set it directly.
+STRATEGY = "b3"
+STRATEGIES = {
+    "b3": (B3_NAME, b3_signals),
+    "dummy": (execution_dummy.STRATEGY_NAME, execution_dummy.generate_signals),
+}
+
+
+def _strategy():
+    return STRATEGIES[STRATEGY]
+
+
+STRATEGY_NAME = B3_NAME   # kept for older imports; run_session uses _strategy()
 from risk_state_engine import decision_for  # noqa: E402
 from order_path import OrderPath  # noqa: E402
 from simulated_broker import SimulatedBroker  # noqa: E402
@@ -223,7 +244,13 @@ def running_state(rows: list[dict]) -> dict:
     equity = 0.0
     peak = 0.0
     trades = 0
-    for r in rows:
+    # PAPER ACCOUNT RESET (2026-09-14, dummy mode): a capital-protection kill is
+    # final for the account it fired on. In dummy mode the next order opens a
+    # NEW paper account so fill collection continues; the reset row is the
+    # boundary and everything before it is history, not state. Rows after the
+    # last reset are the live account.
+    last_reset = max((i for i, r in enumerate(rows) if r.get("outcome") == "paper_account_reset"), default=-1)
+    for r in rows[last_reset + 1:]:
         pnl = r.get("pnl_usd")
         if pnl is not None:
             equity += pnl
@@ -262,14 +289,53 @@ def _resolve_fill_outcome(day_df: pd.DataFrame, direction: str, from_ts, entry_p
             "risk_points": round(risk, 4), "r_multiple": r_multiple}
 
 
-def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
-    sigs = generate_signals(day_df)
+def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]):
+    """B3 mode returns ONE row (one trade/day). Dummy mode returns a LIST of
+    rows, one per order (up to max_orders_per_day), each run through the same
+    gate -> order path -> bookkeeping as a B3 row, with the budget state
+    evolving within the session."""
+    name, gen = _strategy()
+    sigs = gen(day_df)
+    if STRATEGY == "dummy":
+        rows, acc = [], list(prior_rows)
+        # B2's decision is per DATE (it reloads the whole price file each call,
+        # ~25s); compute it once per session and share it across the legs.
+        decision = decision_for(date=str(date)) if sigs else None
+        for sig in sigs[:CAPITAL_CFG.max_orders_per_day]:
+            row = _run_one(date, day_df, acc, sig, name, decision=decision)
+            row["leg"] = sig.market_context.get("fire_time")
+            reasons = row.get("order_path", {}).get("reasons", []) if row["outcome"] == "blocked" else []
+            if any("KILL" in str(x) for x in reasons):
+                # The kill is RECORDED as a real capital-protection trip (it is
+                # one, and a kill firing on a running P&L is itself evidence the
+                # switch works). Then, because the dummy exists only to collect
+                # fills, a fresh paper account opens and the same order is placed
+                # once more under it. One reset per leg, never more.
+                rows.append(row); acc.append(row)
+                reset = {"date": str(date), "strategy": name, "leg": row["leg"],
+                         "outcome": "paper_account_reset",
+                         "note": "capital-protection kill on the dummy's paper account; new paper "
+                                 "account opened so the execution sample keeps accumulating. "
+                                 "The kill row above is the evidence; nothing was tuned.",
+                         "killed_by": reasons}
+                rows.append(reset); acc.append(reset)
+                row = _run_one(date, day_df, acc, sig, name, decision=decision)
+                row["leg"] = sig.market_context.get("fire_time")
+            rows.append(row); acc.append(row)
+        if not rows:
+            rows = [{"date": str(date), "strategy": name, "outcome": "no_signal",
+                     "note": "dummy: no fire time had a usable bar"}]
+        return rows
     if not sigs:
-        return {"date": str(date), "outcome": "no_signal",
+        return {"date": str(date), "strategy": name, "outcome": "no_signal",
                 "note": "no B3 signal (one trade/day rule; not every session fires)"}
-    signal = sigs[0]
+    return _run_one(date, day_df, prior_rows, sigs[0], name)
 
-    decision = decision_for(date=str(date))
+
+def _run_one(date, day_df: pd.DataFrame, prior_rows: list[dict], signal, name: str,
+             decision: dict | None = None) -> dict:
+
+    decision = decision if decision is not None else decision_for(date=str(date))
     if not decision["trade_permission"]:
         return {"date": str(date), "outcome": "blocked_by_risk_state_engine",
                 "signal": {"direction": signal.direction, "entry": signal.entry, "stop": signal.stop,
@@ -284,12 +350,13 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
     # is computed against THIS trade's own swing as 1R, never against live dollars
     swing_usd = round(stop_distance_pts * MNQ_MULTIPLIER, 2)   # ONE rounded figure, used everywhere below
     eff = capital_protection.effective_config(CAPITAL_CFG, swing_usd)
-    budget = capital_protection.budget_allowed(STRATEGY_NAME, state["paper_trades"],
+    budget = capital_protection.budget_allowed(name, state["paper_trades"],
                                                 paper_slippage_measured, state["paper_net_usd"], eff)
     remaining_budget_usd = max(0.0, budget + min(0.0, state["equity_usd"]))
 
     today = {
-        "strategy": STRATEGY_NAME,
+        "session_date": str(date),      # so the daily order cap counts THIS session's orders
+        "strategy": name,
         "paper_trades": state["paper_trades"],
         "paper_slippage_measured": paper_slippage_measured,
         "paper_net_usd": state["paper_net_usd"],
@@ -306,7 +373,9 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
         "reference_signals_today": [signal.direction],
     }
 
-    broker = SimulatedBroker(seed=_seed_for(date),
+    leg = (getattr(signal, "market_context", {}) or {}).get("fire_time", "")
+    seed = _seed_for(date) * 100 + (int(leg.replace(":", "")) % 100 if leg else 0)
+    broker = SimulatedBroker(seed=seed,
                               reject_rate=BROKER_REJECT_RATE, partial_fill_rate=BROKER_PARTIAL_FILL_RATE,
                               disconnect_rate=BROKER_DISCONNECT_RATE, late_ack_rate=BROKER_LATE_ACK_RATE)
     broker.connect()
@@ -315,9 +384,9 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
     result = path.submit_signal(signal, today=today, size_multiplier=decision["size_multiplier"],
                                  price_source=signal.entry)
 
-    row = {"date": str(date), "outcome": result["status"], "gate": today,
+    row = {"date": str(date), "strategy": name, "outcome": result["status"], "gate": today,
            "signal": {"direction": signal.direction, "entry": signal.entry, "stop": signal.stop,
-                      "target": signal.target},
+                      "target": signal.target, "timestamp": str(signal.timestamp)},
            "decision": {"trade_permission": decision["trade_permission"],
                         "size_multiplier": decision["size_multiplier"]},
            "order_path": {k: v for k, v in result.items() if k != "journal"}}
@@ -326,17 +395,24 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]) -> dict:
     if filled_qty > 0:
         fills = result.get("fills", [])
         fill_price = float(fills[0]["price"]) if fills else float(signal.entry)
+        time_exit = (getattr(signal, "market_context", {}) or {}).get("time_exit") or "15:55"
         outcome = _resolve_fill_outcome(day_df, signal.direction, signal.timestamp, fill_price,
-                                         signal.stop, signal.target, "15:55")
+                                         signal.stop, signal.target, time_exit)
         pnl_usd = round((outcome["r_multiple"] or 0.0) * outcome["risk_points"] * filled_qty * MNQ_MULTIPLIER, 2)
         row["bookkeeping"] = outcome
         row["pnl_usd"] = pnl_usd
     return row
 
 
-def main():
+def main(argv=None):
+    import argparse
+    global STRATEGY
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--strategy", choices=sorted(STRATEGIES), default=STRATEGY)
+    a = ap.parse_args(argv if argv is not None else [])   # tests call main() bare
+    STRATEGY = a.strategy
     print("=" * 78)
-    print("BOT STACK PAPER RUN -- B7 (execution loop: signal -> decision -> order path)")
+    print(f"BOT STACK PAPER RUN -- B7 (execution loop: signal -> decision -> order path)  strategy={STRATEGY}")
     print("=" * 78)
 
     from data_loader import load_price_data
@@ -349,14 +425,17 @@ def main():
     print(f"\nB7 execution anchor: {anchor} (see choice 1 in the file header)")
 
     rows = load_log()
-    logged_dates = {r["date"] for r in rows}
+    # coverage is PER STRATEGY: a session B3 already scored is still unscored for
+    # the dummy, and vice versa. Rows before the strategy field existed are B3's.
+    name = _strategy()[0]
+    logged_dates = {r["date"] for r in rows if r.get("strategy", B3_NAME) == name}
     eligible = [d for d in all_dates if d >= anchor and str(d) not in logged_dates]
 
     if not eligible:
         print(f"Nothing new: no session on/after {anchor} is both on disk and unlogged.")
         return
 
-    skipped = []
+    skipped, n_appended = [], 0
     for d in eligible:
         day_df = df[df.index.date == d]
         ok, why = session_is_complete(day_df)
@@ -364,23 +443,26 @@ def main():
             skipped.append((d, why))
             print(f"  {d}: SKIPPED -- {why}")
             continue
-        row = run_session(d, day_df, rows)
-        append_row(row)
-        rows.append(row)
-        if row["outcome"] == "no_signal":
-            print(f"  {d}: no signal")
-        elif "pnl_usd" in row:
-            print(f"  {d}: {row['outcome']} -- {row['order_path']['filled_qty']} filled, "
-                  f"{row['bookkeeping']['r_multiple']}R, ${row['pnl_usd']}")
-        else:
-            print(f"  {d}: {row['outcome']}")
+        out = run_session(d, day_df, rows)
+        for row in (out if isinstance(out, list) else [out]):
+            append_row(row)
+            rows.append(row)
+            n_appended += 1
+            tag = f"{d}" + (f" {row['leg']}" if row.get("leg") else "")
+            if row["outcome"] == "no_signal":
+                print(f"  {tag}: no signal")
+            elif "pnl_usd" in row:
+                print(f"  {tag}: {row['outcome']} -- {row['order_path']['filled_qty']} filled, "
+                      f"{row['bookkeeping']['r_multiple']}R, ${row['pnl_usd']}")
+            else:
+                print(f"  {tag}: {row['outcome']}")
 
     if skipped:
         print(f"\n{len(skipped)} session(s) skipped as incomplete (not logged, will be "
               f"reconsidered on a later run once their data is complete).")
-    print(f"\n{len(eligible) - len(skipped)} new session row(s) appended. Log: {LOG_PATH}")
+    print(f"\n{n_appended} new row(s) appended across {len(eligible) - len(skipped)} session(s). Log: {LOG_PATH}")
     print(f"Total logged: {len(load_log())}")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

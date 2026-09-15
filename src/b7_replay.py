@@ -88,10 +88,11 @@ def replay(df: pd.DataFrame, sessions: list, replay_dir: Path) -> dict:
                              "replay": True})
                 continue
             before = sum(1 for r in journal.all_records() if r.get("event") == "order_intent")
-            row = bpr.run_session(d, df[df.index.date == d], rows)
-            row["replay"] = True
-            bpr.append_row(row)
-            rows.append(row)
+            out = bpr.run_session(d, df[df.index.date == d], rows)
+            for row in (out if isinstance(out, list) else [out]):
+                row["replay"] = True
+                bpr.append_row(row)
+                rows.append(row)
             after = sum(1 for r in journal.all_records() if r.get("event") == "order_intent")
             per_session[str(d)] = after - before
     finally:
@@ -111,11 +112,14 @@ def mechanical_checks(rows: list[dict], per_session: dict, journal_dir: Path, df
         out.append({"check": name, "n": n, "passed": passed,
                     "status": "PASS" if passed == n else "FAIL", "note": note})
 
-    add("R1 one row per session", len(sessions), len(rows) if len(rows) == len(sessions) else 0,
-        f"{len(rows)} rows for {len(sessions)} sessions")
-    doubles = {d: n for d, n in per_session.items() if n > 1}
-    add("R2 at most one order per session", len(per_session), len(per_session) - len(doubles),
-        f"double orders: {doubles}" if doubles else "")
+    cap = 1 if bpr.STRATEGY == "b3" else bpr.CAPITAL_CFG.max_orders_per_day
+    dates_with_rows = {r["date"] for r in rows}
+    add("R1 every session produced a row", len(sessions),
+        sum(1 for d in sessions if str(d) in dates_with_rows),
+        f"{len(rows)} rows for {len(sessions)} sessions (strategy={bpr.STRATEGY})")
+    doubles = {d: n for d, n in per_session.items() if n > cap}
+    add(f"R2 at most {cap} order(s) per session", len(per_session), len(per_session) - len(doubles),
+        f"over cap: {doubles}" if doubles else "")
     ids = [r["order_id"] for r in intents]
     add("R3 unique order ids", len(ids), len(set(ids)))
     hanging = [i["order_id"] for i in intents if i["order_id"] not in terminal]
@@ -125,22 +129,29 @@ def mechanical_checks(rows: list[dict], per_session: dict, journal_dir: Path, df
     add("R5 no hanging positions", len(filled),
         sum(1 for r in filled if r.get("bookkeeping", {}).get("exit_reason")),
         "" if filled else "no fills in replay")
-    entry_by_tag = {}
+    # spec price keyed by the signal's full timestamp (a session can carry several
+    # orders in dummy mode, so the date alone is not a key)
+    entry_by_ts = {}
     for r in rows:
         if "signal" in r:
-            entry_by_tag[r["date"]] = float(r["signal"]["entry"])
+            entry_by_ts[str(r["signal"].get("timestamp", r["date"]))] = float(r["signal"]["entry"])
     mism = []
     for i in intents:
-        tag_ts = str(i.get("client_tag", "")).split(":", 1)[-1][:10]
-        spec = entry_by_tag.get(tag_ts)
+        tag_ts = str(i.get("client_tag", "")).split(":", 1)[-1]
+        spec = entry_by_ts.get(tag_ts)
         if spec is None or abs(float(i.get("intended_price", 0)) - spec) > 1e-9:
             mism.append((i["order_id"], i.get("intended_price"), spec))
     add("R6 requested price == spec price", len(intents), len(intents) - len(mism),
         f"mismatches: {mism}" if mism else "")
     add("R7 quantity within cap", len(intents),
         sum(1 for i in intents if 0 < i.get("quantity", 0) <= CAPITAL_CONFIG.max_contracts))
-    sigs = generate_signals(df[[dd in set(sessions) for dd in df.index.date]])
-    a = audit(sigs)
+    if bpr.STRATEGY == "dummy":
+        import execution_dummy as _ed
+        sigs = _ed.generate_signals(df[[dd in set(sessions) for dd in df.index.date]])
+        a = _ed.audit(sigs)
+    else:
+        sigs = generate_signals(df[[dd in set(sessions) for dd in df.index.date]])
+        a = audit(sigs)
     a_ok = int(bool(a.get("pass")))
     out.append({"check": "R8 signal timing / exactly-once (base_entry_b3.audit)", "n": len(sigs),
                 "passed": len(sigs) if a_ok else 0, "status": "PASS" if a_ok else "FAIL", "note": json.dumps(a)})
@@ -150,7 +161,9 @@ def mechanical_checks(rows: list[dict], per_session: dict, journal_dir: Path, df
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--from", dest="from_date", default=None, help="first session (default: B7 anchor)")
+    ap.add_argument("--strategy", choices=sorted(bpr.STRATEGIES), default="b3")
     args = ap.parse_args(argv)
+    bpr.STRATEGY = args.strategy
 
     from data_loader import load_price_data
     df, synthetic = load_price_data(context="b7_replay.py", apply_holdout=False)
@@ -159,7 +172,7 @@ def main(argv=None) -> int:
     all_dates = sorted(set(df.index.date))
     start = pd.Timestamp(args.from_date).date() if args.from_date else bpr._b7_execution_anchor(all_dates)
     sessions = [d for d in all_dates if d >= start]
-    print(f"B7 REPLAY (Step A) -- {len(sessions)} session(s) from {start} to {sessions[-1] if sessions else '-'}")
+    print(f"B7 REPLAY (Step A) -- strategy={bpr.STRATEGY} -- {len(sessions)} session(s) from {start} to {sessions[-1] if sessions else '-'}")
 
     res = replay(df, sessions, REPLAY_DIR)
     checks = mechanical_checks(res["rows"], res["intents_per_session"], REPLAY_JOURNAL, df, sessions)
@@ -169,6 +182,7 @@ def main(argv=None) -> int:
         outcomes[r["outcome"]] = outcomes.get(r["outcome"], 0) + 1
     report = {
         "ran_at_utc": datetime.now(timezone.utc).isoformat(), "label": "REPLAY -- not the live execution record",
+        "strategy": bpr.STRATEGY,
         "sessions": [str(d) for d in sessions], "outcomes": outcomes,
         "n_order_intents": meas["n_order_intents"], "n_fills": meas["n_fills"],
         "mechanical_checks": checks, "execution_measurement_replay": meas,

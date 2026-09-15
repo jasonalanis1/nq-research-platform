@@ -258,7 +258,7 @@ def test_replay_checks_catch_hanging_order_and_double_order(tmp_path, quiet_brok
 def test_execution_block_no_fills_says_so_and_labels_replay(tmp_path):
     live = {"fills_total": 0, "fills_this_cycle": 0, "avg_slippage_pts": None, "max_abs_deviation_pts": None}
     txt = execution_block.render(replay_report=None, live=live, since="2026-09-14T00:00:00")
-    assert "no live fills yet" in txt and "0 / 40" in txt and "no replay this cycle" in txt
+    assert "no live fills yet" in txt and "0 / 20" in txt and "no replay this cycle" in txt
     rep = {"n_fills": 3, "n_order_intents": 3, "sessions": ["a", "b", "c"], "defects": [],
            "mechanical_checks": [{}] * 8}
     txt2 = execution_block.render(replay_report=rep, live=live, since="2026-09-14T00:00:00")
@@ -270,7 +270,7 @@ def test_execution_block_reports_defects_as_unfixed_and_real_costs():
     rep = {"n_fills": 0, "n_order_intents": 1, "sessions": ["a"], "mechanical_checks": [{}],
            "defects": [{"check": "R4 every order terminal", "n": 1, "passed": 0, "note": "hanging: ['x']"}]}
     txt = execution_block.render(replay_report=rep, live=live, since="2026-09-14T00:00:00")
-    assert "+0.3125 pts/fill" in txt and "21 / 40" in txt and "NOT yet fixed" in txt
+    assert "+0.3125 pts/fill" in txt and "21 / 20" in txt and "NOT yet fixed" in txt
     assert "none charged by the simulated broker" in txt
 
 
@@ -282,3 +282,109 @@ def test_live_stats_counts_fills_since_cycle_start(tmp_path):
     (j / "2026-09-14.jsonl").write_text("\n".join(json.dumps(r) for r in recs) + "\n")
     st = execution_block.live_stats(journal_dir=j, since="2026-09-14T16:00:00")
     assert st == {"fills_total": 2, "fills_this_cycle": 1, "avg_slippage_pts": 0.125, "max_abs_deviation_pts": 0.5}
+
+
+# ------------------------------------------------------------ execution dummy
+def _four_leg_day():
+    """A synthetic RTH day (09:30-15:59) with a mild drift so the dummy's
+    5-bar direction rule is deterministic and each 20pt leg resolves."""
+    t0 = pd.Timestamp("2026-01-06 09:30:00")
+    n = 390
+    rows = []
+    px = 100.0
+    for i in range(n):
+        px += 0.3 if (i // 60) % 2 == 0 else -0.3     # alternating hour-long drifts
+        rows.append((str(t0 + pd.Timedelta(minutes=i)), px, px + 0.4, px - 0.4, px + 0.1))
+    return _bars(rows)
+
+
+def _bars(rows):
+    idx = pd.to_datetime([r[0] for r in rows]).tz_localize("America/New_York")
+    return pd.DataFrame({"Open": [r[1] for r in rows], "High": [r[2] for r in rows],
+                         "Low": [r[3] for r in rows], "Close": [r[4] for r in rows]}, index=idx)
+
+
+def test_dummy_fires_four_times_no_lookahead_all_placeholder():
+    import execution_dummy as ed
+    sigs = ed.generate_signals(_four_leg_day())
+    assert [s.market_context["fire_time"] for s in sigs] == list(ed.FIRE_TIMES)
+    a = ed.audit(sigs)
+    assert a["pass"] and a["lookahead_violations"] == 0 and a["days_over_cap"] == 0
+    for s in sigs:
+        assert abs(s.entry - s.stop) == ed.STOP_PTS and s.validation_status == "placeholder"
+        assert pd.Timestamp(s.timestamp) > pd.Timestamp(s.market_context["trigger_time"])
+
+
+def test_dummy_mode_runs_four_orders_per_session_through_the_real_path(tmp_path, quiet_broker, monkeypatch):
+    monkeypatch.setattr(bpr, "LOG_PATH", tmp_path / "live.jsonl")
+    monkeypatch.setattr(bpr, "JOURNAL_DIR", tmp_path / "live_j")
+    monkeypatch.setattr(bpr, "STRATEGY", "dummy")
+    df = _four_leg_day()
+    d = sorted(set(df.index.date))[0]
+    rows = bpr.run_session(d, df, [])
+    assert isinstance(rows, list) and len(rows) == 4
+    assert [r["leg"] for r in rows] == ["10:00", "11:30", "13:00", "14:30"]
+    assert all(r["strategy"] == "execution_dummy_4x_placeholder" for r in rows)
+    assert all(r["outcome"] in ("filled", "partial") for r in rows), [r["outcome"] for r in rows]
+    assert all("bookkeeping" in r for r in rows)
+    # the R model: 1R = $40 (20pts x $2), budget 4R
+    assert rows[0]["gate"]["one_r_usd"] == 40.0
+    # budget state evolves within the session: the 2nd leg sees the 1st leg's P&L
+    assert rows[1]["gate"]["paper_trades"] == 1
+
+
+def test_b3_mode_is_unchanged_by_the_switch(quiet_broker, monkeypatch):
+    monkeypatch.setattr(bpr, "STRATEGY", "b3")
+    df = _two_day_frame()
+    d = sorted(set(df.index.date))[0]
+    row = bpr.run_session(d, df[df.index.date == d], [])
+    assert isinstance(row, dict) and row["strategy"] == "base_entry_b3_orb_placeholder"
+
+
+def test_replay_in_dummy_mode_passes_mechanical_checks(tmp_path, quiet_broker, monkeypatch):
+    monkeypatch.setattr(bpr, "LOG_PATH", tmp_path / "live.jsonl")
+    monkeypatch.setattr(bpr, "JOURNAL_DIR", tmp_path / "live_j")
+    monkeypatch.setattr(bpr, "STRATEGY", "dummy")
+    d1 = _four_leg_day()
+    d2 = _four_leg_day(); d2.index = d2.index + pd.Timedelta(days=1)
+    df = pd.concat([d1, d2])
+    sessions = sorted(set(df.index.date))
+    res = b7_replay.replay(df, sessions, tmp_path / "replay")
+    assert len(res["rows"]) == 8
+    checks = b7_replay.mechanical_checks(res["rows"], res["intents_per_session"], tmp_path / "replay" / "journal", df, sessions)
+    assert all(c["status"] == "PASS" for c in checks), checks
+    assert next(c for c in checks if c["check"].startswith("R2"))["check"] == "R2 at most 4 order(s) per session"
+
+
+def test_daily_order_cap_counts_by_session_date_not_wall_clock(tmp_path, quiet_broker, monkeypatch):
+    """Regression, 2026-09-14: catching up several sessions in one run put every
+    session's orders on one wall-clock day, so the 4-a-day cap blocked every
+    session after the first. Two 4-leg sessions replayed back-to-back must both
+    fill all four legs."""
+    monkeypatch.setattr(bpr, "STRATEGY", "dummy")
+    d1 = _four_leg_day()
+    d2 = _four_leg_day(); d2.index = d2.index + pd.Timedelta(days=1)
+    rows = []
+    for d, df in ((d1.index[0].date(), d1), (d2.index[0].date(), d2)):
+        out = bpr.run_session(d, df, rows); rows += out
+    assert [r["outcome"] for r in rows] == ["filled"] * 8, [r.get("order_path", {}).get("reasons") for r in rows]
+
+
+def test_dummy_opens_a_new_paper_account_after_a_kill_and_records_it(quiet_broker, monkeypatch):
+    """After a capital-protection kill the dummy must (1) keep the kill row,
+    (2) write a reset row, (3) re-place the same leg under a fresh account, and
+    (4) running_state must ignore everything before the reset."""
+    monkeypatch.setattr(bpr, "STRATEGY", "dummy")
+    df = _four_leg_day()
+    d = df.index[0].date()
+    # prior history that puts the account at the trailing-kill line: 1R = $40,
+    # floor 4R = $160; peak 0 -> kill at equity <= -160
+    prior = [{"date": "2026-01-05", "strategy": "execution_dummy_4x_placeholder", "outcome": "filled",
+              "pnl_usd": -40.0} for _ in range(4)]
+    rows = bpr.run_session(d, df, prior)
+    kinds = [r["outcome"] for r in rows]
+    assert kinds[0] == "blocked" and "KILL" in rows[0]["order_path"]["reasons"][0]
+    assert kinds[1] == "paper_account_reset"
+    assert kinds[2] in ("filled", "partial") and rows[2]["leg"] == rows[0]["leg"]
+    st = bpr.running_state(prior + rows[:2])
+    assert st["equity_usd"] == 0.0 and st["paper_trades"] == 0
