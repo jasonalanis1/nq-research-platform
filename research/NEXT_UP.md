@@ -1424,3 +1424,21 @@ Settled with him the same evening:
 - INTERRUPT HIM BETWEEN SESSIONS ONLY FOR: (1) a decision only he can make, or (2) a
   capital-protection trip. Not for a rejection, not for a defect found and fixed, not for a
   candidate advancing a stage — those wait for the next session report.
+
+## SCHEDULING IS TONY'S JOB, NOT JASON'S (Jason, September 14th ~7:50 pm CT) — binding
+"I think you should be scheduling your cycles automatically without me."
+
+The cadence is SELF-SUSTAINING from here. It must never again be the case that the cycles stop
+because nobody booked them.
+
+- Cycles are `send_later` one-shots aimed at the persistent session (a cron/recurring routine cannot
+  be used: it starts a FRESH session with none of this context, and errors with
+  `missing_worker_target`). Booking them raises no approval prompt.
+- Standing day: **9:00 am, 11:00 am, 1:00 pm, 3:00 pm, 5:00 pm, 7:00 pm, 9:00 pm, 11:00 pm CT.**
+- **THE 11:00 PM CYCLE BOOKS THE WHOLE NEXT DAY**, including the next 11:00 pm carrying this same
+  instruction. That is the chain. If an 11:00 pm cycle ever fails to book, the next cycle to notice
+  an empty schedule books the remainder of the day itself and records the gap in its session report.
+- Every cycle ends with `src/session_report.py` — the owner's briefing is the deliverable, not the
+  session file.
+- Never ask Jason to schedule, confirm a schedule, or choose hours. If the hours should change, that
+  is a judgment call the cycle makes and reports; he will say if he wants it different.
