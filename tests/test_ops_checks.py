@@ -36,7 +36,6 @@ def workspace(tmp_path, monkeypatch):
     monkeypatch.setattr(ops_checks, "MECHANISMS_DIR", research / "mechanisms")
     monkeypatch.setattr(ops_checks, "LOCK", research / "_worksession.lock")
     monkeypatch.setattr(ops_checks, "SESSION_LOG", research / "_session_log.txt")
-    monkeypatch.setattr(ops_checks, "CONSOLE_STATE", research / "_console_state.json")
     monkeypatch.setattr(ops_checks, "NEXT_UP", research / "NEXT_UP.md")
     # keep the fixture hermetic: the real repo ledger must never make a
     # constructed workspace look alive
@@ -83,24 +82,7 @@ def test_missing_lock_warns(workspace):
     assert ops_checks.check_lock_health().status == WARN
 
 
-# ------------------------------------------------------------- console
-
-def test_console_fresh_passes(workspace):
-    (workspace / "_console_state.json").write_text(json.dumps({
-        "generated_at": (datetime.now(timezone.utc) - timedelta(minutes=3))
-        .strftime("%Y-%m-%dT%H:%M:%SZ")}))
-    assert ops_checks.check_console_fresh().status == PASS
-
-
-def test_console_stale_warns(workspace):
-    (workspace / "_console_state.json").write_text(json.dumps({
-        "generated_at": (datetime.now(timezone.utc) - timedelta(hours=4))
-        .strftime("%Y-%m-%dT%H:%M:%SZ")}))
-    assert ops_checks.check_console_fresh().status == WARN
-
-
-def test_console_never_written_fails(workspace):
-    assert ops_checks.check_console_fresh().status == FAIL
+# (console freshness tests removed September 15th -- the console is retired)
 
 
 # ------------------------------------------------------------- reports

@@ -43,19 +43,21 @@ unreachable, schedule the successor FIRST, then retry the device once.
    Gate -> one-shot Validation etc. per the pipeline. Holdout slots and
    data purchases are Jason's alone.
 5. Close-out, in order: ops_checks.py + pytest; pipeline_sweep --write;
-   generate_console_state.py -o research/_console_state.json; console
-   push: device_stage_files that file -> cloud Bash cp to
-   /home/claude/console_state.json -> Artifact read_db get collection
-   "state" doc "current" with out_dir=/home/claude/console_version_check
-   -> write_db set file_path=/home/claude/console_state.json with
-   if_version pinned (never /tmp, never /mnt/user-data paths); session
+   (console retired September 15th -- no state JSON, no push); session
    report research/sessions/<date>-<HHMM>.md; append _session_log.txt;
    NEXT_UP "Last updated by"; KNOWLEDGE.md section 4 + decision log if
    anything structural; cycle_budget.py done; git add/commit (attribution
    lines) and push origin main; worksession_lock.py release --owner cycle;
    list_triggers; send_later successor.
-6. CHANGE FREEZE on structure until September 19th: defect fixes with
-   tests only; observations go to the weekly review. Never display the
+6. REFOCUS (Jason, September 15th, research/infrastructure/refocus-2026-09-15.md)
+   governs: daytime 2-hour cycles only; magnitude research FROZEN, no
+   batch_screen.py; queue 0-DIR (directional lane, 20 trials, count in
+   research/ledger/directional_lane.json) outranks everything research;
+   a cycle with no real queue item closes early and says so; no profit
+   deadline is ever an input; session-report claims cite path:line;
+   anything that appends to a production record runs with
+   TONY_PRODUCTION=1 or through an entry point that enables it
+   (src/production_paths.py); Full Scope is weekly or on request only. Never display the
    .databento_key. Do not propose data purchases unless Jason asks.
    Reporting to Jason: short updates, his format (found / why it matters /
    next).

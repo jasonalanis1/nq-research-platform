@@ -13,7 +13,7 @@ stops it from becoming an agent that files a reassuring report every
 four hours.
 
     python3 src/ops_checks.py            # human-readable
-    python3 src/ops_checks.py --json     # for the console / a session
+    python3 src/ops_checks.py --json     # for a session / cycle_close.py
 """
 from __future__ import annotations
 
@@ -35,7 +35,6 @@ SESSION_LOG = RESEARCH / "_session_log.txt"
 SESSIONS_DIR = RESEARCH / "sessions"
 MECHANISMS_DIR = RESEARCH / "mechanisms"
 LOCK = RESEARCH / "_worksession.lock"
-CONSOLE_STATE = RESEARCH / "_console_state.json"
 NEXT_UP = RESEARCH / "NEXT_UP.md"
 
 PASS, WARN, FAIL = "PASS", "WARN", "FAIL"
@@ -44,13 +43,8 @@ PASS, WARN, FAIL = "PASS", "WARN", "FAIL"
 # almost certainly died -- the desktop bridge dropping mid-run is the
 # observed failure (2026-09-10).
 HEARTBEAT_MINUTES = 30
-# The console is refreshed at every research cycle, which now runs every
-# 2h on the even UTC hour (changed 2026-09-11, per Jason) -- so an idle
-# gap of up to ~2h between cycles is NORMAL, not a refresh failure. Set
-# comfortably past that (3h) so this only fires on an actual broken
-# refresh step, not routine between-cycle staleness. (Previously 45min,
-# which fired as noise on almost every cycle.)
-CONSOLE_STALE_MINUTES = 180
+# (The console freshness check and CONSOLE_STALE_MINUTES were retired
+# September 15th with the console itself -- Jason's refocus memo, s.5.)
 # Runs in a row that produced no new information before this is a signal
 # about the methodology, not about any one run.
 BARREN_RUN_LIMIT = 3
@@ -139,7 +133,7 @@ def _work_beat() -> datetime:
     # SESSION_LOG is deliberately absent: its mtime moves whenever it is
     # appended to, even with an old timestamp, so it would mask exactly the
     # staleness _log_stamps() exists to detect.
-    watched = [LEDGER, CONSOLE_STATE, SESSIONS_DIR, MECHANISMS_DIR,
+    watched = [LEDGER, SESSIONS_DIR, MECHANISMS_DIR,
                RESEARCH / "studies", RESEARCH / "NEXT_UP.md",
                # worksession_lock.py heartbeats land here; a session
                # running a long scan beats this file even when it writes
@@ -160,24 +154,6 @@ def _work_beat() -> datetime:
         except OSError:
             continue
     return newest
-
-
-def check_console_fresh() -> Result:
-    """Jason reads the console on his phone. If the refresh step stops
-    happening, nothing else tells him."""
-    if not CONSOLE_STATE.exists():
-        return Result("console", FAIL, "no console state file has ever been written")
-    try:
-        state = json.loads(CONSOLE_STATE.read_text())
-        gen = datetime.strptime(state["generated_at"], "%Y-%m-%dT%H:%M:%SZ").replace(
-            tzinfo=timezone.utc
-        )
-    except Exception as exc:  # noqa: BLE001
-        return Result("console", FAIL, f"console state unreadable: {exc}")
-    age = (_now() - gen).total_seconds() / 60
-    if age > CONSOLE_STALE_MINUTES:
-        return Result("console", WARN, f"console state is {age:.0f} min old — refresh step may be failing")
-    return Result("console", PASS, f"refreshed {age:.0f} min ago")
 
 
 def check_session_reports() -> Result:
@@ -664,7 +640,6 @@ CHECKS = (
     check_shelf_starving,
     check_unfinished_checkpoint,
     check_value_per_cycle,
-    check_console_fresh,
     check_session_reports,
     check_new_information,
     check_ledger_consistency,

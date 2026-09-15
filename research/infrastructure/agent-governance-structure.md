@@ -775,7 +775,7 @@ tests/test_ops_checks.py. It returns PASS / WARN / FAIL per check:
 
     lock             a lock held with no logged activity for 30 min is
                      a session that died, not a session working
-    console          state older than 45 min means the refresh step is
+    console          (RETIRED September 15th, check removed) state older than 45 min means the refresh step is
                      failing and Jason is reading stale numbers
     reports          every run owes a report, and it owes a shape
     new-information  3 consecutive runs producing nothing is a
@@ -904,7 +904,7 @@ window is more than 5 sessions stale.
 
 - DAILY, 2 lines, Central time: research -- what moved, what's queued;
   execution -- open positions, day P&L, budget remaining, any kill state.
-  Carried by the console state document and the cycle's closing summary.
+  Carried by the cycle's closing summary / session report (the console state document was retired September 15th).
 - IMMEDIATE: any capital-protection trigger; any $5+ spend request; any
   integrity flag on promoted work; any awaiting-Jason item older than 48 h.
 - WEEKLY: map coverage (which entries scanned, which open), power /

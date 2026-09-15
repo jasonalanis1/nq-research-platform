@@ -10,7 +10,7 @@ Why this exists (documented failures, 2026-09-10/11):
 
 Format stays backward compatible: research/_worksession.lock is still ONE line,
 "RUNNING YYYY-MM-DD HH:MM:SS" or "FREE YYYY-MM-DD HH:MM:SS" (UTC, no suffix) --
-ops_checks.py and generate_console_state.py parse exactly that. Everything
+ops_checks.py parses exactly that (generate_console_state.py retired September 15th). Everything
 new lives beside it in research/_worksession.lock.meta (JSON): owner, started,
 last heartbeat, session, note.
 

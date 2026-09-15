@@ -19,7 +19,7 @@ called out rather than silently omitted.
 
     python3 src/cycle_review.py                 # today
     python3 src/cycle_review.py --date 2026-09-14
-    python3 src/cycle_review.py --json          # for the console
+    python3 src/cycle_review.py --json          # machine-readable
 """
 from __future__ import annotations
 

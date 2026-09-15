@@ -1,7 +1,7 @@
 """Jason-facing time formatting. One rule: anything a human reads is Central time.
 
-Internal timestamps (lock file, ledger, session filenames, console JSON keys)
-stay UTC -- ops_checks and the console parser depend on that. This module is
+Internal timestamps (lock file, ledger, session filenames)
+stay UTC -- ops_checks depends on that (the console parser was retired September 15th). This module is
 the single place that converts UTC to the format Jason reads:
 "September 11th, 1:00 pm CT". Use it for session-report headers, NEXT_UP.md,
 _session_log.txt human lines, and any chat message stating a time.
