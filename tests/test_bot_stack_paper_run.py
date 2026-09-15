@@ -240,3 +240,57 @@ def test_main_is_idempotent(monkeypatch, tmp_path):
     assert n_after_first == 1
     bpr.main()
     assert len(bpr.load_log()) == n_after_first
+
+
+# --- PAPER BOOK (standing directive 2026-09-15): several strategies at once ---
+
+def test_candidate_strategies_get_their_own_journal_plumbing_shares_the_legacy_one(monkeypatch):
+    monkeypatch.setattr(bpr, "STRATEGY", "dummy")
+    assert bpr._journal_dir() == bpr.JOURNAL_DIR
+    monkeypatch.setattr(bpr, "STRATEGY", "b3")
+    assert bpr._journal_dir() == bpr.JOURNAL_DIR
+    monkeypatch.setattr(bpr, "STRATEGY", "s001_x")
+    assert bpr._journal_dir() == bpr.JOURNAL_DIR / "s001_x"
+
+
+def test_register_strategy_and_history_passthrough(monkeypatch):
+    import types
+    seen = {}
+
+    def gen(df, history=None):
+        seen["history_rows"] = None if history is None else len(history)
+        return []
+    mod = types.SimpleNamespace(STRATEGY_NAME="s_test_name", generate_signals=gen)
+    bpr.register_strategy("s_test", mod)
+    try:
+        monkeypatch.setattr(bpr, "STRATEGY", "s_test")
+        day = _bars([("2026-01-06 09:30:00", 100, 100.5, 99.5, 100)] * 5)
+        hist = _bars([("2026-01-05 09:30:00", 100, 100.5, 99.5, 100)] * 7)
+        row = bpr.run_session(pd.Timestamp("2026-01-06").date(), day, [], history=hist)
+        assert seen["history_rows"] == 7
+        assert row["outcome"] == "no_signal" and row["strategy"] == "s_test_name"
+        # an older module without `history` still works
+        legacy = types.SimpleNamespace(STRATEGY_NAME="legacy", generate_signals=lambda df: [])
+        bpr.register_strategy("legacy", legacy)
+        monkeypatch.setattr(bpr, "STRATEGY", "legacy")
+        assert bpr.run_session(pd.Timestamp("2026-01-06").date(), day, [], history=hist)["outcome"] == "no_signal"
+    finally:
+        bpr.STRATEGIES.pop("s_test", None); bpr.STRATEGIES.pop("legacy", None)
+
+
+def test_running_state_is_per_strategy_in_main(monkeypatch):
+    """A candidate's paper account is its own: main() hands run_session only that
+    strategy's rows, so the dummy's fills never move a candidate's equity."""
+    monkeypatch.setattr(bpr, "decision_for", _permit())
+    import data_loader
+    day = _orb_day(range_width=10, stop_pts=30, direction="long")
+    last_ts, last = day.index[-1], day.iloc[-1]
+    close = last_ts.normalize() + pd.Timedelta(hours=15, minutes=59)
+    extra_idx = pd.date_range(last_ts + pd.Timedelta(minutes=1), close, freq="min")
+    df = pd.concat([day, pd.DataFrame({c: [float(last[c])] * len(extra_idx) for c in day.columns}, index=extra_idx)])
+    monkeypatch.setattr(data_loader, "load_price_data", lambda **kw: (df, False))
+    # a prior dummy fill in the log must not appear in B3's gate state
+    bpr.append_row({"date": "2026-01-05", "strategy": "execution_dummy_4x_placeholder", "outcome": "filled", "pnl_usd": 999.0})
+    bpr.main()
+    b3_rows = [r for r in bpr.load_log() if r.get("strategy") == "base_entry_b3_orb_placeholder"]
+    assert len(b3_rows) == 1 and b3_rows[0]["gate"]["paper_trades"] == 0 and b3_rows[0]["gate"]["equity_usd"] == 0.0

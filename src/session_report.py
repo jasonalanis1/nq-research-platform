@@ -9,8 +9,15 @@ every time, then a few sentences ONLY on what actually moved; honest zeros with
 the distance to a real number; interrupt him immediately only for a decision
 only he can make, or a capital-protection trip.
 
-Five sections, always in this order, because that is the order an owner asks:
+Six sections, always in this order, because that is the order an owner asks:
   1. MONEY        -- are we making any, and how far from a real answer
+  1b. PAPER BOOK  -- ADDED September 15th (standing directive s.5): every strategy
+                     in paper, in plain language -- trades, days, distance to the
+                     40-trade / 6-week judgment, win rate, average R, result at
+                     1/5/10 micros, worst streak and the daily limit that would
+                     have survived it, slippage MEASURED or ASSUMED, cost-fragile
+                     flag, Salvage result once one has run. Plumbing records (the
+                     execution dummy, B3) get one line each and are never judged.
   2. THE BOT      -- can the machine actually trade yet, what blocks the next step
                      (BUILD STATUS, not results -- results are in 1 and 3)
   3. PIPELINE     -- the research funnel, named and specific: what moved through
@@ -87,13 +94,30 @@ def money() -> list[str]:
         PROJ / "research" / "forward_validation" / "b7_replay" / "replay_report.json").exists() else {}
 
     lines = ["**1. MONEY**"]
-    if scored:
-        lines.append(f"- Paper P&L: **{'-' if pnl < 0 else '+'}${abs(pnl):,.0f}** over {len(scored)} "
-                     f"resolved trade(s), {wins} winner(s). Placeholder strategy with no claimed "
-                     f"edge — this is a test of the plumbing, not a verdict on anything.")
+    # CANDIDATES vs PLUMBING (standing directive, September 15th): the paper log
+    # now carries real strategies alongside the two placeholders. Only the
+    # candidates' record is money-relevant; the placeholders are an order-path test.
+    try:
+        import paper_book as _pb
+        bk = _pb.book()
+    except Exception:  # noqa: BLE001
+        bk = {"strategies": [], "plumbing": []}
+    cands = [s for s in bk.get("strategies", []) if s.get("trades")]
+    if cands:
+        tot1 = sum(s["usd_net"]["1"] for s in cands); n = sum(s["trades"] for s in cands)
+        lines.append(f"- Paper P&L, candidate strategies, net of ASSUMED costs: **{'-' if tot1 < 0 else '+'}${abs(tot1):,.0f}** "
+                     f"at 1 micro over {n} trade(s) across {len(cands)} strateg{'y' if len(cands)==1 else 'ies'} "
+                     f"(detail in section 1b, PAPER BOOK). Not a verdict until a strategy reaches 40 trades or 6 weeks.")
+    elif bk.get("strategies"):
+        lines.append(f"- Paper P&L, candidate strategies: **no trades scored yet** — {len(bk['strategies'])} "
+                     f"strateg{'y' if len(bk['strategies'])==1 else 'ies'} in paper, waiting on sessions (section 1b).")
     else:
-        lines.append(f"- Paper P&L: **none yet** — {len(rows)} session(s) logged, "
-                     f"{blocked} blocked before an order, 0 resolved trades.")
+        lines.append("- Paper P&L, candidate strategies: **none in paper yet** — the first candidate through SCREEN enters the book.")
+    if scored:
+        lines.append(f"- Plumbing P&L (execution dummy / B3 placeholders, GROSS): {'-' if pnl < 0 else '+'}${abs(pnl):,.0f} over {len(scored)} "
+                     f"fill(s), {wins} winner(s). No claimed edge — a test of the order path, never judged, never money.")
+    else:
+        lines.append(f"- Plumbing: {len(rows)} session(s) logged, {blocked} blocked before an order, 0 resolved fills.")
     lines.append(f"- Fills toward the {TARGET_FILLS}-trade record: **{fills} / {TARGET_FILLS}** "
                  f"(slippage becomes measurable at 20)")
     if rep:
@@ -105,6 +129,37 @@ def money() -> list[str]:
     lines.append("- Live capital at risk: **$0.** Nothing is authorized.")
     if one_r:
         lines.append(f"- Paper risk unit: 1R = ${one_r:,.0f} (the trade's own stop); budget 4R.")
+    return lines
+
+
+def paper_book_section() -> list[str]:
+    """1b. PAPER BOOK -- standing directive s.5, per strategy, plain language.
+    Every number is read from the paper log and the strategy registry at run
+    time by src/paper_book.py (net of ASSUMED costs, labelled)."""
+    import paper_book as _pb
+    lines = ["**1b. PAPER BOOK — the strategies accumulating a record (directive s.5)**"]
+    try:
+        bk = _pb.book()
+    except Exception as exc:  # noqa: BLE001
+        return lines + [f"- could not read the paper book: {exc}"]
+    lines += _pb.plain_lines(bk)
+    cb = bk.get("cost_basis", {})
+    lines.append(f"- Cost basis for every figure above: {cb.get('note', 'ASSUMED')} "
+                 f"(${cb.get('usd_per_micro_round_trip', 0):.2f} per micro round trip; src/paper_book.py).")
+    try:
+        import strategy_registry as _sr
+        rows = _sr.read_rows()
+        q = _sr.queue(rows); sq = _sr.salvage_queue(rows)
+        if q:
+            lines.append("- Candidate queue (not yet in paper, Director order): " +
+                         "; ".join(f"**{r['strategy_id']}** {r.get('name','')} — at {r['stage']}" for r in q[:6])
+                         + (f"; +{len(q)-6} more" if len(q) > 6 else "") + ".")
+        else:
+            lines.append("- Candidate queue: **empty** — Discovery owes a source next cycle (directive s.3 Step 4).")
+        if sq:
+            lines.append("- Salvage owed (killed, not yet checked for where it works): " + ", ".join(r["strategy_id"] for r in sq) + ".")
+    except Exception as exc:  # noqa: BLE001
+        lines.append(f"- registry unreadable: {exc}")
     return lines
 
 
@@ -406,7 +461,7 @@ def build(label: str, moved: str = "", agents: str = "") -> str:
     now = datetime.now(CT)
     stamp = now.strftime("%B %-d") + f", {label} CT" if label else now.strftime("%B %-d, %-I:%M %p CT")
     out = [f"## Session report — {stamp}", ""]
-    for section in (money(), product(), pipeline(), operations(), your_desk()):
+    for section in (money(), paper_book_section(), product(), pipeline(), operations(), your_desk()):
         out += section + [""]
     out.append("**What actually moved this session**")
     out.append(moved.strip() or "_Nothing moved. The session ran, the checks passed, and no stage "

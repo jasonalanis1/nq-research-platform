@@ -34,7 +34,8 @@ MECHANISM (one, explicit, default-deny)
 WHAT IS PROTECTED
   PROTECTED_FILES / PROTECTED_TREES / PROTECTED_GLOBS below -- the execution
   record, the ledgers and forward logs, the frozen spec files, the batch-screen
-  state, the idea inventory, the per-cycle compliance/history records, and the
+  state, the idea inventory, the strategy registry / revamp list / frozen strategy specs
+  (standing directive, September 15th), the per-cycle compliance/history records, and the
   1-minute price series. The full audit of every writer, protected or not, is
   research/integrity/write-path-audit-2026-09-15.md; keep the two in step.
 
@@ -55,6 +56,8 @@ PROTECTED_FILES = (
     "research/ledger/hypotheses.jsonl",
     "research/ledger/directional_lane.json",
     "research/ledger/prospective_exp047_log.jsonl",
+    "research/ledger/strategies.jsonl",          # the strategy registry (standing directive, 2026-09-15)
+    "research/ledger/revamp_list.json",          # directive s.9 revamp list
     "research/forward_validation/bot_stack_paper_log.jsonl",
     "research/forward_validation/bot_stack_forward_log.jsonl",
     "research/forward_validation/risk_state_engine_log.jsonl",
@@ -69,6 +72,7 @@ PROTECTED_FILES = (
 PROTECTED_TREES = (
     "research/forward_validation/order_path_journal",
     "research/forward_validation/b7_replay",
+    "research/infrastructure/strategy-specs",    # frozen strategy specs (directive s.13: never edited after FREEZE)
 )
 PROTECTED_GLOBS = (
     "data/*_1min_*.csv",          # the price series every stage reads

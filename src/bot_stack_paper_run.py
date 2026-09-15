@@ -120,13 +120,47 @@ STRATEGIES = {
     "b3": (B3_NAME, b3_signals),
     "dummy": (execution_dummy.STRATEGY_NAME, execution_dummy.generate_signals),
 }
+# PAPER BOOK (standing directive 2026-09-15, s.2 PAPER / s.14): every frozen
+# strategy that passed its SCREEN is registered here under its strategy_id and
+# scored by `--strategy <key>`. "b3" and "dummy" are PLUMBING placeholders
+# (Jason, September 15th: the dummy stays labelled a plumbing test, its record
+# kept separate, never judged); everything else is a CANDIDATE whose record
+# src/paper_book.py measures and the Director judges at 40 trades / 6 weeks.
+PLUMBING_KEYS = ("b3", "dummy")
+
+
+def register_strategy(key: str, module) -> None:
+    """Add a frozen strategy module (STRATEGY_NAME + generate_signals) to the book."""
+    STRATEGIES[key] = (module.STRATEGY_NAME, module.generate_signals)
 
 
 def _strategy():
     return STRATEGIES[STRATEGY]
 
 
+def _journal_dir() -> Path:
+    """Plumbing keys share the legacy journal (their record is history). Each
+    CANDIDATE gets its own journal subtree so the daily order cap, the fill-
+    deviation window and the capital-protection state are per strategy -- two
+    strategies on the same session must not consume each other's budget."""
+    return JOURNAL_DIR if STRATEGY in PLUMBING_KEYS else JOURNAL_DIR / STRATEGY
+
+
+def _signals(gen, day_df: pd.DataFrame, history):
+    """A strategy that needs prior sessions (a trailing state variable) takes
+    `history=` -- the full frame the loop already holds -- so it never has to
+    reload the price file itself. Older modules take the day frame only."""
+    import inspect
+    try:
+        takes_history = "history" in inspect.signature(gen).parameters
+    except (TypeError, ValueError):
+        takes_history = False
+    return gen(day_df, history=history) if (takes_history and history is not None) else gen(day_df)
+
+
 STRATEGY_NAME = B3_NAME   # kept for older imports; run_session uses _strategy()
+# --- candidates in the PAPER BOOK (registered after a positive SCREEN; see
+# research/ledger/strategies.jsonl for the record of when and why) ---
 from risk_state_engine import decision_for  # noqa: E402
 from order_path import OrderPath  # noqa: E402
 from simulated_broker import SimulatedBroker  # noqa: E402
@@ -292,13 +326,15 @@ def _resolve_fill_outcome(day_df: pd.DataFrame, direction: str, from_ts, entry_p
             "risk_points": round(risk, 4), "r_multiple": r_multiple}
 
 
-def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]):
+def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict], history: pd.DataFrame | None = None):
     """B3 mode returns ONE row (one trade/day). Dummy mode returns a LIST of
     rows, one per order (up to max_orders_per_day), each run through the same
     gate -> order path -> bookkeeping as a B3 row, with the budget state
-    evolving within the session."""
+    evolving within the session. A CANDIDATE strategy (paper book) returns ONE
+    row: its first signal of the session is the trade (one trade a session).
+    `prior_rows` are THIS strategy's own rows (main() filters per strategy)."""
     name, gen = _strategy()
-    sigs = gen(day_df)
+    sigs = _signals(gen, day_df, history)
     if STRATEGY == "dummy":
         rows, acc = [], list(prior_rows)
         # B2's decision is per DATE (it reloads the whole price file each call,
@@ -331,7 +367,8 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict]):
         return rows
     if not sigs:
         return {"date": str(date), "strategy": name, "outcome": "no_signal",
-                "note": "no B3 signal (one trade/day rule; not every session fires)"}
+                "note": ("no B3 signal (one trade/day rule; not every session fires)" if STRATEGY == "b3"
+                         else "no signal this session (strategy's own rules; one trade a session)")}
     return _run_one(date, day_df, prior_rows, sigs[0], name)
 
 
@@ -382,7 +419,7 @@ def _run_one(date, day_df: pd.DataFrame, prior_rows: list[dict], signal, name: s
                               reject_rate=BROKER_REJECT_RATE, partial_fill_rate=BROKER_PARTIAL_FILL_RATE,
                               disconnect_rate=BROKER_DISCONNECT_RATE, late_ack_rate=BROKER_LATE_ACK_RATE)
     broker.connect()
-    path = OrderPath(broker, journal_dir=JOURNAL_DIR, instrument=signal.instrument, cfg=CAPITAL_CFG)
+    path = OrderPath(broker, journal_dir=_journal_dir(), instrument=signal.instrument, cfg=CAPITAL_CFG)
     path.recover()
     result = path.submit_signal(signal, today=today, size_multiplier=decision["size_multiplier"],
                                  price_source=signal.entry)
@@ -433,6 +470,9 @@ def main(argv=None):
     name = _strategy()[0]
     logged_dates = {r["date"] for r in rows if r.get("strategy", B3_NAME) == name}
     eligible = [d for d in all_dates if d >= anchor and str(d) not in logged_dates]
+    # the running track record (equity, peak, trade count) is PER STRATEGY too:
+    # a candidate's paper account is its own, never pooled with the plumbing's
+    own_rows = [r for r in rows if r.get("strategy", B3_NAME) == name]
 
     if not eligible:
         print(f"Nothing new: no session on/after {anchor} is both on disk and unlogged.")
@@ -446,10 +486,11 @@ def main(argv=None):
             skipped.append((d, why))
             print(f"  {d}: SKIPPED -- {why}")
             continue
-        out = run_session(d, day_df, rows)
+        out = run_session(d, day_df, own_rows, history=df)
         for row in (out if isinstance(out, list) else [out]):
             append_row(row)
             rows.append(row)
+            own_rows.append(row)
             n_appended += 1
             tag = f"{d}" + (f" {row['leg']}" if row.get("leg") else "")
             if row["outcome"] == "no_signal":

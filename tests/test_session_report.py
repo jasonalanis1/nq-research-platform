@@ -69,3 +69,37 @@ def test_operations_section_prints_the_numbers_not_estimates(tmp_path, monkeypat
     assert "1 cycle(s) run, 33 minutes used" in text
     assert "not estimated" in text
     assert "Test suite: **500 passed**" in text
+
+
+def _trade(day, strategy, r, risk=20.0):
+    return {"date": day, "strategy": strategy, "outcome": "filled", "pnl_usd": r * risk * 2.0,
+            "signal": {"direction": "long"}, "order_path": {"filled_qty": 1},
+            "bookkeeping": {"risk_points": risk, "r_multiple": r, "exit_reason": "target" if r > 0 else "stop"}}
+
+
+def test_paper_book_section_lists_candidates_and_labels_plumbing(tmp_path, monkeypatch):
+    """Standing directive s.5 (Sept 15th): the owner's briefing gains a PAPER BOOK
+    section, per strategy, plain language; plumbing rows are one line, never judged."""
+    import paper_book as pb, strategy_registry as srg
+    log = tmp_path / "log.jsonl"; reg = tmp_path / "reg.jsonl"
+    monkeypatch.setattr(pb, "LOG", log); monkeypatch.setattr(srg, "REGISTRY", reg)
+    log.write_text("\n".join(json.dumps(r) for r in [
+        _trade("2026-09-08", "execution_dummy_4x_placeholder", 1.0),
+        _trade("2026-09-08", "s001_lsr", 1.35), _trade("2026-09-09", "s001_lsr", -1.0)]) + "\n")
+    srg.append({"strategy_id": "S001", "name": "Level Sweep Reversal", "stage": "PAPER", "paper_log_name": "s001_lsr"}, reg)
+    srg.append({"strategy_id": "S002", "name": "Overnight split", "stage": "SOURCE", "priority": 2}, reg)
+    text = "\n".join(sr.paper_book_section())
+    assert text.startswith("**1b. PAPER BOOK")
+    assert "**S001 Level Sweep Reversal**" in text and "2 trades" in text
+    assert "1 / 5 / 10 micros" in text and "ASSUMED" in text and "Win rate 50%" in text
+    assert "Plumbing (not a candidate, never judged): execution_dummy_4x_placeholder" in text
+    assert "Candidate queue" in text and "**S002**" in text
+
+
+def test_paper_book_comes_right_after_money(monkeypatch):
+    calls = []
+    for name in ("money", "paper_book_section", "product", "pipeline", "operations", "your_desk"):
+        monkeypatch.setattr(sr, name, (lambda n: (lambda *a, **k: calls.append(n) or [f"[{n}]"]))(name))
+    out = sr.build("9:00 pm", "moved", "agents")
+    assert calls[:2] == ["money", "paper_book_section"]
+    assert out.index("[money]") < out.index("[paper_book_section]") < out.index("[product]")
