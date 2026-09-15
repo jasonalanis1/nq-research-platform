@@ -2007,7 +2007,7 @@ variable of a registered scan. Restores the shelf to 4/3.
    then tripped exactly that check. Pre-registering it means the answer is known before the
    Gate, not after.
 
-## ENTRY 37 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 37 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=558, mean=+0.4774 vs all-days +0.3738, z=+10.97. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.1036, Sidak-adjusted 90%-family interval [+0.0787, +0.1349]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2028,7 +2028,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 38 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 38 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=557, mean=+0.2779 vs all-days +0.3738, z=-10.15. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.0959, Sidak-adjusted 90%-family interval [-0.1176, -0.0741]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2049,7 +2049,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 39 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 39 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=550, mean=+1.0277 vs all-days +0.8453, z=+8.79. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.1823, Sidak-adjusted 90%-family interval [+0.1217, +0.2512]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2070,7 +2070,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 40 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 40 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=554, mean=+0.3645 vs all-days +0.2986, z=+8.77. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0660, Sidak-adjusted 90%-family interval [+0.0449, +0.0907]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2091,7 +2091,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 41 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / first30 -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 41 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / first30 -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=555, mean=+0.3046 vs all-days +0.3737, z=-8.71. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.0694, Sidak-adjusted 90%-family interval [-0.0941, -0.0451]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2112,7 +2112,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 42 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / first30 -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 42 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / first30 -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M31 volume-vs-expected family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=385, mean=+0.4537 vs all-days +0.3737, z=+8.41. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0762, Sidak-adjusted 90%-family interval [+0.0503, +0.1046]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2133,7 +2133,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 43 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / morning -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 43 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / morning -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=555, mean=+0.3672 vs all-days +0.4512, z=-8.37. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.0845, Sidak-adjusted 90%-family interval [-0.1158, -0.0570]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2154,7 +2154,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 44 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / afternoon -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 44 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / afternoon -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=554, mean=+0.3981 vs all-days +0.3220, z=+8.20. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0761, Sidak-adjusted 90%-family interval [+0.0524, +0.1042]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2175,7 +2175,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 45 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / morning -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 45 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / morning -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M31 volume-vs-expected family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=385, mean=+0.5487 vs all-days +0.4512, z=+8.10. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0916, Sidak-adjusted 90%-family interval [+0.0572, +0.1308]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2196,7 +2196,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 46 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 46 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=555, mean=+0.6804 vs all-days +0.8382, z=-8.05. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.1585, Sidak-adjusted 90%-family interval [-0.2242, -0.1030]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2217,7 +2217,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 47 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 47 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=547, mean=+0.6816 vs all-days +0.8453, z=-7.87. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.1638, Sidak-adjusted 90%-family interval [-0.2096, -0.1134]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2238,7 +2238,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 48 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 48 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M31 volume-vs-expected family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=385, mean=+0.4626 vs all-days +0.3738, z=+7.81. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0859, Sidak-adjusted 90%-family interval [+0.0536, +0.1230]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2259,7 +2259,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 49 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 49 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=552, mean=+0.6897 vs all-days +0.8453, z=-7.51. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.1569, Sidak-adjusted 90%-family interval [-0.2198, -0.0918]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2280,7 +2280,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 50 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / morning -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 50 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / morning -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=559, mean=+0.5256 vs all-days +0.4512, z=+7.44. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0738, Sidak-adjusted 90%-family interval [+0.0422, +0.1138]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2301,7 +2301,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 51 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 51 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=559, mean=+0.9831 vs all-days +0.8382, z=+7.42. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.1441, Sidak-adjusted 90%-family interval [+0.0766, +0.2177]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2322,7 +2322,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 52 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / first30 -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 52 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / first30 -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=559, mean=+0.4320 vs all-days +0.3737, z=+7.39. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0580, Sidak-adjusted 90%-family interval [+0.0318, +0.0879]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2343,7 +2343,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 53 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / overnight -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 53 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / overnight -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M31 volume-vs-expected family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=386, mean=+0.7224 vs all-days +0.5962, z=+7.37. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.1289, Sidak-adjusted 90%-family interval [+0.0805, +0.1803]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2364,7 +2364,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 54 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 54 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / next_rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=558, mean=+0.9957 vs all-days +0.8453, z=+7.30. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.1490, Sidak-adjusted 90%-family interval [+0.0824, +0.2252]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2385,7 +2385,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 55 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 55 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=510, mean=+0.2423 vs all-days +0.2986, z=-7.18. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.0563, Sidak-adjusted 90%-family interval [-0.0773, -0.0377]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2406,7 +2406,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 56 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 56 — batch_screen.py cheap-gate survivor: `volume_vs_expected` HIGH / rth -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M31 volume-vs-expected family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=385, mean=+1.0070 vs all-days +0.8382, z=+7.18. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.1653, Sidak-adjusted 90%-family interval [+0.0943, +0.2354]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2427,7 +2427,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 57 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / afternoon -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 57 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` LOW / afternoon -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=510, mean=+0.2530 vs all-days +0.3220, z=-7.13. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.0690, Sidak-adjusted 90%-family interval [-0.0921, -0.0477]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2448,7 +2448,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 58 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 58 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` HIGH / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=545, mean=+0.3503 vs all-days +0.2986, z=+6.82. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0519, Sidak-adjusted 90%-family interval [+0.0269, +0.0895]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2469,7 +2469,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 59 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 59 — batch_screen.py cheap-gate survivor: `vxn_minus_realized` LOW / midday -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, M29 VXN-minus-realized family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=555, mean=+0.3095 vs all-days +0.3738, z=-6.79. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect -0.0645, Sidak-adjusted 90%-family interval [-0.0924, -0.0375]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2490,7 +2490,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 60 — batch_screen.py cheap-gate survivor: `location_in_range` LOW / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 60 — batch_screen.py cheap-gate survivor: `location_in_range` LOW / last_hour -> range (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — CLOSED September 15th (standing directive s.9; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md: single cell, smallest effect, no mechanism, no host strategy -- closed, not resurrected)
 
 Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, queue item 0-ACCEL): drawn from the Idea Factory candidate_queue (idea_factory_2026-09-14.json), descriptive n=540, mean=+0.3503 vs all-days +0.2986, z=+6.79. Re-tested here with a calendar-time block bootstrap (block=10) and a Sidak correction at this batch's own K=25 (NOT the 143-cell sweep total): raw effect +0.0519, Sidak-adjusted 90%-family interval [+0.0246, +0.0832]. Gates 3 (shifted-signal placebo) and 4 (joint separability vs the vxn_level_vs_trailing / overnight_range_vs_atr / range_vs_atr stack, portfolio_hyp162.py's T1 form) are FLAGS carried forward, not additional pass/fail bars at this stage -- see the FULL SCREEN TABLE below.
 
@@ -2511,7 +2511,7 @@ Generation (Lever C, research/infrastructure/acceleration-plan-2026-09-14.md, qu
 
 ---
 
-## ENTRY 61 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / midday -> mfe (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — PARKED September 15th (Jason's refocus, research/infrastructure/refocus-2026-09-15.md s.3: magnitude research FROZEN; batch screening frozen; NOT DRAWABLE until the 72% placebo-RED rate has a real explanation)
+## ENTRY 61 — batch_screen.py cheap-gate survivor: `opening_range_vs_atr` HIGH / midday -> mfe (batch_screen.py, 2026-09-15) — SURVIVOR, batch K=25, screened only, not scanned — SIZING-INPUT CANDIDATE, S005 / M30 family (standing directive s.9, September 15th; the 72% placebo-RED rate is explained once in research/integrity/placebo-red-explanation-2026-09-15.md -- an arithmetic property of the placebo legs, not evidence). PARKED as a scan: never drawn, never a hypothesis; usable as a stop/sizing input by a host strategy's SPECIFY or FIX ONCE
 
 ## ENTRY 62 — M32: Daylight-saving-time transition anomaly, NQ (literature channel, September 16th, ~9:00 am CT cycle) — CLOSED (Directional Lane trial 2, Scan 038, September 16th ~9:00 am CT, hyp-000164): Discovery P1 FAIL, CLEAN NULL and wrong-signed (diff +51.75 pts, block CI (-13.09,+73.88), n=13 transition weeks). Write-up: research/studies/hyp-000164-directional-lane-trial2-2026-09-16.md
 
