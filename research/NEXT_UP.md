@@ -1529,6 +1529,39 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 16th -- COST-CORRECTION CYCLE, run on JASON'S OWN INSTRUCTION (his two corrections are appended verbatim and
+dated to him as AMENDMENT 2 of research/infrastructure/standing-directive-2026-09-15.md; Tony did not author them and still
+does not edit the directive body). WHAT WAS WRONG: the assumed cost constant. src/integrity_checks.py's
+COMMISSION_PER_SIDE_USD = 2.50 is a FULL-SIZE NQ figure and was being charged to the MNQ MICRO the paper book trades, giving
+"$6.00 per micro round trip = 3.00 index points" -- ~2.3x too high on the round trip, 3-10x on the commission leg. FIXED:
+**src/cost_model.py** now owns every cost, components named separately (commission / exchange+regulatory+clearing fees /
+slippage) with IBKR, BrokerChooser and CME sources cited in the docstring; write-up
+research/infrastructure/cost-model-2026-09-16.md. MNQ market $2.60 = 1.300 pt (THE DECISION BASIS -- what the paper loop
+trades, and the dearest of the four in points); MNQ limit $2.10 = 1.050 pt; NQ market $14.90 = 0.745 pt; NQ limit $9.90 =
+0.495 pt. Rewired: paper_book, screen_strategy, integrity_checks, backtest, salvage_check, session_report,
+study_s008_intraday_cost_budget -- no frozen spec or module edited (s.13), no paper fill re-scored, ONLY the cost overlay
+changed (stated in the code, the registry rows and KNOWLEDGE.md so the Integrity Gate can see the record was untouched).
+EVERY SCREEN AND THE PAPER BOOK NOW PRINT ALL FOUR COMBINATIONS SIDE BY SIDE (net $, net R, gross pt/trade vs cost pt/trade);
+every LIMIT column is labelled an OPTIMISTIC UPPER BOUND (non-fills + adverse selection cannot be modelled). THE "3x COST"
+PRE-SCREEN IS DELETED from CYCLE_PROMPT.md, NEXT_UP and src/ -- Tony invented it, the directive never had it. Jason's rule:
+at SPECIFY reject ONLY if the expected per-trade edge is below the per-trade cost ITSELF (cost_model.specify_gate).
+S007 RESCREENED on its untouched frozen module: 1,525 trades, gross +$526.33 = +0.1726 pt/trade; MNQ market -$3,438.62
+(-1.1274 pt/tr, avg -0.1139R), MNQ limit -$2,676.12, NQ market -$17,458.73 (-0.5724 pt/tr), NQ limit -$9,833.73. Loses in all
+four -- the gross edge is 2.9x below even the cheapest cost -- so **THE KILL STANDS**; not revived, salvage stays spent.
+S008 REOPENED as an INPUT-ERROR CORRECTION (not a salvage, not a FIX ONCE: it was refused WITHOUT A SCREEN on the wrong cost
+and the invented 3x budget, i.e. on an erroneous input, never on evidence). Full SPECIFY (spec rewritten:
+research/infrastructure/strategy-specs/S008-late-day-rebalance-continuation.md, all four cost combinations stated, mechanism
+paragraph, "where this should fail" menu) -> FREEZE in its own commit 08a881d before any outcome data (spec+module sha256 in
+research/ledger/strategies.jsonl; module src/strategy_s008_late_day_rebalance_continuation.py; tests/test_strategy_s008.py)
+-> SCREEN (Discovery only, 2,101 sessions): **704 trades, gross +2.6851 pt/trade, MAKES MONEY IN ALL FOUR** -- MNQ market
++$1,950.18 (+1.3851 pt/tr), MNQ limit +$2,302.18, NQ market +$27,316.22 (+1.9401 pt/tr), NQ limit +$30,836.22. Registered as
+`s008` in bot_stack_paper_run.STRATEGIES and RUN INTO PAPER (2 trades scored). SLOW projection verified from the screen's own
+rate: 0.3351/session x 126 = **42.2 -> NOT SLOW** (the pre-screen study's 0.4390 -> 55.3 was optimistic; the label is the
+same), so S008 is the FIRST non-SLOW strategy in the paper book and runs the ordinary six-week clock. FLAGGED HONESTLY: its
+screen is dollar-positive on a slightly NEGATIVE average R (-0.0116R on MNQ market) -- it passes SCREEN, whose question is
+dollars, but s.6's KEEP needs avg R > 0; the paper record settles that at 40 trades. Suite 597 passed; tree clean; pushed.
+NEXT: Step 3 now has a non-SLOW strategy to advance (S008); Step 4 queue is S004/S005/S006 at SOURCE.
+
 September 16th, ~11:00-11:45 am CT -- SCHEDULED 11:00 AM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
 queue S004/S005/S006 at SOURCE, paper book 3 strategies ALL SLOW, none at a judgment point. Step 2 data: no change since
 the 9:00 am cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET) -- Sept 15 was already scored, so

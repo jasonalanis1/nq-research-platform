@@ -412,3 +412,133 @@ deferral). Shelf 3/3 restored (Entry 30, 31, 32).
 - PLATFORM (the paper loop can now hold a position overnight): `_resolve_fill_outcome` scanned a single calendar-day frame, which is why S002 could not be frozen. Choice 7 in src/bot_stack_paper_run.py: a strategy declares an ABSOLUTE `market_context["exit_ts"]`, the bookkeeping walks the whole frame across the boundary (stop/target first touch, stop wins a tie) and the time exit books the first bar at or after that timestamp at its OPEN. The design decision worth keeping: the session-completeness guard was extended to the EXIT session rather than inventing an "open trade" row. A trade whose exit session is absent or in progress DEFERS its entry session whole -- nothing is written, nothing is force-closed, `session_end_fallback` is refused across a boundary -- so the append-only paper log never has to be revised, which is what the never-re-score rule (directive s.13) would otherwise have collided with. Same-session behaviour is unchanged by construction and proved so against a verbatim copy of the pre-change function (tests/test_cross_session_exit.py).
 - S002 (overnight carry on compressed prior days) FROZEN, SCREENED and IN PAPER: 364 Discovery trades, +$1,446.10 net at 1 micro after ASSUMED costs, 53.6% wins, **+0.006R average** -- profitable in dollars and almost entirely eaten by costs. The general lesson, now twice observed (S001a +0.080R, S002 +0.006R): on a micro, a strategy sourced from a drift-bearing leg screens positive on dollars long before it has any edge per unit of risk, and avg R is the only number that separates them. B4b's MEASURED cost decides whether S002 exists at all.
 - S002's first two paper trades are the spec's own "where this should fail" list arriving early: +0.9519R on a clean clock exit (2026-09-10 -> 09-11 09:30) and -1.0R stopped out on the Sunday 18:00 reopen (2026-09-11 -> 09-13), i.e. the weekend leg hyp-000145 ruled out filtering. Recorded per trade, not filtered, so LEARN can see it at judgment.
+
+## 2026-09-16 (cost-correction cycle, Jason's Amendment 2) — the cost wall was inflated 2–3×, and what survives of it
+
+**Jason caught a material error. The assumed cost constant, $6.00 per micro round trip =
+3.00 index points, applied `src/integrity_checks.py`'s `COMMISSION_PER_SIDE_USD = 2.50` —
+a FULL-SIZE E-mini (NQ) figure — to the MICRO (MNQ) contract the paper book trades. That is
+roughly 3–10× too high on the commission leg and about 2.3× too high on the round trip.**
+The corrected, sourced schedule now lives in `src/cost_model.py` and nowhere else
+(write-up `research/infrastructure/cost-model-2026-09-16.md`; directive Amendment 2):
+
+| | commission/side | fees/side | slippage/side | round trip | in POINTS |
+|---|---|---|---|---|---|
+| MNQ market entry+exit *(decision basis)* | $0.25 | $0.55 | $0.50 | **$2.60** | **1.300 pt** |
+| MNQ limit entry *(OPTIMISTIC)* | $0.25 | $0.55 | $0.50 exit only | $2.10 | 1.050 pt |
+| NQ market entry+exit | $0.85 | $1.60 | $5.00 | $14.90 | **0.745 pt** |
+| NQ limit entry *(OPTIMISTIC)* | $0.85 | $1.60 | $5.00 exit only | $9.90 | 0.495 pt |
+
+### 1. What survives of the "cost wall" conclusion, and what does not
+
+**SURVIVES — the measurement.** The gross numbers were never wrong. The intraday directional
+drift available on NQ really is a **1–6 point** band: 36 continuation cells land between −0.9
+and +5.5 gross points, and the RTH VWAP 2σ reversion really does fire on 92.7% of sessions at
+gross +0.043R on a 17.6-point median risk. Nothing in the correction touches a gross figure,
+a fill, an exit or a t-statistic.
+
+**SURVIVES — the shape of the problem.** Short-horizon intraday trades are still the most
+cost-sensitive thing this project can run, and a fixed cost still eats a per-trade edge that
+is measured in single points. The wall is real. It is just **half to a third as tall as Tony
+said it was**, and the band it has to be compared against is 1.30 points on MNQ, not 3.00.
+
+**DOES NOT SURVIVE — "a 2–5 point intraday drift cannot pay for a round trip."** It can. A
+gross edge of 2.55 points per trade is **+1.25 points net** on MNQ at market and **+1.81 net**
+on NQ at market. The S008 spec's closing line — "what is refuted is that $6.00 a trade is
+affordable out of a 2–5 point intraday drift" — was refuting the wrong number.
+
+**DOES NOT SURVIVE — the reference band as a kill line.** The VWAP 2σ reversion was recorded
+as −1.55 points net per trade. At the corrected cost the same unchanged measurement is −0.54
+net on MNQ market, −0.29 on MNQ limit, **+0.01 on NQ market and +0.26 on NQ limit** — i.e. it
+crosses from "clearly dead" to roughly break-even on the full-size contract. That is a
+descriptive study, not a screen, and nothing is being revived on it; it is recorded so the
+number in the ledger is the right one.
+
+**DOES NOT SURVIVE — the "3× cost" pre-screen.** It was Tony's invention. The standing
+directive never contained it, and it was used to refuse S008 **without a screen**. Jason's
+replacement rule: *at SPECIFY, reject only if the expected per-trade edge is below the
+corrected per-trade cost itself; otherwise screen it* (`cost_model.specify_gate()`).
+
+### 2. THE NEW STRUCTURAL FACT: IN POINTS, THE FULL-SIZE NQ COSTS HALF WHAT THE MICRO COSTS
+
+0.745 pt against 1.300 pt at market; 0.495 against 1.050 on an optimistic limit entry. In
+dollars the NQ round trip is 5.7× the micro's, but a point is worth 10× as much, so the fixed
+commission-and-fee component spreads over ten times the notional while the tick of slippage
+stays the same size in points. **A strategy whose per-trade edge lands between about 0.5 and
+1.3 points is profitable on NQ and unprofitable on MNQ.** "The cost wall killed it" is
+therefore, for that whole band, a statement about the CONTRACT and not about the pattern.
+Every screen and the paper book now print all four combinations side by side so the two can
+never again be confused. (The size question is separate and stays Jason's: NQ is 10× the risk
+per trade at the same stop distance.)
+
+### 3. EVERY LIMIT-ENTRY FIGURE IS AN OPTIMISTIC UPPER BOUND, AND IS LABELLED SO
+
+A limit entry genuinely avoids paying the spread on the way in. What no historical screen can
+model is that **a resting limit order does not always fill, and fills preferentially when the
+market is about to trade through it** — adverse selection, which shows up not as a cost but as
+a worse mix of trades. The screen fills every limit order by construction, so the limit column
+is a **ceiling on what a limit entry could achieve, never an estimate of it**. `cost_model.py`
+carries `optimistic: true`, the `(OPTIMISTIC)` label and the note on every limit row so no
+printer can quietly drop it.
+
+### 4. THE RECORD WAS RE-COSTED, NOT RE-SCORED — AND THE INTEGRITY GATE CAN SEE IT
+
+Directive s.13: *the paper record is never adjusted, deleted, or re-scored.* **No paper fill
+was touched.** Every entry, exit, exit reason and gross `pnl_usd` in
+`research/forward_validation/bot_stack_paper_log.jsonl` is exactly what it was before this
+cycle. What changed is the **cost overlay** `src/paper_book.py` subtracts from that unchanged
+gross — and it now shows four overlays side by side on the same one record
+(`paper_book.four_combination_overlay()`, `cost_model.overlay()`), with identical gross in
+every row, which is the visible proof that the record itself was left alone. Frozen specs and
+modules (S002, S003, S007) still quote the old $6.00 in their own text and were **not edited**;
+the corrected cost is applied *to* them from `cost_model.py`.
+
+### 5. WHAT THE RESCREENS SAID
+
+- **S007 (opening-range break continuation): THE KILL STANDS.** Same frozen spec and module,
+  same 2,101-session Discovery slice: 1,525 trades, gross +$526.33 = **+0.1726 points per
+  trade**. MNQ market net −$3,438.62 (−1.1274 pt/trade, avg −0.1139R); MNQ limit −$2,676.12;
+  NQ market −$17,458.73 (−0.5724 pt/trade); NQ limit −$9,833.73 (−0.3224 pt/trade). The gross
+  edge is **2.9× below even the cheapest of the four costs**, so neither contract nor entry
+  style rescues it. The correction changed the size of the loss, not the verdict. S007 stays
+  closed, its salvage stays spent, nothing revived.
+- **S008 (late-day rebalance continuation): REOPENED AS AN INPUT-ERROR CORRECTION, AND IT
+  PASSES.** It had been sent to LEARN *without a screen* on two erroneous inputs — the wrong
+  cost and the invented 3× budget. It was **rejected on an erroneous input, not on evidence**,
+  so reopening it is neither a Salvage (none spent; S008 has never had one) nor a FIX ONCE (no
+  rule of the trade changed). Specified in full, FROZEN in its own commit before any outcome
+  data was read, then screened for the first time: 704 trades over 2,101 Discovery sessions,
+  gross **+2.6851 points per trade**, and it **makes money in all four combinations** —
+  MNQ market +$1,950.18 (+1.3851 pt/trade), MNQ limit +$2,302.18, NQ market +$27,316.22
+  (+1.9401 pt/trade), NQ limit +$30,836.22. It is in PAPER, and at 0.3351 trades/session ×
+  126 = **42.2 projected trades in six months it is NOT SLOW** — the first strategy in the
+  book whose six-week clock can actually run.
+
+### 6. THE FLAG ON S008, STATED BEFORE ANYONE IS SURPRISED BY IT
+
+S008's screen is **dollar-positive on a slightly negative average R** (−0.0116R on MNQ market,
++0.0027R on NQ market): its winners carry larger risk than its losers, so the two measures
+disagree. The SCREEN's question is the dollar one (directive s.2) and it passes it. But s.6's
+KEEP criterion is **average R above zero**, so on this screen's shape S008 would not yet clear
+a KEEP. That is for the paper record to settle at 40 trades, not to pre-judge here — recorded
+now so the disagreement is on the table from the start rather than discovered at the verdict.
+It is the same shape the S007 salvage refused ("dollars-positive on a losing expectation"), and
+the difference is that there it was one ex-post slice of a losing strategy and here it is the
+whole frozen strategy's own screen.
+
+### 7. THE LESSON, WHICH IS ABOUT INPUTS, NOT ABOUT COSTS
+
+**A number that every stage reads and no stage owns will be wrong for a long time before
+anyone notices.** `COMMISSION_PER_SIDE_USD = 2.50` sat in a file called `integrity_checks.py`
+— the file whose entire job is to assume the candidate is wrong — with a comment describing it
+as a placeholder, and it was imported by the paper book and applied to a different contract
+than the one it was written for. Nothing in the project's machinery could catch that, because
+every check downstream was consistent with it: the screen, the salvage, the paper book and the
+spec all agreed, and all agreed on the wrong number. Two things follow, and both are now in
+place. First, **one owner per constant**: `cost_model.py` is the only place a cost is defined,
+its components are named separately (commission / fees / slippage), and its sources are cited
+in the file. Second, and larger: **Tony invented a gate the directive did not authorize and
+then killed a candidate with it.** The cost error was an accident; the 3× budget was not. A
+rule that is convenient — it ends candidates cheaply — and unaccountable, because no one wrote
+it down as Jason's, is the more dangerous of the two failures. The directive says Tony does not
+make rules; this is what it costs when he does.
