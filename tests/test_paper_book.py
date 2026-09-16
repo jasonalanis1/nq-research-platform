@@ -45,13 +45,64 @@ def test_measure_every_s5_number():
     assert m["slippage"] == "ASSUMED" and m["cost_fragile"] is True
 
 
-def test_judgment_point_by_trades_and_by_weeks():
-    rows = [_trade(f"2026-08-{d:02d}", "s1", 0.5) for d in range(1, 29)] + [_trade(f"2026-09-{d:02d}", "s1", 0.5) for d in range(1, 13)]
-    m = pb.measure(pb.trades_for(rows, "s1"), "2026-08-01", today=date(2026, 9, 12))
+def _n_trades(n, name="s1", start_day=1):
+    """n trades for one strategy, one per calendar day from 2026-08-01."""
+    from datetime import date as _d, timedelta as _td
+    out = []
+    for i in range(n):
+        d = _d(2026, 8, start_day) + _td(days=i)
+        out.append(_trade(d.isoformat(), name, 0.5))
+    return out
+
+
+# --- Amendment 1 (Jason, September 16th 2026): 40 trades is the ONLY judgment
+# point; the 15-trades-in-6-weeks KILL is gone; SLOW strategies run no clock. ---
+
+def test_judgment_point_is_forty_trades():
+    m = pb.measure(pb.trades_for(_n_trades(40), "s1"), "2026-08-01", today=date(2026, 9, 12))
     assert m["trades"] == 40 and m["at_judgment_point"] and "40 trades" in m["judgment_reason"]
-    few = [_trade("2026-07-01", "s1", 0.5)]
-    m2 = pb.measure(pb.trades_for(few, "s1"), "2026-07-01", today=date(2026, 9, 15))
-    assert m2["at_judgment_point"] and "weeks" in m2["judgment_reason"] and "KILL" in m2["judgment_reason"]
+    assert m["slow"] is False
+
+
+def test_fast_strategy_at_six_weeks_with_38_trades_gets_no_verdict():
+    """The <40 rule: a non-SLOW strategy past its six-week mark with 38 trades
+    is NOT at a judgment point and is not killed -- it keeps trading."""
+    m = pb.measure(pb.trades_for(_n_trades(38), "s1"), "2026-08-01", today=date(2026, 9, 30))
+    assert m["trades"] == 38 and m["days_elapsed"] == 60
+    assert m["six_week_mark_passed"] is True
+    assert m["at_judgment_point"] is False
+    assert m["trades_to_judgment"] == 2
+    assert "NOT a judgment point" in m["judgment_reason"] and "keeps trading" in m["judgment_reason"]
+    assert "KILL" not in m["judgment_reason"]
+
+
+def test_slow_strategy_at_six_weeks_with_three_trades_keeps_trading():
+    m = pb.measure(pb.trades_for(_n_trades(3), "s1"), "2026-08-01", today=date(2026, 9, 30), slow=True)
+    assert m["trades"] == 3 and m["slow"] is True
+    assert m["at_judgment_point"] is False and m["judgment_reason"] is None
+    assert m["weeks_to_judgment"] is None          # a SLOW strategy runs no clock
+    assert m["six_week_mark_passed"] is True       # the mark is reported, not acted on
+    assert m["trades_to_judgment"] == 37
+
+
+def test_slow_strategy_at_forty_trades_is_at_its_judgment_point():
+    m = pb.measure(pb.trades_for(_n_trades(40), "s1"), "2026-08-01", today=date(2027, 3, 1), slow=True)
+    assert m["trades"] == 40 and m["slow"] is True and m["at_judgment_point"] is True
+    assert "40 trades" in m["judgment_reason"] and "SLOW" in m["judgment_reason"]
+
+
+def test_slow_threshold_arithmetic_rate_times_126_under_40():
+    # The three strategies in paper on September 16th, from their own screens.
+    assert sr.SLOW_HORIZON_SESSIONS == 126 and sr.SLOW_MIN_TRADES == 40
+    for trades, sessions, projected in ((40, 2101, 2.4), (364, 2101, 21.83), (22, 2101, 1.32)):
+        proj = sr.slow_projection(trades, sessions)
+        assert abs(proj["projected_trades_6_months"] - projected) < 0.01
+        assert proj["slow"] is True and sr.is_slow_by_screen(trades, sessions) is True
+    # The boundary: exactly 40 projected trades is NOT slow (rate * 126 < 40).
+    assert sr.is_slow_by_screen(40, 126) is False                 # 1.0/session -> 126
+    assert sr.slow_projection(40, 126)["projected_trades_6_months"] == 40.0
+    assert sr.is_slow_by_screen(20, 126) is True                  # 0.1587 -> 20
+    assert sr.is_slow_by_screen(0, 0) is True                     # no screen -> conservative
 
 
 def test_book_separates_plumbing_from_candidates(tmp_path, monkeypatch):
@@ -80,3 +131,34 @@ def test_empty_book_says_so(tmp_path, monkeypatch):
     bk = pb.book()
     assert bk["strategies"] == [] and bk["plumbing"] == []
     assert "empty" in pb.plain_lines(bk)[0]
+
+
+def test_book_marks_slow_from_the_registry_and_preflight_shows_it(tmp_path, monkeypatch):
+    log = tmp_path / "log.jsonl"; reg = tmp_path / "reg.jsonl"
+    monkeypatch.setattr(pb, "LOG", log); monkeypatch.setattr(sr, "REGISTRY", reg)
+    rows = _n_trades(3, "s001_x")
+    log.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    sr.append({"strategy_id": "S001", "name": "X", "stage": "PAPER", "paper_log_name": "s001_x",
+               "slow": True, "slow_projection": sr.slow_projection(40, 2101), "ts": "2026-08-01T00:00:00"}, reg)
+    regrows = sr.read_rows(reg)
+    assert sr.slow_ids(regrows) == {"S001"}
+    assert [r["strategy_id"] for r in sr.in_paper_slow(regrows)] == ["S001"]
+    assert sr.in_paper_active(regrows) == []
+    assert sr.queue(regrows) == []                       # SLOW takes no queue slot
+    bk = pb.book(today=date(2026, 9, 30))
+    s = bk["strategies"][0]
+    assert s["slow"] is True and s["at_judgment_point"] is False and s["trades"] == 3
+    text = "\n".join(pb.plain_lines(bk))
+    assert "[SLOW]" in text and "no queue slot" in text
+    assert bk["slow_rule"]["horizon_sessions"] == 126 and bk["slow_rule"]["min_trades"] == 40
+    import cycle_preflight as cp
+    st = cp.paper_book_status(today=date(2026, 9, 30))
+    assert st["at_judgment"] == [] and st["slow"] == ["S001"] and st["n_slow"] == 1
+    assert "SLOW (background, no queue slot" in st["note"]
+
+
+def test_registry_rejects_a_non_bool_slow_flag(tmp_path):
+    reg = tmp_path / "reg.jsonl"
+    import pytest
+    with pytest.raises(ValueError):
+        sr.append({"strategy_id": "S1", "name": "X", "stage": "PAPER", "slow": "yes"}, reg)

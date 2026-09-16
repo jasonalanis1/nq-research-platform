@@ -147,7 +147,8 @@ STRATEGIES = {
 # scored by `--strategy <key>`. "b3" and "dummy" are PLUMBING placeholders
 # (Jason, September 15th: the dummy stays labelled a plumbing test, its record
 # kept separate, never judged); everything else is a CANDIDATE whose record
-# src/paper_book.py measures and the Director judges at 40 trades / 6 weeks.
+# src/paper_book.py measures and the Director judges at 40 trades -- never on
+# fewer, SLOW or not (Amendment 1, Jason, September 16th 2026).
 PLUMBING_KEYS = ("b3", "dummy")
 
 

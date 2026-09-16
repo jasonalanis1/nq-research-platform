@@ -515,10 +515,13 @@ def check_shelf_starving() -> Result:
     try:
         import strategy_registry as sr
         rows = sr.read_rows()
-        q = sr.queue(rows); p = sr.in_paper(rows); s = sr.salvage_queue(rows)
+        q = sr.queue(rows); p = sr.in_paper_active(rows); s = sr.salvage_queue(rows)
+        sl = sr.in_paper_slow(rows)
         head = (f"candidate queue {len(q)} (next: {q[0]['strategy_id']} at {q[0]['stage']})" if q
                 else "candidate queue EMPTY -- Discovery sources next (s.3 Step 4)")
-        return Result("queue", PASS, head + f"; in paper {len(p)}; salvage owed {len(s)} "
+        return Result("queue", PASS, head + f"; in paper {len(p)}; in paper SLOW {len(sl)} "
+                                           f"(background, no queue slot, judged at 40 trades -- Amendment 1); "
+                                           f"salvage owed {len(s)} "
                                            "(shelf floor / draw-thin rules retired, directive s.12)")
     except Exception as exc:  # noqa: BLE001
         return Result("queue", PASS, f"registry unreadable ({exc}); shelf floor rule retired, informational only")

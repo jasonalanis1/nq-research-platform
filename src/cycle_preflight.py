@@ -118,9 +118,14 @@ def queue_status() -> dict:
 
 
 def paper_book_status(today=None) -> dict:
-    """Directive s.3 Step 1 (NEW): preflight reports the paper book -- how many
+    """Directive s.3 Step 1: preflight reports the paper book -- how many
     strategies are live in paper, each one's trade count and days elapsed, and
-    whether any has hit its 40-trade or 6-week judgment point."""
+    whether any has hit its judgment point.
+
+    Amendment 1 (Jason, September 16th 2026): the judgment point is 40 TRADES
+    and nothing else. SLOW strategies are shown distinctly (background paper, no
+    queue slot, no clock) and are never reported as at judgment point before 40
+    trades; neither is anything else."""
     try:
         import paper_book as pb
         bk = pb.book(today=today)
@@ -129,16 +134,26 @@ def paper_book_status(today=None) -> dict:
     strategies = [{"strategy_id": s["strategy_id"], "name": s["name"], "stage": s["stage"], "trades": s["trades"],
                    "days_elapsed": s["days_elapsed"], "trades_to_judgment": s["trades_to_judgment"],
                    "weeks_to_judgment": s["weeks_to_judgment"], "at_judgment_point": s["at_judgment_point"],
+                   "slow": bool(s.get("slow")), "six_week_mark_passed": s.get("six_week_mark_passed"),
                    "judgment_reason": s["judgment_reason"]} for s in bk["strategies"]]
     at = [s["strategy_id"] for s in strategies if s["at_judgment_point"]]
+    slow = [s["strategy_id"] for s in strategies if s["slow"]]
     if not strategies:
         note = "no strategy in paper yet"
     else:
-        note = "; ".join(f"{s['strategy_id']} {s['trades']} trades / {s['days_elapsed']} days"
-                         + (f" -- AT JUDGMENT POINT ({s['judgment_reason']})" if s["at_judgment_point"] else
-                            f" ({s['trades_to_judgment']} trades or {s['weeks_to_judgment']} wk to judgment)")
-                         for s in strategies)
-    return {"ok": True, "n_in_paper": len(strategies), "strategies": strategies, "at_judgment": at,
+        parts = []
+        for s in strategies:
+            head = f"{s['strategy_id']} {s['trades']} trades / {s['days_elapsed']} days"
+            if s["at_judgment_point"]:
+                parts.append(head + f" -- AT JUDGMENT POINT ({s['judgment_reason']})")
+            elif s["slow"]:
+                parts.append(head + f" -- SLOW (background, no queue slot; {s['trades_to_judgment']} more trade(s) to 40)")
+            else:
+                parts.append(head + f" ({s['trades_to_judgment']} trades to judgment, six-week mark in "
+                                    f"{s['weeks_to_judgment']} wk)")
+        note = "; ".join(parts)
+    return {"ok": True, "n_in_paper": len(strategies), "n_slow": len(slow), "slow": slow,
+            "strategies": strategies, "at_judgment": at,
             "plumbing": [p["paper_log_name"] for p in bk["plumbing"]], "note": note}
 
 
@@ -207,6 +222,7 @@ def main() -> int:
     pbk = paper_book_status()
     steps["paper_book"] = {"ok": pbk.get("ok", False), **pbk}
     print(f"  [{'ok' if pbk.get('ok') else 'warn'}]   PAPER BOOK      {pbk.get('n_in_paper', 0)} strateg{'y' if pbk.get('n_in_paper', 0) == 1 else 'ies'} in paper"
+          + (f" ({pbk.get('n_slow')} SLOW: background, no queue slot, judged at 40 trades)" if pbk.get("n_slow") else "")
           + (f"; AT JUDGMENT POINT: {', '.join(pbk['at_judgment'])} -- Director verdict THIS cycle (s.6)" if pbk.get("at_judgment") else ""))
     print(f"         -> {pbk.get('note','')}")
 

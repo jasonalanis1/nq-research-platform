@@ -107,7 +107,8 @@ def money() -> list[str]:
         tot1 = sum(s["usd_net"]["1"] for s in cands); n = sum(s["trades"] for s in cands)
         lines.append(f"- Paper P&L, candidate strategies, net of ASSUMED costs: **{'-' if tot1 < 0 else '+'}${abs(tot1):,.0f}** "
                      f"at 1 micro over {n} trade(s) across {len(cands)} strateg{'y' if len(cands)==1 else 'ies'} "
-                     f"(detail in section 1b, PAPER BOOK). Not a verdict until a strategy reaches 40 trades or 6 weeks.")
+                     f"(detail in section 1b, PAPER BOOK). Not a verdict until a strategy reaches 40 trades "
+                     f"-- nothing is judged on fewer, SLOW or not (Amendment 1, Jason, September 16th).")
     elif bk.get("strategies"):
         lines.append(f"- Paper P&L, candidate strategies: **no trades scored yet** — {len(bk['strategies'])} "
                      f"strateg{'y' if len(bk['strategies'])==1 else 'ies'} in paper, waiting on sessions (section 1b).")

@@ -313,8 +313,12 @@ def test_preflight_paper_book_status_reports_trades_days_and_judgment(tmp_path, 
     st = cp.paper_book_status(today=date(2026, 8, 20))
     assert st["n_in_paper"] == 1 and st["strategies"][0]["trades"] == 5 and st["strategies"][0]["days_elapsed"] == 19
     assert st["at_judgment"] == [] and "S001 5 trades / 19 days" in st["note"]
-    st = cp.paper_book_status(today=date(2026, 9, 20))       # > 6 weeks, 5 trades -> judgment point
-    assert st["at_judgment"] == ["S001"] and "AT JUDGMENT POINT" in st["note"]
+    # Amendment 1 (Jason, September 16th 2026): passing six weeks with 5 trades is
+    # NOT a judgment point any more -- nothing is judged on fewer than 40 trades.
+    st = cp.paper_book_status(today=date(2026, 9, 20))
+    assert st["at_judgment"] == [] and "AT JUDGMENT POINT" not in st["note"]
+    assert st["strategies"][0]["six_week_mark_passed"] is True
+    assert st["strategies"][0]["at_judgment_point"] is False
 
 
 def test_preflight_shelf_floor_is_retired_and_queue_is_reported(tmp_path, monkeypatch):

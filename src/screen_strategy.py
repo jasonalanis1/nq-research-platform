@@ -39,6 +39,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import bot_stack_paper_run as bpr  # noqa: E402
 from paper_book import ASSUMED_COST_USD_PER_MICRO_RT, MNQ_USD_PER_PT, SLIPPAGE_BASIS  # noqa: E402
+from strategy_registry import slow_projection as _slow_projection  # noqa: E402
 
 PROJECT_ROOT = ROOT.parent
 
@@ -98,6 +99,10 @@ def screen(module, df: pd.DataFrame, slice_label: str = "discovery") -> dict:
         "win_rate": round(wins / n, 4) if n else None, "avg_r_net": avg_r,
         "total_r_net": round(sum(t["r_net"] for t in trades), 3),
         "made_money_after_assumed_costs": bool(n and net > 0),
+        # Amendment 1 (Jason, September 16th 2026): the SLOW label is decided HERE,
+        # from this screen's own rate -- trades/sessions * 126 < 40 -> SLOW when it
+        # enters PAPER (background paper, no queue slot, judged at 40 trades).
+        "slow_projection": _slow_projection(n, n_sessions),
         "cost_basis": f"{SLIPPAGE_BASIS}: ${ASSUMED_COST_USD_PER_MICRO_RT:.2f} per micro round trip (commission $2.50/side + 1 tick/side)",
         "bookkeeping": "bot_stack_paper_run._resolve_fill_outcome (first touch, stop wins ties, time exit, session-end fallback; cross-session exits walk the whole frame to market_context['exit_ts'] and an unresolvable one is excluded, never force-closed); fill at signal.entry",
         "trades_detail": trades,
@@ -135,6 +140,9 @@ def main(argv=None) -> int:
     print(f"  gross ${res['gross_usd_1_micro']:,.2f}  minus assumed costs ${res['assumed_costs_usd_1']:,.2f}  [{res['cost_basis']}]")
     print(f"  win rate {res['win_rate']}   avg R (net) {res['avg_r_net']}   total R (net) {res['total_r_net']}")
     print(f"  MADE MONEY AFTER ASSUMED COSTS: {res['made_money_after_assumed_costs']}  -> {'PAPER' if res['made_money_after_assumed_costs'] else 'SALVAGE'}")
+    sp = res["slow_projection"]
+    print(f"  rate {sp['trades_per_session']:.4f} trades/session -> {sp['projected_trades_6_months']:.1f} trades in 6 months "
+          f"(~{sp['horizon_sessions']} sessions): {'SLOW -- background paper, no queue slot, judged at 40 trades' if sp['slow'] else 'not SLOW, ordinary six-week clock'} (Amendment 1)")
     print(f"  exposure (screens run so far, information only): {res['exposure_screens_so_far_for_information']}")
     if a.out:
         Path(a.out).write_text(json.dumps(res, indent=1, default=str))
