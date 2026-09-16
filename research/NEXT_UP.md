@@ -1529,6 +1529,37 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 16th, ~1:00-1:45 pm CT -- SCHEDULED 1:00 PM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
+queue S004/S005/S006 at SOURCE, paper book 4 strategies (3 SLOW), none at a judgment point. Step 2 data: UNCHANGED since
+the 9:00 am cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET) -- NO newly complete session; the
+7 am CT cron tops up once a day, so nothing new is due until tomorrow morning. Data currency PASS, no interrupt. Step 3:
+s001a, s002, s003, s008 and the dummy each returned 0 new rows across 0 sessions. Paper book unchanged at the corrected
+costs: S008 2 trades -0.08R (only non-SLOW, 38 to judgment), S002 2 trades -0.03R, S001a 0, S003 0 -- nothing judgeable
+under 40 trades. Step 4 chose (a), THE PRE-CORRECTION KILLS RECHECKED AGAINST THE CORRECTED COST, over sourcing a new
+candidate: a wrong shared input owes a recheck to EVERY decision it produced, and the cost-correction cycle had rescreened
+only the two candidates in front of it (S007, S008). Every SCREEN row in research/ledger/strategies.jsonl recomputed
+against src/cost_model.py: exactly TWO kill-at-SCREEN verdicts exist (S001, S007) and only S001's gross per trade
+(+2.5552 pt) exceeds the corrected cost. **S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) FLIPS IN
+ALL FOUR.** Frozen spec+module NOT edited (s.13) -- both sha256 re-verified byte-identical to the FREEZE row before the
+re-run -- same Discovery slice (2,101 sessions), same 131 trades, same gross +$669.62 = +2.5552 pt/trade. Old wrong basis:
+$786.00 costs -> -$116.38 -> KILL. Corrected: $340.60 costs -> MNQ market **+$328.87** (+1.2552 pt/tr, avg -0.0182R), MNQ
+limit (OPTIMISTIC) +$394.37 (+1.5052 pt/tr, +0.0044R), NQ market +$4,742.85 (+1.8102 pt/tr, +0.0319R), NQ limit
+(OPTIMISTIC) +$5,397.85 (+2.0602 pt/tr, +0.0544R). Registered as `s001` in bot_stack_paper_run.STRATEGIES and RUN INTO
+PAPER (6 rows, 1 trade scored; log 54 -> 60). SLOW by Amendment 1 from its own screen rate: 0.0624/session x 126 = **7.86
+projected 6-month trades** vs 40 -> background paper, NO queue slot, no clock, judged whenever it reaches 40. Recorded in
+the registry and KNOWLEDGE.md as an **INPUT-ERROR CORRECTION, not a salvage and not a second attempt**: the 2026-09-15
+KILL/SALVAGE/LEARN rows stand as the record of what was decided on the wrong number, S001's one salvage stays spent
+(S001a keeps its own paper record), and NOTHING was adjusted to make it pass. FLAGGED as S008 is: dollar-positive on a
+slightly NEGATIVE avg R on the MNQ market decision basis -- SCREEN asks dollars, s.6's KEEP needs avg R > 0, the 40-trade
+record settles it. **S007 does NOT flip** (gross +0.1726 pt/trade, under even the cheapest of the four costs): MNQ market
+-$3,438.67, MNQ limit -$2,676.17, NQ market -$17,459.20, NQ limit -$9,833.73 -- KILL STANDS, salvage stays spent, not in
+the paper book. No other kill flipped: the list is exhausted, nothing carried to the next cycle. LEARN: a correction is
+not finished when the thing that exposed it has been fixed -- the sweep is owed to every decision the bad input produced.
+Step 5: pytest 597 passed, CLOSE COMPLETE, tree clean, pushed. Session: research/sessions/2026-09-16-1300.md.
+NEXT: Step 4 returns to the ordinary queue -- S004 (H118 lineage vs own-drift baseline), S005 (hyp-000162 as a sizing
+input), S006 (Stack A), all at SOURCE; the four SLOW strategies and S008 hold no queue slot between them except S008's.
+
+
 September 16th -- COST-CORRECTION CYCLE, run on JASON'S OWN INSTRUCTION (his two corrections are appended verbatim and
 dated to him as AMENDMENT 2 of research/infrastructure/standing-directive-2026-09-15.md; Tony did not author them and still
 does not edit the directive body). WHAT WAS WRONG: the assumed cost constant. src/integrity_checks.py's

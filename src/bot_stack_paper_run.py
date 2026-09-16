@@ -191,6 +191,22 @@ register_strategy("s003", _s003)
 import strategy_s008_late_day_rebalance_continuation as _s008  # noqa: E402
 register_strategy("s008", _s008)
 
+# S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) --
+# REGISTERED 2026-09-16 (1:00 pm cycle) as an INPUT-ERROR CORRECTION, exactly as
+# S008 was. S001 was KILLED at SCREEN on 2026-09-15 against the WRONG cost
+# constant ($6.00 per micro round trip = 3.00 index points -- a full-size NQ
+# commission charged to a micro). Its frozen module and spec were NOT edited
+# (directive s.13; sha256 re-verified against the FREEZE row before the
+# re-screen), and the SAME frozen module re-screened at the corrected cost
+# (src/cost_model.py, MNQ market $2.60 = 1.300 pt) MAKES MONEY IN ALL FOUR
+# COMBINATIONS: 131 Discovery trades, gross +2.5552 pt/trade, MNQ market
+# +$328.87. Not a salvage (S001's one salvage was spent and produced S001a,
+# which stays in PAPER on its own) and not a FIX ONCE -- the verdict was
+# produced by an erroneous input, and re-running the frozen module against the
+# corrected input is the correction of that error.
+import strategy_s001_level_sweep_reversal as _s001  # noqa: E402
+register_strategy("s001", _s001)
+
 # S007 (opening-range break continuation) was registered here at its FREEZE
 # (2026-09-16, 9:00 am CT cycle) so a passing SCREEN could put it into PAPER the
 # same cycle. Its SCREEN came back NEGATIVE (-$8,623.67 net over 1,525 Discovery

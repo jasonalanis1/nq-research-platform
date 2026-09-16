@@ -103,6 +103,40 @@ Sourced Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ, li
 
 - 2026-09-14 (11:00 am cycle): A HIGH PLACEBO SCORE IS A REASON TO RUN THE RESIDUALISED TEST, NOT A VERDICT ON ITS OWN. The mechanical suite said yesterday's opening range does 74% of hyp-000162's work, which reads as redundancy. The Director test held yesterday's value FIXED and found 87.2% of the effect still there. Both numbers are correct and they are not in conflict: a lagged predictor and a current one can share a persistent driver without being substitutes. Read alone the placebo number would have killed a genuinely new candidate; read alone the separability number would have missed that the underlying variable persists strongly enough to matter for sizing. The suite should KEEP flagging high placebo scores -- the flag did its job by forcing the analysis -- but the DISPOSITION belongs to the stage that can hold the suspect fixed, not to the flag. This is the counterpart to the same morning's lesson that a structural check needs its own base rate: a check can be correct, informative, and still not be a verdict.
 
+## 2026-09-16 (1:00 pm CT scheduled cycle) — the pre-correction KILLS rechecked against the corrected cost: S001 flips, S007 does not
+
+Jason's Amendment 2 corrected the round-trip cost (research/infrastructure/cost-model-2026-09-16.md; src/cost_model.py:
+MNQ market $2.60 = 1.300 pt, not the old $6.00 = 3.000 pt). S007 and S008 were rescreened against it in the
+cost-correction cycle. **S001 never was**, and it was the other verdict the wrong number could have produced. This cycle
+grepped every SCREEN row in research/ledger/strategies.jsonl and recomputed each against cost_model. There are exactly
+two verdicts of KILL-at-SCREEN in the project's history, S001 and S007, and only S001's gross per trade exceeded the
+corrected cost.
+
+- **S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) FLIPS, in all four combinations.** The frozen
+  spec and module were not edited (s.13): both sha256 were re-verified byte-identical to the FREEZE row before the
+  module was re-run. Same Discovery slice (2,101 sessions), same 131 trades, same gross +$669.62 = **+2.5552 pt/trade**.
+  At the old, wrong $6.00 the assumed costs were $786.00 and the net was **-$116.38** -> KILL. At the corrected cost the
+  assumed costs are $340.60 and the net is **+$328.87 MNQ market (+1.2552 pt/tr, avg -0.0182R)**; MNQ limit (OPTIMISTIC)
+  +$394.37 (+1.5052 pt/tr, +0.0044R); NQ market +$4,742.85 (+1.8102 pt/tr, +0.0319R); NQ limit (OPTIMISTIC) +$5,397.85
+  (+2.0602 pt/tr, +0.0544R). **Reopened as an INPUT-ERROR CORRECTION, exactly as S008 was — not a salvage, not a second
+  attempt, not a FIX ONCE.** The 2026-09-15 KILL/SALVAGE/LEARN rows stand as the record of what was decided on the wrong
+  number, and S001's one salvage stays spent (S001a remains in PAPER on its own record). Nothing was adjusted to make it
+  pass; only the erroneous input was corrected. SLOW by Amendment 1 from its own screen rate: 131/2101 = 0.0624/session
+  x 126 = **7.86 projected trades in six months**, far under 40 — background paper, no queue slot, judged at 40 trades
+  however long that takes. Flagged as S008 is: dollar-positive on a slightly negative average R on the MNQ market
+  decision basis, so SCREEN (a dollars question) passes while s.6's KEEP (avg R > 0) is not yet answered.
+- **S007 does not flip** and was not re-run: its gross is +0.1726 pt/trade, below even the cheapest of the four costs
+  (0.495 pt, NQ limit, itself optimistic). MNQ market -$3,438.67, MNQ limit -$2,676.17, NQ market -$17,459.20, NQ limit
+  -$9,833.73. **The KILL stands**, its salvage stays spent, and it is not registered in the paper book.
+
+THE LESSON, and it is the one that matters more than either verdict: **when a shared input turns out to be wrong, the
+re-check is owed to EVERY decision that input produced, not just to the most recent one.** The cost-correction cycle
+rescreened the two candidates that were in front of it (S007, S008) and stopped there; S001 sat killed for a day on a
+number the project had already disowned. The cheap systematic sweep — every SCREEN row in the registry, recomputed
+against the corrected constant — takes minutes and is the only way to know the list is exhausted. It is now exhausted:
+two kills existed, both have been rechecked, one flipped. A correction is not finished when the thing that exposed it
+has been fixed.
+
 ## 2026-09-16 (11:00 am CT scheduled cycle) — S008: the cost budget run BEFORE the freeze, and the candidate refused on it
 
 **The 9:00 am lesson ("ask for per-trade edge first, fire rate second") was applied as

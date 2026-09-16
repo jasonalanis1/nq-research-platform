@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-16T16:03:13.077523+00:00",
+ "ran_at": "2026-09-16T18:02:30.487051+00:00",
  "owner": "cycle",
- "note": "11:00 am cycle",
+ "note": "1:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 am cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='1:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -71,7 +71,7 @@
   },
   "paper_book": {
    "ok": true,
-   "n_in_paper": 3,
+   "n_in_paper": 4,
    "n_slow": 3,
    "slow": [
     "S002",
@@ -117,6 +117,19 @@
      "slow": true,
      "six_week_mark_passed": false,
      "judgment_reason": null
+    },
+    {
+     "strategy_id": "S008",
+     "name": "Late-day constant-leverage rebalance continuation",
+     "stage": "PAPER",
+     "trades": 2,
+     "days_elapsed": 8,
+     "trades_to_judgment": 38,
+     "weeks_to_judgment": 4.9,
+     "at_judgment_point": false,
+     "slow": false,
+     "six_week_mark_passed": false,
+     "judgment_reason": null
     }
    ],
    "at_judgment": [],
@@ -124,7 +137,7 @@
     "base_entry_b3_orb_placeholder",
     "execution_dummy_4x_placeholder"
    ],
-   "note": "S002 2 trades / 8 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40)"
+   "note": "S002 2 trades / 8 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S008 2 trades / 8 days (38 trades to judgment, six-week mark in 4.9 wk)"
   }
  },
  "failed": [],
