@@ -181,6 +181,16 @@ register_strategy("s002", _s002)
 import strategy_s003_month_end_payment_cycle_reversal as _s003  # noqa: E402
 register_strategy("s003", _s003)
 
+# S008 (late-day constant-leverage rebalance continuation) -- registered at its
+# FREEZE (2026-09-16, cost-correction cycle) so a passing SCREEN can put it into
+# PAPER the same cycle with `--strategy s008` (directive s.14.4). S008 is REOPENED
+# as an INPUT-ERROR CORRECTION: it was sent to LEARN without a screen against a
+# wrong cost constant ($6.00/micro, a full-size NQ commission on a micro) and a
+# "3x cost" pre-screen that the directive never contained. Not a salvage, not a
+# FIX ONCE -- it had never been screened at all.
+import strategy_s008_late_day_rebalance_continuation as _s008  # noqa: E402
+register_strategy("s008", _s008)
+
 # S007 (opening-range break continuation) was registered here at its FREEZE
 # (2026-09-16, 9:00 am CT cycle) so a passing SCREEN could put it into PAPER the
 # same cycle. Its SCREEN came back NEGATIVE (-$8,623.67 net over 1,525 Discovery

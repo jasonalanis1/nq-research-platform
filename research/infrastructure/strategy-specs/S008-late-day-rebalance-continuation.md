@@ -1,129 +1,117 @@
 # S008 — Late-day constant-leverage rebalance continuation
 
-**Status: SPECIFIED, NOT FROZEN, CLOSED TO LEARN AT MONETIZATION.**
-The standing directive s.4 gives Monetization the ruling "no credible path", which
-"sends the candidate to LEARN without a screen". That is what happened here, and it
-happened at the pre-freeze cost-budget check this spec states below — before a spec
-hash, before a module, before a screen row. Nothing about S008 is frozen; this file is
-the record of a candidate that was specified and refused, not a frozen contract.
+**Status: FROZEN September 16th, 2026.** Module `src/strategy_s008_late_day_rebalance_continuation.py`.
+Both files' sha256 are in `research/ledger/strategies.jsonl` at the FREEZE row, written before any
+outcome data was touched. Standing directive s.13: neither file is edited after that row. A change is a
+FIX ONCE, never an edit.
 
-Sourced under Jason's **Amendment 1** top preference (intraday strategies that trade
-most days), and under the lesson the 9:00 am cycle recorded from S007
-(`research/KNOWLEDGE.md`): **ask for per-trade edge first, fire rate second.**
+## 0. Why this candidate is being reopened — an input error, not a salvage
 
----
+S008 was specified earlier on September 16th and sent to **LEARN without a screen**. It was refused at a
+"cost budget" this project invented, which required a gross per-trade edge of **3× the assumed cost**,
+where the assumed cost was **$6.00 per micro round trip = 3.00 index points**.
 
-## 1. The cost budget — stated first, on purpose
+**Both halves of that refusal were wrong.**
 
-This is the number S007 was not made to answer before it was frozen.
+1. The $6.00 figure charged a **full-size E-mini (NQ) commission** ($2.50/side) to a **micro (MNQ)**
+   contract. The corrected MNQ round trip is **$2.60 = 1.30 index points** at market entry and exit
+   (`src/cost_model.py`, sources cited there; write-up
+   `research/infrastructure/cost-model-2026-09-16.md`).
+2. The **"3× cost" pre-screen was Tony's own invention.** The standing directive has never contained it.
+   Jason deleted it in Amendment 2 and replaced it with: *at SPECIFY, reject only if the expected
+   per-trade edge is below the corrected per-trade cost itself; otherwise screen it.*
 
-- ASSUMED costs: $2.50/side commission + 1 tick/side slippage = **$6.00 per micro
-  round trip** (`src/paper_book.py`, labelled ASSUMED until B4b measures it).
-- MNQ is **$2.00 per index point**, so the round trip is **3.00 index points**.
-- A trade is worth running at 1 micro only if its **gross expectancy per trade is
-  well north of 3.00 points**. "Well north" is made concrete here as **at least
-  3× the cost, i.e. ≥ 9.0 gross points per trade**, so that costs are ≤ ~1/3 of the
-  edge rather than 17× it as they were for S007 (+$0.35 gross against $6.00).
-- Equivalently: with a stop-and-target structure of R points, the trade must earn
-  more than `3.0 / R` in R terms just to break even. A structure with R = 50 points
-  pays 0.06R of cost; a structure with R = 12 points pays 0.25R.
+The specified cell's measured gross edge is **+2.55 points per trade** (n = 708, t = 2.11). That is above
+**every one of the four corrected costs** — 1.300 / 1.050 / 0.745 / 0.495 points — so the SPECIFY gate
+passes and the candidate goes to SCREEN.
 
-**The budget therefore demands both halves: a stop measured in tens of points AND a
-gross edge measured in tens of points. Either alone fails.**
+**This reopening is an input-error correction.** It is *not* a Salvage (s.7 — S008 has never had one, and
+none is spent here), *not* a FIX ONCE (s.6 — no rule of the strategy has changed; the trade below is the
+trade that was specified), and *not* a second attempt at a candidate that failed on evidence. S008 was
+never screened. It was rejected on an arithmetic error in a rule that did not exist.
 
-## 2. Mechanism — who is on the other side and why they are forced
+## 1. Mechanism — who is on the other side and why they are forced
 
-Constant-leverage products must rebalance in the direction of the day's move, near
-the cash close, every day, without regard to price. A 3× long ETF that starts the
-day with $100 of assets and $300 of exposure finishes an up-1% day with $103 of
-assets and $303 of exposure — 2.94×, not 3× — and must **buy** to restore the
-mandate; an inverse fund must buy on the same up day for the mirror reason; both must
-**sell** on a down day. The required notional is approximately proportional to the
-day's return times the fund's leverage-weighted assets, so it is small on a quiet day
-and large on a big one, and it is concentrated into the last minutes before the 16:00
-ET equity close because that is where the fund's NAV is struck. The rebalancer is
-price-insensitive and must complete: he is the forced participant. The same day's
-direction also drags variable-annuity and risk-parity hedging programmes, which
-de-risk into losses and re-risk into gains on the same NAV clock. The prediction is a
-**continuation** of the session's direction into the close, with magnitude scaling in
-the size of the day's move — which is why the candidate is conditioned on large-move
-days: the fixed $6.00 is a smaller share of a bigger forced flow.
+Constant-leverage products must rebalance **in the direction of the day's move**, near the cash close,
+every day, without regard to price. A 3× long ETF that starts the day with $100 of assets and $300 of
+exposure finishes an up-1% day with $103 of assets and $303 of exposure — 2.94×, not 3× — and must **buy**
+to restore its mandate; an inverse fund must buy on the same up day for the mirror reason; both must
+**sell** on a down day. The required notional is approximately proportional to the day's return times the
+fund's leverage-weighted assets, so it is small on a quiet day and large on a big one, and it is
+concentrated into the last minutes before the 16:00 ET equity close, because that is where NAV is struck.
+The rebalancer is price-insensitive and must complete: he is the forced participant. The same day's
+direction also drags variable-annuity and risk-parity hedging programmes, which de-risk into losses and
+re-risk into gains on the same NAV clock.
 
-This is market mechanics, not a calendar anomaly and not a pattern description.
+The prediction is a **continuation** of the session's direction into the close, with magnitude scaling in
+the size of the day's move — which is why the trade is conditioned on large-move days. This is market
+mechanics, not a calendar anomaly and not a pattern description.
 
-## 3. The whole trade (what would have been frozen)
+## 2. The whole trade
 
 | | |
 |---|---|
 | **Instrument / sizing** | MNQ, **1 micro**, always |
-| **Known-at** | 15:00 ET: `M = Close(15:00) − Open(09:30)`, and `RNG` = the 09:30–15:00 RTH range |
-| **Condition** | `|M| ≥ 0.5 × median(RNG)` over the trailing 20 sessions — a large-move day, where the forced rebalance is large |
+| **Known at** | 15:00 ET, from that session's RTH bars only: `RNG` = High − Low over 09:30–15:00 inclusive; `M` = Close(15:00 bar) − Open(09:30 bar) |
+| **Condition** | `\|M\| ≥ 0.50 × median(RNG)` over the **trailing 20 RTH sessions, strictly before this one** |
 | **Direction** | `sign(M)` — continuation, never a fade |
-| **Entry** | the next bar's OPEN after 15:00 ET |
-| **Stop** | `0.50 × RNG` against entry (tens of points by construction on these days; median 46.4 pts) |
-| **Target** | `1.5 × risk` |
-| **Time exit** | 15:55 ET, same session (flat before the cash close, never held through it) |
-| **Costs** | ASSUMED $6.00 per micro round trip = 3.00 index points |
+| **Entry** | the **next bar's OPEN** after the 15:00 ET bar |
+| **Stop** | `0.50 × RNG` against entry (tens of points by construction on these days; median ≈ 46.4 pts) |
+| **Target** | `1.50 × risk` (1.5R) |
+| **Time exit** | **15:55 ET**, same session. Flat before the cash close, never held through it. No cross-session exit. |
+| **Bookkeeping** | the paper loop's own: first touch wins, stop wins a same-bar tie, time exit, session-end fallback (`bot_stack_paper_run._resolve_fill_outcome`) |
 
-Fire rate at that condition: **0.439 trades/session → 55.3 trades in 126 sessions**,
-i.e. comfortably **not SLOW** under Amendment 1. The frequency half of the design
-works. The edge half does not.
+**No look-ahead:** the trailing-20 median uses only sessions strictly earlier than the one traded; `RNG`
+and `M` come from bars at or before 15:00; the only bar read after the decision is the next bar's open,
+which is the fill price by construction.
 
-## 4. The pre-freeze budget check — the reason this was never frozen
+## 3. Costs — all four combinations, from `src/cost_model.py`
 
-`src/study_s008_intraday_cost_budget.py` on the Discovery slice (2,101 sessions;
-descriptive, no spec hashed, no screen row, no Validation or Holdout data touched);
-full numbers in `data/study_S008_cost_budget.json` and
-`research/studies/S008-cost-budget-2026-09-16.md`.
+| combination | round trip $ | round trip POINTS | net on the specified cell's +2.55 gross pt/trade |
+|---|---|---|---|
+| **MNQ market entry + exit** *(decision basis)* | $2.60 | **1.300 pt** | **+1.25 pt/trade** |
+| MNQ limit entry, market exit *(OPTIMISTIC)* | $2.10 | 1.050 pt | +1.50 pt/trade |
+| **NQ market entry + exit** | $14.90 | **0.745 pt** | **+1.81 pt/trade** |
+| NQ limit entry, market exit *(OPTIMISTIC)* | $9.90 | 0.495 pt | +2.06 pt/trade |
 
-- **The specified cell** (T = 15:00, `z ≥ 0.5`): n = 708, **gross +2.55 points per
-  trade**, t = 2.11, median half-range stop 46.4 pts. Against a 3.00-point cost that
-  is **−0.45 points net per trade** — a losing trade before a single fill is
-  simulated. Against the stated budget of ≥ 9.0 gross points it misses by 3.5×.
-- **The whole family misses.** Across a 36-cell grid of decision times
-  (10:00–15:30 ET) × move thresholds (`z` ≥ 0.0/0.5/0.8/1.0), every gross expectancy
-  lands between **−0.9 and +5.5 points**. The single best cell of 36 is +5.54 pts
-  (T = 13:30, `z ≥ 0.5`, t = 2.93) — still short of the budget, and it is the maximum
-  of a grid, which is the ex-post selection this project has now refused twice.
-- **The reversion family fails the same way, from the other side.** The RTH VWAP
-  2σ-band reversion (the honest version of `src/detect_vwap_reversion.py`, moved off
-  its 08:30 pre-market open to the 09:30 RTH open, with a real 1:1 stop and a VWAP
-  target) fires on 92.7% of sessions — 1,513 signals — at **gross +0.043R** with a
-  median risk of 17.6 points, i.e. **−1.55 points net per trade**. Its gross R edge
-  is flat across distance buckets (+0.098 / +0.038 / −0.014 / +0.012 / +0.082), so
-  the only bucket that nets positive (> 50 pts, +7.9 pts) is positive because the
-  distance is large, not because the edge is.
-- **The validated magnitude facts were used as the spec requires, and they do not
-  rescue it.** The quiet-midday fact selects days whose afternoon range is *smaller*
-  in absolute points (median 27.4 pts vs 38.2), which is the wrong direction for a
-  fixed cost. The wide-opening-range fact (hyp-000162 / M30) splits 48.3% of sessions
-  and leaves the morning-entry continuation at +3.1 / −0.8 / +0.7 / +1.1 points
-  (t = 1.05 / −0.30 / 0.27 / 0.43) — no edge to widen a stop around.
+Sources are cited in `src/cost_model.py` (IBKR micro futures page; BrokerChooser IBKR MNQ/NQ pages; CME
+contract specs). Slippage is **ASSUMED** at 1 tick per side on a market order (s.11) until B4b measures it.
 
-**Ruling (Monetization, directive s.4): NO CREDIBLE PATH at 1 micro on the ASSUMED
-cost basis. S008 goes to LEARN without a screen. It is not frozen, no screen is
-spent, and no slice of the grid is taken.**
+**Every limit-entry figure above and in the screen is an OPTIMISTIC UPPER BOUND.** A resting limit order
+does not always fill, and it fills preferentially when the market is about to trade through it (adverse
+selection). No historical screen can model a non-fill, so the limit column is a ceiling on what a limit
+entry could achieve, never an estimate of it. The decision basis is the honest and most expensive column:
+MNQ, market entry and exit.
 
-## 5. Where this should fail — its Salvage menu, had it been frozen
+**SPECIFY gate (Amendment 2):** expected edge +2.55 pt > cost 1.300 pt on the decision basis ⇒ **SCREEN**.
+No multiple of cost is applied, because no such rule exists.
 
-Recorded because it is what the Mechanism agent owes at SPECIFY, and because
-anything revisiting this mechanism inherits the list:
+## 4. Expected frequency
 
-1. Days with no meaningful move by the decision time — the rebalance notional is
-   proportional to the return and there is nothing to trade.
-2. Quiet-volatility regimes (VXN low against its trailing level) — small flows,
-   small ranges, the fixed cost dominates.
-3. Half-days and the sessions around them, where the NAV clock and the equity close
-   do not line up with the futures session.
-4. Scheduled-news days, where the 14:00 ET FOMC-class release, not the rebalance,
-   sets the afternoon direction.
-5. Reversal days, where `sign(M)` at 15:00 is already the exhausted side.
-6. **The cost side itself** — this is the condition that actually fired: a mechanism
-   can be real and still be too small to pay for a $6.00 round trip.
+Fire rate at this condition on the Discovery slice: **0.4390 trades/session → 55.3 trades in 126 sessions**
+(≈ six months), i.e. comfortably **NOT SLOW** under Amendment 1. The SLOW label is decided at SCREEN from
+the screen's own rate and recorded on the PAPER row.
 
-## 6. What would have to change for this mechanism to be worth revisiting
+## 5. Where this should fail — the Salvage menu for this candidate
 
-Not a filter. A bigger per-trade structure: a measured (not assumed) cost basis from
-B4b, a larger instrument, or a hold long enough for the forced flow to accumulate
-into tens of points. The mechanism is not refuted here. What is refuted is that
-**$6.00 a trade is affordable out of a 2–5 point intraday drift.**
+Written at SPECIFY by Mechanism, as the directive requires, and binding on any later Salvage check (s.7;
+menu conditions only, one salvage per strategy — S008 has not spent one):
+
+1. **Days with no meaningful move by 15:00** — the rebalance notional is proportional to the return, so
+   there is nothing to trade. (This is the strategy's own filter, so it is not re-split at salvage.)
+2. **Quiet-volatility regimes** (VXN low against its trailing level) — small flows, small ranges, and the
+   fixed part of the cost dominates.
+3. **Half-days and the sessions around them**, where the NAV clock and the equity close do not line up
+   with the futures session.
+4. **Scheduled-news days**, where a 14:00 ET FOMC-class release, not the rebalance, sets the afternoon
+   direction.
+5. **Reversal days**, where `sign(M)` at 15:00 is already the exhausted side and the late move is a
+   retracement.
+6. **Very wide-range days**, where `0.50 × RNG` makes the stop so large that a 1.5R target cannot be
+   reached inside 55 minutes.
+
+## 6. What would refute the mechanism
+
+A continuation edge that does not scale with `|M|` — i.e. the same gross points on small-move days as on
+large ones — would say the effect is not the rebalance flow, because the flow is proportional to the
+return by construction. A screen that is profitable only in one calendar era would say the same.
