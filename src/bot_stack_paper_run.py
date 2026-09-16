@@ -166,6 +166,13 @@ def register_strategy(key: str, module) -> None:
 import strategy_s001a_level_sweep_reversal_prior_day as _s001a  # noqa: E402
 register_strategy("s001a", _s001a)
 
+# S002 (overnight carry on compressed prior days) -- registered 2026-09-16 (9:00 pm
+# CT cycle) after a positive SCREEN (+$1,446.10 net, 364 Discovery trades). The FIRST
+# strategy in the book that holds past its entry session: its signals carry an
+# absolute market_context["exit_ts"] and are bookkept by choice 7's cross-session walk.
+import strategy_s002_overnight_carry_compressed_prior_day as _s002  # noqa: E402
+register_strategy("s002", _s002)
+
 
 def _strategy():
     return STRATEGIES[STRATEGY]

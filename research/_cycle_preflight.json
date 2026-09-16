@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-16T00:03:42.567175+00:00",
+ "ran_at": "2026-09-16T02:02:07.591196+00:00",
  "owner": "cycle",
- "note": "7:00 pm cycle",
+ "note": "9:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='7:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -33,8 +33,8 @@
    "ok": true,
    "returncode": 0,
    "tail": [
-    "No new signal today (2026-09-14 bucket=mid).",
-    "Log: 1 total signals, 1 open, 0 closed, 0 resolved today.",
+    "NEW SIGNAL: 2026-09-15 -- low-tercile vwap_dist_vs_atr, entry_close=28967.00",
+    "Log: 2 total signals, 2 open, 0 closed, 0 resolved today.",
     "Log saved to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/forward_validation/h118_forward_log.jsonl"
    ],
    "stderr_tail": []
@@ -61,8 +61,7 @@
   "queue": {
    "ok": true,
    "queue": [
-    "S001a SPECIFY",
-    "S002 SOURCE",
+    "S002 SPECIFY",
     "S003 SOURCE",
     "S004 SOURCE",
     "S005 SOURCE",
@@ -70,18 +69,30 @@
    ],
    "salvage_owed": [],
    "empty": false,
-   "note": "next candidate: S001a Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only (S001 salvage spawn) at SPECIFY"
+   "note": "next candidate: S002 Overnight-vs-intraday return split, night leg as a trade (M15 via Salvage) at SPECIFY"
   },
   "paper_book": {
    "ok": true,
-   "n_in_paper": 0,
-   "strategies": [],
+   "n_in_paper": 1,
+   "strategies": [
+    {
+     "strategy_id": "S001a",
+     "name": "Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only (S001 salvage spawn)",
+     "stage": "PAPER",
+     "trades": 0,
+     "days_elapsed": 8,
+     "trades_to_judgment": 40,
+     "weeks_to_judgment": 4.9,
+     "at_judgment_point": false,
+     "judgment_reason": null
+    }
+   ],
    "at_judgment": [],
    "plumbing": [
     "base_entry_b3_orb_placeholder",
     "execution_dummy_4x_placeholder"
    ],
-   "note": "no strategy in paper yet"
+   "note": "S001a 0 trades / 8 days (40 trades or 4.9 wk to judgment)"
   }
  },
  "failed": [],
