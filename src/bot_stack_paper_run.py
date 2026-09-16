@@ -138,6 +138,13 @@ def register_strategy(key: str, module) -> None:
     STRATEGY_MODULES[key] = module
 
 
+# S001a (Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only) --
+# registered at its FREEZE (2026-09-15, 7:00 pm CT cycle) so that a passing SCREEN
+# can put it into PAPER the same cycle with `--strategy s001a` (directive s.14.4).
+import strategy_s001a_level_sweep_reversal_prior_day as _s001a  # noqa: E402
+register_strategy("s001a", _s001a)
+
+
 def _strategy():
     return STRATEGIES[STRATEGY]
 
