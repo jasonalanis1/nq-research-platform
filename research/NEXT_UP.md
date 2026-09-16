@@ -17,8 +17,9 @@ Effective September 15th. SUPERSEDES the refocus memo below and every prior rese
 
 THE LOOP (s.2): SOURCE -> SPECIFY -> FREEZE -> SCREEN -> PAPER -> JUDGE -> KEEP (PROMOTE P1..P5, s.8) / FIX ONCE (back to
 SPECIFY, one fix per strategy ever) / KILL (-> SALVAGE check, s.7 -> new candidate at SPECIFY, or LEARN).
-  SOURCE   Discovery names a candidate + one-paragraph reason. Priority: market mechanics, market structure, Observatory,
-           Salvage queue, revamp list; published calendar anomalies LAST (0 for 4).
+  SOURCE   Discovery names a candidate + one-paragraph reason. Priority (AMENDMENT 1 puts a new preference on top):
+           INTRADAY STRATEGIES THAT TRADE MOST DAYS FIRST (so the 6-week clock works as designed), then market mechanics,
+           market structure, Observatory, Salvage queue, revamp list; published calendar anomalies LAST (0 for 4).
   SPECIFY  Mechanism + Monetization write the WHOLE trade: entry, exit, stop, sizing, costs stated. Validated magnitude
            facts (VXN -> next-session range; quiet midday -> expanded afternoon; wide open -> wider midday) size stops/size.
            Mechanism also names "where this should fail" = that candidate's Salvage menu later.
@@ -27,14 +28,31 @@ SPECIFY, one fix per strategy ever) / KILL (-> SALVAGE check, s.7 -> new candida
            Made money -> PAPER. No CI gate, no multiplicity gate, no holdout (exposure counts logged for information only).
   PAPER    B7 paper engine (src/bot_stack_paper_run.py --strategy <id>), one micro, simulated fills (slippage ASSUMED 1 tick
            until B4b). Several strategies at once is encouraged. A strategy in PAPER is the product accumulating a record.
-  JUDGE    Director, at 40 trades or 6 weeks, whichever first (s.6): KEEP = avg R > 0 after costs AND worst streak inside a
-           daily limit of three average winners; FIX ONCE = near break-even or wasteful exit/stop; KILL = lost money or
-           < 15 trades in 6 weeks. Integrity verifies the record before any KEEP stands.
+  JUDGE    Director, at 40 TRADES (s.6 as amended; see AMENDMENT 1 below): KEEP = avg R > 0 after costs AND worst streak
+           inside a daily limit of three average winners; FIX ONCE = near break-even or wasteful exit/stop; KILL = lost
+           money. NOTHING is ever judged on fewer than 40 trades. Integrity verifies the record before any KEEP stands.
   SALVAGE  (s.7, mandatory before any KILL is final) Statistical splits results by the FIXED menu: (1) VXN high/low vs
            trailing, (2) trend vs range (prior-day range contraction / own range vs trailing), (3) time of day,
            (4) scheduled-news day or not, + the Mechanism's named failure conditions. Menu only; one salvage per strategy;
            result written to LEARN either way. First two through Salvage: Level Sweep Reversal (M26) and the
            overnight-vs-intraday split (hyp-000145).
+AMENDMENT 1 (Jason, September 16th; appended and dated in the directive file, quoting him verbatim -- Tony did not author it
+and still does not modify the directive). It changes exactly three things and nothing else: (a) s.6's KILL loses the "or fewer
+than 15 trades in 6 weeks" clause -- KILL is "lost money", full stop; (b) s.2's JUDGE row and s.6's heading go from "40 trades
+or 6 weeks, whichever comes first" to "40 TRADES", with the SLOW label handling the rest; (c) s.2's SOURCE priority gains
+"intraday strategies that trade most days" as the TOP preference.
+  SLOW, precisely: at SCREEN, from the strategy's OWN screen result, rate = trades / sessions_screened; six months ~ 126
+  trading sessions; if rate * 126 < 40 the strategy is labelled SLOW the moment it enters PAPER (registry PAPER row
+  `slow: true` + `slow_projection`; src/strategy_registry.py slow_projection()/slow_ids()/in_paper_slow()).
+  A SLOW strategy keeps paper trading in the BACKGROUND indefinitely, takes NO QUEUE SLOT (Step 4 skips it and works the next
+  non-SLOW candidate), runs NO clock, and is judged WHENEVER it reaches 40 trades. Non-SLOW strategies keep the 6-week clock
+  exactly as written, minus the 15-trade kill. NOTHING is ever judged on fewer than 40 trades, SLOW or not: a strategy that
+  passes six weeks under 40 trades simply keeps trading -- no KILL, no verdict, no salvage (the six-week mark is reported
+  only). Enforced in src/paper_book.py (measure()/book()/plain_lines), src/cycle_preflight.py (paper_book_status: SLOW shown
+  distinctly, never "at judgment point" before 40 trades), src/screen_strategy.py (prints and records the projection),
+  src/ops_checks.py and src/session_report.py. Tests: tests/test_paper_book.py, tests/test_cycle_preflight.py.
+  S001a, S002 and S003 are SLOW as of September 16th -- projected 6-month trade counts 2.40 / 21.83 / 1.32 against 40
+  (screen rates 40/2101, 364/2101, 22/2101). They stay in PAPER, keep scoring, and have VACATED their queue slots.
 RECORDS: research/ledger/strategies.jsonl (append-only, production-guarded, one row per stage event; src/strategy_registry.py);
 research/ledger/revamp_list.json (s.9 ranking, src/revamp_list.py); paper record = research/forward_validation/
 bot_stack_paper_log.jsonl per `strategy` (src/paper_book.py measures it; execution_dummy + B3 rows are PLUMBING, never judged).
@@ -43,9 +61,10 @@ Frozen specs: research/infrastructure/strategy-specs/S###-*.md + src/strategy_s#
 EVERY CYCLE, IN THIS ORDER (s.3): Step 1 PREFLIGHT (`python3 src/cycle_preflight.py`, now prints the Paper Book: strategies
 in paper, trades, days, judgment point). Step 2 DATA CHECK (new bars since last cycle? if not, do NOT idle: go to Step 4 on
 historical data and say paper scoring is waiting on data; stuck > 48 h = interrupt reason 3). Step 3 ADVANCE THE PAPER BOOK
-(`TONY_PRODUCTION=1 python3 src/bot_stack_paper_run.py --strategy <id>` for every strategy in PAPER; any strategy at its
-judgment point gets a Director verdict THIS cycle; any KILL -> Salvage this cycle or next). Step 4 ADVANCE ONE CANDIDATE one
-stage (highest-priority not yet in PAPER; queue never sits empty while sources exist). Step 5 CLOSE-OUT (tests, ops_checks,
+(`TONY_PRODUCTION=1 python3 src/bot_stack_paper_run.py --strategy <id>` for every strategy in PAPER, SLOW ones included;
+any strategy at 40 trades gets a Director verdict THIS cycle; any KILL -> Salvage this cycle or next). Step 4 ADVANCE ONE
+CANDIDATE one stage (highest-priority not yet in PAPER; SLOW strategies hold no slot; queue never sits empty while sources
+exist -- next candidates sourced are INTRADAY STRATEGIES THAT TRADE MOST DAYS, Amendment 1). Step 5 CLOSE-OUT (tests, ops_checks,
 cycle_close.py, session_report.py with its PAPER BOOK section, commit + push verified, lock released). A cycle with genuinely
 nothing to do closes early and says so.
 MOVEMENT (s.3, replaces refocus 7.1): a candidate changing STAGE in the loop, a paper trade recorded, a verdict issued, or a
@@ -1485,6 +1504,30 @@ introduced. Console pushed live cleanly (write_db). Full:
 research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
+
+September 16th (interactive, Jason's amendment implemented) -- **AMENDMENT 1 to the standing directive, written by Jason,
+recorded and implemented.** Context: measured against their own screens all three strategies in paper trade far too rarely for
+a six-week clock (S001a 40 trades / 2,101 sessions, S002 364/2,101, S003 22/2,101 -> ~0.6, ~5 and ~0.3 trades in six weeks), so
+every one would have been KILLed at six weeks under s.6's 15-trade floor having proven nothing. Jason accepted the finding and
+amended the directive; Tony did not author it and still does not modify the directive. (1) The amendment is appended to
+research/infrastructure/standing-directive-2026-09-15.md VERBATIM and dated to him, after "*End of directive.*", with a plain
+statement of the three texts it changes; sections 1-14 are untouched (directive md5 now 026165e691694c18e7dccc131871b25a, the
+1-14 body byte-identical at aa496b87cc93a407229153754adb0aee). (2) SLOW implemented: rate = trades/sessions_screened at SCREEN,
+six months ~ 126 sessions, rate * 126 < 40 -> `slow: true` on the registry PAPER row with its `slow_projection`
+(src/strategy_registry.py slow_projection/is_slow_by_screen/slow_ids/in_paper_slow/in_paper_active, `--slow` on the CLI);
+background paper, no queue slot, no clock, judged at 40 trades. src/paper_book.py: MIN_TRADES_AT_6_WEEKS deleted,
+at_judgment_point is now `trades >= 40` for everyone, `slow` and `six_week_mark_passed` reported, SLOW lines marked [SLOW].
+src/cycle_preflight.py shows SLOW distinctly and never reports it at judgment point before 40 trades; src/screen_strategy.py
+prints and records the projection; ops_checks/session_report/bot_stack_paper_run text follows. Tests: 6 new/rewritten covering
+SLOW at 6 weeks with 3 trades (no verdict, keeps trading), SLOW at 40 trades (at judgment point), fast at 6 weeks with 38
+trades (no verdict), and the rate * 126 < 40 arithmetic incl. the boundary; **pytest 571 passed**. (3) S001a, S002 and S003
+marked SLOW in research/ledger/strategies.jsonl (projections 2.40 / 21.83 / 1.32 against 40) -- still PAPER, still scoring,
+queue slots vacated, so the queue is S004/S005/S006 with no paper strategy blocking Step 4. (4) SOURCE priority in
+research/CYCLE_PROMPT.md and the directive section above now puts INTRADAY STRATEGIES THAT TRADE MOST DAYS first, ahead of the
+revamp list and the other channels, calendar anomalies still last; none sourced here -- the next cycle does that with a clear
+queue. NO other rule changed (Salvage, FIX ONCE, the promotion ladder, costs, the write guard, cadence and the three interrupt
+reasons are untouched). Tree clean, origin/main == HEAD.
+
 
 September 15th, ~11:00-11:55 pm CT -- SCHEDULED 11:00 PM CYCLE, last of the day. Step 1 preflight clean (research/_cycle_preflight.json). Step 2 data: data/NQ_1min_databento_2026-09-15.csv UNCHANGED since the 9:00 pm cycle, Sept 15 STILL IN PROGRESS (last bar 13:38 ET), completeness guard refuses it; data-currency PASS, no interrupt. Step 3: s001a, s002 and the dummy each scored 0 new sessions (Sept 13 Sunday fragment, Sept 15 in progress); S002 still 2 trades / -0.1R, S001a 0 trades; nothing near a judgment point. Step 4: **S003 went SOURCE -> SPECIFY -> FREEZE -> SCREEN -> PAPER in one cycle** -- M24's month-end payment-cycle reversal, closed 2026-09-13 as hyp-000157 P1_FAIL (+0.0112, CI (-0.0005,+0.0224), MONETIZATION NOT RUN), built as a trade for the first time exactly as directive s.9 intends. Spec research/infrastructure/strategy-specs/S003-month-end-payment-cycle-reversal.md: long the 15:59 ET open of a month's final RTH session when its last-week return is <= the 33.3rd pctl of the TRAILING 24 month-ends (a Discovery-frozen tercile is not knowable at decision time), flat at the 15:59 open of the next month's final RTH session via market_context['exit_ts'], stop entry - 4.0 x ATR20 (a horizon-scaled disaster cap: sqrt(21)~4.6 daily ATRs -- the three validated magnitude facts were CONSIDERED AND NOT USED, all three are intraday/next-session and this holds ~21 sessions), no target, 1 micro, ASSUMED $6/RT. FREEZE 06390b3 (spec e96a7ab9 / module fce258fd, hashed before the screen; 23-signal audit-only smoke check disclosed in the row). SCREEN: **22 trades, +$8,339.07 net at 1 micro, 77.3% wins, +0.3956 avg R -- MADE MONEY, and the FIRST candidate that is NOT cost-fragile** (costs 1.6% of gross; avg risk 467.7 pts). 17 time exits, 5 stops (the cap fired more than the spec expected -- recorded, not adjusted). Worst trade -$1,434.60 (2020-02-28). PAPER as --strategy s003: 5 sessions scored, all no_signal (none is a month-end). Book: 3 candidates (S002 2 trades, S001a 0, S003 0) + 2 plumbing lines. Step 5: pytest **565 passed**, origin/main == HEAD. LEARN: research/KNOWLEDGE.md -- +0.396R is the SAME effect as +0.0112 denominated in a stop, not a bigger one; and the 40-trades-or-6-weeks rule cannot judge a monthly-frequency strategy (true now of S001a AND S003). NEXT CYCLE: score Sept 15 once it completes (all three candidates), then Step 4 on **S004** (H118 lineage measured against its own-drift baseline) at SOURCE; queue S004/S005/S006, no salvage owed. TOMORROW'S 8 DAYTIME CYCLES STILL NEED BOOKING -- this cycle had no scheduling tool. Session: research/sessions/2026-09-16-0400.md.
 September 15th, ~9:00-9:55 pm CT -- SCHEDULED 9:00 PM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json). Step 2 data: data/NQ_1min_databento_2026-09-15.csv unchanged since the last cycle, Sept 15 STILL IN PROGRESS (last bar 13:38 ET), so the completeness guard refuses it; data current, no interrupt. Step 3: S001a and the dummy both scored 0 new sessions (Sept 13 Sunday fragment, Sept 15 in progress); S001a still 0 trades / 8 days, 4.9 weeks to judgment; nothing near a judgment point. Step 4: **S002 went SPECIFY -> FREEZE -> SCREEN -> PAPER in one cycle**, after building the thing that blocked it. (a) CROSS-SESSION EXIT in the B7 paper loop (choice 7, commit cc13c09): a strategy declares an absolute market_context['exit_ts'], _resolve_fill_outcome walks the whole frame across the session boundary and books the time exit at the target bar's OPEN; the completeness guard now covers the EXIT session, so an overnight trade whose exit session is absent or in progress DEFERS its entry session whole -- nothing logged, nothing force-closed, session_end_fallback refused across a boundary, re-scored on a later run. B3 and the dummy are byte-identical by construction and proved so against a verbatim copy of the pre-change function (tests/test_cross_session_exit.py, 15 tests). The screen uses the same bookkeeping. (b) FREEZE 88a834b (spec 6dbba19b / module 4b0ab595, hashed before the screen; smoke check over real bars disclosed in the row -- signal count and audit only, no outcome seen). (c) SCREEN: **364 trades, +$1,446.10 net at 1 micro, 53.6% wins, +0.006R -- MADE MONEY, deeply COST-FRAGILE** (60% of gross is assumed costs). (d) PAPER as --strategy s002: 2 trades already -- +0.9519R exiting on the clock 2026-09-10 -> 09-11 09:30, and -1.0R stopped on the Sunday 18:00 reopen 2026-09-11 -> 09-13 (the weekend leg the spec names as a failure place, recorded not filtered). Book: 2 candidates (S002 2 trades, S001a 0) + 2 plumbing lines. Step 5: pytest **565 passed**, ops_checks green but for the standing awaiting-jason WARN, three commits pushed, origin/main == HEAD. NEXT CYCLE: score Sept 15 once it completes (both candidates), then Step 4 on **S003** (M24 month-end payment-cycle reversal) at SOURCE -- the queue is S003/S004/S005/S006, no salvage owed. Session: research/sessions/2026-09-16-0200.md.

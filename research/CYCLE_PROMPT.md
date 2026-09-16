@@ -15,7 +15,8 @@ unreachable, schedule the successor FIRST, then retry the device once.
 Before every git command: bash src/git_unlock.sh.
 
 THE STANDING OPERATING DIRECTIVE governs (research/infrastructure/
-standing-directive-2026-09-15.md, summarized at the top of research/NEXT_UP.md).
+standing-directive-2026-09-15.md + JASON'S AMENDMENT 1 of September 16th appended
+to the same file, summarized at the top of research/NEXT_UP.md).
 Read NEXT_UP.md first. The loop is SOURCE -> SPECIFY -> FREEZE -> SCREEN ->
 PAPER -> JUDGE -> KEEP / FIX ONCE / KILL -> SALVAGE -> LEARN. The evidence for a
 strategy is its paper record. Interrupt Jason only for the three s.10 reasons.
@@ -32,9 +33,13 @@ STEP 2 -- DATA CHECK. Is there new price data since the last cycle (ls -la
 STEP 3 -- ADVANCE THE PAPER BOOK. For every strategy at stage PAPER in
    research/ledger/strategies.jsonl (python3 src/strategy_registry.py):
    TONY_PRODUCTION=1 python3 src/bot_stack_paper_run.py --strategy <id>.
-   Then python3 src/paper_book.py. Any strategy at 40 trades or 6 weeks gets a
-   Director verdict THIS cycle (s.6: KEEP / FIX ONCE / KILL, recorded in the
-   registry with the numbers). Any KILL -> Salvage check (s.7 menu only) this
+   Then python3 src/paper_book.py. Any strategy at 40 TRADES gets a Director
+   verdict THIS cycle (s.6: KEEP / FIX ONCE / KILL, recorded in the registry with
+   the numbers). AMENDMENT 1: 40 trades is the ONLY judgment point -- nothing is
+   ever judged on fewer, SLOW or not; a strategy that passes six weeks under 40
+   trades simply keeps trading (no KILL, no verdict); the 15-trade floor is gone.
+   SLOW strategies (screen rate * 126 < 40) paper trade in the BACKGROUND, take
+   NO QUEUE SLOT, run no clock, and are judged whenever they reach 40 trades. Any KILL -> Salvage check (s.7 menu only) this
    cycle or next; result to LEARN (research/KNOWLEDGE.md) either way. The
    execution dummy and B3 rows are PLUMBING -- never judged, never a candidate.
 STEP 4 -- ADVANCE ONE CANDIDATE ONE STAGE. Highest-priority candidate not yet
@@ -46,9 +51,14 @@ STEP 4 -- ADVANCE ONE CANDIDATE ONE STAGE. Highest-priority candidate not yet
    (python3 src/screen_strategy.py <module>, Discovery slice only, one number:
    net after ASSUMED costs; > 0 -> register in bot_stack_paper_run.STRATEGIES
    and run it into PAPER today; <= 0 -> SALVAGE by the menu, spawn S###a at
-   SPECIFY if a menu condition is profitable, LEARN either way). If the queue
-   is empty, Discovery sources one (mechanics, structure, Observatory, Salvage
-   queue, revamp list research/ledger/revamp_list.json; calendar anomalies last).
+   SPECIFY if a menu condition is profitable, LEARN either way). At SCREEN also
+   record the AMENDMENT 1 label on the PAPER row: trades/sessions * 126 < 40 ->
+   slow: true (screen_strategy.py prints it; strategy_registry.slow_projection).
+   Candidates already in PAPER, SLOW ones included, never block Step 4.
+   If the queue is empty, Discovery sources one. SOURCE PRIORITY (Amendment 1):
+   **INTRADAY STRATEGIES THAT TRADE MOST DAYS FIRST** -- so the 6-week clock works
+   as designed -- then market mechanics, market structure, Observatory, Salvage
+   queue, revamp list research/ledger/revamp_list.json; calendar anomalies last.
    Never batch_screen.py. Never touch Validation/Holdout data in a screen.
 STEP 5 -- CLOSE-OUT, in order: python3 -m pytest -q; ops_checks.py;
    pipeline_sweep --write; session file research/sessions/<date>-<HHMM>.md;
