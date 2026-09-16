@@ -187,11 +187,12 @@ def main(argv=None) -> int:
     cc = res["cost_combinations"]
     print(f"  {'combination':<30}{'net $':>12}{'net R':>10}{'avg R':>9}{'gross pt/tr':>13}{'cost pt/tr':>12}{'net pt/tr':>11}")
     for row in cc["combinations"]:
-        print(f"  {row['label']:<30}{row['net_usd_total']:>12,.2f}{row['net_points_total']/1:>10.1f}"
+        print(f"  {row['label']:<30}{row['net_usd_total']:>12,.2f}{row['total_r_net']:>10.1f}"
               f"{row['avg_r_net']:>9.4f}{row['gross_points_per_trade']:>13.4f}"
               f"{row['cost_points_per_trade']:>12.3f}{row['net_points_per_trade']:>11.4f}"
               f"   {'MAKES MONEY' if row['made_money'] else 'loses'}")
-    print(f"  net R column is total net R; 'net $' is at ONE contract of that instrument.")
+    print(f"  {'':<30}{'':>12}{'(total)':>10}{'(per tr)':>9}")
+    print("  'net $' is at ONE contract of that instrument; net R is size-independent.")
     print(f"  LIMIT ROWS ARE OPTIMISTIC: {cost_model.OPTIMISTIC_NOTE}")
     print("  In POINTS the full-size NQ round trip costs about HALF the micro's -- the fixed")
     print("  commission+fee component spreads over 10x the notional. Cost wall or pattern?")
