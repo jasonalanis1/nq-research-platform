@@ -1,9 +1,29 @@
 # S002 — Overnight carry on compressed prior days (M15 via Salvage): long the 16:00 -> 09:30 leg
 
-**DRAFT spec at SPECIFY, written 2026-09-15 (7:00 pm CT cycle). NOT FROZEN: no FREEZE row
-exists for S002 in research/ledger/strategies.jsonl and no module exists yet. The FREEZE
-cycle may still amend this text (it becomes binding only at the FREEZE row, directive
-s.13). Costs ASSUMED throughout.**
+**FROZEN 2026-09-16 (9:00 pm CT cycle) with src/strategy_s002_overnight_carry_compressed_prior_day.py;
+sha256 of both in the FREEZE row of research/ledger/strategies.jsonl. Not edited after that row
+(directive s.13) -- a change is a FIX ONCE, never an edit. Costs ASSUMED throughout.**
+
+**FREEZE-CYCLE AMENDMENTS (the last text this spec ever takes; the DRAFT header of the
+7:00 pm SPECIFY cycle is replaced by the four lines below, nothing in the trade changed):**
+
+1. **The plumbing prerequisite in s.3 is DONE.** The B7 paper loop now carries a position
+   across the session boundary: a strategy declares an absolute `market_context["exit_ts"]`
+   and `_resolve_fill_outcome` walks the whole frame to it (choice 7 in
+   src/bot_stack_paper_run.py, commit cc13c09, 15 tests). The same-session path is proved
+   byte-identical against a verbatim copy of the pre-change function, so B3, the execution
+   dummy and S001a are untouched. An overnight trade whose EXIT session is not complete is
+   DEFERRED whole -- nothing logged, nothing force-closed, no fabricated exit.
+2. **The condition is read on the ENTRY session.** `prior_day_narrow` for session D is by
+   construction the frozen hyp-000048 NARROW test applied to D-1's own RTH range; the module
+   evaluates that identical number on D-1 (the entry session) so the signal never needs a bar
+   that has not printed. Same definition (`build_daily_frame`, `RANGE_NARROW_PCTL`,
+   `LOOKBACK_DAYS`, shifted threshold), same cell, no lookahead.
+3. **ATR14 is stated exactly:** daily RTH true range (max of the session range and the two
+   gaps against the previous reference close), 14-session rolling mean, lagged one session.
+4. **"No target" is implemented as an unreachable sentinel** 1,000,000 points above the
+   entry, so the shared bookkeeping can only exit on the stop or the clock. `risk_multiple`
+   on an S002 signal is therefore meaningless and is recorded as such.
 
 ## 1. Lineage (Salvage, directive s.7)
 
