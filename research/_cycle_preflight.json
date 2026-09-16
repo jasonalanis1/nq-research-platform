@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-16T20:02:36.289605+00:00",
+ "ran_at": "2026-09-16T22:02:12.811236+00:00",
  "owner": "cycle",
- "note": "3:00 pm cycle",
+ "note": "5:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='3:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='5:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -61,13 +61,14 @@
   "queue": {
    "ok": true,
    "queue": [
+    "S009a SOURCE",
     "S004 SOURCE",
     "S005 SOURCE",
     "S006 SOURCE"
    ],
    "salvage_owed": [],
    "empty": false,
-   "note": "next candidate: S004 H118 VWAP-distance drift lineage, measured against the correct baseline at SOURCE"
+   "note": "next candidate: S009a S009a afternoon VWAP-completion continuation, scheduled-news days excluded at SOURCE"
   },
   "paper_book": {
    "ok": true,

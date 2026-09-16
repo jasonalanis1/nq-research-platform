@@ -1529,7 +1529,32 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
-September 16th, ~3:00-3:45 pm CT -- SCHEDULED 3:00 PM CYCLE, A SOURCING CYCLE. Step 1 preflight clean
+September 16th, ~5:00-5:45 pm CT -- SCHEDULED 5:00 PM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
+queue S009a/S004/S005/S006 at SOURCE, paper book 5 strategies (4 SLOW), none at a judgment point. Step 2 data UNCHANGED
+since the 3:00 pm cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET); the 7 am CT cron tops up
+once a day. Step 3: s001, s001a, s002, s003, s008 and the dummy each returned 0 new rows across 0 sessions, log unchanged
+at 60; NOTHING SCORED. Book at corrected costs (src/paper_book.py): S001 1 trade -0.1R, S002 2 trades -0.1R, S008 2 trades
+-0.2R, S001a and S003 0 trades; all COST-FRAGILE, all on samples that decide nothing. Step 4: S009a was NOT advanced --
+its one added rule needs a FOMC/CPI/NFP calendar and the project's only sourced lists end 2021-09-22 (FOMC) and 2023-12-12
+(CPI/NFP), which covers the Discovery screen but NOT the 2026 sessions the paper loop scores; fail-open would make S009a's
+paper record S009's under another name, fail-closed would put a strategy in PAPER that can never trade, so it KEEPS ITS
+QUEUE POSITION at SOURCE with the blocker and its remedy (re-source the lists from federalreserve.gov / bls.gov, never from
+memory) on its registry row. Instead a NON-SLOW intraday candidate was sourced, because S008 is the only strategy on a live
+six-week clock: S010 thin-participation afternoon completion continuation -- same forced counterparty as S008/S009 but
+selected on the DENOMINATOR (09:30-14:00 volume below its trailing-20 median => an unchanged completion residual pushed
+through a thinner book). SPECIFY -> FREEZE (own commit 65f105f, spec+module sha256 in the registry) -> SCREEN (Discovery
+only, 801 trades / 2101 sessions): LOST MONEY IN ALL FOUR COMBINATIONS -- MNQ market -$1,774.70 (-1.1078 pt/trade), MNQ
+limit OPTIMISTIC -$1,374.20, NQ market -$8,855.93, NQ limit OPTIMISTIC -$4,850.93, gross +0.1922 pt/trade, win 0.4707,
+avg -0.0457R. Rate 0.3812/session x 126 = 48.0 -> NOT SLOW, exactly as projected pre-freeze. The pre-freeze falsifier
+fired as written (stated "fails only if p <= 0.4201"; implied p = 0.4030). SALVAGE (menu only, now spent) REFUSED
+condition 2's TREND side (+$1,399.83) as ex-post on the S009 precedent, recorded that condition 4 lost on BOTH sides
+(unlike S009), and TOOK condition 1 LOW VXN (n=570, +$484.42, +0.425 net pt/trade, avg -0.032R -- dollar-positive,
+R-negative, said plainly), which is the COMPLEMENT of the spec's own pre-named failure condition. S010 KILLED -> LEARN
+(research/KNOWLEDGE.md); S010a spawned at SOURCE (projected 34.2 six-month trades -> expected SLOW), with a SPECIFY-stage
+instruction to check data/VXNCLS_MAX.csv coverage (ends 2026-09-02) and FAIL CLOSED on an unclassified session. Step 5:
+pytest 619 passed, ops_checks clean after the push, origin/main == HEAD. Full: research/sessions/2026-09-16-2200.md.
+
+Previous: September 16th, ~3:00-3:45 pm CT -- SCHEDULED 3:00 PM CYCLE, A SOURCING CYCLE. Step 1 preflight clean
 (research/_cycle_preflight.json): queue S004/S005/S006 at SOURCE, paper book 5 strategies (4 SLOW), none at a judgment
 point. Step 2 data UNCHANGED since the 1:00 pm cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16
 00:50 ET); the 7 am CT cron tops up once a day, nothing due until tomorrow. Step 3: s001, s001a, s002, s003, s008 and

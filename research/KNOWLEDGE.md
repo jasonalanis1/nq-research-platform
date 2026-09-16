@@ -639,3 +639,66 @@ print and the afternoon is news, not execution schedules, with FOMC's 14:00 stat
 the holding window. n=518, +$333.28 at 1 micro. That spawns **S009a**, which enters at SPECIFY and
 will be SLOW (0.2465/session → 31.1 projected six-month trades). S009 stays KILLED and its one
 salvage is spent.
+
+## 2026-09-16 (5:00 pm CT scheduled cycle) — S010: the falsifier fired again, and a queue item was stopped by its own calendar
+
+**Two things were learned, and neither is about the cost model.**
+
+### 1. A candidate can be blocked by the data its rule needs, and that is found at SPECIFY or not at all
+
+S009a was next in the queue and was **not advanced**, for a reason discovered while writing its spec.
+S009a's single added rule is "the session is not a scheduled FOMC / CPI / NFP release day". The
+project's only sourced release calendar is `src/study_fomc_volatility.py`'s `FOMC_SET`
+(2015-01-28 → 2021-09-22) and `src/study_economic_calendar.py`'s `CPI_SET` / `NFP_SET`
+(2015-01-16 → 2023-12-12). The **Discovery slice is covered**, so the screen would have been sound —
+but **the paper loop scores 2026 sessions**, which are past the end of every one of those lists.
+That leaves two implementations and both are unacceptable:
+
+- **fail-open** (a date not in the list is QUIET) makes every 2026 session quiet, so S009a's paper
+  record would be **S009's record under a different name** — precisely the "strategy quietly swapped
+  for a tweaked one" the Integrity Gate exists to catch (directive s.4, s.13);
+- **fail-closed** (no coverage, no trade) puts a strategy into PAPER that can **never record a trade**.
+
+Neither is a record, so S009a stays at SOURCE with its queue position and the blocker written on its
+registry row. The remedy is a **data task, not a research one**: extend the three lists to the paper
+dates with the sourcing discipline they were compiled under (federalreserve.gov press-release
+archive; bls.gov year-by-year Schedule of Releases, cross-validated on day-of-week) — **never from
+memory**. The generalisable rule: **a strategy's rule needs its input to exist over the window the
+strategy will be JUDGED on, not just the window it is screened on, and that is a SPECIFY-stage
+question.** S010a's spawn row carries the same check against `data/VXNCLS_MAX.csv` (ends 2026-09-02,
+days stale rather than years, and it must still fail closed).
+
+### 2. S010 — the second pre-freeze falsifier stated in the screen's own units, and it fired
+
+S010 (thin-participation afternoon completion continuation) was sourced instead, under Amendment 1's
+top preference: **NOT SLOW** (48.0 projected six-month trades), because S008 is the only strategy on
+a live six-week clock. Mechanism: the same benchmark- and close-referenced execution S008 and S009
+name, but selected on the **denominator** — market impact scales with size *relative to available
+volume*, so a session whose 09:30–14:00 volume is below its trailing-20 median has to push an
+unchanged completion residual through a thinner book.
+
+**It lost in all four cost combinations** (MNQ market −$1,774.70 / −1.1078 pt per trade; MNQ limit
+OPTIMISTIC −$1,374.20; NQ market −$8,855.93 / −0.5528 pt; NQ limit OPTIMISTIC −$4,850.93 / −0.3028
+pt, on 801 Discovery trades). Gross was **+0.1922 pt/trade — the right sign, a seventh of the size
+needed.** Because even the cheapest and most optimistic combination is 0.30 pt short, the answer to
+Jason's "cost wall or pattern?" here is unambiguously **the pattern**, with no contract to hide in.
+
+The spec's pre-freeze gate said, in the units the screen reports: **the gate fails only if p ≤ 0.4201**,
+p being the share of trades reaching 1.5R first. The screen's implied p is
+`(0.1922 / 25.875 + 1) / 2.5 = 0.4030` — inside the stated failure region, three tenths of a point
+above the 0.400 breakeven. That is the **second** time (after S009) a specify-stage number has been
+precise enough to be wrong by a stated amount instead of vindicated afterwards. The practice is
+holding: **state the gate in the units the screen will report.**
+
+**The salvage (s.7, menu only, now spent) refused the biggest number on the page and took a smaller
+one.** Condition 2's TREND side (+$1,399.83, +0.154R, n=158) was **refused as ex-post**, on the same
+reasoning that refused S009's: the day's *full* RTH range is the selecting variable, the trade is
+decided at 14:00, and the 14:00–16:00 bars the outcome lives in are inside that variable. Condition 4
+is worth recording for the opposite reason to S009: **both sides lost** (NEWS −$19.75, QUIET
+−$1,754.97), so the news split is not a general-purpose rescue. Taken: **condition 1, LOW VXN**
+(n=570, +$484.42, +0.425 net pt/trade, avg **−0.032R**) — a menu condition, evaluable before the
+session opens, and the **complement of the spec's own pre-named failure condition** (high volatility;
+HIGH duly lost −$2,259.14 at −0.079R). It **confirms** a pre-named prediction rather than inverting
+one, which is exactly the distinction that made S009's low-VXN cell a refusal and makes this one a
+spawn. It is dollar-positive and R-negative, and that is said plainly rather than smoothed over.
+**→ S010a at SOURCE.**
