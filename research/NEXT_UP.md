@@ -8,8 +8,10 @@ docs/BACKLOG.md. Do NOT read BACKLOG.md unless choosing a genuinely new
 research direction. Jason also works this project ad hoc — if "Last updated
 by" says an interactive session, that work is done; continue, don't redo.
 
-## STANDING OPERATING DIRECTIVE (Jason, September 15th) — the standing process; read research/infrastructure/standing-directive-2026-09-15.md first
-Verbatim copy (md5 aa496b87cc93a407229153754adb0aee, never edited by Tony): research/infrastructure/standing-directive-2026-09-15.md.
+## STANDING OPERATING DIRECTIVE (Jason, September 15th, + AMENDMENT 1 September 16th) — the standing process; read research/infrastructure/standing-directive-2026-09-15.md first
+Verbatim copy (md5 026165e691694c18e7dccc131871b25a, never edited by Tony): research/infrastructure/standing-directive-2026-09-15.md. Sections 1-14 are byte-identical to the
+September 15th text (md5 of that body alone: aa496b87cc93a407229153754adb0aee); the only addition is JASON'S OWN AMENDMENT 1, appended and dated September 16th, quoting him
+verbatim. Tony did not author it and still does not modify the directive.
 Effective September 15th. SUPERSEDES the refocus memo below and every prior research-mode rule where they conflict
 (directive s.12). The evidence for a strategy is its PAPER TRADING RECORD, not a CI and not a holdout slot.
 

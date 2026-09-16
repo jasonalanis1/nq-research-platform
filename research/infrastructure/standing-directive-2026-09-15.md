@@ -223,3 +223,59 @@ Short-horizon strategies are the most sensitive to this. A strategy whose averag
 5. Report the state of the queue and the paper book in that cycle's session report. From then on, Section 3 governs every cycle.
 
 *End of directive.*
+
+---
+
+## Amendment 1 — September 16th, 2026 (Jason)
+
+**Jason wrote this amendment. Tony did not author it and did not propose it; Tony still does not modify this
+directive (s.10, s.13). It is recorded here verbatim, dated to him, and appended — the body of sections 1–14
+above stands exactly as written on September 15th, with this amendment governing where the two conflict.**
+
+Why he issued it: measured against their own screen results, every strategy then in paper trades far too rarely
+for a six-week clock — S001a 40 trades over 2,101 Discovery sessions (~0.6 trades in six weeks), S002 364/2,101
+(~5), S003 22/2,101 (~0.3). All three would have been KILLed at six weeks under s.6's 15-trade floor having
+proven nothing. Jason accepted the finding and ruled:
+
+> Good catch, the clock was wrong. Do this: (1) Prioritize sourcing intraday strategies that trade most days, so
+> the 6-week clock works as designed. (2) Drop the "under 15 trades in 6 weeks = kill" rule. At the historical
+> screen, any strategy that can't reach 40 paper trades within about 6 months is labeled SLOW. SLOW strategies
+> keep paper trading in the background, don't take a queue slot, and are judged whenever they reach 40 trades.
+> S001a, S002, and S003 become SLOW now. (3) Don't judge anything on fewer than 40 trades. Record this amendment
+> in the directive's file as dated by me; no other rule changes.
+
+### Exactly what text this changes
+
+1. **Section 6, the KILL criterion** loses the clause "**or fewer than 15 trades in 6 weeks** (a strategy that
+   barely trades cannot be judged and is not worth the paper slot)". KILL is now: lost money. Nothing else.
+2. **Section 2's JUDGE row** and **Section 6's heading** change from "**40 trades or 6 weeks, whichever comes
+   first**" to "**40 trades**". The SLOW label below handles the strategies the six-week clock could never fit.
+3. **Section 2's SOURCE priority order** gains a new top preference: **intraday strategies that trade most days**,
+   ahead of market mechanics, market structure, the Observatory, the Salvage queue and the revamp list.
+   Published calendar anomalies remain last.
+
+Nothing else in this directive changes. Section 7's Salvage check, FIX ONCE, the Section 8 promotion ladder, the
+cost and slippage rules (s.11), the production write guard, the cadence and the three interrupt reasons (s.10)
+are untouched.
+
+### The SLOW rule, stated precisely
+
+- **When it is decided.** At **SCREEN** time, from the strategy's own screen result:
+  `rate = trades / sessions_screened` (trades per session). Six months ≈ **126 trading sessions**. If
+  **`rate × 126 < 40`**, the strategy is labelled **SLOW** at the moment it enters PAPER. The label and the
+  arithmetic that produced it are recorded on the registry's PAPER row (`slow: true`, with the rate and the
+  projection in `slow_projection`).
+- **What SLOW means.** A SLOW strategy keeps paper trading **in the background, indefinitely**. It does **not**
+  occupy a queue slot: the Director's Step 4 ("advance one candidate one stage") skips it and works the next
+  non-SLOW candidate. It is judged **whenever it reaches 40 trades**, however long that takes. No clock runs
+  against it, and no verdict is due before then.
+- **Non-SLOW strategies** keep the six-week clock exactly as Section 3 and Section 6 wrote it, minus the
+  15-trade kill.
+- **Nothing is ever judged on fewer than 40 trades**, SLOW or not. A strategy that reaches six weeks with fewer
+  than 40 trades simply keeps trading: no KILL, no verdict, no salvage. The six-week mark is reported; it is not
+  a judgment point on its own.
+
+**S001a, S002 and S003 are SLOW as of today** (projected six-month trade counts 2.4, 21.8 and 1.3 against the
+40 required). They stay in PAPER, keep scoring, and vacate their queue slots.
+
+*End of Amendment 1.*
