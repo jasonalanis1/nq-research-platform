@@ -181,13 +181,13 @@ register_strategy("s002", _s002)
 import strategy_s003_month_end_payment_cycle_reversal as _s003  # noqa: E402
 register_strategy("s003", _s003)
 
-# S007 (opening-range break continuation, opening-range-scaled stop) -- the first
-# candidate sourced under Jason's Amendment 1 preference for INTRADAY STRATEGIES
-# THAT TRADE MOST DAYS. Registered at its FREEZE (2026-09-16, 9:00 am CT cycle) so
-# that a passing SCREEN can put it into PAPER the same cycle (directive s.14.4).
-# Same-session only: 15:55 ET time exit, no cross-session exit_ts.
-import strategy_s007_opening_range_break_continuation as _s007  # noqa: E402
-register_strategy("s007", _s007)
+# S007 (opening-range break continuation) was registered here at its FREEZE
+# (2026-09-16, 9:00 am CT cycle) so a passing SCREEN could put it into PAPER the
+# same cycle. Its SCREEN came back NEGATIVE (-$8,623.67 net over 1,525 Discovery
+# trades) and the Salvage check found no tradeable condition, so it was KILLED at
+# SCREEN and NEVER ENTERS PAPER. The registration is removed rather than left
+# dormant, so the paper book cannot accidentally score a killed strategy. The
+# module and spec stay frozen on disk as the record (directive s.13).
 
 
 def _strategy():

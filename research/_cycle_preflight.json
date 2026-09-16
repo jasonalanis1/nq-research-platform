@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-16T04:02:47.426103+00:00",
+ "ran_at": "2026-09-16T14:03:01.460736+00:00",
  "owner": "cycle",
- "note": "11:00 pm cycle",
+ "note": "9:00 am cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 am cycle'"
    ],
    "stderr_tail": []
   },
@@ -33,7 +33,7 @@
    "ok": true,
    "returncode": 0,
    "tail": [
-    "No new signal today (2026-09-15 bucket=low).",
+    "No new signal today (2026-09-16 bucket=nan).",
     "Log: 2 total signals, 2 open, 0 closed, 0 resolved today.",
     "Log saved to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/forward_validation/h118_forward_log.jsonl"
    ],
@@ -61,18 +61,23 @@
   "queue": {
    "ok": true,
    "queue": [
-    "S003 SOURCE",
     "S004 SOURCE",
     "S005 SOURCE",
     "S006 SOURCE"
    ],
    "salvage_owed": [],
    "empty": false,
-   "note": "next candidate: S003 Month-end payment-cycle reversal, NQ (M24) as a full strategy at SOURCE"
+   "note": "next candidate: S004 H118 VWAP-distance drift lineage, measured against the correct baseline at SOURCE"
   },
   "paper_book": {
    "ok": true,
-   "n_in_paper": 2,
+   "n_in_paper": 3,
+   "n_slow": 3,
+   "slow": [
+    "S002",
+    "S003",
+    "S001a"
+   ],
    "strategies": [
     {
      "strategy_id": "S002",
@@ -81,8 +86,23 @@
      "trades": 2,
      "days_elapsed": 8,
      "trades_to_judgment": 38,
-     "weeks_to_judgment": 4.9,
+     "weeks_to_judgment": null,
      "at_judgment_point": false,
+     "slow": true,
+     "six_week_mark_passed": false,
+     "judgment_reason": null
+    },
+    {
+     "strategy_id": "S003",
+     "name": "Month-end payment-cycle reversal, NQ (M24) as a full strategy",
+     "stage": "PAPER",
+     "trades": 0,
+     "days_elapsed": 8,
+     "trades_to_judgment": 40,
+     "weeks_to_judgment": null,
+     "at_judgment_point": false,
+     "slow": true,
+     "six_week_mark_passed": false,
      "judgment_reason": null
     },
     {
@@ -92,8 +112,10 @@
      "trades": 0,
      "days_elapsed": 8,
      "trades_to_judgment": 40,
-     "weeks_to_judgment": 4.9,
+     "weeks_to_judgment": null,
      "at_judgment_point": false,
+     "slow": true,
+     "six_week_mark_passed": false,
      "judgment_reason": null
     }
    ],
@@ -102,7 +124,7 @@
     "base_entry_b3_orb_placeholder",
     "execution_dummy_4x_placeholder"
    ],
-   "note": "S002 2 trades / 8 days (38 trades or 4.9 wk to judgment); S001a 0 trades / 8 days (40 trades or 4.9 wk to judgment)"
+   "note": "S002 2 trades / 8 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40)"
   }
  },
  "failed": [],

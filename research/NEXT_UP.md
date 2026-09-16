@@ -1505,6 +1505,37 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 16th, ~9:00-9:55 am CT -- SCHEDULED 9:00 AM CYCLE, the FIRST ordinary cycle under Jason's Amendment 1. Step 1
+preflight clean (research/_cycle_preflight.json): queue S004/S005/S006 at SOURCE, paper book 3 strategies ALL SLOW, none at
+a judgment point. Step 2 data: data/NQ_1min_databento_2026-09-16.csv is NEW (the 7 am CT top-up ran, last bar 2026-09-16
+00:50 ET), so SEPT 15 IS COMPLETE AND SCORABLE for the first time; Sept 16 is an overnight fragment and is skipped;
+data-currency PASS, 0 sessions behind, no interrupt. Step 3: s001a, s002, s003 and the dummy each scored the one new
+complete session, 2026-09-15 -- NO SIGNAL for all three candidates, 4 dummy plumbing fills (+$160 gross). Paper book
+unchanged in substance: S002 2 trades / 8 days / -0.03R / -$59 at 1 micro (cost-fragile), S003 0 trades, S001a 0 trades,
+all three [SLOW], background, no clock, no verdict due (nothing is judged under 40 trades). Step 4: S004-S006 are all
+low-frequency or sizing-input work, so under Amendment 1's new TOP sourcing preference a genuinely INTRADAY candidate was
+sourced ahead of them and taken SOURCE -> SPECIFY -> FREEZE -> SCREEN in one cycle. **S007, opening-range break
+continuation with an opening-range-SCALED stop** (spec research/infrastructure/strategy-specs/S007-opening-range-break-continuation.md,
+module src/strategy_s007_opening_range_break_continuation.py, frozen in its own commit 072f2dd BEFORE any data). Mechanism:
+the liquidity providers who fade the opening auction hold inventory built inside the opening range; a decisive close beyond
+an extreme puts them underwater and their covering is mechanical and in the direction of the break -- with the stop scaled
+to the opening range and the 1.5R target both taken from the validated magnitude fact hyp-000162 / M30, not from B3's
+unconditioned placeholder. SCREEN (Discovery only, 2,101 sessions): **1,525 trades, net -$8,623.67 at 1 micro, 39.6% wins,
+avg -0.2459R; gross +$526.33 against $9,150.00 of ASSUMED costs.** SLOW projection 0.7258/session * 126 = **91.5 trades in
+six months -> NOT SLOW** -- the first candidate in the book whose clock can actually run, so the Amendment 1 preference
+worked on the first try even though the strategy did not. It died on cost: +$0.35 gross per trade against a $6.00 round
+trip. Net <= 0 -> SALVAGE, never PAPER, deregistered from bot_stack_paper_run.STRATEGIES. SALVAGE (menu only, one spent):
+menus 1 and 4 and the direction split lose on both sides; menu 2's day's-own-range TREND side is +$6,469.93 / +0.178R but
+that label is EX-POST (same ruling S001's salvage made), so the KNOWABLE half of the same condition -- prior-day range vs
+its trailing-20 average -- was split as well and BOTH sides lose, which is direct evidence that range expansion is not
+forecastable from the prior session for this trade; menu 3's AFTERNOON side is +$52.28 on -0.072R, dollars-positive on a
+losing expectation, refused. **No condition taken, nothing spawned, S007 stays KILLED**, written to LEARN
+(research/KNOWLEDGE.md) and the registry (SOURCE/SPECIFY/FREEZE/SCREEN/KILL/SALVAGE/LEARN). Write-up
+research/studies/S007-screen-and-salvage-2026-09-16.md. Step 5: pytest **571 passed**, ops_checks clean bar the pre-push
+git-sync and the standing awaiting-jason WARN, session research/sessions/2026-09-16-1400.md. Queue back to S004/S005/S006;
+next sourcing should ask for the PER-TRADE EDGE first and the fire rate second. Tree clean, origin/main == HEAD.
+
+
 September 16th (interactive, Jason's amendment implemented) -- **AMENDMENT 1 to the standing directive, written by Jason,
 recorded and implemented.** Context: measured against their own screens all three strategies in paper trade far too rarely for
 a six-week clock (S001a 40 trades / 2,101 sessions, S002 364/2,101, S003 22/2,101 -> ~0.6, ~5 and ~0.3 trades in six weeks), so

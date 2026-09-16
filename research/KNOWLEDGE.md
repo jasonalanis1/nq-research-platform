@@ -103,6 +103,71 @@ Sourced Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ, li
 
 - 2026-09-14 (11:00 am cycle): A HIGH PLACEBO SCORE IS A REASON TO RUN THE RESIDUALISED TEST, NOT A VERDICT ON ITS OWN. The mechanical suite said yesterday's opening range does 74% of hyp-000162's work, which reads as redundancy. The Director test held yesterday's value FIXED and found 87.2% of the effect still there. Both numbers are correct and they are not in conflict: a lagged predictor and a current one can share a persistent driver without being substitutes. Read alone the placebo number would have killed a genuinely new candidate; read alone the separability number would have missed that the underlying variable persists strongly enough to matter for sizing. The suite should KEEP flagging high placebo scores -- the flag did its job by forcing the analysis -- but the DISPOSITION belongs to the stage that can hold the suspect fixed, not to the flag. This is the counterpart to the same morning's lesson that a structural check needs its own base rate: a check can be correct, informative, and still not be a verdict.
 
+## 2026-09-16 (9:00 am CT scheduled cycle) — S007, the first Amendment 1 intraday candidate: KILLED at SCREEN, salvage spent, nothing spawned
+
+**The sourcing preference worked. The strategy did not, and it failed for the one
+reason a daily-firing strategy fails.**
+
+S007 (opening-range break continuation, opening-range-scaled stop) was the first
+candidate sourced under Jason's Amendment 1 preference for intraday strategies that
+trade most days. It took the one event this project already knew fires almost every
+session — the break of the 09:30–10:00 ET opening range, which `src/base_entry_b3.py`
+fires on 74.7% of sessions as *plumbing with no claimed edge* — and put a real trade
+around it: a 0.10 × width decisiveness requirement, a stop scaled to the opening range
+(0.50 × width) from the project's own validated magnitude fact hyp-000162 / M30 rather
+than B3's unconditioned far-side stop, a 1.5R target justified by that fact's symmetric
+excursion result, a 10:00–13:00 ET window covering the midday session the fact
+describes, and a mechanism paragraph naming the counterparty: the short-term liquidity
+provider who faded the open, whose inventory is underwater on a decisive break and is
+covered mechanically in the direction of the break.
+
+**Screen (Discovery, 2,101 sessions): 1,525 trades, net -$8,623.67 at 1 micro, 39.6%
+wins, avg -0.2459R. Rate 0.7258/session → 91.5 trades in six months, NOT SLOW.**
+
+1. **THE FREQUENCY PREFERENCE IS DOING ITS JOB — ON THE FIRST TRY.** Every other
+   strategy in the book projects 1.3 to 21.8 trades in six months against the 40 the
+   verdict needs. S007 projects 91.5. Amendment 1 asked for a candidate whose clock can
+   actually run and the first attempt under it produced one. That is worth separating
+   from the result, because the result was bad.
+2. **FREQUENCY AND EDGE TRADE AGAINST EACH OTHER, AND COSTS ARE WHERE THE TRADE IS
+   SETTLED.** Gross was **+$526.33** — positive. Assumed costs were **$9,150.00**. The
+   gross edge is **+$0.35 per trade** against a **$6.00** assumed round trip:
+   seventeen times the edge. A strategy that fires most days must clear roughly **0.10R
+   of cost every single day**, and this is now the project's reference number for what
+   an intraday candidate has to beat before it is worth specifying. The cost bar is not
+   a detail that gets applied at the end; for a daily-firing trade it *is* the bar.
+   Sourcing under the new preference should ask for the per-trade edge first and the
+   fire rate second.
+3. **AN EX-POST SALVAGE CONDITION IS A TAUTOLOGY, AND THE KNOWABLE HALF IS THE TEST.**
+   The salvage menu's condition 2 came back strongly positive on TREND days (n=658,
+   +$6,469.93, +0.178R, 54.9% wins) — but that label is the day's *own* range, not
+   known at the 10:00–13:00 ET entry. Spawning on it would have meant "this breakout
+   strategy works on days that broke out." S001's salvage made this identical ruling on
+   this identical condition, so the precedent already existed and was followed. What is
+   new here is the *second step*: the knowable half of the same menu condition —
+   prior-day range against its own trailing-20 average, known before the open — was
+   split as well, and **both sides lose** (PRIOR_EXPANDED -$5,043.69 / -0.266R;
+   PRIOR_CONTRACTED -$3,345.74 / -0.221R). That converts "we refused to use an ex-post
+   label" into a finding: **range expansion is not forecastable from the prior session
+   for this trade.** When a salvage condition is ex-post, split its knowable half rather
+   than only declining the ex-post one — the refusal then produces knowledge instead of
+   just withholding a spawn.
+4. **DOLLARS-POSITIVE ON NEGATIVE R IS NOT A CONDITION.** The AFTERNOON side was
+   +$52.28 across 55 trades at -0.072R. S001's pre-09:30 side was +$24 at -0.300R and
+   was refused. Same shape, same answer. A handful of dollars on a losing per-trade
+   expectation is noise wearing a filter's clothes.
+
+Menu 1 (VXN), menu 4 (news) and the spec-named direction split lose on both sides;
+the spec-named narrow-opening-range and gap-open conditions are subsumed by menus 1
+and 2. **No condition taken, one salvage spent, nothing spawned, S007 stays KILLED.**
+The mechanism is not refuted — what is refuted is that it is worth $6.00 a day.
+Anything revisiting it has to start from a larger per-trade edge, because no knowable
+filter in the menu found one.
+
+Detail: `research/studies/S007-screen-and-salvage-2026-09-16.md`, `data/screen_S007.json`,
+`data/salvage_S007_2026-09-16.json`, registry rows SOURCE/SPECIFY/FREEZE/SCREEN/KILL/
+SALVAGE/LEARN in `research/ledger/strategies.jsonl`.
+
 ## 2026-09-15 (11:00 pm CT scheduled cycle) — S003 (M24 month-end reversal) SPECIFY -> FREEZE -> SCREEN -> PAPER
 
 A closed statistical effect can still be a profitable trade, and this is the first
