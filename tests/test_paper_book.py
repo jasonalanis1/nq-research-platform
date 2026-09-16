@@ -15,18 +15,21 @@ def _trade(day, strategy, r, risk=20.0, qty=1):
             "bookkeeping": {"risk_points": risk, "r_multiple": r, "exit_reason": "target" if r > 0 else "stop"}}
 
 
-def test_assumed_cost_basis_is_the_repo_constants_on_a_micro():
-    # $2.50/side commission + 1 tick/side slippage on a $2/pt micro = $6.00 = 3.0 pts
-    assert pb.ASSUMED_COST_USD_PER_MICRO_RT == 6.0
-    assert pb.ASSUMED_COST_PTS_RT == 3.0
+def test_assumed_cost_basis_is_the_corrected_micro_round_trip():
+    # CORRECTED (Jason, September 16th 2026): the old basis charged a full-size NQ
+    # $2.50/side commission to a MICRO. MNQ = $0.25 commission + $0.55 fees +
+    # 1 tick ($0.50) slippage, per side, at market = $2.60 = 1.30 pts.
+    import cost_model as cm
+    assert pb.ASSUMED_COST_USD_PER_MICRO_RT == 2.60 == cm.DEFAULT_USD_PER_ROUND_TRIP
+    assert pb.ASSUMED_COST_PTS_RT == 1.30
     assert pb.SLIPPAGE_BASIS == "ASSUMED"
 
 
 def test_trades_are_net_of_assumed_costs_and_per_micro():
     rows = [_trade("2026-09-08", "s1", 1.0, risk=20.0, qty=2)]      # +$80 gross for 2 micros
     t = pb.trades_for(rows, "s1")
-    assert len(t) == 1 and t[0]["usd_gross_1"] == 40.0 and t[0]["usd_net_1"] == 34.0
-    assert abs(t[0]["r_net"] - 0.85) < 1e-9
+    assert len(t) == 1 and t[0]["usd_gross_1"] == 40.0 and t[0]["usd_net_1"] == 37.40
+    assert abs(t[0]["r_net"] - 0.935) < 1e-9
 
 
 def test_measure_every_s5_number():
@@ -36,12 +39,12 @@ def test_measure_every_s5_number():
     assert m["trades"] == 5 and m["days_elapsed"] == 14
     assert m["trades_to_judgment"] == 35 and m["weeks_to_judgment"] == 4.0 and not m["at_judgment_point"]
     assert m["win_rate"] == 0.4
-    # net R: (0.85 -1.15 -1.15 +1.2 -1.15)/5
-    assert abs(m["avg_r"] - (0.85 - 1.15 - 1.15 + 1.2 - 1.15) / 5) < 1e-6
+    # net R at the corrected $2.60 cost on a 20-pt ($40) risk = 0.065R of cost:
+    assert abs(m["avg_r"] - (0.935 - 1.065 - 1.065 + 1.285 - 1.065) / 5) < 1e-6
     assert m["usd_net"]["5"] == 5 * m["usd_net"]["1"] and m["usd_net"]["10"] == 10 * m["usd_net"]["1"]
-    assert m["worst_losing_streak"]["trades"] == 2 and m["worst_losing_streak"]["usd_1"] == -92.0
+    assert m["worst_losing_streak"]["trades"] == 2 and m["worst_losing_streak"]["usd_1"] == -85.20
     sv = m["survivable_daily_limit"]
-    assert sv["daily_limit_usd_1"] == round(3 * (34.0 + 48.0) / 2, 2) and sv["worst_streak_inside_limit"] is True
+    assert sv["daily_limit_usd_1"] == round(3 * (37.40 + 51.40) / 2, 2) and sv["worst_streak_inside_limit"] is True
     assert m["slippage"] == "ASSUMED" and m["cost_fragile"] is True
 
 
@@ -117,7 +120,7 @@ def test_book_separates_plumbing_from_candidates(tmp_path, monkeypatch):
     bk = pb.book(today=date(2026, 9, 15))
     assert [s["strategy_id"] for s in bk["strategies"]] == ["S001"]
     s = bk["strategies"][0]
-    assert s["trades"] == 1 and s["sessions_scored"] == 2 and s["usd_net"]["1"] == -46.0
+    assert s["trades"] == 1 and s["sessions_scored"] == 2 and s["usd_net"]["1"] == -42.60
     names = {p["paper_log_name"] for p in bk["plumbing"]}
     assert names == {"execution_dummy_4x_placeholder", "base_entry_b3_orb_placeholder"}
     assert all("never judged" in p["label"] for p in bk["plumbing"])
@@ -162,3 +165,45 @@ def test_registry_rejects_a_non_bool_slow_flag(tmp_path):
     import pytest
     with pytest.raises(ValueError):
         sr.append({"strategy_id": "S1", "name": "X", "stage": "PAPER", "slow": "yes"}, reg)
+
+
+# --- Jason's correction, September 16th 2026: the cost overlay, four ways -----
+
+def test_measure_carries_all_four_cost_combinations_on_one_unchanged_record():
+    """The fills are the record and are NOT re-scored; only the cost overlay
+    applied to them changes. Same gross in every row, four different costs."""
+    rows = [_trade("2026-09-01", "s1", 1.0), _trade("2026-09-02", "s1", -1.0)]
+    m = pb.measure(pb.trades_for(rows, "s1"), "2026-09-01", today=date(2026, 9, 15))
+    cc = m["cost_combinations"]
+    assert cc["trades"] == 2
+    by = {r["key"]: r for r in cc["combinations"]}
+    assert set(by) == {"MNQ_market", "MNQ_limit", "NQ_market", "NQ_limit"}
+    # gross: +20 pts and -20 pts = 0 gross points, identical in all four rows
+    assert {r["gross_points_total"] for r in cc["combinations"]} == {0.0}
+    assert by["MNQ_market"]["net_points_total"] == -2.6      # 2 trades x 1.30 pt
+    assert by["NQ_limit"]["net_points_total"] == -0.99       # 2 trades x 0.495 pt
+    assert by["MNQ_limit"]["optimistic"] and by["NQ_limit"]["optimistic"]
+    assert not by["MNQ_market"]["optimistic"] and not by["NQ_market"]["optimistic"]
+    assert "NOT re-scored" in cc["note"]
+
+
+def test_plain_lines_show_the_four_combinations_and_the_optimistic_label(tmp_path, monkeypatch):
+    log = tmp_path / "log.jsonl"; reg = tmp_path / "reg.jsonl"
+    monkeypatch.setattr(pb, "LOG", log); monkeypatch.setattr(sr, "REGISTRY", reg)
+    log.write_text(json.dumps(_trade("2026-09-08", "s001_x", 1.0)) + "\n")
+    sr.append({"strategy_id": "S001", "name": "X", "stage": "PAPER", "paper_log_name": "s001_x",
+               "ts": "2026-09-08T00:00:00"}, reg)
+    text = "\n".join(pb.plain_lines(pb.book(today=date(2026, 9, 15))))
+    for lbl in ("MNQ market entry", "MNQ limit entry (OPTIMISTIC)", "NQ market entry", "NQ limit entry (OPTIMISTIC)"):
+        assert lbl in text
+    assert "OPTIMISTIC upper bound -- assumes every limit entry filled." in text
+    assert "NOT re-scored, only re-costed" in text
+
+
+def test_book_cost_basis_records_the_correction_and_the_sources():
+    bk = pb.book(today=date(2026, 9, 15))
+    cb = bk["cost_basis"]
+    assert cb["usd_per_micro_round_trip"] == 2.60 and cb["points_per_round_trip"] == 1.30
+    assert cb["decision_basis"] == "MNQ market entry"
+    assert len(cb["combinations"]) == 4
+    assert "NOT" in cb["record_note"] and "re-scored" in cb["record_note"]

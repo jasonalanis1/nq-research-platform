@@ -19,10 +19,25 @@ WHAT COUNTS
     deducts the ASSUMED round-trip cost per micro contract below, so every
     figure here is net of assumed costs and says so.
 
-ASSUMED COSTS (src/integrity_checks.py's constants, applied to the MNQ micro the
-paper book trades): commission $2.50/side and 1 tick (0.25 pt) slippage/side.
-Round trip per micro = $5.00 + 2 * 0.25 pt * $2/pt = $6.00 = 3.0 index points.
-Labelled ASSUMED everywhere until B4b exists; then the report says MEASURED.
+ASSUMED COSTS -- CORRECTED September 16th 2026 (Jason). The cost model is
+src/cost_model.py and nothing here defines a cost. The old basis came from
+src/integrity_checks.py's constants and charged a FULL-SIZE NQ commission
+($2.50/side) to the MICRO contract this book trades: "$6.00 per micro round trip
+= 3.00 index points". The corrected MNQ round trip is commission $0.25/side +
+exchange/regulatory/clearing fees $0.55/side + 1 tick (= $0.50) slippage/side =
+**$2.60 = 1.30 index points** at market entry and exit. Sources are cited in
+cost_model.py. Labelled ASSUMED until B4b measures it; then MEASURED.
+
+THE RECORD IS NOT RE-SCORED, ONLY RE-COSTED. The paper log's fills -- every
+entry, exit, exit reason and gross pnl_usd -- are the record and are untouched by
+this correction (standing directive s.13: "the paper record is never adjusted,
+deleted, or re-scored"; the Integrity Gate holds the veto). What changed is the
+cost OVERLAY this module subtracts from that unchanged gross. `four_combination_
+overlay()` shows the same unchanged gross under all four MNQ/NQ x market/limit
+cost combinations side by side, so it is visible that the fills are one record
+and the costs are four views of it. Every LIMIT-entry figure is an OPTIMISTIC
+upper bound (a limit order is assumed always to fill; real ones miss fills and
+are adversely selected) and is labelled so wherever it is printed.
 
 JUDGMENT POINT (s.2/s.6 as AMENDED by Amendment 1, Jason, September 16th 2026):
 **40 trades. Nothing is ever judged on fewer than 40 trades, SLOW or not.** The
@@ -52,7 +67,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-from integrity_checks import COMMISSION_PER_SIDE_USD, SLIPPAGE_TICKS_PER_SIDE, TICK_SIZE  # noqa: E402
+import cost_model  # noqa: E402
 from strategy_registry import (  # noqa: E402
     PLUMBING_LOG_NAMES, read_rows as read_registry, in_paper as registry_in_paper,
     slow_ids as registry_slow_ids, SLOW_HORIZON_SESSIONS, SLOW_MIN_TRADES,
@@ -61,7 +76,7 @@ from strategy_registry import (  # noqa: E402
 LOG = ROOT / "research" / "forward_validation" / "bot_stack_paper_log.jsonl"
 B3_LOG_NAME = "base_entry_b3_orb_placeholder"
 
-MNQ_USD_PER_PT = 2.0
+MNQ_USD_PER_PT = cost_model.MNQ.usd_per_point
 JUDGE_TRADES = 40
 JUDGE_WEEKS = 6
 # Amendment 1 (Jason, September 16th 2026) dropped the 15-trade-at-6-weeks KILL.
@@ -69,10 +84,26 @@ JUDGE_WEEKS = 6
 JUDGE_MIN_TRADES = JUDGE_TRADES
 COST_FRAGILE_AVG_R = 0.10
 SIZES = (1, 5, 10)
-SLIPPAGE_BASIS = "ASSUMED"     # flips to MEASURED only when a real broker feed exists (B4b)
+SLIPPAGE_BASIS = cost_model.SLIPPAGE_BASIS   # ASSUMED; MEASURED only when a real broker feed exists (B4b)
 
-ASSUMED_COST_USD_PER_MICRO_RT = COMMISSION_PER_SIDE_USD * 2 + SLIPPAGE_TICKS_PER_SIDE * 2 * TICK_SIZE * MNQ_USD_PER_PT
-ASSUMED_COST_PTS_RT = ASSUMED_COST_USD_PER_MICRO_RT / MNQ_USD_PER_PT
+# The decision basis: 1 micro, market orders -- what the paper loop actually
+# trades. src/cost_model.py owns it. $2.60 = 1.30 pt (was wrongly $6.00 = 3.0 pt).
+ASSUMED_COST_USD_PER_MICRO_RT = cost_model.DEFAULT_USD_PER_ROUND_TRIP
+ASSUMED_COST_PTS_RT = cost_model.DEFAULT_POINTS_PER_ROUND_TRIP
+COST_NOTE = cost_model.DEFAULT_NOTE
+
+
+def four_combination_overlay(trades: list) -> dict:
+    """The same unchanged gross record, under all four cost combinations
+    (MNQ/NQ x market/limit entry), side by side.
+
+    THE FILLS ARE NOT RE-SCORED. `trades` carries the gross result the paper log
+    already recorded; this only changes what is subtracted from it. Gross is
+    converted to INDEX POINTS (gross dollars at 1 micro / $2 per point) so it is
+    contract-independent, then each combination's cost is applied. Limit-entry
+    rows are OPTIMISTIC upper bounds and say so."""
+    gross_pts = sum(t["usd_gross_1"] for t in trades) / MNQ_USD_PER_PT
+    return cost_model.overlay(gross_pts, len(trades))
 
 
 def load_log(path: Path | None = None) -> list[dict]:
@@ -180,6 +211,7 @@ def measure(trades: list[dict], first_session: str | None, today: date | None = 
         "usd_gross_1": round(sum(t["usd_gross_1"] for t in trades), 2),
         "assumed_costs_usd_1": round(ASSUMED_COST_USD_PER_MICRO_RT * n, 2),
         "worst_losing_streak": streak, "survivable_daily_limit": survivable,
+        "cost_combinations": four_combination_overlay(trades),
         "slippage": SLIPPAGE_BASIS, "cost_fragile": (avg_r is not None and avg_r < COST_FRAGILE_AVG_R),
         "avg_winner_usd_1": None if avg_winner_usd is None else round(avg_winner_usd, 2),
     }
@@ -234,7 +266,13 @@ def book(log_rows: list[dict] | None = None, registry_rows: list[dict] | None = 
                                    "Nothing is ever judged on fewer than 40 trades.")},
             "cost_basis": {"slippage": SLIPPAGE_BASIS, "usd_per_micro_round_trip": ASSUMED_COST_USD_PER_MICRO_RT,
                            "points_per_round_trip": ASSUMED_COST_PTS_RT,
-                           "note": f"commission ${COMMISSION_PER_SIDE_USD:.2f}/side + {SLIPPAGE_TICKS_PER_SIDE:g} tick/side, ASSUMED until B4b measures it"}}
+                           "decision_basis": cost_model.DEFAULT_LABEL,
+                           "combinations": cost_model.combinations(),
+                           "optimistic_note": cost_model.OPTIMISTIC_NOTE,
+                           "record_note": ("CORRECTED September 16th 2026 (Jason): the previous $6.00/micro basis charged a "
+                                           "full-size NQ commission to a micro. The paper FILLS are the record and were NOT "
+                                           "re-scored -- same entries, exits and gross pnl; only the cost overlay changed."),
+                           "note": cost_model.DEFAULT_NOTE}}
 
 
 def _fmt_usd(x: float) -> str:
@@ -282,8 +320,19 @@ def plain_lines(bk: dict) -> list[str]:
                          f"{'stayed inside it' if sv['worst_streak_inside_limit'] else 'would have BLOWN THROUGH it'}.")
         else:
             lines.append(f"  - Worst losing streak: {st['trades']} trade(s), {_fmt_usd(st['usd_1'])} at 1 micro. No winner yet, so no survivable daily limit can be stated.")
-        lines.append(f"  - Slippage: **{s['slippage']}** (simulated fills, 1 tick/side + $2.50/side commission)"
+        lines.append(f"  - Slippage: **{s['slippage']}** (simulated fills; src/cost_model.py: {cost_model.DEFAULT_LABEL}, "
+                     f"commission ${cost_model.MNQ.commission_per_side_usd:.2f}/side + fees ${cost_model.MNQ.fees_per_side_usd:.2f}/side "
+                     f"+ 1 tick/side = ${ASSUMED_COST_USD_PER_MICRO_RT:.2f} = {ASSUMED_COST_PTS_RT:.2f} pt)"
                      + ("; **COST-FRAGILE** (average R under 0.10 on assumed costs)." if s["cost_fragile"] else "."))
+        cc = s.get("cost_combinations") or {}
+        for row in cc.get("combinations", []):
+            lines.append(f"    - {row['label']}: net {_fmt_usd(row['net_usd_total'])} at 1 contract, "
+                         f"{row['net_points_per_trade']:+.3f} pt/trade "
+                         f"(gross {row['gross_points_per_trade']:+.3f} pt/trade vs cost {row['cost_points_per_trade']:.3f} pt)."
+                         + (" OPTIMISTIC upper bound -- assumes every limit entry filled." if row["optimistic"] else ""))
+        if cc.get("combinations"):
+            lines.append("    - Same fills in all four rows: the paper record was NOT re-scored, only re-costed "
+                         "(directive s.13).")
         if s.get("salvage"):
             lines.append(f"  - Salvage check: {s['salvage']}")
     for p in bk["plumbing"]:
@@ -300,7 +349,8 @@ def main(argv=None) -> int:
     if a.json:
         print(json.dumps(bk, indent=1, default=str))
     else:
-        print("PAPER BOOK (net of ASSUMED costs: $%.2f per micro round trip)" % ASSUMED_COST_USD_PER_MICRO_RT)
+        print("PAPER BOOK (net of ASSUMED costs: $%.2f per micro round trip = %.2f pt, %s)"
+              % (ASSUMED_COST_USD_PER_MICRO_RT, ASSUMED_COST_PTS_RT, cost_model.DEFAULT_LABEL))
         for ln in plain_lines(bk):
             print(ln)
     return 0

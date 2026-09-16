@@ -16,8 +16,27 @@ by construction. What the screen does NOT include: the simulated broker's
 hostile rejections/partials (plumbing noise, not the strategy) and the B7 loop's
 Risk/State Engine session gate (a paper-engine property, disclosed in every spec).
 
-COSTS: src/paper_book.py's ASSUMED micro round trip ($2.50/side commission +
-1 tick/side slippage = $6.00 = 3.0 pts on MNQ), labelled ASSUMED.
+COSTS: src/cost_model.py, CORRECTED September 16th 2026 (Jason). The old basis
+charged a FULL-SIZE NQ commission ($2.50/side) to a MICRO contract and produced
+"$6.00 per micro round trip = 3.00 index points". The corrected MNQ round trip is
+commission $0.25/side + exchange/regulatory/clearing fees $0.55/side + 1 tick
+($0.50) slippage/side = $2.60 = 1.30 index points at market entry and exit.
+
+ALL FOUR COMBINATIONS, SIDE BY SIDE, EVERY SCREEN (Jason, September 16th 2026):
+MNQ market, MNQ limit, NQ market, NQ limit -- net $, net R, and the per-trade
+gross edge in POINTS against that combination's per-trade cost in POINTS. The
+point of showing them together is that in POINTS the full-size NQ costs about
+HALF what the micro does (0.745 vs 1.300 pt), so "the cost wall killed it" on
+MNQ is a statement about the contract as much as about the pattern.
+**Every LIMIT-entry column is an OPTIMISTIC UPPER BOUND** -- the screen assumes a
+resting limit order always filled at its price. Real limit orders miss fills and
+are adversely selected (they fill when the market is about to run the other way),
+and no historical screen can model a non-fill. It is labelled so everywhere.
+
+DECISION BASIS: MNQ market entry -- what the paper loop actually trades, one
+micro with simulated market fills, and the most expensive of the four in points,
+so a strategy that clears it clears all four. `made_money_after_assumed_costs`
+and the per-trade usd_net_1 / r_net are on that basis.
 
 EXPOSURE (for information only, never a gate): the number of SCREEN rows in
 research/ledger/strategies.jsonl so far is printed with every result.
@@ -38,6 +57,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import bot_stack_paper_run as bpr  # noqa: E402
+import cost_model  # noqa: E402
 from paper_book import ASSUMED_COST_USD_PER_MICRO_RT, MNQ_USD_PER_PT, SLIPPAGE_BASIS  # noqa: E402
 from strategy_registry import slow_projection as _slow_projection  # noqa: E402
 
@@ -79,13 +99,26 @@ def screen(module, df: pd.DataFrame, slice_label: str = "discovery") -> dict:
         gross_usd = r_gross * risk * MNQ_USD_PER_PT
         net_usd = gross_usd - ASSUMED_COST_USD_PER_MICRO_RT
         r_net = net_usd / (risk * MNQ_USD_PER_PT) if risk > 0 else 0.0
-        trades.append({"date": str(day), "direction": sig.direction, "entry": float(sig.entry), "stop": float(sig.stop),
+        trades.append({"date": str(day), "pts_gross": round(r_gross * risk, 6),
+                       "direction": sig.direction, "entry": float(sig.entry), "stop": float(sig.stop),
                        "target": float(sig.target), "risk_points": risk, "exit_reason": out["exit_reason"],
                        "exit_time": out["exit_time"], "r_gross": r_gross, "r_net": round(r_net, 4),
                        "usd_gross_1": round(gross_usd, 2), "usd_net_1": round(net_usd, 2),
                        "context": {k: v for k, v in (getattr(sig, "market_context", {}) or {}).items()
                                    if isinstance(v, (str, int, float, bool))}})
     n = len(trades)
+    # ALL FOUR COST COMBINATIONS on ONE unchanged set of trades: the fills, exits
+    # and gross points below are computed once and are identical in every column;
+    # only the cost subtracted from them changes (src/cost_model.overlay).
+    gross_pts_total = sum(t["pts_gross"] for t in trades)
+    combos = cost_model.overlay(gross_pts_total, n)
+    for row in combos["combinations"]:
+        rt_pts = row["cost_points_per_trade"]
+        rs = [(t["r_gross"] - (rt_pts / t["risk_points"])) if t["risk_points"] > 0 else 0.0 for t in trades]
+        row["total_r_net"] = round(sum(rs), 4)
+        row["avg_r_net"] = round(sum(rs) / n, 4) if n else None
+        row["win_rate_net"] = round(sum(1 for t, r in zip(trades, rs)
+                                        if t["pts_gross"] - rt_pts > 0) / n, 4) if n else None
     wins = sum(1 for t in trades if t["usd_net_1"] > 0)
     net = round(sum(t["usd_net_1"] for t in trades), 2)
     gross = round(sum(t["usd_gross_1"] for t in trades), 2)
@@ -103,7 +136,12 @@ def screen(module, df: pd.DataFrame, slice_label: str = "discovery") -> dict:
         # from this screen's own rate -- trades/sessions * 126 < 40 -> SLOW when it
         # enters PAPER (background paper, no queue slot, judged at 40 trades).
         "slow_projection": _slow_projection(n, n_sessions),
-        "cost_basis": f"{SLIPPAGE_BASIS}: ${ASSUMED_COST_USD_PER_MICRO_RT:.2f} per micro round trip (commission $2.50/side + 1 tick/side)",
+        "cost_combinations": combos,
+        "cost_basis": f"{SLIPPAGE_BASIS}, decision basis {cost_model.DEFAULT_LABEL}: "
+                      f"${ASSUMED_COST_USD_PER_MICRO_RT:.2f} per micro round trip = "
+                      f"{cost_model.DEFAULT_POINTS_PER_ROUND_TRIP:.3f} pt "
+                      f"(commission ${cost_model.MNQ.commission_per_side_usd:.2f}/side + fees "
+                      f"${cost_model.MNQ.fees_per_side_usd:.2f}/side + 1 tick/side; src/cost_model.py)",
         "bookkeeping": "bot_stack_paper_run._resolve_fill_outcome (first touch, stop wins ties, time exit, session-end fallback; cross-session exits walk the whole frame to market_context['exit_ts'] and an unresolvable one is excluded, never force-closed); fill at signal.entry",
         "trades_detail": trades,
     }
@@ -143,6 +181,21 @@ def main(argv=None) -> int:
     sp = res["slow_projection"]
     print(f"  rate {sp['trades_per_session']:.4f} trades/session -> {sp['projected_trades_6_months']:.1f} trades in 6 months "
           f"(~{sp['horizon_sessions']} sessions): {'SLOW -- background paper, no queue slot, judged at 40 trades' if sp['slow'] else 'not SLOW, ordinary six-week clock'} (Amendment 1)")
+    print("  " + "-" * 74)
+    print("  ALL FOUR COST COMBINATIONS on the SAME trades (same fills, same exits, same gross;")
+    print("  only the cost overlay differs). Jason, September 16th 2026.")
+    cc = res["cost_combinations"]
+    print(f"  {'combination':<30}{'net $':>12}{'net R':>10}{'avg R':>9}{'gross pt/tr':>13}{'cost pt/tr':>12}{'net pt/tr':>11}")
+    for row in cc["combinations"]:
+        print(f"  {row['label']:<30}{row['net_usd_total']:>12,.2f}{row['net_points_total']/1:>10.1f}"
+              f"{row['avg_r_net']:>9.4f}{row['gross_points_per_trade']:>13.4f}"
+              f"{row['cost_points_per_trade']:>12.3f}{row['net_points_per_trade']:>11.4f}"
+              f"   {'MAKES MONEY' if row['made_money'] else 'loses'}")
+    print(f"  net R column is total net R; 'net $' is at ONE contract of that instrument.")
+    print(f"  LIMIT ROWS ARE OPTIMISTIC: {cost_model.OPTIMISTIC_NOTE}")
+    print("  In POINTS the full-size NQ round trip costs about HALF the micro's -- the fixed")
+    print("  commission+fee component spreads over 10x the notional. Cost wall or pattern?")
+    print("  " + "-" * 74)
     print(f"  exposure (screens run so far, information only): {res['exposure_screens_so_far_for_information']}")
     if a.out:
         Path(a.out).write_text(json.dumps(res, indent=1, default=str))

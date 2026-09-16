@@ -279,3 +279,58 @@ are untouched.
 40 required). They stay in PAPER, keep scoring, and vacate their queue slots.
 
 *End of Amendment 1.*
+
+---
+
+## Amendment 2 — September 16th, 2026 (Jason)
+
+**Jason wrote this amendment. Tony did not author it and did not propose it; Tony still does not modify this
+directive (s.10, s.13). It is recorded here verbatim, dated to him, and appended — the body of sections 1–14
+above, and Amendment 1 above, stand exactly as written, with this amendment governing where any two conflict.**
+
+Why he issued it: the assumed cost constant was wrong. Every cost figure in the project came from
+`src/integrity_checks.py`'s `COMMISSION_PER_SIDE_USD = 2.50`, which is a **full-size E-mini (NQ)** all-in
+commission, applied to the **micro (MNQ)** contract the paper book actually trades. That produced "$6.00 per
+micro round trip = 3.00 index points", roughly 2–3× the real figure and 3–10× too high on the commission leg.
+Tony had also invented a pre-screen of its own — a candidate must gross at least 3× the cost to be worth
+screening — which is nowhere in this directive, and used it to refuse S008 **without a screen**. Jason caught
+both. He ruled:
+
+> (1) Show me the $6 cost breakdown: commission, exchange fees, and slippage, per side, for MNQ. My estimate is
+> about $2–2.50 round trip, roughly 1.1 points. If yours is off, fix it and rescreen S007 and S008 with the
+> corrected number. (2) Drop the "3x cost" pre-screen; the directive doesn't have it. At SPECIFY, reject only if
+> the expected edge is below the corrected cost itself; otherwise screen it. In every screen report, show the net
+> result on MNQ and NQ side by side, and with market vs. limit entries, so we can see whether the cost wall is
+> the pattern or the contract.
+
+### Exactly what this changes
+
+1. **The cost basis.** The corrected, sourced schedule lives in `src/cost_model.py` and is written up in
+   `research/infrastructure/cost-model-2026-09-16.md`. MNQ, market entry and exit: commission $0.25/side + exchange,
+   regulatory and clearing fees $0.55/side + 1 tick ($0.50) slippage/side = **$2.60 per round trip = 1.30 index
+   points**. Jason's own estimate was $2–2.50 / ~1.1 points; the arithmetic lands just above it. Nothing in the
+   project defines a cost anywhere else any more.
+2. **Section 2's SPECIFY row and the SCREEN gate.** There is no cost multiple, no cost budget and no
+   "well north of cost" test, and there never was one in this directive. **At SPECIFY, a candidate is rejected
+   only if its expected per-trade edge is below the corrected per-trade cost itself; otherwise it goes to SCREEN**
+   (`cost_model.specify_gate()`). Tony's 3× pre-screen is deleted from the cycle prompt, from NEXT_UP and from
+   the code.
+3. **Section 5's reporting and the SCREEN report.** Every screen from now on shows **all four combinations side
+   by side** — MNQ market, MNQ limit, NQ market, NQ limit — as net $, net R, and per-trade edge in points against
+   that combination's per-trade cost in points. The paper book shows the same four. The reason is Jason's: so it
+   is visible whether a losing net is the pattern or the contract. In POINTS the full-size NQ round trip costs
+   about **half** what the micro does (0.745 pt vs 1.300 pt), because the fixed commission-and-fee component
+   spreads over ten times the notional while the tick of slippage is the same either way.
+4. **Limit entries are labelled optimistic, always.** A limit entry saves the spread on entry, but a resting
+   limit order does not always fill and it fills preferentially when the market is about to move against it
+   (adverse selection). A historical screen cannot model a non-fill. Every limit-entry figure is therefore an
+   **OPTIMISTIC UPPER BOUND**, labelled so wherever it is printed or written. The decision basis stays the honest
+   one: MNQ, market entry and exit, which is also the most expensive of the four in points.
+5. **S007 and S008 are rescreened against the corrected number** (s.13 is untouched: their frozen specs and
+   modules are not edited, and S008's reopening is an **input-error correction**, not a salvage and not a second
+   attempt — it was refused on an erroneous cost, never on evidence).
+
+Section 11's rule is unchanged and now easier to keep: costs are labelled **ASSUMED** until the broker connection
+measures them. What changed is that the assumption is now the right one, with its sources written down.
+
+*End of Amendment 2.*

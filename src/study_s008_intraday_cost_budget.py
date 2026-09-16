@@ -5,9 +5,18 @@ BEFORE anything was frozen. This is NOT a SCREEN: no spec is hashed, no strategy
 module exists, no screen row is written. It answers one question, the one the
 S007 LEARN entry (research/KNOWLEDGE.md, 2026-09-16 9:00 am) says to ask first:
 
-    a micro round trip costs an ASSUMED $6.00 = 3.0 index points on MNQ
-    ($2/point). Does the candidate's structure earn a GROSS per-trade
-    expectancy well north of 3.0 points?
+    what is this structure's GROSS per-trade expectancy in index points?
+
+CORRECTED September 16th 2026 (Jason's Amendment 2). As first written, this file
+asked whether the expectancy was "well north of" a $6.00 = 3.0-point micro round
+trip, and S008 was refused against a 3x-cost budget built on that number. BOTH
+halves were wrong: $6.00 charged a FULL-SIZE NQ commission ($2.50/side) to a
+MICRO -- the real MNQ market round trip is $2.60 = 1.30 index points
+(src/cost_model.py, sources cited there) -- and the "3x cost" pre-screen was
+Tony's invention, which the standing directive never contained. Jason's rule
+replaces it: at SPECIFY reject ONLY if the expected per-trade edge is below the
+per-trade cost ITSELF; otherwise it goes to SCREEN. The cost here now comes from
+cost_model.py, so this study's net-points columns are on the corrected basis.
 
 Three families are measured, all intraday, all on the 2,101-session Discovery
 slice, all with the entry rule known at the entry timestamp (no ex-post label):
@@ -38,8 +47,12 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-COST_PTS = 3.0          # ASSUMED $6.00 micro round trip / $2.00 per MNQ point
-MNQ_USD_PER_PT = 2.0
+import cost_model  # noqa: E402
+
+# The corrected decision basis: MNQ, market entry and exit. $2.60 = 1.30 index
+# points (was wrongly 3.00). Never redefine a cost here -- cost_model.py owns it.
+COST_PTS = cost_model.DEFAULT_POINTS_PER_ROUND_TRIP
+MNQ_USD_PER_PT = cost_model.MNQ.usd_per_point
 
 
 def _discovery() -> pd.DataFrame:

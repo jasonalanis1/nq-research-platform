@@ -15,8 +15,8 @@ unreachable, schedule the successor FIRST, then retry the device once.
 Before every git command: bash src/git_unlock.sh.
 
 THE STANDING OPERATING DIRECTIVE governs (research/infrastructure/
-standing-directive-2026-09-15.md + JASON'S AMENDMENT 1 of September 16th appended
-to the same file, summarized at the top of research/NEXT_UP.md).
+standing-directive-2026-09-15.md + JASON'S AMENDMENT 1 and AMENDMENT 2, both of
+September 16th, appended to the same file, summarized at the top of research/NEXT_UP.md).
 Read NEXT_UP.md first. The loop is SOURCE -> SPECIFY -> FREEZE -> SCREEN ->
 PAPER -> JUDGE -> KEEP / FIX ONCE / KILL -> SALVAGE -> LEARN. The evidence for a
 strategy is its paper record. Interrupt Jason only for the three s.10 reasons.
@@ -44,14 +44,29 @@ STEP 3 -- ADVANCE THE PAPER BOOK. For every strategy at stage PAPER in
    execution dummy and B3 rows are PLUMBING -- never judged, never a candidate.
 STEP 4 -- ADVANCE ONE CANDIDATE ONE STAGE. Highest-priority candidate not yet
    in PAPER (registry latest stage; Director priority order in NEXT_UP):
-   SOURCE -> SPECIFY (whole trade: entry/exit/stop/sizing/costs, mechanism
-   paragraph, "where this should fail") -> FREEZE (spec file under
+   SOURCE -> SPECIFY (whole trade: entry/exit/stop/sizing/costs from
+   src/cost_model.py with all four combinations stated, mechanism paragraph,
+   "where this should fail") -> FREEZE (spec file under
    research/infrastructure/strategy-specs/ + src/strategy_s###_*.py, sha256 of
    both into the registry, its own commit, BEFORE any data) -> SCREEN
    (python3 src/screen_strategy.py <module>, Discovery slice only, one number:
    net after ASSUMED costs; > 0 -> register in bot_stack_paper_run.STRATEGIES
    and run it into PAPER today; <= 0 -> SALVAGE by the menu, spawn S###a at
-   SPECIFY if a menu condition is profitable, LEARN either way). At SCREEN also
+   SPECIFY if a menu condition is profitable, LEARN either way).
+   AMENDMENT 2 (Jason, September 16th): COSTS COME FROM src/cost_model.py AND
+   NOWHERE ELSE -- MNQ market round trip $2.60 = 1.30 index pt (commission
+   $0.25/side + exchange/regulatory/clearing fees $0.55/side + 1 tick/side),
+   labelled ASSUMED; the old "$6.00 = 3.0 pt" charged a full-size NQ commission
+   to a micro and was 2-3x too high. AT SPECIFY, REJECT ONLY IF THE EXPECTED
+   PER-TRADE EDGE IS BELOW THE PER-TRADE COST ITSELF (cost_model.specify_gate);
+   OTHERWISE IT GOES TO SCREEN. There is no 3x-cost pre-screen and never was --
+   that was Tony's invention and it is deleted. EVERY SCREEN REPORT SHOWS ALL
+   FOUR COMBINATIONS SIDE BY SIDE (MNQ market, MNQ limit, NQ market, NQ limit):
+   net $, net R, per-trade edge in points vs per-trade cost in points, so it is
+   visible whether a losing net is the pattern or the contract (in POINTS the
+   full-size NQ costs about HALF the micro). EVERY LIMIT-ENTRY FIGURE IS AN
+   OPTIMISTIC UPPER BOUND -- a limit order is assumed always to fill; real ones
+   miss fills and are adversely selected -- and is labelled so wherever printed. At SCREEN also
    record the AMENDMENT 1 label on the PAPER row: trades/sessions * 126 < 40 ->
    slow: true (screen_strategy.py prints it; strategy_registry.slow_projection).
    Candidates already in PAPER, SLOW ones included, never block Step 4.
@@ -78,7 +93,8 @@ STILL BINDING from the refocus memo (research/infrastructure/refocus-2026-09-15.
    through an entry point that enables it (src/production_paths.py); Sunday
    1 pm is 1-VERIFY (no research). Never display the .databento_key. Do not
    propose data purchases unless Jason asks. Costs are labeled ASSUMED until
-   B4b measures them. Reporting to Jason: short, his format (found / why it
+   B4b measures them, and they are read from src/cost_model.py (never
+   re-derived, never hard-coded in a study or a strategy). Reporting to Jason: short, his format (found / why it
    matters / next).
 
 STANDING STATE (update each cycle): <one paragraph>

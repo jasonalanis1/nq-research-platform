@@ -18,11 +18,12 @@ def _session(date, close_px, open_px):
 
 def test_night_leg_points_and_weekend_tag():
     fri = _session("2021-01-08", 1000.0, 990.0)      # closes 1000
-    mon = _session("2021-01-11", 1030.0, 1010.0)     # opens 1010 -> +10 pts = $20 gross, $14 net
+    mon = _session("2021-01-11", 1030.0, 1010.0)     # opens 1010 -> +10 pts = $20 gross, $17.40 net
+    # (corrected MNQ round trip $2.60, src/cost_model.py -- was $6.00)
     tue = _session("2021-01-12", 1020.0, 1025.0)     # opens 1025 vs Monday close 1030 -> -5 pts
     legs = m.night_legs(pd.concat([fri, mon, tue]))
     assert [(l["date"], l["points"], l["usd_net_1"], l["weekend"]) for l in legs] == \
-           [("2021-01-11", 10.0, 14.0, True), ("2021-01-12", -5.0, -16.0, False)]
+           [("2021-01-11", 10.0, 17.4, True), ("2021-01-12", -5.0, -12.6, False)]
 
 
 def test_session_without_0930_bar_is_dropped_and_breaks_the_chain():

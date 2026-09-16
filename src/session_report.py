@@ -145,8 +145,20 @@ def paper_book_section() -> list[str]:
         return lines + [f"- could not read the paper book: {exc}"]
     lines += _pb.plain_lines(bk)
     cb = bk.get("cost_basis", {})
-    lines.append(f"- Cost basis for every figure above: {cb.get('note', 'ASSUMED')} "
-                 f"(${cb.get('usd_per_micro_round_trip', 0):.2f} per micro round trip; src/paper_book.py).")
+    lines.append(f"- Cost basis for every figure above: {cb.get('note', 'ASSUMED')}")
+    lines.append(f"  - CORRECTED September 16th 2026 (Jason's Amendment 2): the previous basis, $6.00 per micro round trip "
+                 f"= 3.00 index points, charged a FULL-SIZE NQ commission ($2.50/side) to the MICRO this book trades. "
+                 f"The corrected decision basis is **{cb.get('decision_basis', 'MNQ market entry')}** at "
+                 f"${cb.get('usd_per_micro_round_trip', 0):.2f} = {cb.get('points_per_round_trip', 0):.3f} index points "
+                 f"(src/cost_model.py; write-up research/infrastructure/cost-model-2026-09-16.md).")
+    combos = cb.get("combinations") or []
+    if combos:
+        lines.append("  - All four combinations: " + "; ".join(
+            f"{c['label']} ${c['usd']:.2f} = {c['points']:.3f} pt" for c in combos)
+            + ". In POINTS the full-size NQ costs about HALF the micro (fixed fees over 10x the notional), which is why "
+              "every screen shows both: a losing net can be the contract, not the pattern.")
+        lines.append(f"  - {cb.get('optimistic_note', '')}")
+    lines.append(f"  - **The paper record itself was NOT re-scored.** {cb.get('record_note', '')}")
     try:
         import strategy_registry as _sr
         rows = _sr.read_rows()

@@ -23,7 +23,10 @@ THE MENU (s.7), as computed here for a trade dated D:
                   direction), passed with --extra
 
 A condition side is called PROFITABLE when its net $ at 1 micro (ASSUMED costs
-already inside every trade's usd_net_1) is > 0 AND it has at least MIN_N trades
+already inside every trade's usd_net_1, on src/cost_model.py's decision basis --
+MNQ market entry, $2.60 = 1.30 index points per round trip, CORRECTED September
+16th 2026 from the wrong $6.00/3.00-pt figure that charged a full-size NQ
+commission to a micro) is > 0 AND it has at least MIN_N trades
 (15, the s.6 floor a paper run needs to be judged at all); a profitable side with
 fewer trades is reported as THIN, not spawned. One salvage per strategy.
 

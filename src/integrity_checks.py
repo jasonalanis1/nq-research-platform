@@ -76,16 +76,24 @@ MIN_N = 30                       # below this a check reports INSUFFICIENT, neve
 N_BOOT = 20000                   # matches stack_scan_runner.py
 CI = 90                          # matches the project's CI90 convention
 
-# backtest.py's cost model, at 1x. Explicitly a placeholder cost schedule --
-# see that file's own COST MODELING note. cost_sensitivity stresses it by 2x,
-# which is the point: the check asks whether the result survives the cost
-# assumption being wrong, not whether the assumption is right.
-TICK_SIZE = 0.25
-COMMISSION_PER_SIDE_USD = 2.50
-SLIPPAGE_TICKS_PER_SIDE = 1.0
-CONTRACT_MULTIPLIER = 20.0
-ROUND_TRIP_COST_POINTS_1X = (COMMISSION_PER_SIDE_USD * 2 / CONTRACT_MULTIPLIER) + \
-                            (SLIPPAGE_TICKS_PER_SIDE * TICK_SIZE * 2)
+# THE COST MODEL LIVES IN src/cost_model.py (Jason's correction, September 16th
+# 2026). These constants used to be defined here -- COMMISSION_PER_SIDE_USD =
+# 2.50 with CONTRACT_MULTIPLIER = 20.0 -- and paper_book.py imported them and
+# applied them to a MICRO contract, which produced the wrong "$6.00 per micro
+# round trip = 3.00 index points". $2.50/side is a FULL-SIZE NQ figure. Nothing
+# here defines a cost any more; it reads the one module that owns them, with the
+# sources cited. cost_sensitivity still stresses the cost by 2x, which is the
+# point of the check: does the result survive the assumption being wrong.
+import cost_model  # noqa: E402
+
+TICK_SIZE = cost_model.MNQ.tick_size_points
+COMMISSION_PER_SIDE_USD = cost_model.MNQ.commission_per_side_usd
+FEES_PER_SIDE_USD = cost_model.MNQ.fees_per_side_usd
+SLIPPAGE_TICKS_PER_SIDE = cost_model.SLIPPAGE_TICKS_PER_SIDE
+CONTRACT_MULTIPLIER = cost_model.MNQ.usd_per_point
+# 1x cost of a round trip, in index points, on the decision basis (MNQ, market
+# entry and exit) -- 1.30 pt, not the old 3.00 pt.
+ROUND_TRIP_COST_POINTS_1X = cost_model.DEFAULT_POINTS_PER_ROUND_TRIP
 
 
 def _result(name: str, status: str, n: int = 0, **detail) -> dict:

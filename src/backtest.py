@@ -37,13 +37,16 @@ THE COST ASSUMPTIONS BELOW ARE PLACEHOLDERS, NOT YOUR REAL COSTS. Typical
 retail futures costs, so you have a defensible starting point, but every
 broker is different -- swap these for your actual commission schedule and
 a slippage estimate you trust once you have one:
-  - CONTRACT_MULTIPLIER: $20/point is standard full-size NQ. Micro NQ
-    (MNQ) is $2/point instead -- change this if that's what you trade.
-  - COMMISSION_PER_SIDE: a commonly-cited all-in (commission + exchange +
-    NFA fees) retail futures rate. Round-trip (in + out) is double this.
+  - CORRECTED September 16th 2026 (Jason): the constants below now come
+    from src/cost_model.py, which holds the researched IBKR commission and
+    fee schedule for MNQ and NQ separately, with sources. This engine
+    prices the FULL-SIZE NQ ($20/point); the micro (MNQ, $2/point) is
+    priced by src/paper_book.py and src/screen_strategy.py.
+  - COMMISSION_PER_SIDE here is commission + exchange/regulatory/clearing,
+    per contract per side. Round-trip (in + out) is double this.
   - SLIPPAGE_TICKS_PER_SIDE: how many ticks worse than the signal price
-    we assume you actually get filled at, each side. 1 tick = 0.25
-    points for NQ.
+    we assume you actually get filled at, each side, on a MARKET order.
+    1 tick = 0.25 points for NQ. ASSUMED until B4b measures it.
 
 STRESS-TESTING COSTS (added 2026-08-16): to check how sensitive a result
 is to the cost assumptions above being too optimistic, set the
@@ -74,12 +77,21 @@ DATA_DIR = PROJECT_ROOT / "data"
 # existing habits/commands keep working unchanged.
 DEFAULT_SIGNALS_FILE = "setups_orb.csv"
 
-# --- Cost assumptions (see COST MODELING note above -- placeholders) ---
+# --- Cost assumptions: src/cost_model.py owns them (Jason's correction,
+# September 16th 2026). They are no longer defined here and are no longer
+# "placeholders": cost_model.py carries the researched IBKR figures with their
+# sources. This engine prices the FULL-SIZE NQ ($20/point), so it reads the NQ
+# market-entry round trip -- commission $0.85/side + exchange/regulatory/clearing
+# fees $1.60/side + 1 tick ($5.00) slippage/side = $14.90 = 0.745 index points.
+# (The old hand-written figures here were $2.50/side all-in = 0.750 pt, close on
+# NQ by luck; the same $2.50/side applied to a MICRO is what was 2-3x wrong.)
+import cost_model  # noqa: E402
+
 COST_STRESS_MULTIPLIER = float(os.environ.get("COST_STRESS_MULTIPLIER", "1.0"))
-CONTRACT_MULTIPLIER = 20.0     # dollars per index point, full-size NQ (MNQ = 2.0)
-TICK_SIZE = 0.25                # NQ minimum price movement, in points
-COMMISSION_PER_SIDE = 2.50 * COST_STRESS_MULTIPLIER      # dollars, all-in estimate, per contract, per side
-SLIPPAGE_TICKS_PER_SIDE = 1.0 * COST_STRESS_MULTIPLIER   # assumed ticks of slippage, per side
+CONTRACT_MULTIPLIER = cost_model.NQ.usd_per_point   # dollars per index point, full-size NQ (MNQ = 2.0)
+TICK_SIZE = cost_model.NQ.tick_size_points          # NQ minimum price movement, in points
+COMMISSION_PER_SIDE = cost_model.NQ.fixed_per_side_usd * COST_STRESS_MULTIPLIER   # commission + fees, per contract, per side
+SLIPPAGE_TICKS_PER_SIDE = cost_model.SLIPPAGE_TICKS_PER_SIDE * COST_STRESS_MULTIPLIER
 
 ROUND_TRIP_COMMISSION_DOLLARS = COMMISSION_PER_SIDE * 2
 ROUND_TRIP_SLIPPAGE_POINTS = SLIPPAGE_TICKS_PER_SIDE * TICK_SIZE * 2

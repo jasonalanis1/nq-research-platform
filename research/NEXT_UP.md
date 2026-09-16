@@ -20,12 +20,16 @@ SPECIFY, one fix per strategy ever) / KILL (-> SALVAGE check, s.7 -> new candida
   SOURCE   Discovery names a candidate + one-paragraph reason. Priority (AMENDMENT 1 puts a new preference on top):
            INTRADAY STRATEGIES THAT TRADE MOST DAYS FIRST (so the 6-week clock works as designed), then market mechanics,
            market structure, Observatory, Salvage queue, revamp list; published calendar anomalies LAST (0 for 4).
-  SPECIFY  Mechanism + Monetization write the WHOLE trade: entry, exit, stop, sizing, costs stated. Validated magnitude
-           facts (VXN -> next-session range; quiet midday -> expanded afternoon; wide open -> wider midday) size stops/size.
-           Mechanism also names "where this should fail" = that candidate's Salvage menu later.
+  SPECIFY  Mechanism + Monetization write the WHOLE trade: entry, exit, stop, sizing, costs from src/cost_model.py with
+           all four combinations stated. Validated magnitude facts (VXN -> next-session range; quiet midday -> expanded
+           afternoon; wide open -> wider midday) size stops/size. Mechanism also names "where this should fail" = that
+           candidate's Salvage menu later. AMENDMENT 2 GATE: reject ONLY if the expected per-trade edge is below the
+           per-trade cost ITSELF (cost_model.specify_gate); otherwise it goes to SCREEN. No 3x-cost pre-screen exists.
   FREEZE   Integrity hashes the spec + module into research/ledger/strategies.jsonl BEFORE any data is touched.
   SCREEN   Statistical, one pass on the Discovery slice, ONE number: net result after ASSUMED costs. Lost money -> Salvage.
            Made money -> PAPER. No CI gate, no multiplicity gate, no holdout (exposure counts logged for information only).
+           AMENDMENT 2: the report shows ALL FOUR COST COMBINATIONS side by side (MNQ market, MNQ limit, NQ market,
+           NQ limit) -- net $, net R, per-trade edge in POINTS vs per-trade cost in POINTS. Decision basis = MNQ market.
   PAPER    B7 paper engine (src/bot_stack_paper_run.py --strategy <id>), one micro, simulated fills (slippage ASSUMED 1 tick
            until B4b). Several strategies at once is encouraged. A strategy in PAPER is the product accumulating a record.
   JUDGE    Director, at 40 TRADES (s.6 as amended; see AMENDMENT 1 below): KEEP = avg R > 0 after costs AND worst streak
@@ -53,6 +57,26 @@ or 6 weeks, whichever comes first" to "40 TRADES", with the SLOW label handling 
   src/ops_checks.py and src/session_report.py. Tests: tests/test_paper_book.py, tests/test_cycle_preflight.py.
   S001a, S002 and S003 are SLOW as of September 16th -- projected 6-month trade counts 2.40 / 21.83 / 1.32 against 40
   (screen rates 40/2101, 364/2101, 22/2101). They stay in PAPER, keep scoring, and have VACATED their queue slots.
+AMENDMENT 2 (Jason, September 16th; appended and dated in the directive file, quoting him verbatim -- Tony did not author
+it and still does not modify the directive). THE COST CONSTANT WAS WRONG. src/integrity_checks.py's COMMISSION_PER_SIDE_USD
+= 2.50 is a FULL-SIZE NQ figure and was being charged to the MICRO the paper book trades, giving "$6.00 per micro round trip
+= 3.00 index points" -- about 2-3x too high, 3-10x on the commission leg. CORRECTED, sourced, and owned by src/cost_model.py
+(write-up research/infrastructure/cost-model-2026-09-16.md):
+  MNQ market entry+exit  commission $0.25/side + exchange/regulatory/clearing fees $0.55/side + 1 tick ($0.50)/side
+                         = $2.60 round trip = 1.300 index points   <- THE DECISION BASIS (what the paper loop trades)
+  MNQ limit entry        $2.10 = 1.050 pt    OPTIMISTIC UPPER BOUND
+  NQ  market entry+exit  $14.90 = 0.745 pt
+  NQ  limit entry        $9.90 = 0.495 pt    OPTIMISTIC UPPER BOUND
+  IN POINTS THE FULL-SIZE NQ COSTS ABOUT HALF THE MICRO -- the fixed commission+fee spreads over 10x the notional. So a
+  strategy with a 0.5-1.3 pt per-trade edge is profitable on NQ and not on MNQ: "cost wall" can be the CONTRACT, not the
+  pattern. Every screen and the paper book print all four side by side, every limit figure labelled OPTIMISTIC (a limit
+  order is assumed always to fill; real ones miss fills and are adversely selected, which a screen cannot model).
+  THE "3x COST" PRE-SCREEN IS DELETED -- Tony invented it, the directive never had it, and it wrongly refused S008 without
+  a screen. At SPECIFY: reject ONLY if the expected per-trade edge is below the per-trade cost itself.
+  Enforced in src/cost_model.py (the single owner), src/paper_book.py, src/screen_strategy.py, src/integrity_checks.py,
+  src/backtest.py. Tests: tests/test_cost_model.py. Frozen specs/modules were NOT edited (s.13) and NO paper fill was
+  re-scored -- only the cost overlay applied to the unchanged record changed.
+
 RECORDS: research/ledger/strategies.jsonl (append-only, production-guarded, one row per stage event; src/strategy_registry.py);
 research/ledger/revamp_list.json (s.9 ranking, src/revamp_list.py); paper record = research/forward_validation/
 bot_stack_paper_log.jsonl per `strategy` (src/paper_book.py measures it; execution_dummy + B3 rows are PLUMBING, never judged).
@@ -1520,6 +1544,10 @@ ET, 1 micro; fire rate 0.4390/session -> 55.3 trades in 126 sessions, NOT SLOW) 
 BUDGET and sent to LEARN WITHOUT A SCREEN under directive s.4's Monetization "no credible path". The budget, written into
 the spec before any outcome was looked at: $6.00 ASSUMED round trip / $2.00 per MNQ point = 3.00 index points, so a
 candidate must gross >= 9.0 pts/trade (3x cost). The specified cell grossed +2.55 pts (n=708, t=2.11) = -0.45 pts NET.
+**[CORRECTED September 16th by Jason's Amendment 2 -- BOTH halves of that refusal were wrong: the $6.00/3.00-pt cost was a
+full-size NQ commission charged to a micro (real: $2.60 = 1.30 pt), and the "3x cost" pre-screen was Tony's invention, not
+the directive's. At the corrected cost +2.55 gross pts is +1.25 pts NET on MNQ market and +1.81 on NQ market. S008 was
+rejected on an ERRONEOUS INPUT, not on evidence; it is REOPENED as an input-error correction, not a salvage.]**
 The whole 36-cell family (T 10:00-15:30 ET x z 0/0.5/0.8/1.0) lands -0.9..+5.5 gross pts; the best cell +5.54 (t=2.93) is
 the MAX OF A GRID and was refused as ex-post selection, as S001's and S007's salvages each did. The RTH VWAP 2-sigma
 reversion (detect_vwap_reversion's shape moved off its 08:30 pre-market open to 09:30, real 1:1 stop, VWAP target) fires on
