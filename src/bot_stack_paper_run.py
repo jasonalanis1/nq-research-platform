@@ -181,6 +181,14 @@ register_strategy("s002", _s002)
 import strategy_s003_month_end_payment_cycle_reversal as _s003  # noqa: E402
 register_strategy("s003", _s003)
 
+# S007 (opening-range break continuation, opening-range-scaled stop) -- the first
+# candidate sourced under Jason's Amendment 1 preference for INTRADAY STRATEGIES
+# THAT TRADE MOST DAYS. Registered at its FREEZE (2026-09-16, 9:00 am CT cycle) so
+# that a passing SCREEN can put it into PAPER the same cycle (directive s.14.4).
+# Same-session only: 15:55 ET time exit, no cross-session exit_ts.
+import strategy_s007_opening_range_break_continuation as _s007  # noqa: E402
+register_strategy("s007", _s007)
+
 
 def _strategy():
     return STRATEGIES[STRATEGY]
