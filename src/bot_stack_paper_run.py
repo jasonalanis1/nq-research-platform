@@ -173,6 +173,13 @@ register_strategy("s001a", _s001a)
 import strategy_s002_overnight_carry_compressed_prior_day as _s002  # noqa: E402
 register_strategy("s002", _s002)
 
+# S003 (month-end payment-cycle reversal, M24 as a full strategy) -- registered
+# 2026-09-16 (11:00 pm CT cycle) after a positive SCREEN (+$8,339.07 net, 22
+# Discovery trades). Holds ~21 sessions: an absolute market_context["exit_ts"]
+# at the NEXT month's final RTH session, bookkept by choice 7's cross-session walk.
+import strategy_s003_month_end_payment_cycle_reversal as _s003  # noqa: E402
+register_strategy("s003", _s003)
+
 
 def _strategy():
     return STRATEGIES[STRATEGY]

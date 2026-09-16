@@ -103,6 +103,44 @@ Sourced Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ, li
 
 - 2026-09-14 (11:00 am cycle): A HIGH PLACEBO SCORE IS A REASON TO RUN THE RESIDUALISED TEST, NOT A VERDICT ON ITS OWN. The mechanical suite said yesterday's opening range does 74% of hyp-000162's work, which reads as redundancy. The Director test held yesterday's value FIXED and found 87.2% of the effect still there. Both numbers are correct and they are not in conflict: a lagged predictor and a current one can share a persistent driver without being substitutes. Read alone the placebo number would have killed a genuinely new candidate; read alone the separability number would have missed that the underlying variable persists strongly enough to matter for sizing. The suite should KEEP flagging high placebo scores -- the flag did its job by forcing the analysis -- but the DISPOSITION belongs to the stage that can hold the suspect fixed, not to the flag. This is the counterpart to the same morning's lesson that a structural check needs its own base rate: a check can be correct, informative, and still not be a verdict.
 
+## 2026-09-15 (11:00 pm CT scheduled cycle) — S003 (M24 month-end reversal) SPECIFY -> FREEZE -> SCREEN -> PAPER
+
+A closed statistical effect can still be a profitable trade, and this is the first
+clean demonstration of it under the standing directive's revamp premise (s.9).
+M24 / hyp-000157 was closed 2026-09-13 P1_FAIL: LOW-tercile next-month return net of
+NQ's own drift +0.0112, block CI (-0.0005, +0.0224), n=27 -- a near miss by the old
+academic bar, with MONETIZATION never run. Built as a whole trade (long the 15:59
+open of a heavily-sold month's final RTH session, flat at the 15:59 open of the next
+month's final RTH session, stop entry - 4.0 x ATR20 as a disaster cap, 1 micro,
+ASSUMED $6.00/RT), it screened at **+$8,339.07 net over 22 Discovery trades, 77.3%
+wins, +0.3956 avg R net**. S003 entered PAPER the same cycle.
+
+What is and is not new here:
+- The +0.396 R is NOT a bigger effect than +0.0112. It is the SAME effect denominated
+  in a 4.0xATR20 stop instead of in a month of drift. Anyone comparing the two numbers
+  without that conversion will overstate what changed.
+- What genuinely changed is the question. Scan 031 asked whether the monthly mean
+  clears a CI; the screen asks whether the trade makes money after costs. The directive
+  retired the first as a gate for exactly this reason.
+- S003 is the FIRST candidate in the paper book that is not cost-fragile: average risk
+  467.7 pts ($935 at 1 micro), costs $132 against $8,471 gross = 1.6%. S001a and S002
+  are both cost-fragile. So S003's paper record will test the effect, not the cost
+  assumption -- the most informative paper slot the book has held.
+- The 4.0xATR20 disaster cap fired on 5 of 22 holds, more often than the spec expected
+  a "should almost never be the exit" cap to fire. Recorded as a fact about the spec's
+  own expectation, not adjusted (s.13: a change is a FIX ONCE, never an edit).
+- Frequency remains the structural problem: ~1 trade a month at most, ~1 month in 3 on
+  the condition. The 6-week judgment point will arrive under the 15-trade floor, which
+  is a KILL as unjudgeable (s.6) -- the same fate S001a faces. The screen, not the
+  paper clock, is where a monthly-frequency strategy carries its information. This is
+  now true of two of the three candidates in the book and is worth Jason knowing:
+  the 40-trades-or-6-weeks rule cannot judge a strategy that fires monthly.
+- Method note carried forward: a statistical cell's frozen boundary (Scan 031's
+  Discovery-wide tercile) is inadmissible in a strategy, because a trader at a month
+  end cannot know it. Replaced with the same split measured over a trailing 24
+  month-end window -- knowable at decision time, untuned, and it is what any future
+  revamp of a tercile-conditioned effect should do.
+
 ## 2026-09-13 (interactive, off-cycle) — perspective scoping for Sept 19 checkpoint
 Jason asked whether the project's search perspective needs to shift: (1)
 incorporating scheduled-event/"chatter" data, and (2) reading order

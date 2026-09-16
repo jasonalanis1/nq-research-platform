@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-16T02:02:07.591196+00:00",
+ "ran_at": "2026-09-16T04:02:47.426103+00:00",
  "owner": "cycle",
- "note": "9:00 pm cycle",
+ "note": "11:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -33,7 +33,7 @@
    "ok": true,
    "returncode": 0,
    "tail": [
-    "NEW SIGNAL: 2026-09-15 -- low-tercile vwap_dist_vs_atr, entry_close=28967.00",
+    "No new signal today (2026-09-15 bucket=low).",
     "Log: 2 total signals, 2 open, 0 closed, 0 resolved today.",
     "Log saved to /sessions/rcw-01wkq8jarktqpjrnqp6dlzdw/mnt/Documents--nq-research-platform-live/research/forward_validation/h118_forward_log.jsonl"
    ],
@@ -61,7 +61,6 @@
   "queue": {
    "ok": true,
    "queue": [
-    "S002 SPECIFY",
     "S003 SOURCE",
     "S004 SOURCE",
     "S005 SOURCE",
@@ -69,12 +68,23 @@
    ],
    "salvage_owed": [],
    "empty": false,
-   "note": "next candidate: S002 Overnight-vs-intraday return split, night leg as a trade (M15 via Salvage) at SPECIFY"
+   "note": "next candidate: S003 Month-end payment-cycle reversal, NQ (M24) as a full strategy at SOURCE"
   },
   "paper_book": {
    "ok": true,
-   "n_in_paper": 1,
+   "n_in_paper": 2,
    "strategies": [
+    {
+     "strategy_id": "S002",
+     "name": "Overnight carry on compressed prior days (night leg of M15 via Salvage)",
+     "stage": "PAPER",
+     "trades": 2,
+     "days_elapsed": 8,
+     "trades_to_judgment": 38,
+     "weeks_to_judgment": 4.9,
+     "at_judgment_point": false,
+     "judgment_reason": null
+    },
     {
      "strategy_id": "S001a",
      "name": "Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only (S001 salvage spawn)",
@@ -92,7 +102,7 @@
     "base_entry_b3_orb_placeholder",
     "execution_dummy_4x_placeholder"
    ],
-   "note": "S001a 0 trades / 8 days (40 trades or 4.9 wk to judgment)"
+   "note": "S002 2 trades / 8 days (38 trades or 4.9 wk to judgment); S001a 0 trades / 8 days (40 trades or 4.9 wk to judgment)"
   }
  },
  "failed": [],
