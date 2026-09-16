@@ -1505,6 +1505,33 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 16th, ~11:00-11:45 am CT -- SCHEDULED 11:00 AM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
+queue S004/S005/S006 at SOURCE, paper book 3 strategies ALL SLOW, none at a judgment point. Step 2 data: no change since
+the 9:00 am cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET) -- Sept 15 was already scored, so
+NO NEWLY COMPLETE SESSION; Sept 13/16 are overnight fragments and are skipped, data current, no interrupt. Step 3: s001a,
+s002, s003 and the dummy each returned 0 new rows across 0 sessions, log unchanged at 48. PAPER BOOK unchanged: S002 2
+trades -0.03R, S001a 0, S003 0, all SLOW, judged only at 40 trades. Step 4 (movement: TWO stage changes): S008 late-day
+constant-leverage rebalance continuation SOURCED from market mechanics (forced counterparty: constant-leverage ETFs, VA
+hedges and risk-parity programmes must rebalance in the DIRECTION of the day's move into the 16:00 ET NAV clock,
+price-insensitively, notional proportional to the day's return), SPECIFIED as a whole trade (research/infrastructure/
+strategy-specs/S008-late-day-rebalance-continuation.md: entry 15:00 ET next-bar open on |Close(15:00)-Open(09:30)| >= 0.5 x
+trailing-20 median 09:30-15:00 range, direction sign(M), stop 0.50 x that range = median 46.4 pts, target 1.5R, flat 15:55
+ET, 1 micro; fire rate 0.4390/session -> 55.3 trades in 126 sessions, NOT SLOW) -- then REFUSED AT ITS OWN PRE-FREEZE COST
+BUDGET and sent to LEARN WITHOUT A SCREEN under directive s.4's Monetization "no credible path". The budget, written into
+the spec before any outcome was looked at: $6.00 ASSUMED round trip / $2.00 per MNQ point = 3.00 index points, so a
+candidate must gross >= 9.0 pts/trade (3x cost). The specified cell grossed +2.55 pts (n=708, t=2.11) = -0.45 pts NET.
+The whole 36-cell family (T 10:00-15:30 ET x z 0/0.5/0.8/1.0) lands -0.9..+5.5 gross pts; the best cell +5.54 (t=2.93) is
+the MAX OF A GRID and was refused as ex-post selection, as S001's and S007's salvages each did. The RTH VWAP 2-sigma
+reversion (detect_vwap_reversion's shape moved off its 08:30 pre-market open to 09:30, real 1:1 stop, VWAP target) fires on
+92.7% of sessions at gross +0.043R on 17.6-pt median risk = -1.55 pts net, edge flat across distance buckets. The validated
+magnitude facts size a trade but do not create one -- the quiet-midday fact selects SMALLER absolute afternoon ranges
+(27.4 vs 38.2 pts), the wrong direction for a fixed cost. NO spec hashed, NO module written, NO screen spent, Validation/
+Holdout untouched. Registry rows SOURCE/SPECIFY/LEARN. LEARN: research/KNOWLEDGE.md + research/studies/
+S008-cost-budget-2026-09-16.md + src/study_s008_intraday_cost_budget.py + data/study_S008_cost_budget.json. Step 5: pytest
+571 passed, cycle_close CLOSE COMPLETE, committed and pushed, origin/main == HEAD. Session: research/sessions/
+2026-09-16-1600.md.
+
+
 September 16th, ~9:00-9:55 am CT -- SCHEDULED 9:00 AM CYCLE, the FIRST ordinary cycle under Jason's Amendment 1. Step 1
 preflight clean (research/_cycle_preflight.json): queue S004/S005/S006 at SOURCE, paper book 3 strategies ALL SLOW, none at
 a judgment point. Step 2 data: data/NQ_1min_databento_2026-09-16.csv is NEW (the 7 am CT top-up ran, last bar 2026-09-16

@@ -103,6 +103,73 @@ Sourced Entry 29/M25 (monthly options-expiration week delta-hedge unwind, NQ, li
 
 - 2026-09-14 (11:00 am cycle): A HIGH PLACEBO SCORE IS A REASON TO RUN THE RESIDUALISED TEST, NOT A VERDICT ON ITS OWN. The mechanical suite said yesterday's opening range does 74% of hyp-000162's work, which reads as redundancy. The Director test held yesterday's value FIXED and found 87.2% of the effect still there. Both numbers are correct and they are not in conflict: a lagged predictor and a current one can share a persistent driver without being substitutes. Read alone the placebo number would have killed a genuinely new candidate; read alone the separability number would have missed that the underlying variable persists strongly enough to matter for sizing. The suite should KEEP flagging high placebo scores -- the flag did its job by forcing the analysis -- but the DISPOSITION belongs to the stage that can hold the suspect fixed, not to the flag. This is the counterpart to the same morning's lesson that a structural check needs its own base rate: a check can be correct, informative, and still not be a verdict.
 
+## 2026-09-16 (11:00 am CT scheduled cycle) — S008: the cost budget run BEFORE the freeze, and the candidate refused on it
+
+**The 9:00 am lesson ("ask for per-trade edge first, fire rate second") was applied as
+a GATE this cycle rather than as a post-mortem, and it stopped a candidate at SPECIFY
+for one third of S007's cost.**
+
+S008 (late-day constant-leverage rebalance continuation) was sourced from market
+mechanics with a genuinely forced counterparty: constant-leverage ETFs, variable-
+annuity hedges and risk-parity programmes must rebalance in the direction of the day's
+move into the 16:00 ET NAV clock, price-insensitively, with notional roughly
+proportional to the day's return. Whole trade written: entry at the 15:00 ET next-bar
+open when |Close(15:00) − Open(09:30)| ≥ 0.5 × the trailing-20 median 09:30–15:00
+range, direction sign(M), stop 0.50 × that range, target 1.5R, flat 15:55 ET, 1 micro.
+**Fire rate 0.4390/session → 55.3 trades in 126 sessions: NOT SLOW.** The frequency
+half of Amendment 1's preference worked on the second try as it did on the first.
+
+**The budget, written into the spec before any outcome was looked at:** $6.00 ASSUMED
+per micro round trip ÷ $2.00 per MNQ point = **3.00 index points**, so a candidate
+must earn a gross expectancy of **≥ 9.0 points per trade** (3× cost). **The specified
+cell earned +2.55 gross points (n=708, t=2.11) — −0.45 points NET, 3.5× short.**
+Monetization ruled NO CREDIBLE PATH, which directive s.4 sends to LEARN *without a
+screen*. No spec hashed, no module written, no SCREEN row spent.
+
+1. **THE INTRADAY DIRECTIONAL DRIFT AVAILABLE ON NQ IS 1–6 POINTS, AND THE ROUND TRIP
+   IS 3.** Thirty-six continuation cells across six decision times (10:00–15:30 ET)
+   and four move thresholds all land between −0.9 and +5.5 gross points. The RTH VWAP
+   2σ-band reversion — `detect_vwap_reversion.py`'s shape moved off its 08:30
+   pre-market open to the 09:30 RTH open, with a real 1:1 stop and a VWAP target —
+   fires on **92.7% of sessions** at **gross +0.043R** on a median 17.6-point risk,
+   i.e. −1.55 points net, with a FLAT edge across distance buckets (+0.098/+0.038/
+   −0.014/+0.012/+0.082). This band is now the project's reference number: an intraday
+   candidate has to explain why it sits outside a range nothing tested has left.
+2. **THE SINGLE BEST CELL OF A GRID IS NOT A CANDIDATE.** T=13:30, z≥0.5 came back
+   +5.54 gross points at t=2.93 — still short of the budget, and the maximum of 36
+   cells. Taking it would have been the same ex-post selection S001's and S007's
+   salvages each refused. Refused again, in a third context: at SOURCE, before a
+   freeze, where refusing is cheapest.
+3. **THE VALIDATED MAGNITUDE FACTS SIZE A TRADE; THEY DO NOT CREATE ONE — AND ONE OF
+   THEM POINTS THE WRONG WAY FOR A FIXED COST.** The quiet-midday → expanded-afternoon
+   fact selects days whose afternoon range is *smaller in absolute points* (median
+   27.4 vs 38.2): expansion measured against a compressed midday is not expansion in
+   the units a $6.00 cost is paid in, so conditioning on it makes the cost problem
+   worse. The wide-opening-range fact (hyp-000162 / M30) splits 48.3% of sessions and
+   leaves the morning continuation at +3.1/−0.8/+0.7/+1.1 points (t = 1.05/−0.30/
+   0.27/0.43). A bigger expected range widens the stop; it does not supply the edge
+   that stop protects. Same answer Stack A (hyp-000161) gave about the expected-range
+   regime as an entry filter, reached this time from the cost side.
+4. **THE FIRE RATE AND THE PER-TRADE EDGE PULL AGAINST EACH OTHER IN THIS BOOK.** The
+   only two candidates that clear 40 trades in six months (S007 at 91.5, S008 at 55.3)
+   are exactly the two whose edge cannot pay $6.00; the only strategy with a real
+   per-trade edge (S003, +$379/trade, +0.396R) projects 1.3 trades in six months. That
+   is an observation for LEARN and nothing more — Amendment 1 stands as Jason wrote it
+   and the SLOW label already handles the clock. Its only operational consequence is
+   sourcing ORDER: ask the budget question first and accept whatever fire rate the
+   surviving structure has.
+5. **WHAT WOULD CHANGE THE ANSWER IS THE COST, NOT A FILTER.** No knowable condition
+   in S007's menu found an edge and this study found the family-level reason why. The
+   levers left are a MEASURED cost basis from B4b (the 3.00 points is an assumption
+   and could be materially smaller), a longer hold in which forced flow accumulates,
+   or a mechanism whose forced participant moves tens of points. The S008 mechanism is
+   not refuted; what is refuted is that it is worth $6.00 a trade.
+
+Detail: `research/studies/S008-cost-budget-2026-09-16.md`,
+`research/infrastructure/strategy-specs/S008-late-day-rebalance-continuation.md`,
+`src/study_s008_intraday_cost_budget.py`, `data/study_S008_cost_budget.json`, registry
+rows SOURCE/SPECIFY/LEARN in `research/ledger/strategies.jsonl`.
+
 ## 2026-09-16 (9:00 am CT scheduled cycle) — S007, the first Amendment 1 intraday candidate: KILLED at SCREEN, salvage spent, nothing spawned
 
 **The sourcing preference worked. The strategy did not, and it failed for the one
