@@ -203,6 +203,18 @@ register_strategy("s008", _s008)
 import strategy_s009_vwap_completion_continuation as _s009  # noqa: E402
 register_strategy("s009", _s009)
 
+# S010 (thin-participation afternoon completion continuation) -- registered at its
+# FREEZE (2026-09-16, 5:00 pm cycle) so a passing SCREEN can put it into PAPER the
+# same cycle with `--strategy s010` (directive s.14.4). Sourced under Amendment 1's
+# top preference (intraday, trades most days) from market mechanics: the same
+# benchmark- and close-referenced execution S008 and S009 name, but selected on the
+# DENOMINATOR -- a session whose 09:30-14:00 volume is below its trailing-20 median
+# has to push an unchanged completion residual through a thinner book, and market
+# impact scales with size RELATIVE to available volume. Projected 48.0 six-month
+# trades (0.381247/session x 126) -> NOT SLOW.
+import strategy_s010_thin_participation_completion as _s010  # noqa: E402
+register_strategy("s010", _s010)
+
 # S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) --
 # REGISTERED 2026-09-16 (1:00 pm cycle) as an INPUT-ERROR CORRECTION, exactly as
 # S008 was. S001 was KILLED at SCREEN on 2026-09-15 against the WRONG cost
