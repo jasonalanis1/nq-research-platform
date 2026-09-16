@@ -88,6 +88,28 @@ silently decide them)
      work once real execution costs are known (B4b or a funded paper
      account).
 
+  7. CROSS-SESSION (OVERNIGHT) EXITS. Added 2026-09-16 (9:00 pm cycle) as
+     S002's named FREEZE PREREQUISITE: choice 4's bookkeeping walked only the
+     entry session's OWN frame, so a trade held past 16:00 could not be
+     bookkept at all. A strategy that holds past its entry session now says so
+     per signal, by putting an ABSOLUTE exit timestamp in
+     market_context["exit_ts"]; _resolve_fill_outcome then walks the full
+     price frame across the session boundary (stop and target still first-
+     touch, stop still wins a same-bar tie) and the time exit fires at the
+     first bar at or after that timestamp, booked at that bar's OPEN (the
+     platform's next-bar-open convention; a same-session time exit still books
+     the bar's CLOSE, unchanged). Nothing about the same-session path moves:
+     every strategy that does not set "exit_ts" -- B3, the execution dummy,
+     S001a -- takes the identical code path with scan_df=None and exit_ts=None
+     (tests/test_bot_stack_paper_run.py proves it against a verbatim copy of
+     the pre-change function). THE COMPLETENESS GUARD EXTENDS WITH IT: an
+     overnight trade whose EXIT session is not yet complete is not scored at
+     all -- the entry session is DEFERRED, nothing is written to the log, the
+     trade stays OPEN and unresolved, and a later run reconsiders it once the
+     exit session's data is on disk. It is never force-closed at the last bar
+     available and never fabricated (session_end_fallback is refused outright
+     in cross-session mode).
+
 LOG: research/forward_validation/bot_stack_paper_log.jsonl (append-only, one
 row per session, idempotent -- a session already logged is never re-run).
 
@@ -307,33 +329,77 @@ def running_state(rows: list[dict]) -> dict:
     return {"equity_usd": equity, "peak_profit_usd": peak, "paper_trades": trades, "paper_net_usd": equity}
 
 
+def cross_session_exit_ts(signal):
+    """The ABSOLUTE exit timestamp a strategy that holds past its entry session
+    declares in market_context["exit_ts"] (choice 7), or None. B3, the execution
+    dummy and S001a never set it, so they never leave the same-session path."""
+    ctx = getattr(signal, "market_context", {}) or {}
+    raw = ctx.get("exit_ts")
+    return pd.Timestamp(raw) if raw else None
+
+
+def cross_session_exit_ready(scan_df: pd.DataFrame | None, exit_ts) -> tuple[bool, str]:
+    """session_is_complete()'s refusal, applied to the EXIT session of an
+    overnight trade. False means the trade stays OPEN and unresolved: not
+    scored, not logged, not force-closed, reconsidered on a later run once the
+    exit session's bars are on disk. Never fabricate an exit."""
+    if scan_df is None or len(scan_df) == 0:
+        return False, "no cross-session price frame available"
+    exit_ts = pd.Timestamp(exit_ts)
+    exit_day = exit_ts.date()
+    day_frame = scan_df[scan_df.index.date == exit_day]
+    if day_frame.empty:
+        return False, f"exit session {exit_day} is not on disk yet"
+    ok, why = session_is_complete(day_frame)
+    if not ok:
+        return False, f"exit session {exit_day} is not complete -- {why}"
+    if day_frame.index.max() < exit_ts:
+        return False, f"exit session {exit_day} has no bar at or after {exit_ts}"
+    return True, ""
+
+
 def _resolve_fill_outcome(day_df: pd.DataFrame, direction: str, from_ts, entry_price: float,
-                           stop: float, target: float, time_exit: str) -> dict:
+                           stop: float, target: float, time_exit: str,
+                           scan_df: pd.DataFrame | None = None, exit_ts=None) -> dict | None:
     """EXECUTION-side bookkeeping exit -- see choice 4 above. Deliberately not
-    shared code with bot_forward_log.py's _simulate_outcome."""
-    after = day_df[day_df.index > from_ts]
-    exit_price, exit_reason, exit_ts = None, None, None
+    shared code with bot_forward_log.py's _simulate_outcome.
+
+    scan_df / exit_ts are the choice-7 cross-session extension and are BOTH None
+    for every same-session strategy, which then runs the identical original code
+    (frame is day_df, the time exit is the clock string, the session-end fallback
+    stands). With exit_ts set the walk crosses the session boundary and the time
+    exit fires at the first bar at or after exit_ts, booked at that bar's OPEN;
+    if the data runs out before that bar this returns None -- the trade is still
+    OPEN and the caller must not book it."""
+    frame = day_df if scan_df is None else scan_df
+    after = frame[frame.index > from_ts]
+    exit_price, exit_reason, hit_ts = None, None, None
     for ts, bar in after.iterrows():
         lo, hi = float(bar["Low"]), float(bar["High"])
         if direction == "long":
             if lo <= stop:
-                exit_price, exit_reason, exit_ts = stop, "stop", ts; break
+                exit_price, exit_reason, hit_ts = stop, "stop", ts; break
             if hi >= target:
-                exit_price, exit_reason, exit_ts = target, "target", ts; break
+                exit_price, exit_reason, hit_ts = target, "target", ts; break
         else:
             if hi >= stop:
-                exit_price, exit_reason, exit_ts = stop, "stop", ts; break
+                exit_price, exit_reason, hit_ts = stop, "stop", ts; break
             if lo <= target:
-                exit_price, exit_reason, exit_ts = target, "target", ts; break
-        if ts.strftime("%H:%M") >= time_exit:
-            exit_price, exit_reason, exit_ts = float(bar["Close"]), "time_exit", ts; break
+                exit_price, exit_reason, hit_ts = target, "target", ts; break
+        if exit_ts is None:
+            if ts.strftime("%H:%M") >= time_exit:
+                exit_price, exit_reason, hit_ts = float(bar["Close"]), "time_exit", ts; break
+        elif ts >= pd.Timestamp(exit_ts):
+            exit_price, exit_reason, hit_ts = float(bar["Open"]), "time_exit", ts; break
     if exit_price is None:
+        if exit_ts is not None:
+            return None     # OPEN, unresolved -- no session_end_fallback across a boundary
         last = day_df.iloc[-1]
-        exit_price, exit_reason, exit_ts = float(last["Close"]), "session_end_fallback", day_df.index[-1]
+        exit_price, exit_reason, hit_ts = float(last["Close"]), "session_end_fallback", day_df.index[-1]
     risk = abs(entry_price - stop)
     move = (exit_price - entry_price) if direction == "long" else (entry_price - exit_price)
     r_multiple = round(move / risk, 4) if risk else None
-    return {"exit_price": round(exit_price, 4), "exit_reason": exit_reason, "exit_time": str(exit_ts),
+    return {"exit_price": round(exit_price, 4), "exit_reason": exit_reason, "exit_time": str(hit_ts),
             "risk_points": round(risk, 4), "r_multiple": r_multiple}
 
 
@@ -380,11 +446,23 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict], history: pd.
         return {"date": str(date), "strategy": name, "outcome": "no_signal",
                 "note": ("no B3 signal (one trade/day rule; not every session fires)" if STRATEGY == "b3"
                          else "no signal this session (strategy's own rules; one trade a session)")}
-    return _run_one(date, day_df, prior_rows, sigs[0], name)
+    return _run_one(date, day_df, prior_rows, sigs[0], name, scan_df=history)
 
 
 def _run_one(date, day_df: pd.DataFrame, prior_rows: list[dict], signal, name: str,
-             decision: dict | None = None) -> dict:
+             decision: dict | None = None, scan_df: pd.DataFrame | None = None) -> dict:
+
+    # CHOICE 7 -- overnight trades. This runs BEFORE anything with a side effect
+    # (no B2 call, no broker, no order-path journal entry): if the exit session
+    # is not complete the session is deferred whole and nothing is recorded.
+    x_exit = cross_session_exit_ts(signal)
+    if x_exit is not None:
+        ready, why = cross_session_exit_ready(scan_df, x_exit)
+        if not ready:
+            return {"date": str(date), "strategy": name, "outcome": "open_trade_deferred",
+                    "_defer": True,
+                    "note": f"cross-session exit {x_exit} not resolvable yet: {why}. "
+                            "Trade stays OPEN and unresolved; reconsidered on a later run."}
 
     decision = decision if decision is not None else decision_for(date=str(date))
     if not decision["trade_permission"]:
@@ -448,7 +526,15 @@ def _run_one(date, day_df: pd.DataFrame, prior_rows: list[dict], signal, name: s
         fill_price = float(fills[0]["price"]) if fills else float(signal.entry)
         time_exit = (getattr(signal, "market_context", {}) or {}).get("time_exit") or "15:55"
         outcome = _resolve_fill_outcome(day_df, signal.direction, signal.timestamp, fill_price,
-                                         signal.stop, signal.target, time_exit)
+                                         signal.stop, signal.target, time_exit,
+                                         scan_df=(scan_df if x_exit is not None else None),
+                                         exit_ts=x_exit)
+        if outcome is None:
+            # unreachable behind the guard above; if it ever happens the trade is
+            # OPEN and nothing is booked -- never a fabricated exit.
+            return {"date": str(date), "strategy": name, "outcome": "open_trade_deferred",
+                    "_defer": True,
+                    "note": "cross-session exit unreachable in the data on disk; trade stays OPEN."}
         pnl_usd = round((outcome["r_multiple"] or 0.0) * outcome["risk_points"] * filled_qty * MNQ_MULTIPLIER, 2)
         row["bookkeeping"] = outcome
         row["pnl_usd"] = pnl_usd
@@ -502,6 +588,10 @@ def main(argv=None):
             continue
         out = run_session(d, day_df, own_rows, history=df)
         for row in (out if isinstance(out, list) else [out]):
+            if row.pop("_defer", False):
+                skipped.append((d, row["note"]))
+                print(f"  {d}: DEFERRED -- {row['note']}")
+                continue
             append_row(row)
             rows.append(row)
             own_rows.append(row)

@@ -51,6 +51,7 @@ def screen(module, df: pd.DataFrame, slice_label: str = "discovery") -> dict:
     gen = module.generate_signals
     trades = []
     n_sessions = 0
+    n_unresolved = 0        # cross-session trades whose exit falls past the slice
     for day, day_df in df.groupby(df.index.date):
         n_sessions += 1
         sigs = bpr._signals(gen, day_df, df)
@@ -58,8 +59,20 @@ def screen(module, df: pd.DataFrame, slice_label: str = "discovery") -> dict:
             continue
         sig = sigs[0]                       # one trade a session, the paper loop's rule
         time_exit = (getattr(sig, "market_context", {}) or {}).get("time_exit") or bpr.SESSION_COMPLETE_BY
+        # CROSS-SESSION (choice 7 in the paper loop): a strategy holding past its
+        # entry session declares an absolute market_context["exit_ts"] and is
+        # walked across the boundary on the WHOLE frame, identically to paper.
+        # Same-session strategies pass scan_df=None/exit_ts=None -- unchanged.
+        x_exit = bpr.cross_session_exit_ts(sig)
         out = bpr._resolve_fill_outcome(day_df, sig.direction, sig.timestamp, float(sig.entry),
-                                        float(sig.stop), float(sig.target), time_exit)
+                                        float(sig.stop), float(sig.target), time_exit,
+                                        scan_df=(df if x_exit is not None else None),
+                                        exit_ts=x_exit)
+        if out is None:
+            # the exit falls past the end of this slice: the trade is OPEN and is
+            # not counted. Never force-closed, never fabricated.
+            n_unresolved += 1
+            continue
         risk = out["risk_points"]
         r_gross = out["r_multiple"] if out["r_multiple"] is not None else 0.0
         gross_usd = r_gross * risk * MNQ_USD_PER_PT
@@ -79,13 +92,14 @@ def screen(module, df: pd.DataFrame, slice_label: str = "discovery") -> dict:
     return {
         "strategy_name": module.STRATEGY_NAME, "strategy_version": getattr(module, "STRATEGY_VERSION", ""),
         "slice": slice_label, "sessions": n_sessions, "trades": n,
+        "open_unresolved_trades_excluded": n_unresolved,
         "net_usd_1_micro": net, "net_usd_5_micro": round(net * 5, 2), "net_usd_10_micro": round(net * 10, 2),
         "gross_usd_1_micro": gross, "assumed_costs_usd_1": round(ASSUMED_COST_USD_PER_MICRO_RT * n, 2),
         "win_rate": round(wins / n, 4) if n else None, "avg_r_net": avg_r,
         "total_r_net": round(sum(t["r_net"] for t in trades), 3),
         "made_money_after_assumed_costs": bool(n and net > 0),
         "cost_basis": f"{SLIPPAGE_BASIS}: ${ASSUMED_COST_USD_PER_MICRO_RT:.2f} per micro round trip (commission $2.50/side + 1 tick/side)",
-        "bookkeeping": "bot_stack_paper_run._resolve_fill_outcome (first touch, stop wins ties, time exit, session-end fallback); fill at signal.entry",
+        "bookkeeping": "bot_stack_paper_run._resolve_fill_outcome (first touch, stop wins ties, time exit, session-end fallback; cross-session exits walk the whole frame to market_context['exit_ts'] and an unresolvable one is excluded, never force-closed); fill at signal.entry",
         "trades_detail": trades,
     }
 
