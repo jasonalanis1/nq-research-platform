@@ -1,0 +1,157 @@
+{
+ "trade": "long 1 micro at 16:00 close (D-1) -> flat at 09:30 open (D), no stop, ASSUMED $6.00 RT",
+ "slice": "discovery",
+ "n": 1631,
+ "all": {
+  "n": 1631,
+  "net_usd_1": 1784.5,
+  "win_rate": 0.53,
+  "avg_r_net": 0.0,
+  "profitable": true,
+  "thin": false,
+  "positive_but_thin": false,
+  "avg_pts": 3.547
+ },
+ "menu": [
+  {
+   "condition": "1. VXN regime (D-2 close vs trailing-20, known at entry)",
+   "sides": {
+    "HIGH": {
+     "n": 695,
+     "net_usd_1": 168.0,
+     "win_rate": 0.553,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 3.121
+    },
+    "LOW": {
+     "n": 936,
+     "net_usd_1": 1616.5,
+     "win_rate": 0.514,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 3.864
+    }
+   }
+  },
+  {
+   "condition": "2. prior-day range contraction (prior_day_narrow of D, known at entry)",
+   "sides": {
+    "NARROW": {
+     "n": 364,
+     "net_usd_1": 1625.0,
+     "win_rate": 0.533,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 5.232
+    },
+    "WIDE": {
+     "n": 1267,
+     "net_usd_1": 159.5,
+     "win_rate": 0.53,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 3.063
+    }
+   }
+  },
+  {
+   "condition": "3. time of day",
+   "sides": {
+    "FIXED_1600_0930": {
+     "n": 1631,
+     "net_usd_1": 1784.5,
+     "win_rate": 0.53,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 3.547
+    }
+   }
+  },
+  {
+   "condition": "4. scheduled-news day (D in FOMC/CPI/NFP)",
+   "sides": {
+    "NEWS": {
+     "n": 199,
+     "net_usd_1": 1735.5,
+     "win_rate": 0.568,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 7.361
+    },
+    "QUIET": {
+     "n": 1432,
+     "net_usd_1": 49.0,
+     "win_rate": 0.525,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 3.017
+    }
+   }
+  },
+  {
+   "condition": "info: weekend leg (Fri close -> Mon open) -- NOT a menu condition",
+   "sides": {
+    "WEEKDAY": {
+     "n": 1294,
+     "net_usd_1": 5185.5,
+     "win_rate": 0.536,
+     "avg_r_net": 0.0,
+     "profitable": true,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": 5.004
+    },
+    "WEEKEND": {
+     "n": 337,
+     "net_usd_1": -3401.0,
+     "win_rate": 0.51,
+     "avg_r_net": 0.0,
+     "profitable": false,
+     "thin": false,
+     "positive_but_thin": false,
+     "avg_pts": -2.046
+    }
+   }
+  }
+ ],
+ "cross": {
+  "condition": "1 x 4 not computed -- single conditions only (s.7 menu)",
+  "sides": {
+   "HIGH": {
+    "n": 695,
+    "net_usd_1": 168.0,
+    "win_rate": 0.553,
+    "avg_r_net": 0.0,
+    "profitable": true,
+    "thin": false,
+    "positive_but_thin": false,
+    "avg_pts": 3.121
+   },
+   "LOW": {
+    "n": 936,
+    "net_usd_1": 1616.5,
+    "win_rate": 0.514,
+    "avg_r_net": 0.0,
+    "profitable": true,
+    "thin": false,
+    "positive_but_thin": false,
+    "avg_pts": 3.864
+   }
+  }
+ }
+}

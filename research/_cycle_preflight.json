@@ -1,18 +1,23 @@
 {
- "ran_at": "2026-09-15T22:37:45.325969+00:00",
+ "ran_at": "2026-09-16T00:03:42.567175+00:00",
  "owner": "cycle",
- "note": "Day One -- standing directive 2026-09-15",
+ "note": "7:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
-   "skipped": true,
+   "returncode": 0,
    "tail": [
-    "--skip-lock"
-   ]
+    "BUSY owner=cycle last_heartbeat=0min_ago note='7:00 pm cycle'"
+   ],
+   "stderr_tail": []
   },
   "budget": {
    "ok": true,
-   "skipped": true
+   "returncode": 0,
+   "tail": [
+    "budget started: 105 min"
+   ],
+   "stderr_tail": []
   },
   "sweep": {
    "ok": true,
@@ -49,9 +54,34 @@
    "known": true,
    "count": 0,
    "floor": 3,
-   "sourcing_owed": true,
-   "line": "Shelf 0/3 DRAWABLE (Entry none; pending on data/Jason: Entry 15, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61) -> SOURCING OWED (read ",
-   "note": "shelf is AT OR BELOW the floor -- SOURCING IS OWED this cycle, before the work item"
+   "sourcing_owed": false,
+   "line": "Shelf 0/3 DRAWABLE (Entry none; pending on data/Jason: Entry 15, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61) -> SOURCING OWED (read + sc",
+   "note": "shelf floor rule RETIRED (directive s.12) -- informational; the candidate queue is the thing that must not be empty"
+  },
+  "queue": {
+   "ok": true,
+   "queue": [
+    "S001a SPECIFY",
+    "S002 SOURCE",
+    "S003 SOURCE",
+    "S004 SOURCE",
+    "S005 SOURCE",
+    "S006 SOURCE"
+   ],
+   "salvage_owed": [],
+   "empty": false,
+   "note": "next candidate: S001a Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only (S001 salvage spawn) at SPECIFY"
+  },
+  "paper_book": {
+   "ok": true,
+   "n_in_paper": 0,
+   "strategies": [],
+   "at_judgment": [],
+   "plumbing": [
+    "base_entry_b3_orb_placeholder",
+    "execution_dummy_4x_placeholder"
+   ],
+   "note": "no strategy in paper yet"
   }
  },
  "failed": [],
