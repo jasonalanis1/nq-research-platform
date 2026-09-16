@@ -191,6 +191,18 @@ register_strategy("s003", _s003)
 import strategy_s008_late_day_rebalance_continuation as _s008  # noqa: E402
 register_strategy("s008", _s008)
 
+# S009 (afternoon VWAP-completion continuation) -- registered at its FREEZE
+# (2026-09-16, 3:00 pm cycle) so a passing SCREEN can put it into PAPER the same
+# cycle with `--strategy s009` (directive s.14.4). Sourced under Amendment 1's
+# top preference (intraday, trades most days) from market mechanics: agency
+# VWAP/POV execution algos carry a fixed quantity to a clock (the cash close) on
+# a back-loaded volume curve, so quantity stranded on the wrong side of the
+# session VWAP at 13:30 must be worked into the remaining hours regardless of
+# price -- forced, price-insensitive, one-directional flow that predicts
+# CONTINUATION of the benchmark gap.
+import strategy_s009_vwap_completion_continuation as _s009  # noqa: E402
+register_strategy("s009", _s009)
+
 # S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) --
 # REGISTERED 2026-09-16 (1:00 pm cycle) as an INPUT-ERROR CORRECTION, exactly as
 # S008 was. S001 was KILLED at SCREEN on 2026-09-15 against the WRONG cost
