@@ -576,3 +576,66 @@ then killed a candidate with it.** The cost error was an accident; the 3× budge
 rule that is convenient — it ends candidates cheaply — and unaccountable, because no one wrote
 it down as Jason's, is the more dangerous of the two failures. The directive says Tony does not
 make rules; this is what it costs when he does.
+
+---
+
+## S009 — afternoon VWAP-completion continuation: the right sign, two-thirds of the size
+*September 16th 2026, 3:00 pm CT cycle. SOURCE → SPECIFY → FREEZE → SCREEN → SALVAGE → KILL, one cycle.*
+*Spec `research/infrastructure/strategy-specs/S009-afternoon-vwap-completion-continuation.md`; screen
+`data/screen_S009.json`; salvage `data/salvage_S009_2026-09-16.json`.*
+
+The candidate: at 13:30 ET, if price sits more than 0.30 × the 09:30–13:30 range away from that
+window's VWAP, trade in the direction of the gap with a 0.50 × RNG stop, a 1.5R target and a 15:55
+flat. The forced counterparty is agency execution — VWAP/POV algos with a fixed parent quantity, a
+clock deadline and a back-loaded volume curve, which must work whatever is stranded on the wrong
+side of the benchmark into the remaining hours regardless of price.
+
+**The result, on 585 Discovery trades: gross +0.7113 index points per trade.** Not noise, and in the
+direction the mechanism predicts — that gross edge is an implied ~40.9% hit rate against the 40.0%
+breakeven a 1.5R/1R trade needs. But the pre-freeze gate (Amendment 2, the cost itself and no
+multiple of it) needed **41.6%**, and the screen came in below it:
+
+| combination | net/trade | verdict |
+|---|---|---|
+| MNQ market — **decision basis** | −0.5887 pt | loses |
+| MNQ limit (OPTIMISTIC) | −0.3387 pt | loses |
+| NQ market | **−0.0337 pt** | loses, by 3 hundredths of a point |
+| NQ limit (OPTIMISTIC) | +0.2163 pt | the only positive column, and it is an upper bound |
+
+**Three things worth keeping.**
+
+**1. This is the first candidate where the corrected cost was genuinely the binding constraint and
+the honest answer was still no.** S008 and S001 flipped from negative to positive when the cost was
+fixed. S009 does not: at the corrected 1.300 pt it misses by 0.59 pt, and even at the full-size NQ's
+0.745 pt it misses by 0.034 pt. Jason's reason for printing all four side by side was exactly this
+question — cost wall or pattern? — and here the answer is *both, and neither is enough*: the pattern
+is real and small, the micro's cost is nearly twice it, and the full-size contract closes almost the
+whole gap without closing it. A strategy that needs the cheaper contract to break even has no margin
+left for the slippage the broker will actually measure.
+
+**2. The pre-freeze edge-vs-cost check did its job for the first time.** The gate was written as a
+hit rate — "fails only if p ≤ 0.4155" — before any outcome was read, and the outcome landed at
+p ≈ 0.409. That is the first time a specify-stage number has been precise enough to be *wrong by a
+stated amount* rather than vindicated after the fact. Stating the gate in the units the screen will
+report it in is worth doing every time.
+
+**3. The biggest number on the salvage page was refused, and the reason is reusable.** Menu
+condition 2's TREND side was +$2,615 at +0.137R on 301 trades — by far the best cell in the check —
+and it is **ex-post-only**: the condition is the day's *full* RTH range, and the trade is decided at
+13:30, so the 13:30–16:00 bars the trade's own outcome lives in are inside the variable that selects
+it. A salvage condition has to be evaluable at the moment of the decision or it is not a filter, it
+is a description of the trades that worked. The known-at-13:30 substitute is a different variable,
+and it had already been measured and rejected at SPECIFY for making the strategy SLOW; swapping it in
+would have been a re-specification wearing a salvage's clothes. Two more sides were refused: a
+`direction = long` cell (+$1,397) because the mechanism is symmetric by construction and a long-only
+version of it is a long-NQ result on a rising sample, and a LOW-VXN cell (+$502) because the spec had
+*pre-named low volatility as where this should fail* — a slice that pays exactly where the mechanism
+said it should not is a found slice, not a confirmation.
+
+**What was taken:** menu condition 4, QUIET (no FOMC / CPI / NFP). It is a menu condition, it is also
+the spec's own pre-named failure condition written before any outcome was read, it is known in
+advance from a calendar, and its losing side is coherent — on a release day the morning VWAP is one
+print and the afternoon is news, not execution schedules, with FOMC's 14:00 statement sitting inside
+the holding window. n=518, +$333.28 at 1 micro. That spawns **S009a**, which enters at SPECIFY and
+will be SLOW (0.2465/session → 31.1 projected six-month trades). S009 stays KILLED and its one
+salvage is spent.

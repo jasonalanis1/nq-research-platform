@@ -103,3 +103,76 @@ def test_paper_book_comes_right_after_money(monkeypatch):
     out = sr.build("9:00 pm", "moved", "agents")
     assert calls[:2] == ["money", "paper_book_section"]
     assert out.index("[money]") < out.index("[paper_book_section]") < out.index("[product]")
+
+
+# --- PIPELINE reads the STRATEGY REGISTRY, not only the hypothesis ledger -----
+# Under the standing directive of September 15th 2026 every stage change is a row
+# in research/ledger/strategies.jsonl. Reading only the old hypothesis ledger made
+# this section report "nothing moved / the funnel is empty" on cycles that froze,
+# screened, salvaged and killed a strategy (caught 2026-09-16).
+
+def _wire_pipeline(tmp_path, monkeypatch, registry_rows, ledger_rows=()):
+    import strategy_registry as _sr
+    (tmp_path / "data").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "research" / "ledger").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "data" / "pipeline_sweep.json").write_text(json.dumps({"rows": [], "shelf": "Shelf 0/3 DRAWABLE"}))
+    led = tmp_path / "research" / "ledger" / "hypotheses.jsonl"
+    led.write_text("".join(json.dumps(r) + "\n" for r in ledger_rows))
+    reg = tmp_path / "research" / "ledger" / "strategies.jsonl"
+    reg.write_text("".join(json.dumps(r) + "\n" for r in registry_rows))
+    monkeypatch.setattr(sr, "PROJ", tmp_path)
+    monkeypatch.setattr(_sr, "REGISTRY", reg)
+    start = datetime.now().replace(tzinfo=None) - timedelta(minutes=30)
+    monkeypatch.setattr(sr, "_cycle_start", lambda: start, raising=False)
+    return reg
+
+
+def _ts(minutes_ago: int) -> str:
+    return (datetime.now(UTC) - timedelta(minutes=minutes_ago)).isoformat()
+
+
+def test_pipeline_reports_registry_stage_changes_when_the_hypothesis_ledger_is_silent(tmp_path, monkeypatch):
+    rows = [
+        {"strategy_id": "S009", "name": "VWAP completion", "stage": "FREEZE", "ts": _ts(20)},
+        {"strategy_id": "S009", "name": "VWAP completion", "stage": "SCREEN", "ts": _ts(15)},
+        {"strategy_id": "S009", "name": "VWAP completion", "stage": "KILL",
+         "verdict": "KILL -- lost money at SCREEN", "ts": _ts(10)},
+    ]
+    _wire_pipeline(tmp_path, monkeypatch, rows)
+    out = "\n".join(sr.pipeline())
+    assert "strategy registry" in out
+    assert "S009" in out and "**FREEZE**" in out and "**SCREEN**" in out and "**KILL**" in out
+    assert "Nothing. No candidate had input" not in out
+
+
+def test_pipeline_in_flight_counts_the_registry_queue_and_the_paper_book(tmp_path, monkeypatch):
+    rows = [
+        {"strategy_id": "S008", "name": "Late-day rebalance", "stage": "PAPER", "slow": False, "ts": _ts(5000)},
+        {"strategy_id": "S002", "name": "Overnight carry", "stage": "PAPER", "slow": True, "ts": _ts(5000)},
+        {"strategy_id": "S004", "name": "H118 lineage", "stage": "SOURCE", "ts": _ts(5000)},
+    ]
+    _wire_pipeline(tmp_path, monkeypatch, rows)
+    out = "\n".join(sr.pipeline())
+    assert "*In flight (3 strategies):*" in out
+    assert "S008" in out and "S002" in out and "S004" in out
+    assert "[SLOW — background, no queue slot]" in out          # Amendment 1's label survives
+    assert "the funnel is empty" not in out
+    # a SOURCE row is owed its SPECIFY, and the section says so
+    assert "owed next: SPECIFY" in out
+
+
+def test_pipeline_says_so_only_when_the_registry_is_genuinely_empty(tmp_path, monkeypatch):
+    _wire_pipeline(tmp_path, monkeypatch, [])
+    out = "\n".join(sr.pipeline())
+    assert "*In flight (0 strategies):*" in out
+    assert "interrupt reason 2" in out                           # s.10, not a silent empty funnel
+
+
+def test_pipeline_keeps_the_hypothesis_ledger_as_historical_context(tmp_path, monkeypatch):
+    """The 159 hypotheses are still the all-time denominator in 'the odds'."""
+    led = [{"hypothesis_id": "hyp-000001", "strategy_name": "old_thing",
+            "strategy_status": "REJECTED", "logged_at": _ts(100000), "parameters": {}}]
+    rows = [{"strategy_id": "S008", "name": "Late-day rebalance", "stage": "PAPER", "ts": _ts(5000)}]
+    _wire_pipeline(tmp_path, monkeypatch, rows, led)
+    out = "\n".join(sr.pipeline())
+    assert "Tested and closed, all time: **1** of 1 logged" in out

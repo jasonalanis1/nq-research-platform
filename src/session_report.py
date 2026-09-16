@@ -220,6 +220,56 @@ def _plain(name: str) -> str:
     return name.replace("_", " ")
 
 
+# --- THE STRATEGY REGISTRY, the PIPELINE section's primary source -------------
+# research/ledger/strategies.jsonl is where every stage change has lived since the
+# standing directive of September 15th 2026. src/strategy_registry.py owns it.
+_NEXT_STAGE = {
+    "SOURCE": "SPECIFY (write the whole trade: entry, exit, stop, sizing, costs)",
+    "SPECIFY": "FREEZE (hash spec + module into the registry, own commit, before any outcome data)",
+    "FREEZE": "SCREEN (one pass on Discovery, all four cost combinations)",
+    "SCREEN": "PAPER if it made money, SALVAGE if it did not",
+    "SALVAGE": "KILL, and SPECIFY for any spawn",
+    "FIX_ONCE": "SPECIFY (the one permitted rule change, written before the new run)",
+    "PAPER": "JUDGE at 40 trades, never on fewer",
+    "KEEP": "P1 extended paper",
+}
+
+
+def _registry_rows() -> list[dict]:
+    try:
+        import strategy_registry as _sr
+        return _sr.read_rows()
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def _next_stage(stage: str) -> str:
+    return _NEXT_STAGE.get(str(stage).upper(), "—")
+
+
+def _registry_moved_since(start) -> list[dict]:
+    """Every registry stage event written since this cycle started, oldest first."""
+    out = []
+    for r in _registry_rows():
+        try:
+            t = datetime.fromisoformat(str(r.get("ts", ""))).replace(tzinfo=None)
+        except Exception:  # noqa: BLE001
+            continue
+        if t >= start:
+            out.append(r)
+    return sorted(out, key=lambda r: str(r.get("ts", "")))
+
+
+def _registry_in_flight() -> tuple[list[dict], list[dict]]:
+    """(candidate queue not yet in paper, strategies in paper) from the registry."""
+    try:
+        import strategy_registry as _sr
+        rows = _sr.read_rows()
+        return _sr.queue(rows), _sr.in_paper(rows)
+    except Exception:  # noqa: BLE001
+        return [], []
+
+
 def pipeline(closed_today: int | None = None) -> list[str]:
     sweep = json.loads((PROJ / "data" / "pipeline_sweep.json").read_text())
     led = _load_jsonl(PROJ / "research" / "ledger" / "hypotheses.jsonl")
@@ -268,22 +318,62 @@ def pipeline(closed_today: int | None = None) -> list[str]:
 
     lines = ["**3. PIPELINE — the research funnel**", ""]
 
-    moved = _moved_since()
-    lines.append("*Moved a stage this session:*")
-    if moved:
-        for r in moved:
-            stage = str(r.get("parameters", {}).get("stage", "")).split("(")[0].strip() or "stage"
-            lines.append(f"- **{r['hypothesis_id']}** — {_plain(r['strategy_name'])} → "
-                         f"**{stage}**, now {r.get('strategy_status')}")
+    # THE PRIMARY SOURCE IS THE STRATEGY REGISTRY (research/ledger/strategies.jsonl),
+    # not the hypothesis ledger. Under the standing directive of September 15th the
+    # loop is SOURCE -> SPECIFY -> FREEZE -> SCREEN -> PAPER -> JUDGE and every stage
+    # change is a registry row; the hypothesis ledger stopped moving when the
+    # directive replaced "is this effect real?" with "does this strategy make
+    # money?". Reading only the old ledger made this section report "nothing moved /
+    # the funnel is empty" on cycles that froze, screened, salvaged and killed a
+    # strategy (caught 2026-09-16). The hypothesis ledger is kept below, as the
+    # historical record of the 159 hypotheses, which is what it now is.
+    reg_moved = _registry_moved_since(_cycle_start())
+    lines.append("*Moved a stage this session (strategy registry):*")
+    if reg_moved:
+        for r in reg_moved:
+            sid = r.get("strategy_id", "?")
+            extra = ""
+            if r.get("stage") == "PAPER":
+                extra = " · **SLOW**" if r.get("slow") else " · ordinary six-week clock"
+            verdict = str(r.get("verdict", "")).split(".")[0].strip()
+            lines.append(f"- **{sid}** — {r.get('name', '')} → **{r.get('stage')}**{extra}"
+                         + (f" — {verdict}" if verdict else ""))
     else:
         lines.append("- Nothing. No candidate had input for its next stage.")
     lines.append("")
 
+    reg_q, reg_paper = _registry_in_flight()
+    lines.append(f"*In flight ({len(reg_q) + len(reg_paper)} strategies):*")
+    if reg_paper:
+        for r in reg_paper:
+            tag = " **[SLOW — background, no queue slot]**" if r.get("slow") else ""
+            lines.append(f"- **{r.get('strategy_id')}** — {r.get('name', '')}")
+            lines.append(f"  - stage: PAPER{tag} · judged at 40 trades, never on fewer")
+    for r in reg_q:
+        lines.append(f"- **{r.get('strategy_id')}** — {r.get('name', '')}")
+        lines.append(f"  - stage: {r.get('stage', '?')} · owed next: "
+                     f"{_next_stage(r.get('stage', ''))}")
+    if not (reg_q or reg_paper):
+        lines.append("- **None — the candidate queue and the paper book are both empty.** "
+                     "That is standing directive s.10 interrupt reason 2.")
+    lines.append("")
+
+    # HISTORICAL CONTEXT: the hypothesis ledger and the sweep, which the directive
+    # did not retire but no longer drives. Shown only when it actually moved.
+    moved = _moved_since()
+    if moved:
+        lines.append("*Hypothesis ledger (historical context) also moved:*")
+        for r in moved:
+            stage = str(r.get("parameters", {}).get("stage", "")).split("(")[0].strip() or "stage"
+            lines.append(f"- **{r['hypothesis_id']}** — {_plain(r['strategy_name'])} → "
+                         f"**{stage}**, now {r.get('strategy_status')}")
+        lines.append("")
+
     TERMINAL = {"REJECTED", "VALIDATED_NOT_PROMOTED", "HOLDOUT PASSED", "FORWARD VALIDATION"}
     open_rows = [r for r in sweep.get("rows", []) if r.get("tier") == "OPEN"
                  and hist.get(r.get("id", ""), [{}])[-1].get("strategy_status") not in TERMINAL]
-    lines.append(f"*In flight ({len(open_rows)}):*")
     if open_rows:
+        lines.append(f"*Hypothesis ledger, still open ({len(open_rows)}) — historical context:*")
         for r in open_rows:
             hid = r.get("id", "")
             latest_row = hist.get(hid, [{}])[-1]
@@ -292,10 +382,7 @@ def pipeline(closed_today: int | None = None) -> list[str]:
             lines.append(f"- **{hid}** — {_plain(r.get('name', ''))}")
             lines.append(f"  - stage: {r.get('stage_reached', '?')} · status: {status} · age {_age(hid)}")
             lines.append(f"  - owed next: {owed or '—'}")
-    else:
-        lines.append("- **None — the funnel is empty.** Every candidate has been closed out. "
-                     "The next research action is a fresh draw from the shelf.")
-    lines.append("")
+        lines.append("")
 
     nxt = shelf.split("-> next DRAW:")[-1].strip() if "next DRAW" in shelf else "—"
     # THROUGHPUT, measured by when a candidate was FIRST opened -- not by its last

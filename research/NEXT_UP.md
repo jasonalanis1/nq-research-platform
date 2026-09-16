@@ -1529,6 +1529,47 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 16th, ~3:00-3:45 pm CT -- SCHEDULED 3:00 PM CYCLE, A SOURCING CYCLE. Step 1 preflight clean
+(research/_cycle_preflight.json): queue S004/S005/S006 at SOURCE, paper book 5 strategies (4 SLOW), none at a judgment
+point. Step 2 data UNCHANGED since the 1:00 pm cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16
+00:50 ET); the 7 am CT cron tops up once a day, nothing due until tomorrow. Step 3: s001, s001a, s002, s003, s008 and
+the dummy each returned 0 new rows across 0 sessions, log unchanged at 60; NOTHING SCORED. Book at corrected costs:
+S008 2 trades -0.08R (only non-SLOW, 38 to judgment, six-week mark 4.9 wk), S002 2 -0.03R, S001 1 -1.03R, S001a 0,
+S003 0 -- nothing judgeable under 40. Step 4 ran a candidate END TO END: **S009 AFTERNOON VWAP-COMPLETION
+CONTINUATION**, sourced under Amendment 1's top preference from MARKET MECHANICS in S008's shape (forced,
+price-insensitive flow into a clock) with a different forced participant: agency VWAP/POV execution algos carry a
+FIXED parent quantity to a CLOCK (the cash close) on a BACK-LOADED volume curve, so quantity stranded on the wrong
+side of the session VWAP at 13:30 must be worked into the remaining hours regardless of price -> CONTINUATION of the
+benchmark gap. Trigger quantity = |Close(13:30) - VWAP(09:30-13:30)|, not the day's move, so selection differs from
+S008's. NOT a resurrection (not M2/IB-breakout or gap-fade, both CLOSED and bottom-tier "stays dead"; not
+H118/hyp-000121-134; not detect_vwap_reversion's 2-sigma fade; not M16). TRADE: fire |D| >= 0.30 x RNG, direction
+sign(D), entry next bar's open after 13:30, stop 0.50 x RNG, target 1.5R, flat 15:55 ET, 1 micro. MAGNITUDE FACTS
+ENTER AS THE RISK UNIT (median RNG 67.2 pt -> risk 33.6 pt -> the 1.300-pt cost is 0.039R); a separate "large-range
+days only" filter was measured and REJECTED PRE-FREEZE for cutting the rate 0.3567 -> 0.2072/session (SLOW).
+PRE-FREEZE EDGE-VS-COST (Amendment 2, no multiple): breakeven p 40.0%, gate fails only if p <= 0.4155, at the
+mechanism's p = 0.45 prior the expected edge is +4.20 pt/trade vs 1.300/1.050/0.745/0.495 -> PASSES ALL FOUR ->
+SCREEN. FREEZE in its own commit f8af930 before any outcome data. SCREEN (Discovery, 2,101 sessions): 585 trades,
+gross +0.7113 pt/trade -- THE RIGHT SIGN, TWO-THIRDS OF THE SIZE. MNQ market **-$688.77** (-0.5887 pt/tr, -0.0269R),
+MNQ limit (OPTIMISTIC) -$396.27, NQ market -$394.24 (-0.0337 pt/tr -- misses by 3 hundredths of a point), NQ limit
+(OPTIMISTIC) +$2,530.76, the only positive column and an upper bound. SLOW projection 0.2784 x 126 = 35.1, so it
+would have been SLOW had it passed. SALVAGE (menu only, spent): THREE PROFITABLE SIDES REFUSED WITH REASONS --
+condition 2's TREND side (+$2,615, +0.137R, the biggest number on the page) is EX-POST-ONLY, because the day's FULL
+RTH range selects trades decided at 13:30 using the 13:30-16:00 bars the outcome lives in; direction=long (+$1,397)
+is a hidden beta bet contradicting a mechanism that is symmetric by construction; LOW VXN (+$502) INVERTS the spec's
+own pre-named failure condition. TAKEN: condition 4 QUIET, no FOMC/CPI/NFP (n=518, +$333.28) -- a menu condition,
+ALSO the spec's pre-named failure condition 3, known in advance from a calendar -> **S009a SPAWNED AT SOURCE** (rate
+0.2465 x 126 = 31.1 -> will be SLOW, no queue slot). KILL (lost money, full stop) + LEARN to KNOWLEDGE.md. Never
+entered PAPER, no paper record touched, frozen spec/module unedited (s.13). ALSO FIXED the cosmetic reporting gap:
+src/session_report.py's PIPELINE section read only the old hypothesis ledger and reported "nothing moved / funnel
+empty" on cycles the registry showed moving; it now takes research/ledger/strategies.jsonl as its PRIMARY source
+(stage changes this session; in-flight split into candidate queue vs paper book, carrying Amendment 1's SLOW label;
+an empty registry reported as s.10 interrupt reason 2) with the hypothesis ledger kept as historical context and
+still the all-time denominator. 4 tests added. Step 5: pytest **609 passed**, CLOSE COMPLETE, tree clean, pushed.
+Session: research/sessions/2026-09-16-1500.md.
+NEXT: Step 4's queue is **S009a (SOURCE, the S009 salvage spawn, owed its SPECIFY)**, then S004 (H118 lineage vs
+own-drift baseline), S005 (hyp-000162 as a sizing input), S006 (Stack A). S008 is the only non-SLOW strategy in
+paper and the only one on a clock.
+
 September 16th, ~1:00-1:45 pm CT -- SCHEDULED 1:00 PM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
 queue S004/S005/S006 at SOURCE, paper book 4 strategies (3 SLOW), none at a judgment point. Step 2 data: UNCHANGED since
 the 9:00 am cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET) -- NO newly complete session; the
