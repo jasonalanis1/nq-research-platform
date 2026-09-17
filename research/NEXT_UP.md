@@ -1564,6 +1564,28 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 17th, 9:00 pm cycle -- **S004 took three stages in one cycle and its PAPER entry is OWED, not taken.**
+Detail: research/sessions/2026-09-17-2100.md. **THE GATE BLOCKED SIX STEPS** (CPI 2023-12-12, FOMC 2021-09-22,
+NFP 2023-12-08, VXN 2026-09-02): step3_paper_scoring, step3_b2_risk_state_decision, step4_salvage_check,
+salvage_reruns (S007/S009 still owed), step4_specify_S009a, step4_specify_S010a. Nothing was scored, nothing booked,
+no partial salvage run, nothing defaulted. Price data is fine (through 2026-09-16). **S004** (H118's VWAP-distance
+lineage rebuilt as a strategy against its OWN-DRIFT baseline) SPECIFY -> FREEZE (ca287c3, spec sha256 8408305460...,
+module sha256 f8f8832579...) -> SCREEN. Trade: LOW-tercile vwap_dist_vs_atr on session P, H118's FROZEN Discovery
+edges never refit; long 1 micro at the OPEN of P+1's 09:30 bar; exit at P+11's 09:30 open (exactly 10 RTH sessions,
+absolute exit_ts); stop entry - 4.0 x atr14 as a disaster cap; no target. **PRICE-ONLY BY DESIGN** -- the VXN
+sizing fact was deliberately not used for the stop, so no stale series could block its screen. Pre-freeze gate on the
+BASELINE-CORRECTED edge (+15.693 pt vs 1.300 pt MNQ market) => SCREEN. SCREEN, 2,101 Discovery sessions:
+arm A 554 trades, +76.0131 gross pt/trade, MNQ market **+$82,782.06** (74.7131 net pt, avg R 0.1207), MNQ limit
++$83,059.06 (OPTIMISTIC), NQ market +$833,970.04, NQ limit +$836,740.04 (OPTIMISTIC) -- all four make money.
+Arm B, the own-drift null (identical trade on EVERY session, filter removed and nothing else): 1,663 trades,
++60.7698 gross pt/trade. **MARGIN +15.2433 pt/trade (+0.0118 R)** -> both gate conditions hold -> PAPER.
+CAVEAT RECORDED AT SCREEN: +0.0118 R is the same order as the +0.1162 R whose block-bootstrap CI failed to clear
+zero in the H118 diagnostic, and 10-session holds overlap heavily -- the paper record is the evidence.
+**SLOW** (554/2101 = 0.2637/session -> 33.2 in 126 < 40): background paper, no queue slot, no clock, judged at 40.
+Registered in bot_stack_paper_run.STRATEGIES as 's004'; registry stage **BLOCKED_PENDING_REFERENCE_DATA**
+(blocked_by VXN/FOMC/CPI/NFP) -- the first cycle with current coverage runs `--strategy s004` and appends the PAPER
+row. **Step 4 next cycle works S005, then S006** (S004 holds no slot). pytest 701 passed.
+
 September 17th -- JASON'S THREE FOLLOW-UPS on the fail-open reference data (not a scheduled cycle; his instruction of
 September 16th). Full detail: research/sessions/2026-09-17-0200.md.
 **(2) THE B2 AUDIT, and it is a RECORD-INTEGRITY MATTER.** Every live paper decision was taken on a FORWARD-FILLED VXN

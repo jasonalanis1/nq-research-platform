@@ -1,18 +1,23 @@
 {
- "ran_at": "2026-09-17T00:17:33.037799+00:00",
+ "ran_at": "2026-09-17T02:02:38.017998+00:00",
  "owner": "cycle",
- "note": "7:00 pm cycle",
+ "note": "9:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
-   "skipped": true,
+   "returncode": 0,
    "tail": [
-    "--skip-lock"
-   ]
+    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 pm cycle'"
+   ],
+   "stderr_tail": []
   },
   "budget": {
    "ok": true,
-   "skipped": true
+   "returncode": 0,
+   "tail": [
+    "budget started: 105 min"
+   ],
+   "stderr_tail": []
   },
   "sweep": {
    "ok": true,
@@ -56,15 +61,13 @@
   "queue": {
    "ok": true,
    "queue": [
-    "S010a SOURCE",
-    "S009a SOURCE",
     "S004 SOURCE",
     "S005 SOURCE",
     "S006 SOURCE"
    ],
    "salvage_owed": [],
    "empty": false,
-   "note": "next candidate: S010a S010a thin-participation completion continuation, LOW-VXN sessions only at SOURCE"
+   "note": "next candidate: S004 H118 VWAP-distance drift lineage, measured against the correct baseline at SOURCE"
   },
   "reference_data": {
    "ok": true,
@@ -115,6 +118,164 @@
     "  Consumers FAIL CLOSED past these dates: a session outside coverage is refused, never guessed."
    ],
    "note": "STALE: CPI ends 2023-12-12, FOMC ends 2021-09-22, NFP ends 2023-12-08, VXN ends 2026-09-02 -- consumers FAIL CLOSED past these dates (reference_data.ReferenceDataUnavailable), they do not guess. Extend with the updater named on each series."
+  },
+  "reference_data_gate": {
+   "ok": false,
+   "session_date": "2026-09-17",
+   "stale_series": [
+    "CPI",
+    "FOMC",
+    "NFP",
+    "VXN"
+   ],
+   "series": {
+    "CPI": {
+     "last_date": "2023-12-12",
+     "stale": true,
+     "days_short": 1010,
+     "reason": "coverage ends 2023-12-12, the session is 2026-09-17",
+     "updater": "src/data_topup_macro_calendar.py"
+    },
+    "FOMC": {
+     "last_date": "2021-09-22",
+     "stale": true,
+     "days_short": 1821,
+     "reason": "coverage ends 2021-09-22, the session is 2026-09-17",
+     "updater": "src/data_topup_macro_calendar.py"
+    },
+    "NFP": {
+     "last_date": "2023-12-08",
+     "stale": true,
+     "days_short": 1014,
+     "reason": "coverage ends 2023-12-08, the session is 2026-09-17",
+     "updater": "src/data_topup_macro_calendar.py"
+    },
+    "VXN": {
+     "last_date": "2026-09-02",
+     "stale": true,
+     "days_short": 15,
+     "reason": "coverage ends 2026-09-02, the session is 2026-09-17",
+     "updater": "src/data_topup_vxn.py"
+    }
+   },
+   "blocked_steps": {
+    "step3_paper_scoring": {
+     "series": [
+      "VXN",
+      "FOMC",
+      "CPI",
+      "NFP"
+     ],
+     "why": "every paper row goes through B2 (src/risk_state_engine.py:decision_for), which reads vxn_level_vs_trailing and vetoes trade_permission on a scheduled-event day",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "updater": [
+      "src/data_topup_macro_calendar.py",
+      "src/data_topup_vxn.py"
+     ]
+    },
+    "step3_b2_risk_state_decision": {
+     "series": [
+      "VXN",
+      "FOMC",
+      "CPI",
+      "NFP"
+     ],
+     "why": "src/risk_state_engine.py:require_reference_data refuses a session past either series",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "updater": [
+      "src/data_topup_macro_calendar.py",
+      "src/data_topup_vxn.py"
+     ]
+    },
+    "step4_salvage_check": {
+     "series": [
+      "VXN",
+      "FOMC",
+      "CPI",
+      "NFP"
+     ],
+     "why": "directive s.7 menu conditions 1 (VXN vs trailing) and 4 (scheduled-news day) -- src/salvage_check.py:vxn_labels / news_labels",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "updater": [
+      "src/data_topup_macro_calendar.py",
+      "src/data_topup_vxn.py"
+     ]
+    },
+    "salvage_reruns": {
+     "series": [
+      "VXN",
+      "FOMC",
+      "CPI",
+      "NFP"
+     ],
+     "why": "src/rerun_salvages.py re-runs the salvages that were decided on invented labels",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "updater": [
+      "src/data_topup_macro_calendar.py",
+      "src/data_topup_vxn.py"
+     ]
+    },
+    "step4_specify_S009a": {
+     "series": [
+      "FOMC",
+      "CPI",
+      "NFP"
+     ],
+     "why": "S009a trades ONLY on days with no scheduled macro event",
+     "reason": "FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "updater": [
+      "src/data_topup_macro_calendar.py"
+     ]
+    },
+    "step4_specify_S010a": {
+     "series": [
+      "VXN"
+     ],
+     "why": "S010a selects LOW-VXN sessions only",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17",
+     "updater": [
+      "src/data_topup_vxn.py"
+     ]
+    }
+   },
+   "allowed_steps": [
+    "step4_source (Discovery names a candidate)",
+    "step4_specify (price-only candidates)",
+    "step4_freeze",
+    "step4_screen (Discovery slice, price-only)",
+    "step5_closeout (tests, ops checks, commit, push, report)"
+   ],
+   "salvage_reruns": {
+    "owed": true,
+    "strategies": [
+     "S007",
+     "S009"
+    ],
+    "blocked_candidates": [
+     "S009a",
+     "S010a"
+    ],
+    "blocked_by": [
+     "CPI",
+     "FOMC",
+     "NFP"
+    ],
+    "runnable_now": false
+   },
+   "lines": [
+    "REFERENCE-DATA GATE (session 2026-09-17) -- STALE: CPI, FOMC, NFP, VXN",
+    "  BLOCKED  salvage_reruns  <- VXN, FOMC, CPI, NFP  (src/rerun_salvages.py re-runs the salvages that were decided on invented labels)",
+    "  BLOCKED  step3_b2_risk_state_decision  <- VXN, FOMC, CPI, NFP  (src/risk_state_engine.py:require_reference_data refuses a session past either series)",
+    "  BLOCKED  step3_paper_scoring  <- VXN, FOMC, CPI, NFP  (every paper row goes through B2 (src/risk_state_engine.py:decision_for), which reads vxn_level_vs_trailing and vetoes trade_permission on a scheduled-event day)",
+    "  BLOCKED  step4_salvage_check  <- VXN, FOMC, CPI, NFP  (directive s.7 menu conditions 1 (VXN vs trailing) and 4 (scheduled-news day) -- src/salvage_check.py:vxn_labels / news_labels)",
+    "  BLOCKED  step4_specify_S009a  <- FOMC, CPI, NFP  (S009a trades ONLY on days with no scheduled macro event)",
+    "  BLOCKED  step4_specify_S010a  <- VXN  (S010a selects LOW-VXN sessions only)",
+    "  STILL RUNS: step4_source (Discovery names a candidate), step4_specify (price-only candidates), step4_freeze, step4_screen (Discovery slice, price-only), step5_closeout (tests, ops checks, commit, push, report)",
+    "  Blocked is not aborted: the cycle runs every step above and reports the block.",
+    "  salvage reruns owed: S007, S009 -- blocked by CPI, FOMC, NFP",
+    "  BLOCKED_PENDING_REFERENCE_DATA: S009a, S010a -- these take no queue slot and Step 4 must not advance them"
+   ],
+   "rule": "Jason, September 16th 2026: any reference data past its coverage date blocks the steps that use it and gets reported, never defaulted. A series with no coverage entry is treated as stale (fail closed)."
   },
   "paper_book": {
    "ok": true,

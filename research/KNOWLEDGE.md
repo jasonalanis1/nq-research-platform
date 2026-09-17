@@ -859,3 +859,27 @@ candidates on the Discovery slice, and close-out, all still run (`INDEPENDENT_ST
 `session_report.operations()` states plainly which steps were blocked and which series blocked them.
 **A series with no coverage entry at all is treated as stale**, not as fine: "we have no record of how
 far it reaches" is not evidence that it reaches far enough — which is the exact shape of the original bug.
+
+### 6. THE TWO-NULLS RULE, APPLIED PROSPECTIVELY FOR THE FIRST TIME (S004, September 17th 2026)
+
+Failure mode #7 (baseline confusion) was named *after* H118 had passed three stages. S004 is the first
+candidate whose **own-drift baseline was written into the spec as a decision rule before the strategy was
+frozen** (`research/infrastructure/strategy-specs/S004-vwap-dist-low-drift-vs-own-drift.md` s.5), and the
+first whose screen refuses to report a pass without it.
+
+The mechanics that made it cheap, and are reusable: the null is **the same module with one flag flipped**
+(`UNCONDITIONAL_BASELINE`), so arm B is the identical trade — same entry clock, same ten-session hold, same
+`4.0 × atr14` stop, same bookkeeping, same four-way cost overlay — with **only** the tercile filter removed.
+Nothing else can differ, because nothing else is different code. A null built that way cannot quietly
+acquire an advantage the strategy does not have.
+
+S004 cleared it: +76.0131 vs +60.7698 gross points per trade, a **+15.2433 pt/trade margin**, against a raw
+net of +$82,782.06 on the MNQ-market basis. **The two numbers are worth seeing side by side**: measured
+against zero the effect looks like 76 points a trade; measured against being long NQ for the same ten
+sessions, four fifths of that is the index. That ratio is the whole of failure mode #7 in one line.
+
+And the honest half: **+0.0118 avg R per trade** is the same order as the +0.1162 R whose 10-day
+block-bootstrap CI (−0.2630, +0.4895) failed to clear zero in the H118 diagnostic, and ten-session holds
+overlap so heavily that 554 trades are far from 554 independent episodes. The directive's SCREEN is one
+number with no CI gate (s.2), so S004 passes and goes to paper — but the margin, not the raw net, is the
+number its paper record has to defend.
