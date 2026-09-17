@@ -211,9 +211,61 @@ def decide(base_multiplier: float, vxn_high: bool, range_avg_points: float, atr1
 # data-backed decision for a session date
 # ----------------------------------------------------------------------------
 def _event_days() -> set:
+    """The OPTIONAL local override file. It has never existed on disk, which is
+    exactly the defect found 2026-09-17: `d in _event_days()` returned False for
+    every session ever scored, so B2's "scheduled-event day -> no trade
+    permission" rule silently never fired. The authoritative answer now comes
+    from reference_data.is_scheduled_news_day() (fail-closed); this file, if a
+    human ever writes one, is unioned on top."""
     if not EVENT_CALENDAR.exists():
         return set()
     return {ln.strip() for ln in EVENT_CALENDAR.read_text().splitlines() if ln.strip() and not ln.startswith("#")}
+
+
+def _is_scheduled_event_day(session_date) -> bool:
+    """FAIL-CLOSED scheduled-event answer. Raises past coverage rather than
+    returning False (which is what the missing CSV did for every session)."""
+    from reference_data import is_scheduled_news_day
+    return bool(is_scheduled_news_day(session_date))
+
+
+def require_reference_data(session_date) -> dict:
+    """FAIL CLOSED (2026-09-17, Jason follow-up 2).
+
+    B2 reads TWO reference series -- the VXN level (vxn_level_vs_trailing, the
+    hyp-000151 HIGH-tercile input) and the scheduled-macro-event calendar (the
+    trade_permission veto). Both used to fail OPEN past their coverage end:
+
+      * VXN   extend_state_frame ffilled the last close onto every later
+              session, so a session after 2026-09-02 was scored on the
+              2026-09-02 volatility reading. The ffill was fixed to leave the
+              tail NaN -- but NaN then fell through `np.isfinite(v) and ...`
+              to vxn_high=False, which is STILL a default, just a quieter one.
+      * calendar  `_event_days()` read a file that does not exist, so
+              is_event_day was False for every session ever scored.
+
+    A default is indistinguishable from a measurement at the call site. So B2
+    now REFUSES a session it cannot honestly score, and the caller records the
+    refusal instead of booking a decision on an invented input.
+
+    Returns the two coverage ends when the session is inside both."""
+    from reference_data import (ReferenceDataUnavailable, macro_coverage_end,
+                                vxn_coverage_end, _as_date)
+    d = _as_date(session_date)
+    vxn_end = vxn_coverage_end()
+    if d > vxn_end:
+        raise ReferenceDataUnavailable(
+            "VXN", d, vxn_end,
+            "B2 (risk_state_engine) scores vxn_level_vs_trailing for this session; "
+            "a carried-forward or NaN-defaulted level would set the HIGH-tercile flag "
+            "and therefore expected_range_mult, size_multiplier and trade_permission.")
+    macro_end = macro_coverage_end()
+    if macro_end is None or d > macro_end:
+        raise ReferenceDataUnavailable(
+            "macro calendar", d, macro_end,
+            "B2 (risk_state_engine) vetoes trade_permission on a scheduled-event day; "
+            "past coverage 'no event' is an assumption, not a fact.")
+    return {"vxn_covered_through": vxn_end, "macro_covered_through": macro_end}
 
 
 def decision_for(date=None) -> dict:
@@ -244,20 +296,26 @@ def decision_for(date=None) -> dict:
         if d not in idx:
             raise SystemExit(f"{date} is not a session in the data on disk")
     d_date = d.date()
+    # FAIL CLOSED before anything is computed from a reference series (2026-09-17).
+    cov = require_reference_data(d_date)
     base = get_volatility_conditioning(d_date, cond)
     v = vxn.get(d, np.nan)
     vxn_high = bool(np.isfinite(v) and v >= params["vxn_high_tercile_edge"])
     last_bar = df.index[-1]
     stale = (date is None) and ((pd.Timestamp.now(tz=last_bar.tz) - last_bar).days > STALE_SESSIONS * 1.6)
     out = decide(base["expected_range_multiplier"], vxn_high, float(range_avg.get(d, np.nan)), float(atr.get(d, np.nan)),
-                 params["permission_bottom_decile_edge"], d.strftime("%Y-%m-%d") in _event_days(), bool(stale),
-                 params.get("within_session_shape", {}), base.get("basis", []))
+                 params["permission_bottom_decile_edge"],
+                 bool(_is_scheduled_event_day(d_date) or d.strftime("%Y-%m-%d") in _event_days()),
+                 bool(stale), params.get("within_session_shape", {}), base.get("basis", []))
     out.update({"session": d.strftime("%Y-%m-%d"), "computed_at": datetime.now(timezone.utc).isoformat(),
                 "inputs": {"prior_day_narrow": base["narrow_prior_day"], "prior_day_wide": base["wide_prior_day"],
                            "coiled_overnight": base["coiled_overnight"], "vxn_level_vs_trailing": None if not np.isfinite(v) else round(float(v), 4),
                            "vxn_high": vxn_high, "range_avg_points": None if not np.isfinite(range_avg.get(d, np.nan)) else round(float(range_avg.get(d)), 2),
                            "atr14_points": None if not np.isfinite(atr.get(d, np.nan)) else round(float(atr.get(d)), 2),
-                           "last_bar": str(last_bar)}})
+                           "last_bar": str(last_bar)},
+                "reference_data": {"vxn_covered_through": str(cov["vxn_covered_through"]),
+                                   "macro_covered_through": str(cov["macro_covered_through"]),
+                                   "basis": "fail-closed: this session lies inside both series"}})
     # afternoon update, intraday-only, kept separate on purpose
     out["afternoon_update"] = {"usable_from": "14:00 ET", "note": "midday->afternoon fact (hyp-000105/141) applies intraday only; call get_afternoon_conditioning() after 14:00 ET, never folded into the pre-open number"}
     return out

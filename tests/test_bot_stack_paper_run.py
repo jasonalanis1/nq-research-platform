@@ -294,3 +294,41 @@ def test_running_state_is_per_strategy_in_main(monkeypatch):
     bpr.main()
     b3_rows = [r for r in bpr.load_log() if r.get("strategy") == "base_entry_b3_orb_placeholder"]
     assert len(b3_rows) == 1 and b3_rows[0]["gate"]["paper_trades"] == 0 and b3_rows[0]["gate"]["equity_usd"] == 0.0
+
+
+# ---------------------------------------------------------------------------
+# FAIL CLOSED on stale reference data (2026-09-17, Jason's follow-up 2)
+#
+# The paper loop's decision path goes through B2 (risk_state_engine), which
+# reads the VXN series and the macro calendar. When either does not cover the
+# session, NOTHING is booked: no fill, no order-path journal entry, no P&L row.
+# The refusal itself is recorded so the gap is visible instead of silent.
+# ---------------------------------------------------------------------------
+def test_paper_loop_records_a_refusal_and_books_nothing_when_b2_refuses(monkeypatch):
+    import bot_stack_paper_run as bs
+    from reference_data import ReferenceDataUnavailable
+
+    def _refuse(date=None):
+        raise ReferenceDataUnavailable("VXN", date, "2026-09-02")
+
+    monkeypatch.setattr(bs, "decision_for", _refuse)
+    decision, refusal = bs._decision_for_session("2026-09-08")
+    assert decision is None
+    assert isinstance(refusal, ReferenceDataUnavailable)
+
+    row = bs._blocked_by_reference_data("2026-09-08", "s001_level_sweep_reversal", refusal)
+    assert row["outcome"] == "blocked_by_stale_reference_data"
+    assert "pnl_usd" not in row and "order_path" not in row and "bookkeeping" not in row
+    assert "REFUSED" in row["note"]
+    assert "VXN" in row["reference_data_refusal"]
+
+
+def test_a_refusal_row_is_not_a_trade_in_the_paper_book():
+    """paper_book counts a row as a trade only when it carries pnl_usd. A
+    refusal must never enter the record as a scored session."""
+    import paper_book as pb
+    import bot_stack_paper_run as bs
+    from reference_data import ReferenceDataUnavailable
+    row = bs._blocked_by_reference_data("2026-09-08", "s001_x",
+                                        ReferenceDataUnavailable("VXN", "2026-09-08", "2026-09-02"))
+    assert pb.trades_for([row], "s001_x") == []

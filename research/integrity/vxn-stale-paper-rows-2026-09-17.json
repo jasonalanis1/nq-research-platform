@@ -1,0 +1,404 @@
+{
+  "title": "Record-integrity annotation: every live paper decision was taken on a forward-filled VXN close",
+  "written": "2026-09-17",
+  "written_by": "Tony, executing Jason's follow-up 2 of September 16th 2026",
+  "status": "ANNOTATION ONLY -- the paper log is NOT rewritten, re-scored or adjusted (standing directive s.13; the Integrity Gate holds the veto). This file is the caveat the record now carries.",
+  "the_defect": {
+    "series": "VXN (data/VXNCLS_MAX.csv), coverage end 2026-09-02",
+    "consumer": "src/risk_state_engine.py:decision_for -> market_state_primitives_v2.extend_state_frame (vxn_level_vs_trailing)",
+    "mechanism": "extend_state_frame reindexed the VXN daily series with method='ffill', which is correct for a holiday INSIDE the series and wrong past its end. Every session after 2026-09-02 was handed the 2026-09-02 close (21.07) as though it were that day's volatility reading. B2 turned that number into vxn_high (>= the frozen HIGH-tercile edge 0.02545542283434844), and vxn_high sets expected_range_mult, stop_distance_atr, target_distance_atr, size_multiplier and can set trade_permission.",
+    "second_defect": "src/risk_state_engine.py:_event_days() read research/calendars/event_days.csv, which has never existed on disk, so is_event_day was False for EVERY session B2 has ever scored and the directive's scheduled-event trade_permission veto silently never fired. The FOMC/CPI/NFP calendar (coverage end 2021-09-22) could not have answered for a 2026 session either.",
+    "why_it_matters": "The live paper record starts 2026-09-08, which is AFTER the VXN coverage end. There is no session in the paper log that was scored on a measured VXN value."
+  },
+  "what_the_stale_input_produced": {
+    "vxn_close_carried_forward": 21.07,
+    "as_of": "2026-09-02",
+    "frozen_high_tercile_edge": 0.02545542283434844,
+    "vxn_level_vs_trailing_as_computed": {
+      "2026-09-08": -0.0225,
+      "2026-09-09": -0.018,
+      "2026-09-10": -0.015,
+      "2026-09-11": -0.0152,
+      "2026-09-14": -0.0149,
+      "2026-09-15": -0.0157
+    },
+    "vxn_high_flag_on_every_session": false,
+    "consequence": "vxn_factor stayed 1.0 on every live session, so expected_range_mult was the base (prior-day / overnight) product alone and size_multiplier came from that. The flag being False is NOT a finding -- it is what the invented input happened to produce. To flip it the true reading needed rel >= +0.0255, i.e. a VXN close of roughly 21.9 or above, a level this same series printed on 2026-09-01 (21.96). Whether any of these six sessions was truly a HIGH-tercile session is UNKNOWN and stays unknown until data/VXNCLS_MAX.csv is extended.",
+    "not_recomputed": "No affected row is re-scored and no counterfactual multiplier is written anywhere. Per the directive the record stands as recorded; this annotation states what it rests on."
+  },
+  "affected_rows": [
+    {
+      "log_line": 1,
+      "date": "2026-09-08",
+      "strategy": "base_entry_b3_orb_placeholder",
+      "outcome": "blocked",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": false,
+      "pnl_usd_gross": null
+    },
+    {
+      "log_line": 2,
+      "date": "2026-09-09",
+      "strategy": "base_entry_b3_orb_placeholder",
+      "outcome": "blocked",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": false,
+      "pnl_usd_gross": null
+    },
+    {
+      "log_line": 3,
+      "date": "2026-09-10",
+      "strategy": "base_entry_b3_orb_placeholder",
+      "outcome": "blocked",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": false,
+      "pnl_usd_gross": null
+    },
+    {
+      "log_line": 4,
+      "date": "2026-09-11",
+      "strategy": "base_entry_b3_orb_placeholder",
+      "outcome": "blocked",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": false,
+      "pnl_usd_gross": null
+    },
+    {
+      "log_line": 5,
+      "date": "2026-09-08",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 6,
+      "date": "2026-09-08",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 7,
+      "date": "2026-09-08",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 8,
+      "date": "2026-09-08",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 9,
+      "date": "2026-09-09",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 10,
+      "date": "2026-09-09",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 11,
+      "date": "2026-09-09",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 12,
+      "date": "2026-09-09",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 13,
+      "date": "2026-09-10",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 14,
+      "date": "2026-09-10",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 15,
+      "date": "2026-09-10",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 16,
+      "date": "2026-09-10",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 17,
+      "date": "2026-09-11",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "blocked",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": false,
+      "pnl_usd_gross": null
+    },
+    {
+      "log_line": 19,
+      "date": "2026-09-11",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 20,
+      "date": "2026-09-11",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 21,
+      "date": "2026-09-11",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 22,
+      "date": "2026-09-11",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 28,
+      "date": "2026-09-14",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 29,
+      "date": "2026-09-14",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 30,
+      "date": "2026-09-14",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -40.0
+    },
+    {
+      "log_line": 31,
+      "date": "2026-09-14",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -32.5
+    },
+    {
+      "log_line": 34,
+      "date": "2026-09-10",
+      "strategy": "s002_overnight_carry_compressed_prior_day",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 558.49
+    },
+    {
+      "log_line": 35,
+      "date": "2026-09-11",
+      "strategy": "s002_overnight_carry_compressed_prior_day",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -605.11
+    },
+    {
+      "log_line": 45,
+      "date": "2026-09-15",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 0.9252,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 46,
+      "date": "2026-09-15",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 0.9252,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 47,
+      "date": "2026-09-15",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 0.9252,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 48,
+      "date": "2026-09-15",
+      "strategy": "execution_dummy_4x_placeholder",
+      "outcome": "filled",
+      "size_multiplier_recorded": 0.9252,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 40.0
+    },
+    {
+      "log_line": 53,
+      "date": "2026-09-14",
+      "strategy": "s008_late_day_rebalance_continuation",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -167.49
+    },
+    {
+      "log_line": 54,
+      "date": "2026-09-15",
+      "strategy": "s008_late_day_rebalance_continuation",
+      "outcome": "filled",
+      "size_multiplier_recorded": 0.9252,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": 58.51
+    },
+    {
+      "log_line": 55,
+      "date": "2026-09-08",
+      "strategy": "s001_level_sweep_reversal_compressed_prior_day",
+      "outcome": "filled",
+      "size_multiplier_recorded": 1.0595,
+      "trade_permission_recorded": true,
+      "booked_trade": true,
+      "pnl_usd_gross": -90.5
+    }
+  ],
+  "counts": {
+    "paper_log_rows_total": 60,
+    "rows_carrying_a_B2_decision": 34,
+    "booked_trades_among_them": 29,
+    "candidate_strategy_rows": 5,
+    "plumbing_rows": 29,
+    "sessions": [
+      "2026-09-08",
+      "2026-09-09",
+      "2026-09-10",
+      "2026-09-11",
+      "2026-09-14",
+      "2026-09-15"
+    ],
+    "candidate_strategies_affected": [
+      "s001_level_sweep_reversal_compressed_prior_day",
+      "s002_overnight_carry_compressed_prior_day",
+      "s008_late_day_rebalance_continuation"
+    ]
+  },
+  "fix": [
+    "src/risk_state_engine.py:require_reference_data() -- B2 now raises ReferenceDataUnavailable for a session past the VXN or macro-calendar coverage end instead of scoring it on a carried-forward or NaN-defaulted level.",
+    "src/risk_state_engine.py:_is_scheduled_event_day() -- the scheduled-event veto now reads reference_data.is_scheduled_news_day() (fail-closed); the optional local CSV is unioned on top, never relied on.",
+    "src/bot_stack_paper_run.py:_decision_for_session/_blocked_by_reference_data -- the paper loop records outcome 'blocked_by_stale_reference_data' and books NOTHING (no fill, no journal entry, no P&L) rather than crashing or defaulting.",
+    "Tests: tests/test_risk_state_engine.py and tests/test_bot_stack_paper_run.py prove refusal rather than a default, per consumer."
+  ],
+  "not_consumers_verified": {
+    "src/paper_book.py": "reads only research/forward_validation/bot_stack_paper_log.jsonl and src/cost_model.py; no VXN, no calendar. Unaffected except that it measures rows that carry the defect -- hence this annotation.",
+    "src/capital_protection.py": "budget/kill-switch arithmetic on the paper row state only; no reference series.",
+    "src/execution_block.py / execution_clock_check_1_2.py / execution_clock_signal_engine.py / execution_dummy.py / execution_measurement.py": "no VXN and no calendar read (verified by grep 2026-09-17).",
+    "src/order_path.py / src/broker_interface.py": "no reference series.",
+    "src/base_entry_b3.py": "price-only signal generator; no reference series."
+  }
+}

@@ -268,6 +268,35 @@ STRATEGY_NAME = B3_NAME   # kept for older imports; run_session uses _strategy()
 # --- candidates in the PAPER BOOK (registered after a positive SCREEN; see
 # research/ledger/strategies.jsonl for the record of when and why) ---
 from risk_state_engine import decision_for  # noqa: E402
+from reference_data import ReferenceDataUnavailable  # noqa: E402
+
+
+def _blocked_by_reference_data(date, name: str, exc: Exception, signal=None) -> dict:
+    """FAIL CLOSED (2026-09-17, Jason follow-up 2). B2's decision needs the VXN
+    series and the macro calendar. When either does not cover this session the
+    session is NOT scored: no fill, no order-path journal entry, no paper row
+    with a P&L. The refusal itself is recorded so the gap in the record is
+    visible rather than silent -- which is the whole point: before this, a
+    session past 2026-09-02 was scored on a forward-filled VXN close and nothing
+    in the row said so."""
+    row = {"date": str(date), "strategy": name, "outcome": "blocked_by_stale_reference_data",
+           "reference_data_refusal": str(exc),
+           "note": "REFUSED, not defaulted: this session lies past a reference series' coverage end, "
+                   "so B2 cannot score it. Nothing was booked. Run the series' updater "
+                   "(research/ledger/data_coverage.json names it) and the session scores normally."}
+    if signal is not None:
+        row["signal"] = {"direction": signal.direction, "entry": signal.entry,
+                         "stop": signal.stop, "target": signal.target}
+    return row
+
+
+def _decision_for_session(date):
+    """decision_for(), with the reference-data refusal separated from the result
+    so every caller handles it the same way."""
+    try:
+        return decision_for(date=str(date)), None
+    except ReferenceDataUnavailable as exc:
+        return None, exc
 from order_path import OrderPath  # noqa: E402
 from simulated_broker import SimulatedBroker  # noqa: E402
 import capital_protection  # noqa: E402
@@ -489,7 +518,11 @@ def run_session(date, day_df: pd.DataFrame, prior_rows: list[dict], history: pd.
         rows, acc = [], list(prior_rows)
         # B2's decision is per DATE (it reloads the whole price file each call,
         # ~25s); compute it once per session and share it across the legs.
-        decision = decision_for(date=str(date)) if sigs else None
+        decision = None
+        if sigs:
+            decision, refusal = _decision_for_session(date)
+            if refusal is not None:
+                return [_blocked_by_reference_data(date, name, refusal, sigs[0])]
         for sig in sigs[:CAPITAL_CFG.max_orders_per_day]:
             row = _run_one(date, day_df, acc, sig, name, decision=decision)
             row["leg"] = sig.market_context.get("fire_time")
@@ -537,7 +570,10 @@ def _run_one(date, day_df: pd.DataFrame, prior_rows: list[dict], signal, name: s
                     "note": f"cross-session exit {x_exit} not resolvable yet: {why}. "
                             "Trade stays OPEN and unresolved; reconsidered on a later run."}
 
-    decision = decision if decision is not None else decision_for(date=str(date))
+    if decision is None:
+        decision, refusal = _decision_for_session(date)
+        if refusal is not None:
+            return _blocked_by_reference_data(date, name, refusal, signal)
     if not decision["trade_permission"]:
         return {"date": str(date), "outcome": "blocked_by_risk_state_engine",
                 "signal": {"direction": signal.direction, "entry": signal.entry, "stop": signal.stop,
