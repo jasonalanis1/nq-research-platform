@@ -111,6 +111,41 @@ SURVIVES from the refocus memo: no profit deadline (s.1), daytime cadence (s.2),
 request and actual minutes (s.6), 1-VERIFY (7.2), production write guard (7.3), path:line citations (7.4a), push verified (7.5).
 DAY ONE (s.14) executed September 15th: see "Last updated by". From then on s.3 governs every cycle.
 
+## THE REFERENCE-DATA GATE (Jason, September 16th 2026) — STANDING, binding every cycle
+His words: **"Add a standing preflight rule: any reference data past its coverage date blocks the steps that use it and gets
+reported, never defaulted."** Tony did not propose this and does not amend it. It is a GATE, not a printed warning.
+- **WHERE:** `src/cycle_preflight.py:reference_data_gate()` (STEP_DEPENDENCIES / INDEPENDENT_STEPS), run inside every Step 1
+  preflight, written into the receipt `research/_cycle_preflight.json` under `steps.reference_data_gate`, and reported by
+  `src/session_report.py:reference_data_gate_lines()` in section 4 OPERATIONS. Tests: `tests/test_cycle_preflight.py`.
+- **WHAT IT DOES:** for EVERY series in `research/ledger/data_coverage.json`, coverage end vs the current session date. A
+  series that does not reach the session BLOCKS the cycle steps that depend on it, by name, with the series named as the reason.
+  Currently blocked by VXN (2026-09-02) and FOMC/CPI/NFP (macro end 2021-09-22): `step3_paper_scoring`,
+  `step3_b2_risk_state_decision`, `step4_salvage_check`, `salvage_reruns`, `step4_specify_S009a`, `step4_specify_S010a`.
+- **BLOCKED IS NOT ABORTED.** The cycle still runs every step that does not depend on a stale series — sourcing, specifying,
+  freezing and screening price-only candidates on the Discovery slice, and close-out — and the session report says plainly
+  which steps were blocked and which series blocked them. A stale series is never an excuse to idle a cycle (s.3 Step 2).
+- **FAIL CLOSED ON A MISSING ENTRY.** A series with no coverage entry at all, or with no last_date, is treated as STALE.
+  "We have no record of how far it reaches" is not evidence that it reaches far enough — that is the shape of the original bug.
+- **CONSUMERS REFUSE TOO, they do not default:** `src/reference_data.py` (`ReferenceDataUnavailable`),
+  `salvage_check.vxn_labels/news_labels`, `market_state_primitives_v2.extend_state_frame`, and — added September 17th —
+  `src/risk_state_engine.py:require_reference_data()` (B2) with `src/bot_stack_paper_run.py` recording
+  `outcome: "blocked_by_stale_reference_data"` and booking NOTHING.
+
+## SALVAGE RERUNS OWED — S007, S009 (Jason's follow-up 1, September 16th) — blocked by FOMC/CPI/NFP
+Standing owed item on Step 4 until it fires. `src/rerun_salvages.py` REFUSES while coverage is stale and runs automatically
+the first cycle it is current; preflight surfaces "salvage reruns owed, blocked by <series>" until then.
+- **SUPERSEDED pending rerun:** S007 (menu condition 4, 6 of 1,525 trades past 2021-09-22 — outcome UNAFFECTED, both sides lose
+  either way), S009 (menu condition 4, 4 of 585 — it IS the verdict condition; QUIET is profitable at both bounds, +$333.28 to
+  +$734.93, so the direction survives but the numbers are wrong). Originals never deleted or edited.
+- **AUDITED CLEAN, no rerun needed:** S001 (0 of 131 past either end) and S010 (0 of 801). **Menu condition 1 was never
+  corrupted in any salvage** — every screen ends 2021-10-01 and the VXN series reaches 2026-09-02. Conditions 2 and 3 are
+  price/clock-derived (verified, not assumed).
+- **BLOCKED_PENDING_REFERENCE_DATA (registry stage, takes NO queue slot, Step 4 must not advance them):** S009a (needs the
+  calendar current AND the S009 rerun) and S010a (needs VXN current; its parent salvage is clean — the block is forward-looking,
+  its rule selects LOW-VXN sessions).
+- **RECORD-INTEGRITY, annotated not rewritten (s.13):** every live paper row 2026-09-08..09-15 was decided on a forward-filled
+  VXN close — 34 rows carrying a B2 decision, 29 booked trades. `research/integrity/vxn-stale-paper-rows-2026-09-17.json`.
+
 ## In forward validation (paper only, no capital) — DO NOT TOUCH, see scope boundary below
 
 - **H118** vwap_dist_vs_atr LOW tercile, 10-day drift. **REJECTED AS AN EDGE
@@ -1528,6 +1563,42 @@ introduced. Console pushed live cleanly (write_db). Full:
 research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
+
+September 17th -- JASON'S THREE FOLLOW-UPS on the fail-open reference data (not a scheduled cycle; his instruction of
+September 16th). Full detail: research/sessions/2026-09-17-0200.md.
+**(2) THE B2 AUDIT, and it is a RECORD-INTEGRITY MATTER.** Every live paper decision was taken on a FORWARD-FILLED VXN
+close. The paper record starts 2026-09-08; VXN ends 2026-09-02. Of 60 rows in
+research/forward_validation/bot_stack_paper_log.jsonl, **34 carry a B2 decision and 29 are booked trades** (S001 x1,
+S002 x2, S008 x2, the rest plumbing) -- there is NO session in the log scored on a measured VXN value. Path:
+bot_stack_paper_run.py:523/:574 -> risk_state_engine.decision_for -> market_state_primitives_v2.extend_state_frame:84.
+vxn_high came out False on all six sessions ONLY because the stale 21.07 gave rel -0.0225..-0.0147 against the frozen
+0.02545542 edge; flipping it needed ~21.9, which this series printed on 2026-09-01 (21.96). Unknowable until the series
+extends. SECOND FAIL-OPEN: risk_state_engine._event_days() read research/calendars/event_days.csv, which has NEVER
+EXISTED, so the directive's scheduled-event trade_permission veto never fired once, ever. CLEARED (read no reference
+series): paper_book, capital_protection, order_path, broker_interface, base_entry_b3, all five execution_*.
+**ANNOTATED, NOT REWRITTEN** (s.13, Integrity veto): research/integrity/vxn-stale-paper-rows-2026-09-17.json + KNOWLEDGE.
+FIXED: risk_state_engine.require_reference_data() raises ReferenceDataUnavailable (a NaN falling through
+`isfinite(v) and v >= edge` to False is still a default); bot_stack_paper_run records
+outcome "blocked_by_stale_reference_data" and BOOKS NOTHING. Tests per consumer proving refusal.
+**(3) THE REFERENCE-DATA GATE** -- see its own section above. cycle_preflight.reference_data_gate() blocks six named
+steps today; blocked is not aborted; a missing coverage entry is treated as stale; session_report section 4 states which
+steps were blocked and which series blocked them. Standing, attributed to Jason, in NEXT_UP and CYCLE_PROMPT. 10 tests.
+**(1) THE SALVAGE AUDIT -- NO RERUN WAS RUN, and that is the point.** Menu CONDITION 1 WAS NEVER CORRUPTED in any
+salvage (every screen ends 2021-10-01; VXN reaches 2026-09-02). Conditions 2 and 3 are price/clock-derived -- verified,
+not assumed. Condition 4 corrupted in S007 (6 of 1,525 trades past 2021-09-22, net -$347.00; OUTCOME UNAFFECTED, both
+sides lose either way and the verdict never turned on it) and S009 (4 of 585, net -$401.65; it IS the verdict condition,
+but QUIET is profitable at BOTH bounds, +$333.28 as computed to +$734.93 worst case, so the direction survives and the
+numbers do not). S001 (0 of 131) and S010 (0 of 801) AUDITED CLEAN. Registry: S007/S009 SUPERSEDED pending rerun,
+S009a/S010a BLOCKED_PENDING_REFERENCE_DATA (new stage, NOT in QUEUE_STAGES, so Step 4 skips them), S001/S010 clean rows.
+src/rerun_salvages.py REFUSES while coverage is stale (verified: exit 2, nothing written), re-runs against the same
+frozen screens and modules, supersedes rather than replaces, and re-decides spawns under s.7 with one added rule -- an
+EX-POST-ONLY condition (menu 2, the session's own range) cannot carry a spawn. Standing Step 4 owed item.
+**STILL NEEDS ONE LINE FROM JASON, unchanged:** the two cron lines in
+research/infrastructure/reference-data-currency-2026-09-16.md. cboe/fed/bls/fred are all 403 from both shells. Until they
+run, VXN stays 2026-09-02, the calendar 2021-09-22, the six steps stay blocked and the reruns stay owed.
+pytest 692 green. No Validation/Holdout touched, no batch_screen, no frozen spec or module edited, no paper-log fill
+altered, no trigger booked, no spend.
+
 
 September 16th, ~7:00-7:45 pm CT -- SCHEDULED 7:00 PM CYCLE. THE REFERENCE-DATA COVERAGE GAP IS FIXED, and that IS this
 cycle's stage advance: it unblocks TWO queued candidates and repairs an input every future Salvage check reads. Step 1

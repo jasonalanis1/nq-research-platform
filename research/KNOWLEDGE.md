@@ -742,3 +742,120 @@ Two smaller things worth keeping:
   `data_topup_macro_calendar.py` refuses to write unless every date it parses inside the frozen
   list's range matches that list exactly, and unless the result has a real schedule's shape. The
   frozen lists' real value turned out to be as a *test oracle*, not just as data.
+
+---
+
+## The three follow-ups on the fail-open reference data (Jason, September 16th; executed September 17th)
+
+Jason ordered three things after the fail-open bug was found. Follow-ups 2 and 3 are done; follow-up 1
+is audited, marked and **built to fire automatically**, because the reruns genuinely cannot be computed
+until the calendar is extended from his own Terminal.
+
+### 1. RECORD-INTEGRITY: every live paper decision was taken on a forward-filled VXN close
+
+Not a hypothetical. The paper record starts **2026-09-08**; the VXN series ends **2026-09-02**. So
+**there is no session in the paper log that was scored on a measured VXN value.** Of 60 rows,
+**34 carry a B2 decision and 29 of those are booked trades** — 5 on candidate strategies (S001, S002,
+S008) and 29 on plumbing (the execution dummy and the B3 ORB placeholder). Every one of them went
+`bot_stack_paper_run._run_one` → `risk_state_engine.decision_for` →
+`market_state_primitives_v2.extend_state_frame`, whose `reindex(..., method="ffill")` handed the
+2026-09-02 close (21.07) to every later session. B2 turned that into `vxn_high`, and `vxn_high` sets
+`expected_range_mult`, `stop_distance_atr`, `target_distance_atr`, `size_multiplier` and can veto
+`trade_permission`.
+
+`vxn_high` came out **False on all six sessions** — but *that is not a finding, it is what the invented
+input happened to produce*. Flipping it needed `rel >= +0.02546`, i.e. a VXN close around **21.9**, a
+level this same series printed on **2026-09-01 (21.96)**. Whether any of those sessions was truly a
+HIGH-tercile session is **unknown and stays unknown** until the series is extended.
+
+**A second fail-open turned up in the same engine.** `risk_state_engine._event_days()` read
+`research/calendars/event_days.csv`, **which has never existed on disk**. So `is_event_day` was False
+for every session B2 has ever scored and the directive's scheduled-event trade-permission veto
+**silently never fired, once, ever.**
+
+**The record is annotated, not rewritten.** Directive s.13: the paper record is never adjusted, deleted
+or re-scored, and the Integrity Gate holds the veto. The affected rows are listed line by line in
+`research/integrity/vxn-stale-paper-rows-2026-09-17.json`, with the defect, the arithmetic, and what is
+and is not knowable. No row was re-scored and no counterfactual multiplier was written anywhere.
+
+Consumers audited and **cleared** (they read no reference series at all): `paper_book.py`,
+`capital_protection.py`, `order_path.py`, `broker_interface.py`, `base_entry_b3.py`, and all five
+`execution_*.py`. The blast radius was B2 and only B2 — but B2 gates every paper trade, so that was enough.
+
+### 2. THE GENERAL LESSON, sharpened: a default is invisible at the call site
+
+The first version of this lesson (below, 2026-09-16) said a shared input with a default is more
+dangerous than one without. The follow-up sharpened it: **fixing the default is not the same as fixing
+the fail-open.** `extend_state_frame` was corrected to leave the tail NaN instead of ffilling it — and
+B2 then read that NaN through `bool(np.isfinite(v) and v >= edge)` straight into `vxn_high = False`.
+A quieter default is still a default. The only safe repair is for the *consumer* to refuse:
+`risk_state_engine.require_reference_data()` now raises `ReferenceDataUnavailable`, and the paper loop
+records `outcome: "blocked_by_stale_reference_data"` and **books nothing** — no fill, no journal entry,
+no P&L row.
+
+### 3. WHICH SALVAGES WERE ACTUALLY CORRUPTED — and the surprise, which is how few
+
+The suspicion was menu conditions 1 (VXN) and 4 (news). Measured against the coverage ends, condition 1
+is clean everywhere and condition 4 is barely touched:
+
+| Salvage | trades | past VXN end (2026-09-02) | past macro end (2021-09-22) | corrupted condition | outcome changed? |
+|---|---|---|---|---|---|
+| S001 (09-15) | 131 | **0** | **0** | none — AUDITED CLEAN | no |
+| S007 | 1,525 | **0** | 6 (net −$347.00) | condition 4 only | **no** |
+| S009 | 585 | **0** | 4 (net −$401.65) | condition 4 — **the verdict condition** | direction survives, numbers don't |
+| S010 | 801 | **0** | **0** | none — AUDITED CLEAN | no |
+
+**Condition 1 was never corrupted by anything.** Every screen runs on the Discovery slice, which ends
+2021-10-01, and the VXN series reaches 2026-09-02 — four and a half years past the last trade. The
+forward-fill defect is real and it hit the *paper book*, not the *salvages*. **Conditions 2 and 3 are
+clean by construction, verified not assumed:** `salvage_check.range_labels` reads price bars and
+`tod_label` reads the signal's own trigger time; neither function touches a reference series.
+
+**S009 is the one that matters, and even it is bounded.** Its 4 unverified trades were all labelled
+QUIET. As computed, QUIET is n=518 net **+$333.28** → profitable → S009a spawned. If all four were
+truly NEWS days, QUIET becomes n=514 net **+$734.93**. *Both ends are profitable with n far above
+MIN_N=15*, so a QUIET condition will be found either way — but the net, the win rate and the average R
+a future decision would quote are wrong, so **S009a is not specified on these numbers.**
+
+S007 is corrupted and **outcome-unaffected**: condition 4 loses on both sides as computed (NEWS
+−$656.55, QUIET −$7,967.12) and still loses on both under the worst case (−$1,003.55 / −$7,620.12), and
+its verdict never turned on condition 4 anyway.
+
+**S010a's block has a different cause and it is worth keeping straight.** Its parent salvage is clean —
+condition 1 LOW VXN, n=570, +$484.42, computed entirely inside the series. The block is *forward*-looking:
+S010a's own rule selects LOW-VXN sessions, and no session after 2026-09-02 can be classified without
+inventing the level.
+
+### 4. WHAT IS NOW IN THE REGISTRY, AND WHAT FIRES BY ITSELF
+
+`research/ledger/strategies.jsonl` gained two states (`src/strategy_registry.py`): **SUPERSEDED** (a
+result computed on reference data now known wrong; the original row is never deleted or edited, a new
+row is appended saying what it supersedes and what must be true before the rerun) and
+**BLOCKED_PENDING_REFERENCE_DATA** (deliberately *not* in `QUEUE_STAGES`, so Step 4 skips it and no
+cycle can specify it on invented labels). S007 and S009 are SUPERSEDED pending rerun; S009a and S010a
+are BLOCKED with their exact preconditions; S001 and S010 carry AUDITED-CLEAN rows.
+
+`src/rerun_salvages.py` re-runs the owed salvages against the **same frozen screen results and the same
+frozen modules** — reference labels are the only thing that changes — and re-decides the spawns under
+s.7 (one salvage per strategy, menu conditions only). It adds one rule the old path lacked: **an
+ex-post-only condition cannot carry a spawn.** Menu condition 2 measures the session's own range, which
+nobody has at 09:30; it is refused out loud rather than silently dropped, the same reasoning the
+Integrity Gate applies to "find the slice that looks good", applied to *time* instead of to *search*.
+**It refuses while coverage is stale** and says which updater fixes it — a rerun on the same invented
+labels would look authoritative and be worth nothing, which is worse than no rerun at all.
+
+`src/cycle_preflight.py` surfaces "salvage reruns owed, blocked by FOMC/CPI/NFP" every cycle, and flips
+to "COVERAGE IS CURRENT: run src/rerun_salvages.py THIS CYCLE" the moment the calendar is extended.
+
+### 5. THE STANDING PREFLIGHT RULE (Jason, September 16th) — a gate, not a printed line
+
+> "Any reference data past its coverage date blocks the steps that use it and gets reported, never defaulted."
+
+`cycle_preflight.reference_data_gate()` compares every series in `research/ledger/data_coverage.json`
+against the session date and **blocks the dependent steps by name** (`STEP_DEPENDENCIES`). Today it
+blocks paper scoring, the B2 decision, the salvage check, the salvage reruns, and the S009a/S010a
+specifications. **Blocked is not aborted** — sourcing, specifying, freezing and screening price-only
+candidates on the Discovery slice, and close-out, all still run (`INDEPENDENT_STEPS`), and
+`session_report.operations()` states plainly which steps were blocked and which series blocked them.
+**A series with no coverage entry at all is treated as stale**, not as fine: "we have no record of how
+far it reaches" is not evidence that it reaches far enough — which is the exact shape of the original bug.

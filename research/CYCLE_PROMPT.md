@@ -25,6 +25,20 @@ STEP 1 -- PREFLIGHT. python3 src/cycle_preflight.py --owner cycle --note "<cycle
    (lock, budget clock 105 min, pipeline sweep, both daily checkers, PAPER BOOK
    status: strategies in paper, trades, days elapsed, judgment point). If
    cycle_budget.py status says UNFINISHED, resume that item/step first.
+   THE REFERENCE-DATA GATE (JASON, SEPTEMBER 16th 2026 -- STANDING, his rule, not
+   Tony's): ANY REFERENCE DATA PAST ITS COVERAGE DATE BLOCKS THE STEPS THAT USE
+   IT AND GETS REPORTED, NEVER DEFAULTED. Preflight runs it
+   (cycle_preflight.reference_data_gate; receipt key steps.reference_data_gate)
+   against every series in research/ledger/data_coverage.json. BLOCKED IS NOT
+   ABORTED: the cycle still runs every step that does not depend on a stale
+   series -- sourcing, specifying, freezing and screening price-only candidates
+   on the Discovery slice, and close-out -- and the SESSION REPORT MUST STATE
+   WHICH STEPS WERE BLOCKED AND WHICH SERIES BLOCKED THEM (session_report
+   section 4 OPERATIONS prints it). A series with NO coverage entry at all is
+   treated as STALE, not as fine. Do not work around a block, do not default a
+   value, do not "assume no event" or carry a level forward: the consumers
+   themselves raise ReferenceDataUnavailable and the paper loop records
+   outcome "blocked_by_stale_reference_data" and books nothing.
 STEP 2 -- DATA CHECK. Is there new price data since the last cycle (ls -la
    data/NQ_1min_databento_*.csv; Jason tops up daily ~7 am CT)? If yes, Step 3.
    If no, do NOT idle and do NOT report "bot checked, not moved": go to Step 4 on
@@ -70,6 +84,22 @@ STEP 4 -- ADVANCE ONE CANDIDATE ONE STAGE. Highest-priority candidate not yet
    record the AMENDMENT 1 label on the PAPER row: trades/sessions * 126 < 40 ->
    slow: true (screen_strategy.py prints it; strategy_registry.slow_projection).
    Candidates already in PAPER, SLOW ones included, never block Step 4.
+   STANDING OWED ITEM ON STEP 4 -- SALVAGE RERUNS (Jason's follow-up 1,
+   September 16th 2026). Step 4 OWNS this and it comes BEFORE sourcing a new
+   candidate: the first cycle in which reference-data coverage is current, run
+   TONY_PRODUCTION=1 python3 src/rerun_salvages.py --run --write. It re-runs
+   every SUPERSEDED salvage (currently S007 and S009, decided on menu condition 4
+   labels the code invented past 2021-09-22) against the SAME frozen screen
+   results and modules, writes NEW salvage rows that supersede rather than
+   replace, and re-decides the spawns under s.7 (one salvage per strategy, menu
+   conditions only, and an EX-POST-ONLY condition -- menu 2, the session's own
+   range -- cannot carry a spawn). IT REFUSES TO RUN WHILE COVERAGE IS STALE and
+   says which updater fixes it; do not force it, do not re-run a salvage by hand
+   on stale labels, and do not specify S009a or S010a: both sit at registry stage
+   BLOCKED_PENDING_REFERENCE_DATA, take NO queue slot, and their preconditions
+   are written on their rows. Preflight prints "salvage reruns owed, blocked by
+   <series>" until it fires, then "COVERAGE IS CURRENT: run src/rerun_salvages.py
+   THIS CYCLE".
    If the queue is empty, Discovery sources one. SOURCE PRIORITY (Amendment 1):
    **INTRADAY STRATEGIES THAT TRADE MOST DAYS FIRST** -- so the 6-week clock works
    as designed -- then market mechanics, market structure, Observatory, Salvage
