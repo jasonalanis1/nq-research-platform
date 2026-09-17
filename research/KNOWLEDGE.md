@@ -21,6 +21,7 @@ Integrated in src/volatility_conditioning.py as sizing/context tools (the 3 rang
 6. Exit-design mismatch — a real drift effect destroyed by a stop/target that races it (H87/H89, H93, H114/115).
 8. Cost basis mismatch (named September 15th, S001) — every pre-directive study charged the full-size NQ round trip (0.75 pts at $20/pt); the paper book trades the MICRO, where the same $2.50/side commission is 2.5 pts. S001's +2.6-pt gross edge a trade (131 Discovery trades) is real in-sample and smaller than a micro's assumed $6.00 round trip. Cost-fragile (avg R < 0.10 after assumed costs, directive s.11) is the DEFAULT state of an ~11-pt-risk intraday NQ trade at this assumption; B4b's measured number is the most valuable missing input.
 7. Baseline confusion (named September 12th) — a long-only effect measured against ZERO on a trending asset. H118 passed three stages this way; against NQ's own drift it is nothing. The two-nulls rule now prevents it.
+9. Overlap confusion (named September 17th, S004) — a CORRECT baseline margin measured on a sample that is far smaller than its trade count. S004's +15.24 pt/trade over its own-drift baseline came from 554 trades on 10-session holds: ~56 independent episodes. Calendar-time block bootstrap CI90 -0.66..+32.84 pt (R: -0.0198..+0.0447, P(margin<=0)=0.257) and the sign FLIPS on non-overlapping thinning. The companion to failure mode 7: fixing the null does not fix the sample. Any strategy whose holds overlap gets its baseline margin measured on non-overlapping blocks, and quoted in points AND R AND % of notional, before paper entry.
 Idea-source hit rates for finding SOMETHING real: pattern-guess 0%; intuition ~1 in 8; behavior-first Observatory ~1 in 3; forced-participant map: 11 entries, 0 survivors (9 clean nulls, 1 near-miss, 1 untestable). Literature / practitioner / observatory channels: being measured from September 12th -- literature so far 0 for 2 scanned (M15, M16), both clean nulls on decayed 2018/2019 results; practitioner 0 entries from 3 claims; observatory characterized 3 questions, 0 candidates.
 Closed families (never resurrect without a genuinely different claim): Treasury 10-year auction concession/rebound (M19, ZN, n=40 events, both gating legs null, kill check clears -- a real absence, not underpowered noise masquerading as a kill); overnight-vs-intraday split (M15, night = 55% of drift, not 'all'; do not slice to weekday-only); market intraday momentum first-30 -> last-30 (M16, null in every cell); candlestick/bar patterns; opening-range/IB breakout; VWAP and reference-level fades; gap fades (3 variants); weekly/multi-day trend following (7 variants); VXN level/ROC as direction; ZN lead-lag (daily); turn-of-month; closing-pressure reversal; CPI/NFP reaction; pre-NFP drift; pre-FOMC drift (2 attempts); post-FOMC continuation; month-end NQ-vs-ZN; NQ-ZN correlation breakdown (near-miss); basket correlation convergence (clean null, no gradient); days-to-opex; overnight_range_vs_atr drift; vwap_dist LOW drift (H118, baseline confusion).
 Structural conclusion (September 12th, four independent reads agree): scheduled, public flows are the most competed in NQ and nine nulls there is the expected outcome; the participants who leave money on the table (dealers hedging gamma, basis arbs, intraday liquidity takers) are not visible in 1-minute OHLCV. Widening the search without new data produces lottery tickets with nicer stories.
@@ -883,3 +884,78 @@ block-bootstrap CI (−0.2630, +0.4895) failed to clear zero in the H118 diagnos
 overlap so heavily that 554 trades are far from 554 independent episodes. The directive's SCREEN is one
 number with no CI gate (s.2), so S004 passes and goes to paper — but the margin, not the raw net, is the
 number its paper record has to defend.
+
+## 2026-09-17 (11:00 pm CT scheduled cycle) — S004 KILLED before paper entry: the baseline gate stripped 80% and the remaining 20% was not there
+
+**The honest numbers, in one place.** S004's screen: 554 trades over 2,101 Discovery sessions,
+**+76.0131 gross pt/trade**, +$82,782.06 net on the MNQ-market decision basis, all four cost
+combinations positive. Its own-drift baseline arm — the identical trade on every session with the
+descriptor, filter off — earns **+60.7698 pt/trade**. Margin **+15.2433 pt = +0.0118 R**. Arm A is a
+strict subset of arm B and every shared trade agrees to 1e-6, so this is one trade and one selection
+rule, not two strategies.
+
+That margin does not survive measurement (`research/studies/S004-scrutiny-2026-09-17.md`,
+`src/study_s004_scrutiny.py`, `data/s004_scrutiny.json`):
+
+- **Overlap.** Calendar-time moving-block bootstrap on blocks of consecutive sessions (the house
+  convention in `src/gate_conditions_hyp162.py` / `src/baseline_relative.py`), 3,000 resamples:
+  points CI90 **−0.66 … +32.84** at block 10 and **−1.01 … +32.32** at block 20; % of notional
+  −0.020 … +0.393; **R −0.0198 … +0.0447 with P(margin ≤ 0) = 0.257**. Nothing clears zero. Thin the
+  trades so no two 10-session holds overlap and **the sign flips**: −12.22 pt (n=140) and −0.34 pt
+  (n=138) on two different thinnings. The effective independent sample is about **56 trades, not 554**.
+- **Exposure.** Both arms hold 10 RTH sessions at 1 micro, so time and size are matched by
+  construction; the only exposure the filter can add is volatility, and it does — atr14/price **1.740%**
+  on selected sessions vs 1.645% on all, stop rate 13.54% vs 10.94%. Volatility-matched the margin is
+  +0.0117 R ≈ +5.9 pt at the sample's 508-pt mean risk. **Of the +76.01 headline: ~80% index drift,
+  ~12% volatility selection, ~8% residual that straddles zero.**
+- **Subperiods**, each against its own period's baseline: points +8.38 / −0.30 / +19.62 / +8.98 /
+  +19.03 / +39.74 / +39.29 for 2015…2021 — 6/7 positive but **rising with the index level**, which is
+  the artifact the exposure-matched units exist to strip. In R: 5/7 positive, negative in 2016 and
+  2018, and 2017 alone is 48% of the seven-year total.
+- **The suite the project already owns**, run against the correct null (60.7698, not zero) with the
+  full population and selector mask: 4 green, **2 RED**, 1 not applicable. Red: cost_sensitivity (the
+  2× CI90 53.09…98.62 crosses the 60.77 null — the width, not the mean, which moves 0.007 pt) and
+  concentration (**28 of 554 trades carry 240% of the effect**).
+
+**FOUR THINGS LEARNED, and the third and fourth are new.**
+
+1. **A baseline gate is necessary and not sufficient.** S004's own-drift gate is the best methodological
+   fix this project has made — it removed 80% of a headline that H118 banked through three validation
+   stages. But it is a **point estimate on overlapping windows**, and a point estimate cannot tell you
+   whether the 20% it left is real. The screening agent wrote that caveat into the SCREEN row before
+   this study existed, which is the system working; what was missing was a step that acts on it.
+   *Standing consequence: any strategy whose holds overlap gets its baseline margin measured on
+   non-overlapping blocks before paper entry, not after.*
+2. **An overlapping sample lies about its own size in the direction of confidence.** 554 trades on a
+   10-session hold is ~56 episodes. Every interval computed as though they were independent — including
+   any win rate, worst streak or avg-R stability read off a screen — is too narrow by roughly √10.
+3. **Points are not an exposure-matched unit on an index that rose 10× across the slice.** A margin
+   quoted in points mixes the edge with how volatile and how expensive the selected sessions were. The
+   S004 filter selects 5.8% more volatile sessions *mechanically* — a close far below its own VWAP is
+   more common on a volatile day — so 61% of its points margin is bought volatility, visible only once
+   the same number is quoted in R and in % of notional. **Quote a baseline margin in all three.**
+4. **Two of `integrity_checks.py`'s greens are weaker than they look, and one is arithmetically
+   incapable of firing.** (a) The **inverted placebo leg is an identity** for a difference-of-means
+   statistic: −margin × n_signal/n_other, here −15.2433 × 554/1109 = −7.6147 exactly, one hundredth of a
+   point under the 50% red threshold. It can never red when the signal is a minority of the population,
+   so a green from it is not evidence. (b) **subperiod_stability greens against a FIXED null** — S004's
+   first half of trades averages 37.93 pt and its second 114.10 against a 60.77 null, i.e. −22.8 then
+   +53.3, and it greens only because a fixed null is contaminated by the index level rising. Both checks
+   are still worth running; neither should be read as a pass without its internals. Recorded here rather
+   than patched: changing the suite mid-flight is how a check gets tuned to a candidate.
+
+**Disposition.** S004 is a **KILL**, recorded before it ever entered PAPER, so no paper record exists and
+none was adjusted. It is deregistered from `bot_stack_paper_run.STRATEGIES`. The frozen spec (sha256
+8408305460…) and module (sha256 f8f8832579…) were not edited and the screen was not re-run with different
+parameters — this was measurement of the existing result. The mandatory s.7 **Salvage is OWED and BLOCKED**
+by the reference-data gate (menu condition 1 reads VXN, condition 4 reads FOMC/CPI/NFP); S004 now sits on
+`src/rerun_salvages.py`'s owed list beside S007 and S009, and all three run the first cycle coverage is
+current. Worth Jason knowing, and **not acted on**: S004's Discovery trades end 2021-09-15, so
+`rerun_salvages.coverage_check("S004")` reports every menu series covering every one of its trade dates —
+the block on its salvage comes from the standing session-level gate (`step4_salvage_check`, stale VXN and
+calendar as of the current session), not from its own trade dates. Tony did not reinterpret the gate to get
+around that.
+
+This is the **fourth** time the H118 lineage has produced a large, clean, positive number that is the index
+going up. Failure mode 7 (baseline confusion) in §2 now has a companion: **overlap confusion** — a correct
+baseline measured on a sample that is ten times smaller than its trade count.

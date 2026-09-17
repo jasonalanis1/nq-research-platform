@@ -1564,6 +1564,52 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 17th, 11:00 pm cycle -- **S004 WAS STRESS-TESTED BEFORE PAPER ENTRY AND IS A KILL.** Detail:
+research/sessions/2026-09-17-2300.md; study research/studies/S004-scrutiny-2026-09-17.md; tool
+src/study_s004_scrutiny.py; numbers data/s004_scrutiny.json. MEASUREMENT ONLY -- the frozen spec (sha256
+8408305460...) and module (sha256 f8f8832579...) were NOT edited and the screen was NOT re-run with different
+parameters (s.13); everything is computed from the frozen data/screen_S004_with_baseline.json, in which arm A
+(554 trades) is a strict SUBSET of arm B (1,663) agreeing trade-for-trade to 1e-6 -- one trade, one selection
+rule. **THE BASELINE GATE STRIPPED 80% OF THE HEADLINE AND THE REMAINING 20% IS NOT THERE.** (1) OVERLAP:
+calendar-time moving-block bootstrap on blocks of consecutive SESSIONS (house convention,
+gate_conditions_hyp162 / baseline_relative), 3,000 resamples, seed 7 -- points CI90 -0.6636..+32.8398 (block
+10), -1.0066..+32.3218 (block 20); % of notional -0.0197..+0.3925; **R -0.0198..+0.0447 with P(margin<=0) =
+0.257**. Nothing clears zero. Non-overlapping thinning **FLIPS THE SIGN**: -12.2230 pt (n=140) and -0.3438 pt
+(n=138). Effective independent sample **~56 trades, not 554**. (2) EXPOSURE: holding time and size identical in
+both arms by construction, so the only exposure the filter adds is volatility -- and it does (atr14/price
+1.740% vs 1.645%, stop rate 13.54% vs 10.94%). Volatility-matched the margin is **+0.0117 R ~ +5.9 pt** at the
+508-pt mean risk: of the +76.0131 gross headline **~80% index drift, ~12% volatility selection, ~8% residual
+straddling zero**. (3) SUBPERIODS, each against its OWN baseline: points +8.38 / -0.30 / +19.62 / +8.98 /
++19.03 / +39.74 / +39.29 for 2015..2021, 6/7 positive but rising with the index level; in R 5/7, NEGATIVE in
+2016 and 2018, and 2017 alone is 48% of the seven-year total. (4) INTEGRITY SUITE vs the CORRECT null (60.7698,
+not zero) with the full population and the selector mask: **7 attempted, 4 GREEN, 2 RED, 1 NOT APPLICABLE, and
+NONE GATED** -- no check in src/integrity_checks.py reads VXN or the macro calendar. RED cost_sensitivity (2x
+CI90 53.09..98.62 crosses the null; the width, not the mean), RED concentration (28 of 554 trades carry 240% of
+the effect). NOT APPLICABLE overnight_intraday_split (no leg on a 10-session hold -- NOT a pass). Two greens are
+weaker than they look and it is recorded, not patched: subperiod_stability greens against a FIXED null (first
+half of trades 37.93 pt vs second 114.10 against 60.77 = -22.8 then +53.3), and the placebo's INVERTED leg is an
+arithmetic identity (-15.2433 x 554/1109 = -7.6147, one hundredth of a point under the threshold, incapable of
+firing when the signal is a minority). **DISPOSITION: registry stage KILL with the numbers; S004 never entered
+PAPER so no paper record exists and none was adjusted; deregistered from bot_stack_paper_run.STRATEGIES.** The
+mandatory s.7 SALVAGE is **OWED AND BLOCKED** -- S004 now sits on src/rerun_salvages.py's owed list beside S007
+and S009 (SALVAGE_INPUTS["S004"] with trades_path for its two-arm screen file; owed() now also returns a KILL
+whose first salvage never ran), so all three run the first cycle coverage is current. NOT ACTED ON, worth
+knowing: S004's trades end 2021-09-15, so rerun_salvages.coverage_check("S004") reports every menu series
+covering every trade date -- the block is the standing SESSION-LEVEL gate (step4_salvage_check), which Tony does
+not reinterpret. THE GATE STILL BLOCKS SIX STEPS (CPI 2023-12-12, FOMC 2021-09-22, NFP 2023-12-08, VXN
+2026-09-02): step3_paper_scoring, step3_b2_risk_state_decision, step4_salvage_check, salvage_reruns (S007, S009,
+**now S004**), step4_specify_S009a, step4_specify_S010a. Step 3 blocked -- **nothing scored, nothing booked**;
+book unchanged (S008 2 trades / 38 to judgment, the only live clock; SLOW: S002 2, S001 1, S001a 0, S003 0).
+Price data through 2026-09-16, fine. **S005 was read and scoped but NOT advanced and no stage was claimed**: its
+Portfolio finding (research/studies/hyp162-portfolio-2026-09-14.md) says the 10:00 ET opening-range update adds
+nothing to the pre-open stack (joint retention 17.7%/52.0%, lower bounds -14.3%/+14.9% vs a 50% bar; MAE 0.3252
+-> 0.3256), so the only honest S005 is a sizing overlay SPECIFIED, FROZEN and SCREENED against a named
+already-frozen host module (S008 is the obvious one) -- Step 4 starts there next cycle. KNOWLEDGE.md: new dated
+section and **failure mode 9, OVERLAP CONFUSION** (a correct baseline measured on a sample far smaller than its
+trade count -- the companion to failure mode 7). pytest 704 passed. No Validation/Holdout touched, no
+batch_screen, no frozen spec or module edited, no paper-log fill altered, no trigger booked, no spend.
+
+
 September 17th, 9:00 pm cycle -- **S004 took three stages in one cycle and its PAPER entry is OWED, not taken.**
 Detail: research/sessions/2026-09-17-2100.md. **THE GATE BLOCKED SIX STEPS** (CPI 2023-12-12, FOMC 2021-09-22,
 NFP 2023-12-08, VXN 2026-09-02): step3_paper_scoring, step3_b2_risk_state_decision, step4_salvage_check,
