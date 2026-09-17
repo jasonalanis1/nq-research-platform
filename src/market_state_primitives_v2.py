@@ -82,6 +82,15 @@ def extend_state_frame(states: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
 
     vxn = _load_vxn_daily()
     vxn_reindexed = vxn.reindex(out.index, method="ffill")  # FRED VXN has occasional gaps -- carry forward last known level
+    # FAIL CLOSED PAST THE SERIES END (2026-09-16). The ffill above is right for
+    # a holiday inside the series and WRONG past its end: it was quietly giving
+    # every session after 2026-09-02 the level from 2026-09-02. A gap is filled;
+    # a missing tail is left missing, so a consumer gets NaN it must handle
+    # rather than a stale number it cannot see. reference_data.vxn_close() is the
+    # accessor that refuses outright.
+    _vxn_end = max(vxn.index) if len(vxn.index) else None
+    if _vxn_end is not None:
+        vxn_reindexed = vxn_reindexed.where(pd.Index(out.index) <= _vxn_end)
     vxn_trailing_avg = vxn_reindexed.rolling(VXN_LOOKBACK_DAYS, min_periods=VXN_LOOKBACK_DAYS).mean().shift(1)
     vxn_prior = vxn_reindexed.shift(1)
     out["vxn_level_vs_trailing"] = (vxn_prior / vxn_trailing_avg) - 1.0

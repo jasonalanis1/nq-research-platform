@@ -1,0 +1,80 @@
+{
+  "generated": "2026-09-17T00:18:01",
+  "price_data_end": "2026-09-16",
+  "macro_calendar_covered_through": "2021-09-22",
+  "series": {
+    "VXN": {
+      "last_date": "2026-09-02",
+      "n_observations": 6434,
+      "file": "data/VXNCLS_MAX.csv",
+      "updater": "src/data_topup_vxn.py",
+      "source": "CBOE published daily history: https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv",
+      "consumers": [
+        "src/market_state_primitives_v2.py:_load_vxn_daily/extend_state_frame (vxn_level_vs_trailing)",
+        "src/salvage_check.py:vxn_labels (directive s.7 Salvage menu condition 1)",
+        "src/study_s002_night_leg_menu.py",
+        "src/idea_factory.py",
+        "src/observatory_free_look.py",
+        "src/study_vxn_level_signal.py / study_vxn_roc_signal.py / study_vxn_pricing_check.py",
+        "validated magnitude fact: VXN -> next-session range (stop and sizing input at SPECIFY)",
+        "S010a (queued at SOURCE): selects LOW-VXN sessions only"
+      ],
+      "covers_price_data": false,
+      "days_short_of_price_data": 14,
+      "stale": true
+    },
+    "FOMC": {
+      "last_date": "2021-09-22",
+      "n_events": 53,
+      "file": "frozen list + data/macro_event_calendar.csv",
+      "updater": "src/data_topup_macro_calendar.py",
+      "source": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "consumers": [
+        "src/salvage_check.py:news_labels (directive s.7 Salvage menu condition 4)",
+        "src/study_fomc_volatility.py, src/study_pre_fomc_drift.py",
+        "S009a (queued at SOURCE): trades only on days with no scheduled macro event"
+      ],
+      "covers_price_data": false,
+      "days_short_of_price_data": 1820,
+      "stale": true
+    },
+    "CPI": {
+      "last_date": "2023-12-12",
+      "n_events": 108,
+      "file": "frozen list + data/macro_event_calendar.csv",
+      "updater": "src/data_topup_macro_calendar.py",
+      "source": "https://www.bls.gov/schedule/news_release/cpi.htm",
+      "consumers": [
+        "src/salvage_check.py:news_labels (directive s.7 Salvage menu condition 4)",
+        "src/study_economic_calendar.py, src/validate_exp039_economic_calendar.py",
+        "S009a (queued at SOURCE)"
+      ],
+      "covers_price_data": false,
+      "days_short_of_price_data": 1009,
+      "stale": true
+    },
+    "NFP": {
+      "last_date": "2023-12-08",
+      "n_events": 108,
+      "file": "frozen list + data/macro_event_calendar.csv",
+      "updater": "src/data_topup_macro_calendar.py",
+      "source": "https://www.bls.gov/schedule/news_release/empsit.htm",
+      "consumers": [
+        "src/salvage_check.py:news_labels (directive s.7 Salvage menu condition 4)",
+        "src/study_economic_calendar.py, src/study_pre_nfp_drift.py",
+        "S009a (queued at SOURCE)"
+      ],
+      "covers_price_data": false,
+      "days_short_of_price_data": 1013,
+      "stale": true
+    }
+  },
+  "stale_series": [
+    "CPI",
+    "FOMC",
+    "NFP",
+    "VXN"
+  ],
+  "ok": false,
+  "note": "STALE: CPI ends 2023-12-12, FOMC ends 2021-09-22, NFP ends 2023-12-08, VXN ends 2026-09-02 -- consumers FAIL CLOSED past these dates (reference_data.ReferenceDataUnavailable), they do not guess. Extend with the updater named on each series."
+}

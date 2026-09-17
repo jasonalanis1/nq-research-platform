@@ -117,6 +117,33 @@ def queue_status() -> dict:
         return {"ok": False, "note": f"registry unreadable: {exc}"}
 
 
+def reference_data_status() -> dict:
+    """Directive s.3 Step 1, added 2026-09-16. The non-price reference series --
+    VXN and the FOMC/CPI/NFP calendar -- have their own coverage ends, and two
+    consecutive cycles burned a Step 4 on a candidate that could not be
+    specified because nobody saw the series had run out.
+
+    Surfaced here so staleness is visible BEFORE a candidate is spent on it.
+    Reported, never judged: a stale series does not fail preflight, because the
+    consumers already fail closed on it (src/reference_data.py). What preflight
+    owes the cycle is the warning."""
+    try:
+        import reference_data as rd
+        state = rd.coverage()
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "note": f"reference-data coverage unreadable: {exc}", "series": {}}
+    stale = state["stale_series"]
+    return {"ok": True, "stale_series": stale,
+            "covers_price_data": not stale,
+            "price_data_end": state["price_data_end"],
+            "series": {n: {"last_date": r["last_date"], "stale": r["stale"],
+                           "days_short": r["days_short_of_price_data"],
+                           "updater": r["updater"], "n_consumers": len(r["consumers"])}
+                       for n, r in state["series"].items()},
+            "lines": rd.plain_lines(state),
+            "note": state["note"]}
+
+
 def paper_book_status(today=None) -> dict:
     """Directive s.3 Step 1: preflight reports the paper book -- how many
     strategies are live in paper, each one's trade count and days elapsed, and
@@ -219,6 +246,21 @@ def main() -> int:
     steps["queue"] = {"ok": q.get("ok", False), **q}
     print(f"  [{'ok' if q.get('ok') else 'warn'}]   candidate queue {', '.join(q.get('queue', [])) or 'EMPTY'}")
     print(f"         -> {q.get('note','')}")
+    ref = reference_data_status()
+    steps["reference_data"] = {"ok": ref.get("ok", False), **ref}
+    _stale = ref.get("stale_series") or []
+    print(f"  [{'ok' if ref.get('ok') and not _stale else 'warn'}]   reference data  "
+          + ("VXN + FOMC/CPI/NFP calendar all cover the price data"
+             if ref.get("ok") and not _stale else
+             (f"STALE: " + ", ".join(f"{n} ends {ref['series'][n]['last_date']}" for n in _stale)
+              if ref.get("ok") else ref.get("note", "unreadable"))))
+    if _stale:
+        print("         -> consumers FAIL CLOSED past these dates (they refuse the session, they do not guess). "
+              "Top up from Jason's own Terminal:")
+        for n in _stale:
+            print(f"            {n}: {ref['series'][n]['updater']}  ({ref['series'][n]['n_consumers']} consumer(s), "
+                  f"{ref['series'][n]['days_short']}d short)")
+
     pbk = paper_book_status()
     steps["paper_book"] = {"ok": pbk.get("ok", False), **pbk}
     print(f"  [{'ok' if pbk.get('ok') else 'warn'}]   PAPER BOOK      {pbk.get('n_in_paper', 0)} strateg{'y' if pbk.get('n_in_paper', 0) == 1 else 'ies'} in paper"

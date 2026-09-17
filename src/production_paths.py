@@ -68,6 +68,11 @@ PROTECTED_FILES = (
     "research/idea_inventory.md",
     "research/_cycle_compliance.jsonl",
     "research/_cycle_history.jsonl",
+    "research/ledger/data_coverage.json",          # reference-data coverage state (2026-09-16)
+    "data/VXNCLS_MAX.csv",                         # the VXN daily reference series
+    "data/macro_event_calendar.csv",               # FOMC/CPI/NFP schedule extension
+    "data/macro_event_calendar_coverage.json",     # how far each published schedule was verified
+    "data/_reference_data_topup_log.jsonl",        # what each reference top-up added
 )
 PROTECTED_TREES = (
     "research/forward_validation/order_path_journal",

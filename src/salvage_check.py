@@ -69,7 +69,20 @@ def split(trades: list[dict], label_fn, name: str) -> dict:
 
 
 def vxn_labels(dates: list[date]) -> dict:
+    """FAIL-CLOSED (2026-09-16). A session past the VXN series' coverage end is
+    REFUSED, not carried forward. Before this, the ffill below silently handed a
+    two-week-old volatility reading to menu condition 1, so a salvage could be
+    decided -- and a candidate spawned -- on a number that was never measured on
+    the day it was attributed to."""
     from market_state_primitives_v2 import _load_vxn_daily
+    from reference_data import ReferenceDataUnavailable, vxn_coverage_end
+    end = vxn_coverage_end()
+    past = sorted(d for d in set(dates) if d > end)
+    if past:
+        raise ReferenceDataUnavailable(
+            "VXN", past[0], end,
+            f"{len(past)} of {len(set(dates))} trade date(s) in this Salvage check lie past the series "
+            f"(latest {past[-1]}). Salvage menu condition 1 cannot be judged on a carried-forward level.")
     vxn = _load_vxn_daily()
     idx = pd.Index(sorted(set(vxn.index) | set(dates)))
     v = vxn.reindex(idx).ffill()
@@ -91,18 +104,13 @@ def range_labels(df: pd.DataFrame, dates: list[date]) -> dict:
 
 
 def news_labels(dates: list[date]) -> dict:
-    sets = set()
-    try:
-        from study_fomc_volatility import FOMC_SET
-        sets |= set(FOMC_SET)
-    except Exception:  # noqa: BLE001
-        pass
-    try:
-        from study_economic_calendar import CPI_SET, NFP_SET
-        sets |= set(CPI_SET) | set(NFP_SET)
-    except Exception:  # noqa: BLE001
-        pass
-    return {d: ("NEWS" if d in sets else "QUIET") for d in dates}
+    """FAIL-CLOSED (2026-09-16). Menu condition 4 used to read `d in FOMC_SET`
+    and call every miss QUIET -- so a 2026 date was "quiet" because the sourced
+    lists stop in 2021, not because the day held no release. That is a fabricated
+    classification. Coverage now comes from src/reference_data.py and a date past
+    it raises rather than defaulting to QUIET."""
+    from reference_data import scheduled_events_on
+    return {d: ("NEWS" if scheduled_events_on(d) else "QUIET") for d in dates}
 
 
 def tod_label(t: dict) -> str:

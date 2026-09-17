@@ -335,3 +335,18 @@ def test_preflight_shelf_floor_is_retired_and_queue_is_reported(tmp_path, monkey
     srg.append({"strategy_id": "S001", "name": "LSR", "stage": "SOURCE"}, tmp_path / "reg.jsonl")
     q = cp.queue_status()
     assert q["queue"] == ["S001 SOURCE"] and "next candidate: S001" in q["note"]
+
+
+def test_preflight_surfaces_reference_data_coverage_and_its_updaters():
+    """Added 2026-09-16. Two cycles in a row spent a Step 4 on a candidate that
+    could not be specified because a reference series had quietly run out. A
+    future cycle sees the staleness here, before it spends the candidate."""
+    import cycle_preflight as cp
+    st = cp.reference_data_status()
+    assert st["ok"]
+    assert set(st["series"]) == {"VXN", "FOMC", "CPI", "NFP"}
+    for name, rec in st["series"].items():
+        assert rec["last_date"] and rec["updater"] and rec["n_consumers"] >= 1
+    # stale is a WARNING, never a preflight failure -- the consumers already refuse
+    assert st["covers_price_data"] == (not st["stale_series"])
+    assert any("FAIL CLOSED" in ln for ln in st["lines"])

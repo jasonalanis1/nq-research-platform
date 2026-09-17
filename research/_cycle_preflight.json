@@ -1,23 +1,18 @@
 {
- "ran_at": "2026-09-16T22:02:12.811236+00:00",
+ "ran_at": "2026-09-17T00:17:33.037799+00:00",
  "owner": "cycle",
- "note": "5:00 pm cycle",
+ "note": "7:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
-   "returncode": 0,
+   "skipped": true,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='5:00 pm cycle'"
-   ],
-   "stderr_tail": []
+    "--skip-lock"
+   ]
   },
   "budget": {
    "ok": true,
-   "returncode": 0,
-   "tail": [
-    "budget started: 105 min"
-   ],
-   "stderr_tail": []
+   "skipped": true
   },
   "sweep": {
    "ok": true,
@@ -61,6 +56,7 @@
   "queue": {
    "ok": true,
    "queue": [
+    "S010a SOURCE",
     "S009a SOURCE",
     "S004 SOURCE",
     "S005 SOURCE",
@@ -68,7 +64,57 @@
    ],
    "salvage_owed": [],
    "empty": false,
-   "note": "next candidate: S009a S009a afternoon VWAP-completion continuation, scheduled-news days excluded at SOURCE"
+   "note": "next candidate: S010a S010a thin-participation completion continuation, LOW-VXN sessions only at SOURCE"
+  },
+  "reference_data": {
+   "ok": true,
+   "stale_series": [
+    "CPI",
+    "FOMC",
+    "NFP",
+    "VXN"
+   ],
+   "covers_price_data": false,
+   "price_data_end": "2026-09-16",
+   "series": {
+    "VXN": {
+     "last_date": "2026-09-02",
+     "stale": true,
+     "days_short": 14,
+     "updater": "src/data_topup_vxn.py",
+     "n_consumers": 8
+    },
+    "FOMC": {
+     "last_date": "2021-09-22",
+     "stale": true,
+     "days_short": 1820,
+     "updater": "src/data_topup_macro_calendar.py",
+     "n_consumers": 3
+    },
+    "CPI": {
+     "last_date": "2023-12-12",
+     "stale": true,
+     "days_short": 1009,
+     "updater": "src/data_topup_macro_calendar.py",
+     "n_consumers": 3
+    },
+    "NFP": {
+     "last_date": "2023-12-08",
+     "stale": true,
+     "days_short": 1013,
+     "updater": "src/data_topup_macro_calendar.py",
+     "n_consumers": 3
+    }
+   },
+   "lines": [
+    "REFERENCE DATA COVERAGE (price data ends 2026-09-16)",
+    "  [STALE] VXN   covered through 2026-09-02, 14d short of the price data -- 8 consumer(s); update with src/data_topup_vxn.py",
+    "  [STALE] FOMC  covered through 2021-09-22, 1820d short of the price data -- 3 consumer(s); update with src/data_topup_macro_calendar.py",
+    "  [STALE] CPI   covered through 2023-12-12, 1009d short of the price data -- 3 consumer(s); update with src/data_topup_macro_calendar.py",
+    "  [STALE] NFP   covered through 2023-12-08, 1013d short of the price data -- 3 consumer(s); update with src/data_topup_macro_calendar.py",
+    "  Consumers FAIL CLOSED past these dates: a session outside coverage is refused, never guessed."
+   ],
+   "note": "STALE: CPI ends 2023-12-12, FOMC ends 2021-09-22, NFP ends 2023-12-08, VXN ends 2026-09-02 -- consumers FAIL CLOSED past these dates (reference_data.ReferenceDataUnavailable), they do not guess. Extend with the updater named on each series."
   },
   "paper_book": {
    "ok": true,
@@ -86,7 +132,7 @@
      "name": "Level Sweep Reversal on compressed prior days (M26 via Salvage)",
      "stage": "PAPER",
      "trades": 1,
-     "days_elapsed": 8,
+     "days_elapsed": 9,
      "trades_to_judgment": 39,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -99,7 +145,7 @@
      "name": "Overnight carry on compressed prior days (night leg of M15 via Salvage)",
      "stage": "PAPER",
      "trades": 2,
-     "days_elapsed": 8,
+     "days_elapsed": 9,
      "trades_to_judgment": 38,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -112,7 +158,7 @@
      "name": "Month-end payment-cycle reversal, NQ (M24) as a full strategy",
      "stage": "PAPER",
      "trades": 0,
-     "days_elapsed": 8,
+     "days_elapsed": 9,
      "trades_to_judgment": 40,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -125,7 +171,7 @@
      "name": "Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only (S001 salvage spawn)",
      "stage": "PAPER",
      "trades": 0,
-     "days_elapsed": 8,
+     "days_elapsed": 9,
      "trades_to_judgment": 40,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -138,9 +184,9 @@
      "name": "Late-day constant-leverage rebalance continuation",
      "stage": "PAPER",
      "trades": 2,
-     "days_elapsed": 8,
+     "days_elapsed": 9,
      "trades_to_judgment": 38,
-     "weeks_to_judgment": 4.9,
+     "weeks_to_judgment": 4.7,
      "at_judgment_point": false,
      "slow": false,
      "six_week_mark_passed": false,
@@ -152,7 +198,7 @@
     "base_entry_b3_orb_placeholder",
     "execution_dummy_4x_placeholder"
    ],
-   "note": "S001 1 trades / 8 days -- SLOW (background, no queue slot; 39 more trade(s) to 40); S002 2 trades / 8 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 8 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S008 2 trades / 8 days (38 trades to judgment, six-week mark in 4.9 wk)"
+   "note": "S001 1 trades / 9 days -- SLOW (background, no queue slot; 39 more trade(s) to 40); S002 2 trades / 9 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 9 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 9 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S008 2 trades / 9 days (38 trades to judgment, six-week mark in 4.7 wk)"
   }
  },
  "failed": [],
