@@ -36,6 +36,12 @@ ROW SHAPE
                   `slow` key wins, exactly like `stage`.
   slow_projection {"trades", "sessions_screened", "trades_per_session",
                   "projected_trades_6_months"} -- the arithmetic behind `slow`
+  supersedes      on a SUPERSEDED row: what it supersedes (the original row's ts
+                  + stage + the artefact it produced). Required.
+  blocked_by      on a SUPERSEDED or BLOCKED_PENDING_REFERENCE_DATA row: the
+                  reference series that must become current. Required.
+  precondition    on a BLOCKED_PENDING_REFERENCE_DATA row: the exact condition
+                  that releases it. Required.
 
 The Salvage queue and the revamp list are NOT separate stores: the Salvage queue
 is every strategy whose latest stage is KILL without a later SALVAGE row; the
@@ -64,9 +70,26 @@ from production_paths import assert_writable, enable_production  # noqa: E402
 REGISTRY = ROOT / "research" / "ledger" / "strategies.jsonl"
 
 STAGES = ("SOURCE", "SPECIFY", "FREEZE", "SCREEN", "PAPER", "JUDGE",
-          "KEEP", "FIX_ONCE", "KILL", "SALVAGE",
+          "KEEP", "FIX_ONCE", "KILL", "SALVAGE", "SUPERSEDED",
+          "BLOCKED_PENDING_REFERENCE_DATA",
           "P1", "P2", "P3", "P4", "P5", "LEARN")
 QUEUE_STAGES = ("SOURCE", "SPECIFY", "FREEZE", "SCREEN")     # not yet in paper, still moving
+
+# --- the two states added 2026-09-17 for Jason's follow-ups 1 and 3 ---------
+# SUPERSEDED                      a result (so far: a SALVAGE result) that was
+#                                 computed on reference data now known to have
+#                                 been wrong, marked pending a rerun. The
+#                                 ORIGINAL ROW IS NEVER DELETED OR EDITED: a
+#                                 SUPERSEDED row is APPENDED and says what it
+#                                 supersedes, what was corrupted and what has to
+#                                 be true before the rerun can happen.
+# BLOCKED_PENDING_REFERENCE_DATA  a candidate that must NOT be advanced because
+#                                 a reference series it needs is past its
+#                                 coverage end. It is deliberately NOT in
+#                                 QUEUE_STAGES, so Step 4 skips it and no future
+#                                 cycle specifies it on invented labels.
+SUPERSEDED_STAGE = "SUPERSEDED"
+BLOCKED_STAGE = "BLOCKED_PENDING_REFERENCE_DATA"
 PAPER_STAGES = ("PAPER", "FIX_ONCE", "KEEP", "P1", "P2")     # a paper record is accumulating
 VERDICT_STAGES = ("KEEP", "FIX_ONCE", "KILL")
 CLOSED_STAGES = ("LEARN",)
@@ -159,6 +182,15 @@ def append(row: dict, path: Path | None = None) -> dict:
         raise ValueError("a SCREEN row must carry screen_result")
     if stage in VERDICT_STAGES and not row.get("verdict"):
         raise ValueError(f"a {stage} row must carry the verdict and the numbers that produced it")
+    if stage == SUPERSEDED_STAGE and not row.get("supersedes"):
+        raise ValueError("a SUPERSEDED row must name what it supersedes (`supersedes`) "
+                         "-- the original row is never deleted or edited")
+    if stage in (SUPERSEDED_STAGE, BLOCKED_STAGE) and not row.get("blocked_by"):
+        raise ValueError(f"a {stage} row must carry `blocked_by`: the reference series "
+                         "that must become current before this can move")
+    if stage == BLOCKED_STAGE and not row.get("precondition"):
+        raise ValueError("a BLOCKED_PENDING_REFERENCE_DATA row must carry the exact "
+                         "`precondition` that releases it")
     if "slow" in row and not isinstance(row["slow"], bool):
         raise ValueError("`slow` must be a bool (Amendment 1's SLOW label)")
     out = dict(row)
@@ -224,6 +256,38 @@ def salvage_queue(rows: list[dict]) -> list[dict]:
     return out
 
 
+def superseded_salvages(rows: list[dict]) -> list[dict]:
+    """Every SUPERSEDED row still owed its rerun -- i.e. no later SALVAGE row for
+    that strategy. These are what src/rerun_salvages.py re-runs the first time
+    reference-data coverage is current (Jason's follow-up 1, September 16th)."""
+    out = []
+    for r in rows:
+        if r.get("stage") != SUPERSEDED_STAGE:
+            continue
+        sid = r["strategy_id"]
+        later = [x for x in rows if x.get("strategy_id") == sid
+                 and x.get("stage") == "SALVAGE" and str(x.get("ts", "")) > str(r.get("ts", ""))]
+        if not later:
+            out.append(r)
+    return out
+
+
+def blocked_pending_reference_data(rows: list[dict]) -> list[dict]:
+    """Candidates whose stage of record is BLOCKED_PENDING_REFERENCE_DATA. They
+    take no queue slot and Step 4 must not advance them."""
+    return [r for r in latest(rows).values() if r.get("stage") == BLOCKED_STAGE]
+
+
+def reference_series_blocking(rows: list[dict]) -> set:
+    """Every reference series named by something currently blocked or owed a
+    rerun -- what preflight reports as the reason the work cannot proceed."""
+    series = set()
+    for r in superseded_salvages(rows) + blocked_pending_reference_data(rows):
+        for name in (r.get("blocked_by") or []):
+            series.add(str(name))
+    return series
+
+
 def stage_map(rows: list[dict]) -> dict[str, str]:
     """strategy_id -> stage, for the movement rule (cycle_budget.py)."""
     return {sid: r.get("stage") for sid, r in latest(rows).items()}
@@ -249,6 +313,14 @@ def summary_lines(rows: list[dict]) -> list[str]:
                  (", ".join(f"{r['strategy_id']} {r['stage']}" for r in sl) if sl else "none"))
     s = salvage_queue(rows)
     lines.append(f"  salvage owed: " + (", ".join(r["strategy_id"] for r in s) if s else "none"))
+    sup = superseded_salvages(rows)
+    lines.append(f"  salvage RERUNS owed (superseded on bad reference labels): " +
+                 (", ".join(f"{r['strategy_id']} (blocked by {'/'.join(r.get('blocked_by') or [])})" for r in sup)
+                  if sup else "none"))
+    blk = blocked_pending_reference_data(rows)
+    lines.append(f"  BLOCKED pending reference data (no queue slot): " +
+                 (", ".join(f"{r['strategy_id']} (blocked by {'/'.join(r.get('blocked_by') or [])})" for r in blk)
+                  if blk else "none"))
     closed = [r for r in lat.values() if r.get("stage") in CLOSED_STAGES]
     lines.append(f"  closed to LEARN: " + (", ".join(r["strategy_id"] for r in closed) if closed else "none"))
     return lines
