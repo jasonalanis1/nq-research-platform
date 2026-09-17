@@ -96,6 +96,35 @@ def test_what_is_owed_comes_from_the_registry_not_from_this_module():
     assert rs.owed([]) == []
 
 
+def test_a_kill_whose_first_salvage_never_ran_is_owed_too():
+    """S004 was KILLED on 2026-09-17 before paper entry and its MANDATORY s.7
+    salvage was BLOCKED by the reference-data gate, so it was never run at all --
+    not superseded, just never done. That is owed for the same reason a rerun is
+    owed and is refused for the same reason, so it goes through the same door."""
+    rows = [{"ts": "2026-09-17T04:00:00+00:00", "strategy_id": "S004", "name": "x",
+             "stage": "KILL", "verdict": "KILL -- margin does not survive overlap correction"}]
+    assert rs.owed(rows) == ["S004"]
+    # ...and stops being owed the moment its salvage is recorded
+    rows2 = rows + [{"ts": "2026-09-18T00:00:00+00:00", "strategy_id": "S004", "name": "x",
+                     "stage": "SALVAGE", "verdict": "nothing taken"}]
+    assert rs.owed(rows2) == []
+
+
+def test_a_kill_this_module_has_no_inputs_for_is_left_out_not_guessed():
+    rows = [{"ts": "2026-09-17T04:00:00+00:00", "strategy_id": "S999", "name": "x",
+             "stage": "KILL", "verdict": "KILL"}]
+    assert rs.owed(rows) == []
+
+
+def test_s004s_trades_are_read_from_the_two_arm_screen_file():
+    """S004's screen output nests its trades under 'strategy' (it has two arms).
+    The owed salvage must read the STRATEGY arm, never the baseline null."""
+    trades = rs.screen_trades("S004")
+    assert len(trades) == 554
+    dates = rs.trade_dates("S004")
+    assert dates[0] == date(2015, 2, 9) and dates[-1] == date(2021, 9, 15)
+
+
 # --------------------------------------------------------------------------
 # re-deciding the spawn (directive s.7)
 # --------------------------------------------------------------------------

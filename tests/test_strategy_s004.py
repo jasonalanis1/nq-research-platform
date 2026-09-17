@@ -149,14 +149,16 @@ def test_the_baseline_arm_removes_only_the_tercile_filter():
     assert all(x.direction == "long" for x in base)
 
 
-def test_registered_in_the_paper_loop_but_not_scored_while_the_gate_blocks():
-    """S004 passed SCREEN, so it is registered under 's004' and can enter PAPER the
-    first cycle reference-data coverage is current. Registration is not entry: the
-    registry's stage of record is BLOCKED_PENDING_REFERENCE_DATA, not PAPER."""
+def test_deregistered_from_the_paper_loop_after_the_kill():
+    """S004 was KILLED on 2026-09-17 BEFORE paper entry
+    (research/studies/S004-scrutiny-2026-09-17.md): the +15.2433 pt/trade margin
+    over its own-drift baseline does not survive overlap correction. It was
+    registered under 's004' between its SCREEN and that KILL and is now
+    deregistered, so no paper row can ever be written for it. The frozen module
+    below is UNTOUCHED -- every other test in this file still runs against it."""
     import bot_stack_paper_run as bpr
     import strategy_registry as sr
-    assert "s004" in bpr.STRATEGIES
-    assert bpr.STRATEGIES["s004"][0] == s4.STRATEGY_NAME
-    assert "s004" not in bpr.PLUMBING_KEYS
+    assert "s004" not in bpr.STRATEGIES
     latest = sr.latest(sr.read_rows()).get("S004")
-    assert latest is not None and latest["stage"] != "PAPER"
+    assert latest is not None and latest["stage"] == "KILL"
+    assert latest["stage"] != "PAPER"

@@ -221,18 +221,20 @@ register_strategy("s010", _s010)
 # Discovery trades, AND +15.2433 gross points per trade over the identical trade
 # taken on every session, which is the correction that killed H118 (it passed all
 # three validation stages and turned out to be the stock market going up).
-# S004 IS NOT IN PAPER YET, AND THIS REGISTRATION DOES NOT PUT IT THERE. Paper
-# scoring is BLOCKED this cycle by the reference-data gate (VXN ends 2026-09-02;
-# FOMC 2021-09-22, CPI 2023-12-12, NFP 2023-12-08) because every paper row goes
-# through B2, which refuses a session past either coverage end rather than
-# defaulting. S004 itself reads NO reference data -- its entry, stop and exit are
-# price-only, which is why its screen ran clean. The registration exists so that
-# the first cycle with current coverage can run `--strategy s004` and append the
-# PAPER row without touching a frozen file; the owed entry is recorded on the
-# registry's BLOCKED_PENDING_REFERENCE_DATA row. It is SLOW (0.2637 trades/session
-# -> 33.2 in 126 sessions), so it papers in the BACKGROUND and takes no queue slot.
-import strategy_s004_vwap_dist_low_drift as _s004  # noqa: E402
-register_strategy("s004", _s004)
+# S004 IS NOT IN PAPER AND NEVER WILL BE -- DEREGISTERED 2026-09-17 (11:00 pm
+# cycle). It was KILLED before paper entry on
+# research/studies/S004-scrutiny-2026-09-17.md: the +15.2433 pt/trade margin over
+# its own-drift baseline does not survive overlap correction (calendar-time block
+# bootstrap CI90 -0.66..+32.84 points, -0.0198..+0.0447 R, P(margin<=0)=0.257; the
+# sign FLIPS under non-overlapping thinning; ~56 effective independent
+# observations, not 554), ~61% of what is left is the filter selecting more
+# volatile sessions, and 28 of 554 trades carry 240% of the effect. The frozen
+# spec and module are untouched (s.13) and the screen was not re-run; only this
+# registration is removed, so no paper row can ever be written for it. The
+# mandatory s.7 SALVAGE is OWED and blocked by the reference-data gate --
+# src/rerun_salvages.py carries it alongside S007 and S009.
+# import strategy_s004_vwap_dist_low_drift as _s004   # deregistered, see above
+# register_strategy("s004", _s004)
 
 # S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) --
 # REGISTERED 2026-09-16 (1:00 pm cycle) as an INPUT-ERROR CORRECTION, exactly as

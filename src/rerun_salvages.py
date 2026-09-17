@@ -85,6 +85,15 @@ EX_ANTE_SPEC_FIELDS = {"level_source", "direction"}
 # salvage ran on -- the frozen screen result and the same spec-named fields --
 # so the reference labels are the only thing that differs.
 SALVAGE_INPUTS = {
+    # S004 is NOT a rerun: it was KILLED on 2026-09-17 by
+    # research/studies/S004-scrutiny-2026-09-17.md and its FIRST salvage is owed,
+    # blocked by the same series. It joins this table because the refusal, the
+    # coverage check and the s.7 spawn rules are identical whether a salvage is
+    # owed for the first time or owed again. Its screen output nests the trades
+    # under "strategy" (two arms), hence `trades_path`.
+    "S004": {"screen": "data/screen_S004_with_baseline.json",
+             "trades_path": ["strategy", "trades_detail"], "extra": ["direction"],
+             "original": None, "spawn": "S004a"},
     "S007": {"screen": "data/screen_S007.json", "extra": ["direction"],
              "original": "data/salvage_S007_2026-09-16.json", "spawn": None},
     "S009": {"screen": "data/screen_S009.json", "extra": ["direction"],
@@ -105,17 +114,52 @@ class CoverageStale(RuntimeError):
 # what is owed
 # ---------------------------------------------------------------------------
 def owed(registry_rows: list | None = None) -> list[str]:
-    """Strategy ids with a SUPERSEDED salvage row and no later SALVAGE row.
-    The registry is the authority on what is owed -- never this module's table."""
+    """Every salvage this module is on the hook for, in registry order:
+
+      * a SUPERSEDED salvage row with no later SALVAGE row -- a RERUN owed
+        because the original was decided on invented labels (S007, S009); and
+      * a KILL with no SALVAGE row at all -- a FIRST salvage owed because the
+        s.7 check was blocked by the reference-data gate when the KILL was
+        recorded (S004, killed 2026-09-17 on
+        research/studies/S004-scrutiny-2026-09-17.md).
+
+    Both are owed for the same reason and are refused for the same reason, so
+    they run through the same door. THE REGISTRY IS THE AUTHORITY on what is
+    owed -- never this module's table; an id with no SALVAGE_INPUTS entry is
+    left out because this module has no inputs to run it on, not because it is
+    not owed."""
     import strategy_registry as sr
     rows = registry_rows if registry_rows is not None else sr.read_rows()
-    return [r["strategy_id"] for r in sr.superseded_salvages(rows)]
+    out = [r["strategy_id"] for r in sr.superseded_salvages(rows)]
+    has_salvage = {r["strategy_id"] for r in rows if r.get("stage") == "SALVAGE"}
+    for r in sr.salvage_queue(rows):
+        sid = r["strategy_id"]
+        if sid not in has_salvage and sid not in out and sid in SALVAGE_INPUTS:
+            out.append(sid)
+    return out
+
+
+def screen_trades(strategy_id: str) -> list:
+    """The frozen screen result's trade list, wherever that file keeps it."""
+    meta = SALVAGE_INPUTS[strategy_id]
+    res = json.loads((PROJECT_ROOT / meta["screen"]).read_text())
+    node = res
+    for key in meta.get("trades_path", ["trades_detail"]):
+        node = node[key]
+    return node
+
+
+def screen_strategy_name(strategy_id: str) -> str | None:
+    meta = SALVAGE_INPUTS[strategy_id]
+    res = json.loads((PROJECT_ROOT / meta["screen"]).read_text())
+    for key in meta.get("trades_path", ["trades_detail"])[:-1]:
+        res = res[key]
+    return res.get("strategy_name")
 
 
 def trade_dates(strategy_id: str) -> list:
-    p = PROJECT_ROOT / SALVAGE_INPUTS[strategy_id]["screen"]
-    res = json.loads(p.read_text())
-    return sorted({date.fromisoformat(str(t["date"])[:10]) for t in res["trades_detail"]})
+    return sorted({date.fromisoformat(str(t["date"])[:10])
+                   for t in screen_trades(strategy_id)})
 
 
 # ---------------------------------------------------------------------------
@@ -240,15 +284,18 @@ def rerun_one(strategy_id: str, df=None, today=None) -> dict:
     require_current(strategy_id)
     import salvage_check as sc
     meta = SALVAGE_INPUTS[strategy_id]
-    res = json.loads((PROJECT_ROOT / meta["screen"]).read_text())
-    out = sc.run(res["trades_detail"], df, list(meta["extra"]))
-    out["strategy_name"] = res.get("strategy_name")
+    out = sc.run(screen_trades(strategy_id), df, list(meta["extra"]))
+    out["strategy_name"] = screen_strategy_name(strategy_id)
     out["screen_source"] = meta["screen"]
     out["rerun_of"] = meta["original"]
     out["rerun_at"] = (today or datetime.now(timezone.utc).date()).isoformat()
-    out["rerun_reason"] = ("the original was computed on reference labels past the macro calendar's "
-                           "coverage end; menu condition 4 defaulted to QUIET. Same frozen screen "
-                           "result, same frozen module, corrected labels.")
+    out["rerun_reason"] = (
+        ("the original was computed on reference labels past the macro calendar's "
+         "coverage end; menu condition 4 defaulted to QUIET. Same frozen screen "
+         "result, same frozen module, corrected labels.") if meta["original"] else
+        ("FIRST salvage, not a rerun: the mandatory s.7 check was BLOCKED by the "
+         "reference-data gate when the KILL was recorded, and was never run partially "
+         "and never defaulted. Same frozen screen result, same frozen module."))
     out["condition_2_note"] = ("price-derived, unchanged by this rerun -- kept in the output so the two "
                                "results can be compared line for line")
     if meta.get("spawn"):
@@ -271,7 +318,8 @@ def main(argv=None) -> int:
     print("SALVAGE RERUNS -- owed: " + (", ".join(todo) if todo else "none"))
     print("=" * 78)
     if not todo:
-        print("  Nothing is owed: no SUPERSEDED salvage row is missing its rerun.")
+        print("  Nothing is owed: no SUPERSEDED salvage row is missing its rerun and no "
+              "KILL is missing its first salvage.")
         return 0
 
     checks = {s: coverage_check(s) for s in todo}
@@ -312,8 +360,10 @@ def main(argv=None) -> int:
             enable_production("salvage rerun registry rows")
             sr.append({"strategy_id": s, "name": out.get("strategy_name") or s, "stage": "SALVAGE",
                        "verdict": out["verdict"],
-                       "notes": (f"RERUN OF RECORD, superseding {out['rerun_of']} (Jason's follow-up 1, "
-                                 f"September 16th 2026). {out['rerun_reason']} Artefact: "
+                       "notes": ((f"RERUN OF RECORD, superseding {out['rerun_of']} (Jason's follow-up 1, "
+                                  f"September 16th 2026). " if out["rerun_of"] else
+                                  "FIRST salvage (directive s.7), owed since the KILL and blocked until "
+                                  "coverage was current. ") + f"{out['rerun_reason']} Artefact: "
                                  f"{path.relative_to(PROJECT_ROOT)}. The original row and artefact are "
                                  f"untouched."),
                        "lineage": s})
