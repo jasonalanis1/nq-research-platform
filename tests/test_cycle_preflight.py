@@ -350,3 +350,105 @@ def test_preflight_surfaces_reference_data_coverage_and_its_updaters():
     # stale is a WARNING, never a preflight failure -- the consumers already refuse
     assert st["covers_price_data"] == (not st["stale_series"])
     assert any("FAIL CLOSED" in ln for ln in st["lines"])
+
+
+# ---------------------------------------------------------------------------
+# THE REFERENCE-DATA GATE (Jason, September 16th 2026 -- standing rule)
+#
+#   "Any reference data past its coverage date blocks the steps that use it and
+#    gets reported, never defaulted."
+#
+# A printed warning is not a gate. These tests are about BLOCKING: a stale
+# series stops its dependent steps and is named; a current series stops nothing;
+# and a series with no coverage entry at all is treated as stale, not as fine.
+# ---------------------------------------------------------------------------
+def _coverage(**series) -> dict:
+    return {"series": {n: ({"last_date": v, "updater": f"src/data_topup_{n.lower()}.py"}
+                           if v else {"last_date": None, "updater": None})
+                       for n, v in series.items()}}
+
+
+ALL_CURRENT = dict(VXN="2026-09-17", FOMC="2026-12-31", CPI="2026-12-31", NFP="2026-12-31")
+
+
+def test_a_stale_series_blocks_its_dependents_and_says_which_series_did_it():
+    st = _coverage(**{**ALL_CURRENT, "VXN": "2026-09-02"})
+    g = cp.reference_data_gate(st, session_date="2026-09-17", registry_rows=[])
+    assert g["stale_series"] == ["VXN"]
+    assert "step4_specify_S010a" in g["blocked_steps"]          # LOW-VXN sessions only
+    assert "step3_paper_scoring" in g["blocked_steps"]          # B2 reads the VXN level
+    assert "step4_salvage_check" in g["blocked_steps"]          # menu condition 1
+    assert g["blocked_steps"]["step4_specify_S010a"]["series"] == ["VXN"]
+    assert "step4_specify_S009a" not in g["blocked_steps"]      # calendar-only, still current
+    assert any("VXN" in ln and "BLOCKED" in ln for ln in g["lines"])
+
+
+def test_a_current_series_blocks_nothing():
+    g = cp.reference_data_gate(_coverage(**ALL_CURRENT), session_date="2026-09-17", registry_rows=[])
+    assert g["ok"] is True
+    assert g["stale_series"] == []
+    assert g["blocked_steps"] == {}
+    assert "step4_salvage_check" in g["allowed_steps"]
+
+
+def test_coverage_exactly_at_the_session_date_is_current_not_stale():
+    g = cp.reference_data_gate(_coverage(**{**ALL_CURRENT, "VXN": "2026-09-17"}),
+                               session_date="2026-09-17", registry_rows=[])
+    assert g["series"]["VXN"]["stale"] is False and g["blocked_steps"] == {}
+
+
+def test_a_series_with_no_coverage_entry_at_all_is_treated_as_stale():
+    """FAIL CLOSED. 'We have no coverage record for it' is not evidence that it
+    is current -- that is precisely the shape of the bug this rule exists for."""
+    st = _coverage(FOMC="2026-12-31", CPI="2026-12-31", NFP="2026-12-31")   # VXN entirely absent
+    g = cp.reference_data_gate(st, session_date="2026-09-17", registry_rows=[])
+    assert "VXN" in g["stale_series"]
+    assert g["series"]["VXN"]["stale"] is True
+    assert "no entry" in g["series"]["VXN"]["reason"]
+    assert "step4_specify_S010a" in g["blocked_steps"]
+
+
+def test_a_series_present_but_with_no_last_date_is_treated_as_stale():
+    st = _coverage(**{**ALL_CURRENT, "VXN": None})
+    g = cp.reference_data_gate(st, session_date="2026-09-17", registry_rows=[])
+    assert g["series"]["VXN"]["stale"] is True
+    assert "step3_paper_scoring" in g["blocked_steps"]
+
+
+def test_blocked_is_not_aborted_the_independent_steps_still_run():
+    st = _coverage(VXN="2026-09-02", FOMC="2021-09-22", CPI="2023-12-12", NFP="2023-12-08")
+    g = cp.reference_data_gate(st, session_date="2026-09-17", registry_rows=[])
+    assert set(cp.INDEPENDENT_STEPS).issubset(set(g["allowed_steps"]))
+    for step in ("step4_source (Discovery names a candidate)",
+                 "step4_screen (Discovery slice, price-only)",
+                 "step5_closeout (tests, ops checks, commit, push, report)"):
+        assert step in g["allowed_steps"]
+    assert any("Blocked is not aborted" in ln for ln in g["lines"])
+
+
+def test_unreadable_coverage_blocks_every_dependent_step(monkeypatch):
+    import reference_data as rd
+    monkeypatch.setattr(rd, "coverage", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom")))
+    g = cp.reference_data_gate(None, session_date="2026-09-17", registry_rows=[])
+    assert g["ok"] is False
+    assert set(g["blocked_steps"]) == set(cp.STEP_DEPENDENCIES)
+
+
+def test_gate_surfaces_salvage_reruns_owed_and_what_blocks_them():
+    rows = [{"ts": "2026-09-17T00:00:00+00:00", "strategy_id": "S009", "name": "x",
+             "stage": "SUPERSEDED", "supersedes": "the 2026-09-16 SALVAGE row",
+             "blocked_by": ["FOMC", "CPI", "NFP"]}]
+    st = _coverage(VXN="2026-09-17", FOMC="2021-09-22", CPI="2023-12-12", NFP="2023-12-08")
+    g = cp.reference_data_gate(st, session_date="2026-09-17", registry_rows=rows)
+    rr = g["salvage_reruns"]
+    assert rr["owed"] is True and rr["strategies"] == ["S009"] and rr["runnable_now"] is False
+    assert any("salvage reruns owed" in ln for ln in g["lines"])
+
+
+def test_gate_says_run_the_reruns_once_coverage_is_current():
+    rows = [{"ts": "2026-09-17T00:00:00+00:00", "strategy_id": "S009", "name": "x",
+             "stage": "SUPERSEDED", "supersedes": "the 2026-09-16 SALVAGE row",
+             "blocked_by": ["FOMC", "CPI", "NFP"]}]
+    g = cp.reference_data_gate(_coverage(**ALL_CURRENT), session_date="2026-09-17", registry_rows=rows)
+    assert g["salvage_reruns"]["runnable_now"] is True
+    assert any("rerun_salvages.py" in ln for ln in g["lines"])

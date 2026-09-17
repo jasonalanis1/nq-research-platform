@@ -117,6 +117,162 @@ def queue_status() -> dict:
         return {"ok": False, "note": f"registry unreadable: {exc}"}
 
 
+# ---------------------------------------------------------------------------
+# THE REFERENCE-DATA GATE (Jason, September 16th 2026 -- standing rule)
+#
+#   "Add a standing preflight rule: any reference data past its coverage date
+#    blocks the steps that use it and gets reported, never defaulted."
+#
+# It is a GATE, not a printed line. For every series in
+# research/ledger/data_coverage.json, coverage end is compared against the
+# current session date; a series that does not reach it BLOCKS the cycle steps
+# that depend on it, and the session report says which steps were blocked and
+# which series blocked them.
+#
+# BLOCKED IS NOT ABORTED. The cycle still runs every step that does not depend
+# on a stale series -- sourcing, specifying, freezing and screening a price-only
+# candidate on the Discovery slice, and close-out. Only the dependent steps stop.
+#
+# FAIL CLOSED ON A MISSING ENTRY. A series named as a dependency with no entry
+# in the coverage ledger at all -- or with no last_date -- is treated as STALE,
+# never as fine. "We have no coverage record for it" is not evidence of currency.
+# ---------------------------------------------------------------------------
+STEP_DEPENDENCIES = {
+    "step3_paper_scoring": {
+        "series": ["VXN", "FOMC", "CPI", "NFP"],
+        "why": "every paper row goes through B2 (src/risk_state_engine.py:decision_for), which "
+               "reads vxn_level_vs_trailing and vetoes trade_permission on a scheduled-event day",
+    },
+    "step3_b2_risk_state_decision": {
+        "series": ["VXN", "FOMC", "CPI", "NFP"],
+        "why": "src/risk_state_engine.py:require_reference_data refuses a session past either series",
+    },
+    "step4_salvage_check": {
+        "series": ["VXN", "FOMC", "CPI", "NFP"],
+        "why": "directive s.7 menu conditions 1 (VXN vs trailing) and 4 (scheduled-news day) -- "
+               "src/salvage_check.py:vxn_labels / news_labels",
+    },
+    "salvage_reruns": {
+        "series": ["VXN", "FOMC", "CPI", "NFP"],
+        "why": "src/rerun_salvages.py re-runs the salvages that were decided on invented labels",
+    },
+    "step4_specify_S009a": {
+        "series": ["FOMC", "CPI", "NFP"],
+        "why": "S009a trades ONLY on days with no scheduled macro event",
+    },
+    "step4_specify_S010a": {
+        "series": ["VXN"],
+        "why": "S010a selects LOW-VXN sessions only",
+    },
+}
+
+# Steps that depend on no reference series at all. Named explicitly so a stale
+# series is never used as an excuse to idle a cycle (directive s.3 Step 2).
+INDEPENDENT_STEPS = [
+    "step4_source (Discovery names a candidate)",
+    "step4_specify (price-only candidates)",
+    "step4_freeze",
+    "step4_screen (Discovery slice, price-only)",
+    "step5_closeout (tests, ops checks, commit, push, report)",
+]
+
+
+def reference_data_gate(state: dict | None = None, session_date=None,
+                        registry_rows: list | None = None) -> dict:
+    """Compare every series' coverage end against the session date and BLOCK the
+    steps that depend on a stale one. Reported, never defaulted."""
+    from datetime import date as _date
+
+    if session_date is None:
+        session_date = _date.today()
+    elif isinstance(session_date, str):
+        session_date = _date.fromisoformat(session_date[:10])
+
+    if state is None:
+        try:
+            import reference_data as rd
+            state = rd.coverage()
+        except Exception as exc:  # noqa: BLE001
+            # Cannot read coverage at all -> EVERY dependent step is blocked.
+            blocked = {k: {"series": v["series"], "why": v["why"],
+                           "reason": f"reference-data coverage unreadable: {exc}"}
+                       for k, v in STEP_DEPENDENCIES.items()}
+            return {"ok": False, "session_date": session_date.isoformat(),
+                    "stale_series": sorted({s for v in STEP_DEPENDENCIES.values() for s in v["series"]}),
+                    "series": {}, "blocked_steps": blocked, "allowed_steps": list(INDEPENDENT_STEPS),
+                    "lines": [f"REFERENCE-DATA GATE: coverage unreadable ({exc}) -- every dependent step BLOCKED"],
+                    "note": "fail closed: no coverage record is not evidence of currency"}
+
+    series_state = state.get("series") or {}
+    named = sorted({s for v in STEP_DEPENDENCIES.values() for s in v["series"]})
+    detail = {}
+    for name in sorted(set(named) | set(series_state)):
+        rec = series_state.get(name)
+        if not rec or not rec.get("last_date"):
+            detail[name] = {"last_date": None, "stale": True,
+                            "reason": ("no entry in research/ledger/data_coverage.json -- treated as STALE "
+                                       "(fail closed), never as current"),
+                            "updater": (rec or {}).get("updater")}
+            continue
+        last = _date.fromisoformat(str(rec["last_date"])[:10])
+        stale = last < session_date
+        detail[name] = {"last_date": last.isoformat(), "stale": stale,
+                        "days_short": (session_date - last).days if stale else 0,
+                        "reason": (f"coverage ends {last.isoformat()}, the session is {session_date.isoformat()}"
+                                   if stale else "covers the session"),
+                        "updater": rec.get("updater")}
+
+    stale = sorted(n for n, r in detail.items() if r["stale"])
+    blocked = {}
+    allowed = list(INDEPENDENT_STEPS)
+    for step, dep in STEP_DEPENDENCIES.items():
+        bad = [s for s in dep["series"] if detail.get(s, {"stale": True})["stale"]]
+        if bad:
+            blocked[step] = {"series": bad, "why": dep["why"],
+                             "reason": "; ".join(f"{s}: {detail[s]['reason']}" for s in bad),
+                             "updater": sorted({detail[s].get("updater") for s in bad if detail[s].get("updater")})}
+        else:
+            allowed.append(step)
+
+    # Salvage reruns owed -- surfaced while pending (Jason's follow-up 1).
+    reruns = {"owed": False, "strategies": [], "blocked_by": []}
+    try:
+        import strategy_registry as sr
+        rows = registry_rows if registry_rows is not None else sr.read_rows()
+        sup = sr.superseded_salvages(rows)
+        blk = sr.blocked_pending_reference_data(rows)
+        by = sorted({s for r in sup for s in (r.get("blocked_by") or [])})
+        reruns = {"owed": bool(sup), "strategies": [r["strategy_id"] for r in sup],
+                  "blocked_candidates": [r["strategy_id"] for r in blk],
+                  "blocked_by": by,
+                  "runnable_now": bool(sup) and not [s for s in by if detail.get(s, {"stale": True})["stale"]]}
+    except Exception as exc:  # noqa: BLE001
+        reruns["note"] = f"registry unreadable: {exc}"
+
+    lines = [f"REFERENCE-DATA GATE (session {session_date.isoformat()}) -- "
+             + ("every series covers the session; nothing blocked"
+                if not stale else f"STALE: {', '.join(stale)}")]
+    for step, b in sorted(blocked.items()):
+        lines.append(f"  BLOCKED  {step}  <- {', '.join(b['series'])}  ({b['why']})")
+    if blocked:
+        lines.append("  STILL RUNS: " + ", ".join(INDEPENDENT_STEPS))
+        lines.append("  Blocked is not aborted: the cycle runs every step above and reports the block.")
+    if reruns.get("owed"):
+        lines.append("  salvage reruns owed: " + ", ".join(reruns["strategies"])
+                     + (f" -- blocked by {', '.join([s for s in reruns['blocked_by'] if detail.get(s, {'stale': True})['stale']]) or 'nothing named'}"
+                        if not reruns.get("runnable_now") else " -- COVERAGE IS CURRENT: run src/rerun_salvages.py THIS CYCLE"))
+    if reruns.get("blocked_candidates"):
+        lines.append("  BLOCKED_PENDING_REFERENCE_DATA: " + ", ".join(reruns["blocked_candidates"])
+                     + " -- these take no queue slot and Step 4 must not advance them")
+
+    return {"ok": not stale, "session_date": session_date.isoformat(), "stale_series": stale,
+            "series": detail, "blocked_steps": blocked, "allowed_steps": allowed,
+            "salvage_reruns": reruns, "lines": lines,
+            "rule": "Jason, September 16th 2026: any reference data past its coverage date blocks the "
+                    "steps that use it and gets reported, never defaulted. A series with no coverage "
+                    "entry is treated as stale (fail closed)."}
+
+
 def reference_data_status() -> dict:
     """Directive s.3 Step 1, added 2026-09-16. The non-price reference series --
     VXN and the FOMC/CPI/NFP calendar -- have their own coverage ends, and two
@@ -261,6 +417,11 @@ def main() -> int:
             print(f"            {n}: {ref['series'][n]['updater']}  ({ref['series'][n]['n_consumers']} consumer(s), "
                   f"{ref['series'][n]['days_short']}d short)")
 
+    gate = reference_data_gate(ref if ref.get("ok") else None)
+    steps["reference_data_gate"] = {"ok": True, **gate}   # a block is never a preflight FAILURE
+    for ln in gate["lines"]:
+        print("  " + ("[gate] " if ln.startswith("REFERENCE") else "       ") + ln)
+
     pbk = paper_book_status()
     steps["paper_book"] = {"ok": pbk.get("ok", False), **pbk}
     print(f"  [{'ok' if pbk.get('ok') else 'warn'}]   PAPER BOOK      {pbk.get('n_in_paper', 0)} strateg{'y' if pbk.get('n_in_paper', 0) == 1 else 'ies'} in paper"
@@ -287,6 +448,10 @@ def main() -> int:
         print("Do NOT proceed to the work item until these are resolved or explicitly waived in the report.")
     else:
         print("PREFLIGHT COMPLETE -- Step 2 data check, Step 3 advance the paper book, Step 4 advance one candidate (directive s.3).")
+    if gate["blocked_steps"]:
+        print(f"REFERENCE-DATA GATE: {len(gate['blocked_steps'])} step(s) BLOCKED by "
+              f"{', '.join(gate['stale_series'])} -- the cycle still runs everything else and "
+              f"the session report must say which steps were blocked and why.")
     print(f"receipt -> {RECEIPT}")
     return 1 if failed else 0
 

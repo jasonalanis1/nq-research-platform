@@ -469,6 +469,37 @@ def day_usage(now=None) -> dict:
             "labels": [c["label"] for c in cycles if c["label"]]}
 
 
+def reference_data_gate_lines() -> list[str]:
+    """Jason's standing rule, September 16th 2026: any reference data past its
+    coverage date BLOCKS the steps that use it and GETS REPORTED, never
+    defaulted. The session report must say plainly which steps were blocked and
+    which series blocked them -- a block that is not reported is a silent one,
+    which is the failure this rule exists to stop."""
+    try:
+        sys.path.insert(0, str(PROJ / "src"))
+        import cycle_preflight as cp
+        gate = cp.reference_data_gate()
+    except Exception as exc:  # noqa: BLE001
+        return [f"- Reference-data gate: **unreadable** ({exc}) — treat every dependent step as blocked"]
+    if not gate["blocked_steps"]:
+        return ["- Reference-data gate: **nothing blocked** — every series covers this session "
+                "(research/ledger/data_coverage.json)"]
+    out = [f"- Reference-data gate: **{len(gate['blocked_steps'])} step(s) BLOCKED** by "
+           f"{', '.join(gate['stale_series'])} (research/ledger/data_coverage.json). "
+           f"Blocked is not aborted — every other step ran."]
+    for step, b in sorted(gate["blocked_steps"].items()):
+        out.append(f"  - `{step}` blocked by **{', '.join(b['series'])}** — {b['why']}")
+    rr = gate.get("salvage_reruns") or {}
+    if rr.get("owed"):
+        out.append(f"  - Salvage reruns owed: **{', '.join(rr['strategies'])}** — "
+                   + ("coverage is current, run `python3 src/rerun_salvages.py` this cycle"
+                      if rr.get("runnable_now") else f"blocked by {', '.join(rr['blocked_by'])}"))
+    if rr.get("blocked_candidates"):
+        out.append(f"  - BLOCKED_PENDING_REFERENCE_DATA: **{', '.join(rr['blocked_candidates'])}** — "
+                   "no queue slot, Step 4 must not advance them")
+    return out
+
+
 def operations() -> list[str]:
     comp = _load_jsonl(PROJ / "research" / "_cycle_compliance.jsonl")
     lines = ["**4. OPERATIONS**"]
@@ -490,6 +521,7 @@ def operations() -> list[str]:
                      f"— read from the budget clock (research/_cycle_checkpoint.json), not estimated")
     else:
         lines.append("- This session used: **unknown** — no budget-clock checkpoint was written")
+    lines += reference_data_gate_lines()
     d = day_usage()
     extra = f" ({d['unknown']} without a recorded start)" if d["unknown"] else ""
     lines.append(f"- Today so far: **{d['cycles']} cycle(s) run, {d['minutes']:.0f} minutes used**{extra} "
