@@ -702,3 +702,43 @@ HIGH duly lost −$2,259.14 at −0.079R). It **confirms** a pre-named predictio
 one, which is exactly the distinction that made S009's low-VXN cell a refusal and makes this one a
 spawn. It is dollar-positive and R-negative, and that is said plainly rather than smoothed over.
 **→ S010a at SOURCE.**
+
+---
+
+## Reference data does not merely go stale — it goes stale **failing open** (2026-09-16, 7:00 pm cycle)
+
+Two cycles in a row lost a Step 4 to the same thing: S009a could not be specified because the
+FOMC/CPI/NFP lists end 2021-09-22 / 2023-12-12, and S010a sat behind a VXN series ending
+2026-09-02. Fixing the coverage was the obvious job. The finding is what turned up underneath it.
+
+**Both series were not just short — they were lying quietly.** `salvage_check.news_labels` asked
+`d in FOMC_SET` and labelled every miss **QUIET**, so any session after 2021 was "a day with no
+scheduled release" because the list stops there, not because the day was quiet.
+`market_state_primitives_v2.extend_state_frame` reindexed VXN with `method="ffill"`, which is
+correct for a holiday inside the series and wrong past its end: every session after 2026-09-02 was
+being handed the 2026-09-02 close as though it were that day's volatility. Neither produced an
+error, a NaN, or a warning. Both produced a *classification*, and a classification nobody measured
+is a fabricated one.
+
+That makes this a repair, not housekeeping: **every Salvage check run since those series lapsed was
+reading manufactured labels on any date past coverage** — menu conditions 1 and 4 both. The rule
+adopted, and now enforced in code and tests: **a session past a reference series' coverage end is
+REFUSED, never guessed** (`src/reference_data.py`, `ReferenceDataUnavailable`). A refusal is
+visible; a guess is not.
+
+The generalisable lesson, and it is the second time this project has learned a version of it (the
+first was Amendment 2's cost constant): **a shared input that has a default is more dangerous than
+one that has none.** `d in SET` defaults to False. `ffill` defaults to the last known value. Both
+defaults are indistinguishable from a real answer at the call site. The cost constant at least had
+to be *wrong*; these only had to be *absent*.
+
+Two smaller things worth keeping:
+
+- **The sandbox egress wall is wider than Databento.** cboe.com, federalreserve.gov, bls.gov and
+  fred.stlouisfed.org are all HTTP 403 at the proxy from the device shell **and** the cloud
+  container. Every free reference feed the project needs is a Jason's-Terminal job, not just the
+  paid one. Assume a new external source is unreachable until a fetch proves otherwise.
+- **A parser for a sourced calendar must reproduce the existing sourced list before it is trusted.**
+  `data_topup_macro_calendar.py` refuses to write unless every date it parses inside the frozen
+  list's range matches that list exactly, and unless the result has a real schedule's shape. The
+  frozen lists' real value turned out to be as a *test oracle*, not just as data.

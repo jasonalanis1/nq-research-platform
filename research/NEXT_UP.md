@@ -1529,7 +1529,45 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
-September 16th, ~5:00-5:45 pm CT -- SCHEDULED 5:00 PM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
+September 16th, ~7:00-7:45 pm CT -- SCHEDULED 7:00 PM CYCLE. THE REFERENCE-DATA COVERAGE GAP IS FIXED, and that IS this
+cycle's stage advance: it unblocks TWO queued candidates and repairs an input every future Salvage check reads. Step 1
+preflight clean (research/_cycle_preflight.json): queue S010a/S009a/S004/S005/S006 at SOURCE, paper book 5 strategies
+(4 SLOW), none at a judgment point. Step 2 data UNCHANGED since the 5:00 pm cycle (data/NQ_1min_databento_2026-09-16.csv,
+last bar 2026-09-16 00:50 ET); the 7 am CT cron tops up once a day. Step 3: s001, s001a, s002, s003, s008 and the dummy
+each returned 0 new rows across 0 sessions, log unchanged at 60; NOTHING SCORED. Book at corrected costs: S008 2 trades
+-0.08R (only non-SLOW, 38 to judgment, six-week mark 4.7 wk), S002 2 -0.03R, S001 1 -1.03R, S001a 0, S003 0; all
+COST-FRAGILE, all on samples that decide nothing. STEP 4: WHAT WAS STALE -- **VXN data/VXNCLS_MAX.csv ends 2026-09-02**
+(14 d short; 8 consumers incl. salvage_check.vxn_labels = MENU CONDITION 1, extend_state_frame's vxn_level_vs_trailing,
+the validated VXN -> next-session-range sizing fact, and S010a which selects LOW-VXN sessions); **FOMC ends 2021-09-22**,
+**CPI 2023-12-12**, **NFP 2023-12-08** (3 consumers each incl. salvage_check.news_labels = MENU CONDITION 4, and S009a
+which trades only on no-event days). THE REAL FINDING: both were failing **OPEN**, not merely short -- `news_labels` read
+`d in FOMC_SET` and called every post-2021 session QUIET, and `extend_state_frame` ffilled the 2026-09-02 VXN close onto
+every later session. Neither errored; both produced a classification nobody measured. BUILT: **src/reference_data.py**
+(the single owner of coverage + FAIL-CLOSED accessors -- a session past coverage raises ReferenceDataUnavailable, never
+defaults; the frozen sourced lists are NEVER edited, a fetched extension is unioned with them; macro coverage end is the
+MINIMUM across FOMC/CPI/NFP); **src/data_topup_vxn.py** (CBOE published daily history, header DATE,OPEN,HIGH,LOW,CLOSE
+verified live; old observations win on every overlap; PROVES the fetched series is the one on disk before extending it;
+continuity-checked, logged, production-guarded); **src/data_topup_macro_calendar.py** (federalreserve.gov + bls.gov; a
+mis-parsed schedule is a FABRICATED EVENT DATE, so it refuses to write unless every parsed date inside a frozen list's
+range reproduces that list exactly AND the result has a real schedule's shape -- 8 FOMC decisions a year on a Tue/Wed/Thu,
+12 BLS releases one to a month, NFP always a Friday). FAIL-CLOSED WIRED INTO THE CONSUMERS (salvage_check.py:72 and :100
+refuse instead of labelling; market_state_primitives_v2 ffills a hole INSIDE the series and leaves the tail past its end
+NaN), with tests. **research/ledger/data_coverage.json** records each series' last date, consumers and updater, surfaced
+as a preflight row (cycle_preflight.reference_data_status) so a future cycle sees staleness BEFORE it spends a candidate.
+**NEEDS ONE LINE FROM JASON:** cdn.cboe.com, federalreserve.gov, bls.gov and fred.stlouisfed.org are ALL HTTP 403 at the
+proxy from the device shell AND the cloud container -- the same wall Databento sits behind. Both updaters cost nothing
+(no account, no key) and belong beside the 7 am cron; lines and dry-run instructions in
+research/infrastructure/reference-data-currency-2026-09-16.md. Until he runs them the series stay stale and every consumer
+refuses the affected sessions OUT LOUD -- the intended state. S010a was deliberately NOT taken through SPECIFY: its
+selection variable is the VXN series, so freezing now would put a strategy in PAPER that refuses every live session, the
+same objection recorded against S009a. Step 5: pytest **664 passed** (619 -> +45), ops_checks clean, tree clean, pushed.
+Full: research/sessions/2026-09-17-0000.md.
+NEXT: the moment `python3 src/data_topup_vxn.py` has run once from Jason's Terminal, **S010a** (SOURCE, LOW-VXN thin-
+participation completion, expected SLOW) is unblocked and owed its SPECIFY; `data_topup_macro_calendar.py` likewise
+unblocks **S009a**. Then S004 (H118 lineage vs own-drift baseline), S005 (hyp-000162 as a sizing input), S006 (Stack A).
+S008 remains the only non-SLOW strategy in paper and the only one on a clock.
+
+Previous: September 16th, ~5:00-5:45 pm CT -- SCHEDULED 5:00 PM CYCLE. Step 1 preflight clean (research/_cycle_preflight.json):
 queue S009a/S004/S005/S006 at SOURCE, paper book 5 strategies (4 SLOW), none at a judgment point. Step 2 data UNCHANGED
 since the 3:00 pm cycle (data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET); the 7 am CT cron tops up
 once a day. Step 3: s001, s001a, s002, s003, s008 and the dummy each returned 0 new rows across 0 sessions, log unchanged
