@@ -215,6 +215,25 @@ register_strategy("s009", _s009)
 import strategy_s010_thin_participation_completion as _s010  # noqa: E402
 register_strategy("s010", _s010)
 
+# S004 (the H118 VWAP-distance drift lineage, measured against NQ's OWN drift) --
+# registered 2026-09-17 (9:00 pm cycle) after a SCREEN that passed BOTH of its
+# spec's conditions: +$82,782.06 net on the MNQ-market decision basis over 554
+# Discovery trades, AND +15.2433 gross points per trade over the identical trade
+# taken on every session, which is the correction that killed H118 (it passed all
+# three validation stages and turned out to be the stock market going up).
+# S004 IS NOT IN PAPER YET, AND THIS REGISTRATION DOES NOT PUT IT THERE. Paper
+# scoring is BLOCKED this cycle by the reference-data gate (VXN ends 2026-09-02;
+# FOMC 2021-09-22, CPI 2023-12-12, NFP 2023-12-08) because every paper row goes
+# through B2, which refuses a session past either coverage end rather than
+# defaulting. S004 itself reads NO reference data -- its entry, stop and exit are
+# price-only, which is why its screen ran clean. The registration exists so that
+# the first cycle with current coverage can run `--strategy s004` and append the
+# PAPER row without touching a frozen file; the owed entry is recorded on the
+# registry's BLOCKED_PENDING_REFERENCE_DATA row. It is SLOW (0.2637 trades/session
+# -> 33.2 in 126 sessions), so it papers in the BACKGROUND and takes no queue slot.
+import strategy_s004_vwap_dist_low_drift as _s004  # noqa: E402
+register_strategy("s004", _s004)
+
 # S001 (Level Sweep Reversal on compressed prior days, M26 via Salvage) --
 # REGISTERED 2026-09-16 (1:00 pm cycle) as an INPUT-ERROR CORRECTION, exactly as
 # S008 was. S001 was KILLED at SCREEN on 2026-09-15 against the WRONG cost

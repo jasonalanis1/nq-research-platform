@@ -147,3 +147,16 @@ def test_the_baseline_arm_removes_only_the_tercile_filter():
     assert all(x.market_context["baseline_arm"] is True for x in base)
     assert all(x.market_context["hold_sessions"] == 10 for x in base)
     assert all(x.direction == "long" for x in base)
+
+
+def test_registered_in_the_paper_loop_but_not_scored_while_the_gate_blocks():
+    """S004 passed SCREEN, so it is registered under 's004' and can enter PAPER the
+    first cycle reference-data coverage is current. Registration is not entry: the
+    registry's stage of record is BLOCKED_PENDING_REFERENCE_DATA, not PAPER."""
+    import bot_stack_paper_run as bpr
+    import strategy_registry as sr
+    assert "s004" in bpr.STRATEGIES
+    assert bpr.STRATEGIES["s004"][0] == s4.STRATEGY_NAME
+    assert "s004" not in bpr.PLUMBING_KEYS
+    latest = sr.latest(sr.read_rows()).get("S004")
+    assert latest is not None and latest["stage"] != "PAPER"
