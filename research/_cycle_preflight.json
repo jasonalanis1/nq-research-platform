@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-18T14:02:18.975473+00:00",
+ "ran_at": "2026-09-18T16:02:06.484145+00:00",
  "owner": "cycle",
- "note": "9:00 am cycle",
+ "note": "11:00 am cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 am cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 am cycle'"
    ],
    "stderr_tail": []
   },
@@ -61,13 +61,13 @@
   "queue": {
    "ok": true,
    "queue": [
-    "S012 SOURCE"
+    "S013 SOURCE"
    ],
    "salvage_owed": [
     "S004"
    ],
    "empty": false,
-   "note": "next candidate: S012 S012 monthly opex-week delta-hedge unwind, NQ (M25 / hyp-000158) at SOURCE"
+   "note": "next candidate: S013 S013 opening-auction order imbalance, NQ (hyp-000076, pre-Gate scan tier) at SOURCE"
   },
   "reference_data": {
    "ok": true,
