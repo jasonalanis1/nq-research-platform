@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-18T02:02:47.442036+00:00",
+ "ran_at": "2026-09-18T04:02:47.983251+00:00",
  "owner": "cycle",
- "note": "9:00 pm cycle",
+ "note": "11:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='9:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -61,13 +61,13 @@
   "queue": {
    "ok": true,
    "queue": [
-    "S006 SOURCE"
+    "S011 SOURCE"
    ],
    "salvage_owed": [
     "S004"
    ],
    "empty": false,
-   "note": "next candidate: S006 Stack A: B3 breakout inside HIGH expected-range context (B2 x B3) at SOURCE"
+   "note": "next candidate: S011 Daily reversal after a high-volume session, NQ (M18 lineage), measured against NQ's own next-session drift at SOURCE"
   },
   "reference_data": {
    "ok": true,
