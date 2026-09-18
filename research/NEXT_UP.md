@@ -119,12 +119,18 @@ forbidden retest verbatim; the unconditional trigger is −0.0266R before costs;
 sign flip, top 5% carrying 188%). Write-up research/studies/S006-stack-a-not-rebuilt-2026-09-17.md.
 **This is NOT directive s.10 reason 2.** The revamp list's top tier (research/ledger/revamp_list.json, 27 entries)
 still holds unworked NQ candidates with named forced counterparties. Sourced this cycle so the queue is not empty:
-- **S011 — daily reversal after a high-volume session, NQ (hyp-000152 / M18), measured against NQ's own drift.**
-  SOURCE, registered in research/ledger/strategies.jsonl. P1 passed on Discovery (HIGH-vol sign-adjusted next-session
-  return ci_90 −0.1523..−0.0463); it closed only because volume added no GRADIENT. Price+volume only → NOT gate-blocked;
-  fires most sessions → should project non-SLOW. The spec may NOT reintroduce a volume tercile. Binding question is cost.
+- ~~**S011**~~ — **DONE, 11:00 pm cycle September 17th: SPECIFY → FREEZE → SCREEN in one cycle, PASSED both gates.**
+  Spec research/infrastructure/strategy-specs/S011-daily-reversal-vs-own-drift.md (sha256 b286e28d70995aa8...), module
+  src/strategy_s011_daily_reversal_vs_own_drift.py (sha256 973916b7092c414e...), frozen in its own commit d4c2aaf.
+  No volume tercile was reintroduced: hyp-000152's closure form forbids it by name, so what is traded is Scan 026
+  **cell 5**, the UNCONDITIONAL reversal (−0.0425 × ATR14), not the HIGH-volume cell's −0.0942. Screen: 1669 trades,
+  MNQ-market net **+$14,535.06**, **all four** cost combinations make money, margin over NQ's own next-session drift
+  **+2.9030 net pt/trade**. **NOT SLOW** (0.7944/session → 100.1 projected). Now
+  **BLOCKED_PENDING_REFERENCE_DATA for paper entry** — not added to bot_stack_paper_run.STRATEGIES while
+  step3_paper_scoring is gated; it takes no queue slot until VXN and the macro calendar are current.
 Next two after that, in order:
-- **hyp-000158 monthly opex-week delta-hedge unwind, NQ (M25)** — real forced dealer flow, calendar computable from the
+- **S012 / hyp-000158 monthly opex-week delta-hedge unwind, NQ (M25)** — REGISTERED AT SOURCE this cycle so the queue
+  is not empty. Real forced dealer flow, calendar computable from the
   third Friday (not the stale macro calendar); expect SLOW (~12 events/yr), so background paper.
 - **hyp-000147 intraday periodicity, same slot next day (M17)** — intraday, fires most days, mechanism doc names a flow.
 Deliberately NOT queued: hyp-000139 (overnight/RTH divergence reversion) — its own mechanism doc records the
@@ -1582,6 +1588,44 @@ introduced. Console pushed live cleanly (write_db). Full:
 research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
+
+September 17th, 11:00 pm cycle -- **S011 SPECIFIED, FROZEN AND SCREENED IN ONE CYCLE; IT PASSED BOTH GATES AND IS
+PARKED BLOCKED_PENDING_REFERENCE_DATA.** Detail: research/sessions/2026-09-18-0400.md.
+Spec research/infrastructure/strategy-specs/S011-daily-reversal-vs-own-drift.md (sha256 b286e28d70995aa8...); module
+src/strategy_s011_daily_reversal_vs_own_drift.py (sha256 973916b7092c414e...), frozen in its own commit d4c2aaf
+BEFORE any outcome data; baseline runner src/screen_s011_own_drift_baseline.py.
+**NO VOLUME TERCILE WAS REINTRODUCED.** hyp-000152's closure form's `not_retest` line is "Volume as a gradient on
+daily reversal", so the traded claim is Scan 026 **cell 5** -- the UNCONDITIONAL reversal, mean -0.0425 x ATR14 --
+not the HIGH-volume cell's -0.0942, whose advantage over LOW was never credible (ci_90 -0.1253..+0.0054). vol_ratio
+is recorded in every signal and read by no decision. The trade: fade sign(prior RTH session's move), enter at the
+next session's 09:30 open, 2.0 x atr14 disaster cap, no target, flat at 15:55 the same session, 1 micro.
+**PRE-FREEZE EDGE-vs-COST CHECK: 0.0425 x atr14 ~ 4.24 pt/trade against the 1.300 pt MNQ market round trip --
+passes; the cost wall was never the binding question here, the baseline was.**
+**SCREEN (Discovery, 2101 sessions), ALL FOUR COMBINATIONS MAKE MONEY:** 1669 trades, win 0.5021, gross 5.6544
+pt/trade -- MNQ market **+$14,535.10** / 15.5 R / 4.3544 net pt (DECISION BASIS); MNQ limit (OPTIMISTIC) $15,369.60
+/ 4.6044 pt; NQ market $163,876.90 / 4.9094 pt; NQ limit (OPTIMISTIC) $172,221.90 / 5.1594 pt.
+**OWN-DRIFT BASELINE (arm B, identical trade forced LONG, the two-nulls rule that killed H118): net $4,844.88,
+1.4514 net pt/trade -> MARGIN +2.9030 pt/trade (+0.0056 R). Both pre-registered conditions pass; the pre-freeze
+falsifier ("fails if net <= $0 or margin <= 0") did not fire.** VERDICT PAPER.
+**EFFECTIVE SAMPLE 1669 = the trade count** (1669 distinct sessions, 0 duplicates, 0 holds crossing their own
+session; the hold is 09:30-15:55 of one session so no two windows share a bar). The S004 lesson applied BEFORE the
+claim, with four honest qualifications disclosed in the ledger row: top 5% of trades carry 243% of net (median
+trade +$1.40) -- the S006 concentration flag again; the entire margin comes from the 926 post-UP sessions, because
+on the 743 post-DOWN sessions arms A and B are the same long trade and differ by $0.00 by construction; half 2 of
+Discovery carries 6.6x half 1 (both positive, NO sign flip); avg R is tiny (+0.0093) only because R = 2 x atr14 is
+a wide disaster cap and 1649 of 1669 trades exit on the 15:55 clock.
+**NOT SLOW: 1669/2101 = 0.7944 trades/session x 126 = 100.1 projected six-month trades against 40 -- ordinary
+six-week clock.** **PAPER ENTRY IS BLOCKED, NOT FORCED:** step3_paper_scoring and step3_b2_risk_state_decision are
+gated by VXN/CPI/FOMC/NFP, so S011 is NOT in bot_stack_paper_run.STRATEGIES and takes no queue slot, beside S009a
+and S010a. It enters PAPER on the first cycle with current coverage. Its salvage menu is pre-registered in the
+frozen spec s.7 and its conditions 1 and 4 are blocked by the same series.
+**DATA: 47.40 HOURS STALE AT 2026-09-18 00:13 ET -- 48h NOT CROSSED DURING THIS CYCLE; it crosses at
+2026-09-18 00:50 ET (04:50 UTC).** No s.10 reason-3 declaration made this cycle. The NEXT cycle will measure >=48h
+and must declare it. Root cause known and NOT a code defect: the 7am cron's Databento fetch gets 403 Forbidden at
+the egress proxy, the same wall as VXN/macro. Needs Jason.
+Gate blocked 6 steps (step3_paper_scoring, step3_b2_risk_state_decision, step4_salvage_check, salvage_reruns,
+step4_specify_S009a, step4_specify_S010a) on VXN/CPI/FOMC/NFP; paper book NOT scored, no fill invented.
+S012 (hyp-000158 opex-week unwind) registered at SOURCE so the queue is not empty. pytest 712 passed.
 
 September 17th, 9:00 pm cycle -- **S006 (STACK A) CLOSED TO LEARN WITHOUT A FREEZE OR A SCREEN; S011 SOURCED IN ITS PLACE.**
 Detail: research/sessions/2026-09-18-0200.md; study research/studies/S006-stack-a-not-rebuilt-2026-09-17.md.
