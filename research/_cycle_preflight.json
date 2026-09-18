@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-17T18:08:49.706886+00:00",
+ "ran_at": "2026-09-18T00:02:32.931354+00:00",
  "owner": "cycle",
- "note": "1:00 pm cycle",
+ "note": "7:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='1:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='7:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -122,7 +122,7 @@
   },
   "reference_data_gate": {
    "ok": false,
-   "session_date": "2026-09-17",
+   "session_date": "2026-09-18",
    "stale_series": [
     "CPI",
     "FOMC",
@@ -133,29 +133,29 @@
     "CPI": {
      "last_date": "2023-12-12",
      "stale": true,
-     "days_short": 1010,
-     "reason": "coverage ends 2023-12-12, the session is 2026-09-17",
+     "days_short": 1011,
+     "reason": "coverage ends 2023-12-12, the session is 2026-09-18",
      "updater": "src/data_topup_macro_calendar.py"
     },
     "FOMC": {
      "last_date": "2021-09-22",
      "stale": true,
-     "days_short": 1821,
-     "reason": "coverage ends 2021-09-22, the session is 2026-09-17",
+     "days_short": 1822,
+     "reason": "coverage ends 2021-09-22, the session is 2026-09-18",
      "updater": "src/data_topup_macro_calendar.py"
     },
     "NFP": {
      "last_date": "2023-12-08",
      "stale": true,
-     "days_short": 1014,
-     "reason": "coverage ends 2023-12-08, the session is 2026-09-17",
+     "days_short": 1015,
+     "reason": "coverage ends 2023-12-08, the session is 2026-09-18",
      "updater": "src/data_topup_macro_calendar.py"
     },
     "VXN": {
      "last_date": "2026-09-02",
      "stale": true,
-     "days_short": 15,
-     "reason": "coverage ends 2026-09-02, the session is 2026-09-17",
+     "days_short": 16,
+     "reason": "coverage ends 2026-09-02, the session is 2026-09-18",
      "updater": "src/data_topup_vxn.py"
     }
    },
@@ -168,7 +168,7 @@
       "NFP"
      ],
      "why": "every paper row goes through B2 (src/risk_state_engine.py:decision_for), which reads vxn_level_vs_trailing and vetoes trade_permission on a scheduled-event day",
-     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-18; FOMC: coverage ends 2021-09-22, the session is 2026-09-18; CPI: coverage ends 2023-12-12, the session is 2026-09-18; NFP: coverage ends 2023-12-08, the session is 2026-09-18",
      "updater": [
       "src/data_topup_macro_calendar.py",
       "src/data_topup_vxn.py"
@@ -182,7 +182,7 @@
       "NFP"
      ],
      "why": "src/risk_state_engine.py:require_reference_data refuses a session past either series",
-     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-18; FOMC: coverage ends 2021-09-22, the session is 2026-09-18; CPI: coverage ends 2023-12-12, the session is 2026-09-18; NFP: coverage ends 2023-12-08, the session is 2026-09-18",
      "updater": [
       "src/data_topup_macro_calendar.py",
       "src/data_topup_vxn.py"
@@ -196,7 +196,7 @@
       "NFP"
      ],
      "why": "directive s.7 menu conditions 1 (VXN vs trailing) and 4 (scheduled-news day) -- src/salvage_check.py:vxn_labels / news_labels",
-     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-18; FOMC: coverage ends 2021-09-22, the session is 2026-09-18; CPI: coverage ends 2023-12-12, the session is 2026-09-18; NFP: coverage ends 2023-12-08, the session is 2026-09-18",
      "updater": [
       "src/data_topup_macro_calendar.py",
       "src/data_topup_vxn.py"
@@ -210,7 +210,7 @@
       "NFP"
      ],
      "why": "src/rerun_salvages.py re-runs the salvages that were decided on invented labels",
-     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17; FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-18; FOMC: coverage ends 2021-09-22, the session is 2026-09-18; CPI: coverage ends 2023-12-12, the session is 2026-09-18; NFP: coverage ends 2023-12-08, the session is 2026-09-18",
      "updater": [
       "src/data_topup_macro_calendar.py",
       "src/data_topup_vxn.py"
@@ -223,7 +223,7 @@
       "NFP"
      ],
      "why": "S009a trades ONLY on days with no scheduled macro event",
-     "reason": "FOMC: coverage ends 2021-09-22, the session is 2026-09-17; CPI: coverage ends 2023-12-12, the session is 2026-09-17; NFP: coverage ends 2023-12-08, the session is 2026-09-17",
+     "reason": "FOMC: coverage ends 2021-09-22, the session is 2026-09-18; CPI: coverage ends 2023-12-12, the session is 2026-09-18; NFP: coverage ends 2023-12-08, the session is 2026-09-18",
      "updater": [
       "src/data_topup_macro_calendar.py"
      ]
@@ -233,7 +233,7 @@
       "VXN"
      ],
      "why": "S010a selects LOW-VXN sessions only",
-     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-17",
+     "reason": "VXN: coverage ends 2026-09-02, the session is 2026-09-18",
      "updater": [
       "src/data_topup_vxn.py"
      ]
@@ -264,7 +264,7 @@
     "runnable_now": false
    },
    "lines": [
-    "REFERENCE-DATA GATE (session 2026-09-17) -- STALE: CPI, FOMC, NFP, VXN",
+    "REFERENCE-DATA GATE (session 2026-09-18) -- STALE: CPI, FOMC, NFP, VXN",
     "  BLOCKED  salvage_reruns  <- VXN, FOMC, CPI, NFP  (src/rerun_salvages.py re-runs the salvages that were decided on invented labels)",
     "  BLOCKED  step3_b2_risk_state_decision  <- VXN, FOMC, CPI, NFP  (src/risk_state_engine.py:require_reference_data refuses a session past either series)",
     "  BLOCKED  step3_paper_scoring  <- VXN, FOMC, CPI, NFP  (every paper row goes through B2 (src/risk_state_engine.py:decision_for), which reads vxn_level_vs_trailing and vetoes trade_permission on a scheduled-event day)",
@@ -294,7 +294,7 @@
      "name": "Level Sweep Reversal on compressed prior days (M26 via Salvage)",
      "stage": "PAPER",
      "trades": 1,
-     "days_elapsed": 9,
+     "days_elapsed": 10,
      "trades_to_judgment": 39,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -307,7 +307,7 @@
      "name": "Overnight carry on compressed prior days (night leg of M15 via Salvage)",
      "stage": "PAPER",
      "trades": 2,
-     "days_elapsed": 9,
+     "days_elapsed": 10,
      "trades_to_judgment": 38,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -320,7 +320,7 @@
      "name": "Month-end payment-cycle reversal, NQ (M24) as a full strategy",
      "stage": "PAPER",
      "trades": 0,
-     "days_elapsed": 9,
+     "days_elapsed": 10,
      "trades_to_judgment": 40,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -333,7 +333,7 @@
      "name": "Level Sweep Reversal, compressed prior day, PRIOR-DAY levels only (S001 salvage spawn)",
      "stage": "PAPER",
      "trades": 0,
-     "days_elapsed": 9,
+     "days_elapsed": 10,
      "trades_to_judgment": 40,
      "weeks_to_judgment": null,
      "at_judgment_point": false,
@@ -346,9 +346,9 @@
      "name": "Late-day constant-leverage rebalance continuation",
      "stage": "PAPER",
      "trades": 2,
-     "days_elapsed": 9,
+     "days_elapsed": 10,
      "trades_to_judgment": 38,
-     "weeks_to_judgment": 4.7,
+     "weeks_to_judgment": 4.6,
      "at_judgment_point": false,
      "slow": false,
      "six_week_mark_passed": false,
@@ -360,7 +360,7 @@
     "base_entry_b3_orb_placeholder",
     "execution_dummy_4x_placeholder"
    ],
-   "note": "S001 1 trades / 9 days -- SLOW (background, no queue slot; 39 more trade(s) to 40); S002 2 trades / 9 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 9 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 9 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S008 2 trades / 9 days (38 trades to judgment, six-week mark in 4.7 wk)"
+   "note": "S001 1 trades / 10 days -- SLOW (background, no queue slot; 39 more trade(s) to 40); S002 2 trades / 10 days -- SLOW (background, no queue slot; 38 more trade(s) to 40); S003 0 trades / 10 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S001a 0 trades / 10 days -- SLOW (background, no queue slot; 40 more trade(s) to 40); S008 2 trades / 10 days (38 trades to judgment, six-week mark in 4.6 wk)"
   }
  },
  "failed": [],
