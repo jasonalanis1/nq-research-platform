@@ -1052,3 +1052,37 @@ days at a clip bound), so this is not a degenerate-input artefact.
 Absent a genuinely different use, hyp-000162 should not be re-sourced. The null was recorded plainly and
 no variant was hunted — searching for a k-band or tercile split that looked better is the ex-post slicing
 the salvage rule exists to forbid.
+
+## 2026-09-18 (1:00 pm CT cycle) — the sourcing well is dry on NQ at this data ceiling, and saying so is the finding
+
+A full fresh-channel SOURCE sweep was run against the four families that had not yet been mined by name —
+index-tracking fund flows around rebalance mechanics, settlement/margin-driven flow, cross-asset lead-lag
+with a forced hedger, and liquidity-provision withdrawal around scheduled illiquidity. **All four came back
+closed, banned, built, or blocked on data.** The channel-by-channel ruling table is in
+`research/sessions/2026-09-18-1300.md`.
+
+What this teaches, stated once so no later cycle re-derives it:
+
+1. **The forced participants who recur EVERY DAY on NQ are a short, finite list, and it is now fully
+   allocated.** Index funds/ETFs at the cash close (M1, closed for good, attempt 2 of 2 with hyp-000110);
+   constant-leverage products into the close (S008, built, in paper); opening-auction inventory resolution
+   (M2 closed, S007 built and killed); scheduled execution programs (M17 closed, hyp-000147 `not_retest`
+   "Intraday return periodicity on NQ", condition none; S009/S010 built on the VWAP-completion expression);
+   liquidity providers at the midday seam (M10 attempt 1 spent, the surviving fact is RANGE not direction);
+   the unconditional next-session reversal (S011). There is no fifth clock left with a nameable forced flow.
+2. **A forced counterparty you cannot SEE is not a mechanism, it is a story.** Settlement- and margin-driven
+   liquidation is genuinely forced and genuinely price-insensitive — and completely invisible in 1-minute
+   OHLCV. Its only price-only expression is "price moved a lot, so somebody was probably liquidated", which
+   is the CLOSED gap-fade family wearing a mechanism paragraph, and which would restate S011 besides. The
+   map's own STANDING NOTE reached this conclusion first: widening the forced-participant definition without
+   widening the data produces lottery tickets with a nicer story attached.
+3. **An untradeable KNOWN TRUE can be blocked by infrastructure rather than by evidence, and that distinction
+   must be kept.** M23 (London FX open, 6E) is P1_PASS with a one-sentence forced counterparty — London
+   dealers clearing an accumulated overnight order backlog at the venue open, regardless of price. It cannot
+   be specified because `src/cost_model.py:127` defines `CONTRACTS = {"MNQ": MNQ, "NQ": NQ}` and Amendment 2
+   requires all four combinations stated. Inventing a 6E cost model to unblock a candidate is precisely the
+   arithmetic self-deception Amendment 2 was written to end. It is a Jason decision item, filed as such.
+4. **The process working looks like this.** Four consecutive cycles (S006, S012, S013, and this one) closed
+   candidates at or before SPECIFY on rules written in advance. Nothing was screened into existence to make a
+   cycle look productive. Zero movement, honestly reported, is the correct output of a cycle whose only
+   remaining moves would have been manufactured ones.

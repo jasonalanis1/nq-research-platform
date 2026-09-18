@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-18T16:02:06.484145+00:00",
+ "ran_at": "2026-09-18T18:02:24.361344+00:00",
  "owner": "cycle",
- "note": "11:00 am cycle",
+ "note": "1:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 am cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='1:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -60,14 +60,12 @@
   },
   "queue": {
    "ok": true,
-   "queue": [
-    "S013 SOURCE"
-   ],
+   "queue": [],
    "salvage_owed": [
     "S004"
    ],
-   "empty": false,
-   "note": "next candidate: S013 S013 opening-auction order imbalance, NQ (hyp-000076, pre-Gate scan tier) at SOURCE"
+   "empty": true,
+   "note": "candidate queue EMPTY -- Discovery sources the next candidate this cycle (s.3 Step 4)"
   },
   "reference_data": {
    "ok": true,

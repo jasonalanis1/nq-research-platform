@@ -158,7 +158,24 @@ corrected (honest, **unknown**) cause above — not the withdrawn 403 story.
 > landing, at which point this block is struck and the paper book resumes.
 
 
-## CANDIDATE QUEUE AFTER S006 (9:00 pm cycle, September 17th 2026) — NOT exhaustion, blockage + an unmined revamp tier
+## CANDIDATE QUEUE — EXHAUSTED AT THIS DATA CEILING (1:00 pm cycle, September 18th 2026); s.10 REASON 2 IN SUBSTANCE
+
+**UPDATE, 1:00 pm cycle September 18th — the two items this section still lists as "next two after that" are
+FORMALLY BANNED and must not be re-queued.** `research/ledger/closures.jsonl`: hyp-000158 `not_retest` =
+"Opex-week directional claims on NQ", `condition` = none (that is S012); hyp-000147 `not_retest` =
+"Intraday return periodicity on NQ", `condition` = none (that is M17). The revamp list's top tier was audited
+exhausted at the 11:00 am cycle; map entries M1-M35 are closed, spent, parked, or range-only; the 43 mechanism
+docs leave no undrawn daily intraday directional claim. **A full fresh-channel SOURCE sweep was run this cycle
+across index-tracking rebalance flow, settlement/margin-driven flow, cross-asset lead-lag with a forced hedger,
+and liquidity-provision withdrawal around scheduled illiquidity, and produced NO candidate with a nameable
+forced counterparty** (channel-by-channel ruling table: research/sessions/2026-09-18-1300.md s."Step 4").
+**One genuinely open verified fact is blocked on infrastructure, not evidence:** M23 London-open 6E is
+P1_PASS / KNOWN TRUE with a real forced counterparty (London dealers clearing an overnight order backlog at
+the venue open), but `src/cost_model.py:127` defines only MNQ and NQ, so Amendment 2's four mandatory cost
+combinations cannot be stated for 6E without inventing a cost model. **A 6E cost model is a Jason decision
+item; Tony did not invent one.** Historical context of this section is preserved below.
+
+
 S006 (Stack A) closed to **LEARN without a screen**: its own pre-registered closure form
 (research/mechanisms/stack-a-b2-context-x-b3-breakout.md s.12) had already answered its question as a
 **powered** null (IN−OUT +0.0247R, CI −0.0496..+0.0976; design excluded anything above ~+0.19R) and names the
@@ -1637,6 +1654,24 @@ introduced. Console pushed live cleanly (write_db). Full:
 research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
+
+September 18th, 1:00 pm cycle -- **FRESH-CHANNEL SOURCE SWEEP RUN IN FULL; NO CANDIDATE WITH A REAL FORCED
+COUNTERPARTY EXISTS AT THIS DATA CEILING. Reported as directive s.10 reason 2 in substance, not escalated from
+inside the cycle, and NO mechanism was manufactured to avoid saying so.** Zero movement claimed (no stage change,
+no paper trade, no verdict, no salvage). Closure-form check run BEFORE writing anything, over both `not_retest`
+and `condition` in research/ledger/closures.jsonl and over prose vein rules in sibling hypotheses.jsonl rows and
+the map's ruling column: index-tracking rebalance flow BANNED (hyp-000154 "Any 'close rebalance' claim on index
+futures from price alone", condition "only with actual LETF AUM/flow data"; M1 closed for good; M9 re-parked on a
+roll-day data gap; S008 holds the surviving expression); settlement/margin flow has no participant visible in
+1-min OHLCV and its only price-only expression sits in the CLOSED gap-fade family AND would restate S011;
+cross-asset lead-lag CLOSED (hyp-000031/034/035), M11 needs a forced-flow proxy the map records as unavailable at
+this ceiling, M12 refuted; scheduled-illiquidity withdrawal spent on NQ (M10 attempt 1, second attempt may not be
+"morning move retraces in the lull"; the surviving midday fact is RANGE, Holdout-gated). The S011 directional-
+agreement figure is NOT reported because no candidate reached the point of measuring it -- the method (directional
+agreement on shared sessions, never session overlap, which is near-total and meaningless for S011) is recorded for
+the next survivor. Step 3 BLOCKED by the reference-data gate (VXN/FOMC/CPI/NFP), nothing scored. s.10 reason-3
+restated once: DECLARED 2026-09-18, still open, 61.25 h stale, cause unknown, Jason informed and without computer
+access. pytest 712 passed. research/sessions/2026-09-18-1300.md
 
 September 18th, 11:00 am cycle -- **S013 CLOSED TO LEARN AT SOURCE; THE S011 OVERLAP CHECK RAN AND PASSED; THE TOP
 REVAMP TIER IS NOW EXHAUSTED.** Detail: research/studies/S013-opening-auction-imbalance-not-built-2026-09-18.md.
