@@ -111,6 +111,53 @@ SURVIVES from the refocus memo: no profit deadline (s.1), daytime cadence (s.2),
 request and actual minutes (s.6), 1-VERIFY (7.2), production write guard (7.3), path:line citations (7.4a), push verified (7.5).
 DAY ONE (s.14) executed September 15th: see "Last updated by". From then on s.3 governs every cycle.
 
+## ⚠ STANDING CORRECTION + s.10 REASON-3 DECLARATION (September 18th, 9:00 am cycle) — READ BEFORE REPEATING EITHER CLAIM
+
+### (a) CORRECTION: "the 7 am cron dies 403 Forbidden at the egress proxy" IS WRONG. WITHDRAWN.
+Several prior records state that Jason's 7:00 am Databento top-up cron fails with `403 Forbidden` at an
+egress proxy. **That claim is not supported by any evidence this project holds and is hereby withdrawn.**
+
+VERIFIED THIS CYCLE, directly:
+- `data/_fetch_run.log` mtime is **2026-09-09 18:15 UTC** — nine days old. It is NOT a record of any
+  cron run on the 15th, 16th, 17th or 18th.
+- Its traceback frames are **sandbox paths** (`/sessions/rcw-.../mnt/Documents--nq-research-platform-live/...`),
+  i.e. a run made *inside the sandboxed device VM*, whose egress is of course blocked. Not Jason's Mac.
+- It is from **`src/data_fetch_databento.py`** (the full 2015→today historical fetcher, failing on its
+  *2015* chunk) — **not** `src/data_topup_databento.py`, which is what the cron actually runs.
+
+**THE TRUTH: we do not know why no new price file has appeared since 2026-09-16.** The cron logs to
+`~/Library/Logs/tony-topup.log`, which is **outside the connected folders and unreadable from here**, so
+no cycle can diagnose it. Candidate causes, **none confirmed, do not state any as fact**: the Mac asleep
+or powered down at 7:00 am; `cron`/`launchd` lacking Full Disk Access or the key file; a Databento-side
+or network failure we cannot see; the job not installed as believed.
+
+WHAT STAYS TRUE AND IS **NOT** CORRECTED: the *sandbox* egress wall is real and verified — `hist.databento.com`,
+`cdn.cboe.com`, `federalreserve.gov`, `bls.gov`, `fred.stlouisfed.org` are all 403 at the proxy **from the
+sandboxed shells**. That is why these fetches must run from Jason's own Terminal. It says nothing about why
+his cron did not produce a file.
+
+CORRECTED IN: this block; `research/NEXT_UP.md` "Operational constraints"; `research/KNOWLEDGE.md`;
+correction notes appended to `research/sessions/2026-09-18-0000.md`, `-0200.md`, `-0400.md` (their dated
+history is preserved, not rewritten). **ALSO WRONG, left in place as an immutable ledger record:** the
+`S011` row in `research/ledger/strategies.jsonl` (`ts` 2026-09-18T04:13:39Z) repeats the claim inside its
+`notes`; it is superseded by this block and must not be quoted forward.
+
+### (b) DIRECTIVE s.10 REASON-3 CONDITION: **DECLARED, and it stands OPEN.**
+Newest price file `data/NQ_1min_databento_2026-09-16.csv`, last bar **2026-09-16 00:50 ET (04:50 UTC)**.
+Measured at this cycle's data check, **2026-09-18 14:01 UTC → 57.19 hours stale**. The 48-hour line was
+crossed at 2026-09-18 04:50 UTC and **the s.10 reason-3 condition is DECLARED as of this cycle**, with the
+corrected (honest, **unknown**) cause above — not the withdrawn 403 story.
+
+**JASON HAS ALREADY BEEN TOLD AND CURRENTLY HAS NO ACCESS TO HIS COMPUTER.** This condition therefore
+**stands open** rather than being escalated again.
+
+> **RULE FOR FUTURE CYCLES — RESTATE ONCE, DO NOT RE-ESCALATE.** While this block is present and the price
+> file is still stale, every cycle **restates in one line** ("s.10 reason-3 DECLARED 2026-09-18, still open,
+> N h stale, cause unknown, Jason informed and without computer access") and **does not** re-declare it, does
+> not re-escalate it, and does not re-diagnose the cause. It is closed only by a newer `data/NQ_1min_databento_*.csv`
+> landing, at which point this block is struck and the paper book resumes.
+
+
 ## CANDIDATE QUEUE AFTER S006 (9:00 pm cycle, September 17th 2026) — NOT exhaustion, blockage + an unmined revamp tier
 S006 (Stack A) closed to **LEARN without a screen**: its own pre-registered closure form
 (research/mechanisms/stack-a-b2-context-x-b3-breakout.md s.12) had already answered its question as a
@@ -401,8 +448,10 @@ strategy today -- H118 can finish stage 2 and still not be live-ready.
 
 ## Operational constraints
 
-- Databento fetch cannot run in an automated/bridged session (egress
-  blocked; package not installed). Jason runs it manually in Terminal.app.
+- Databento fetch cannot run in an automated/bridged SANDBOXED session (egress
+  blocked at the proxy, verified; package not installed). Jason runs it manually in
+  Terminal.app. **This is a fact about the sandbox only — it is NOT the reason his
+  7 am cron produced no file; that cause is UNKNOWN. See the STANDING CORRECTION block above.**
 - Price data current through 2026-09-08. Mounted-folder mtimes unreliable —
   check contents, not mtimes.
 - `purgedcv` (DSR/PBO library) AND `pytest` are NOT pre-installed in every

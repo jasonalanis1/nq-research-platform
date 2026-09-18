@@ -739,6 +739,32 @@ Two smaller things worth keeping:
   fred.stlouisfed.org are all HTTP 403 at the proxy from the device shell **and** the cloud
   container. Every free reference feed the project needs is a Jason's-Terminal job, not just the
   paid one. Assume a new external source is unreachable until a fetch proves otherwise.
+  **SCOPE WARNING, added 2026-09-18 — this is a fact about the SANDBOX ONLY.** It does NOT explain,
+  and must never be cited as explaining, anything that happens on Jason's own Mac (see the next
+  lesson).
+
+### A log file is evidence about the run that WROTE it, not about the failure you are looking at (2026-09-18)
+
+For three cycles the project stated as *known root cause* that the 7:00 am Databento top-up cron on
+Jason's Mac "dies 403 Forbidden at the egress proxy". **It was wrong, and the error was entirely
+avoidable by reading the log's own metadata before trusting its contents.** `data/_fetch_run.log`:
+
+- **mtime 2026-09-09 18:15 UTC** — nine days stale, so it could not be a record of any recent cron run;
+- **sandbox paths in every traceback frame** (`/sessions/rcw-.../mnt/...`) — a run made inside the
+  sandboxed device VM, whose egress is blocked by design, not a run on the Mac;
+- **from `src/data_fetch_databento.py`** (the full 2015→today historical fetcher, failing on its *2015*
+  chunk) — **not** `src/data_topup_databento.py`, which is the script the cron actually runs.
+
+Three independent tells, any one of which was enough. The real answer is that the cron logs to
+`~/Library/Logs/tony-topup.log`, **outside the connected folders and unreadable from here**, so the
+honest status is **UNKNOWN** — Mac asleep, missing Full Disk Access, or something unseen.
+
+**THE GENERALISABLE LESSON, and it is the same shape as the fail-open reference data and the cost
+constant:** a plausible-looking artifact that is *present* reads as an answer, and a *stale* artifact is
+indistinguishable from a fresh one at the point of use. Before a log becomes a root cause, check three
+things: **its mtime, the code path it names, and the machine its paths belong to.** "We do not know" is a
+legitimate, reportable root-cause finding; a confident wrong one sends the fix to the wrong machine —
+here, three cycles of telling Jason to allow-list a host that was never the problem.
 - **A parser for a sourced calendar must reproduce the existing sourced list before it is trusted.**
   `data_topup_macro_calendar.py` refuses to write unless every date it parses inside the frozen
   list's range matches that list exactly, and unless the result has a real schedule's shape. The
