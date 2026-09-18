@@ -1638,6 +1638,43 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 18th, 11:00 am cycle -- **S013 CLOSED TO LEARN AT SOURCE; THE S011 OVERLAP CHECK RAN AND PASSED; THE TOP
+REVAMP TIER IS NOW EXHAUSTED.** Detail: research/studies/S013-opening-auction-imbalance-not-built-2026-09-18.md.
+**CLOSURE-FORM CHECK (run first, per the standing change).** hyp-000076 has NO U8 closure row in
+research/ledger/closures.jsonl (13 rows, hyp-000146..162 only): no `not_retest`, no `condition`, and it is not named in
+any other row's not_retest -- NOT banned on the letter. It IS banned in substance by a **pre-committed decision rule in
+hyp-000078's ledger note**: the single-day reactive-trigger "fresh pre-move behavior" vein closed 7 of 7, and reopening
+needs "a genuinely new data source or a longer holding-period structure, not another intraday reactive trigger". S013
+was price+volume only. **STANDING CHANGE, EXTENDED: the SOURCE check must read the lineage's SIBLINGS' pre-committed
+decision rules, not only its own not_retest/condition pair** -- pre-Gate rows carry their bans in prose, in whichever
+sibling closed the vein. Third cycle running (S006, S012, S013) that closeness ranked a dead candidate to the front.
+**CONDITION 2 (S011 overlap) RAN AND PASSED** -- src/overlap_check_s013_vs_s011.py, Discovery: S011 1669 sessions, S013
+1686, 1667 joint, **98.76% session overlap but only 51.35% DIRECTIONAL agreement (856/1667)**. An independent direction
+rule, not an S011 variant. **CORRECTION TO THE RECORD: S011 does NOT fire only after high-volume sessions** -- its frozen
+module (src/strategy_s011_daily_reversal_vs_own_drift.py:15-22) trades the UNCONDITIONAL reversal with no volume filter
+and fires essentially every session, so the ~99% session overlap is mechanical and carries no information; direction is
+the question with content. Portfolio note for any revival: same instrument, same 15:55 exit, so ~51% of sessions would
+be doubled exposure.
+**CONDITION 3 IS WHAT KILLED IT.** hyp-000076 closed credibly NEGATIVE against zero, so the only profitable construction
+is the fade -- the forbidden sign flip -- and an expectancy measured against zero on a drifting instrument is
+substantially a statement about drift and costs (it never carried an own-drift baseline arm). No spec, no freeze, no
+screen, nothing papered. **NO SALVAGE OWED** (a salvage follows a KILL after a screen; there was no screen).
+**DATA ACQUISITION TRIGGER:** real exchange opening-auction imbalance data is not on disk; hyp-000076 tested a
+price+volume proxy and the proxy is what failed. That data is the one admissible route back into this family.
+**TOP REVAMP TIER AUDITED, 27 entries, NO UNBANNED CANDIDATE REMAINS:** hyp-000072-078 vein-closed (above);
+hyp-000146/147/152/155/157/158/159/160/161/162 carry U8 not_retest bans or are already built; hyp-000121/136/137 are the
+H118 lineage killed by the two-nulls rule; hyp-000122/123 are Validation/Holdout rows and may not be touched;
+hyp-000139 is deliberately not queued (its own mechanism doc: counterparty "weak/possibly none"); hyp-000021 is killed by
+its own frozen spec's Section 11 ("kill, not followed by parameter variants"); hyp-000149/155 are Data Acquisition
+Triggers; hyp-000060 is n=69 and closed with the sign against it. **NEXT CYCLE MUST SOURCE FROM A FRESH CHANNEL** --
+the September 12th staff meeting names literature-sourced entries as the highest-prior unused pool (~1 in 3 behavior-
+first vs 0% pattern-guess) -- and must NOT force another revamp row. This is now an s.10 reason-2 check that the revamp
+list HAS been worked through at the top tier, unlike the 9:00 am reading.
+Gate blocked the same 6 steps on VXN/CPI/FOMC/NFP; paper book NOT scored, no fill invented. PAPER BOOK unchanged: S008
+2 trades/10 days (38 to judgment, only live clock); SLOW: S001 (1), S002 (2), S003 (0), S001a (0). S011 stays
+BLOCKED_PENDING_REFERENCE_DATA. Price data stale >57h; the Section 10 reason-3 condition is already declared and
+standing, cause recorded as unknown.
+
 September 18th, 9:00 am cycle -- **TWO CORRECTIONS TO THE RECORD, AND S012 CLOSED TO LEARN AS A FORBIDDEN RETEST.**
 Detail: research/sessions/2026-09-18-0900.md; study research/studies/S012-opex-week-not-built-2026-09-18.md.
 **(a) THE 403-CRON ROOT CAUSE IS WITHDRAWN -- IT WAS WRONG.** See the STANDING CORRECTION block near the top of this
