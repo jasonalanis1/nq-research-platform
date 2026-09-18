@@ -111,6 +111,25 @@ SURVIVES from the refocus memo: no profit deadline (s.1), daytime cadence (s.2),
 request and actual minutes (s.6), 1-VERIFY (7.2), production write guard (7.3), path:line citations (7.4a), push verified (7.5).
 DAY ONE (s.14) executed September 15th: see "Last updated by". From then on s.3 governs every cycle.
 
+## CANDIDATE QUEUE AFTER S006 (9:00 pm cycle, September 17th 2026) — NOT exhaustion, blockage + an unmined revamp tier
+S006 (Stack A) closed to **LEARN without a screen**: its own pre-registered closure form
+(research/mechanisms/stack-a-b2-context-x-b3-breakout.md s.12) had already answered its question as a
+**powered** null (IN−OUT +0.0247R, CI −0.0496..+0.0976; design excluded anything above ~+0.19R) and names the
+forbidden retest verbatim; the unconditional trigger is −0.0266R before costs; integrity 2 RED of 7 (subperiod
+sign flip, top 5% carrying 188%). Write-up research/studies/S006-stack-a-not-rebuilt-2026-09-17.md.
+**This is NOT directive s.10 reason 2.** The revamp list's top tier (research/ledger/revamp_list.json, 27 entries)
+still holds unworked NQ candidates with named forced counterparties. Sourced this cycle so the queue is not empty:
+- **S011 — daily reversal after a high-volume session, NQ (hyp-000152 / M18), measured against NQ's own drift.**
+  SOURCE, registered in research/ledger/strategies.jsonl. P1 passed on Discovery (HIGH-vol sign-adjusted next-session
+  return ci_90 −0.1523..−0.0463); it closed only because volume added no GRADIENT. Price+volume only → NOT gate-blocked;
+  fires most sessions → should project non-SLOW. The spec may NOT reintroduce a volume tercile. Binding question is cost.
+Next two after that, in order:
+- **hyp-000158 monthly opex-week delta-hedge unwind, NQ (M25)** — real forced dealer flow, calendar computable from the
+  third Friday (not the stale macro calendar); expect SLOW (~12 events/yr), so background paper.
+- **hyp-000147 intraday periodicity, same slot next day (M17)** — intraday, fires most days, mechanism doc names a flow.
+Deliberately NOT queued: hyp-000139 (overnight/RTH divergence reversion) — its own mechanism doc records the
+counterparty as "weak/possibly none, mechanical mean-reversion of a stretched statistic", which fails the Mechanism Gate.
+
 ## THE REFERENCE-DATA GATE (Jason, September 16th 2026) — STANDING, binding every cycle
 His words: **"Add a standing preflight rule: any reference data past its coverage date blocks the steps that use it and gets
 reported, never defaulted."** Tony did not propose this and does not amend it. It is a GATE, not a printed warning.
