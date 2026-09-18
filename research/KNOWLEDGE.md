@@ -959,3 +959,39 @@ around that.
 This is the **fourth** time the H118 lineage has produced a large, clean, positive number that is the index
 going up. Failure mode 7 (baseline confusion) in §2 now has a companion: **overlap confusion** — a correct
 baseline measured on a sample that is ten times smaller than its trade count.
+
+---
+
+## hyp-000162 is a closed question: it adds nothing as a forecast input and nothing as a sizing input
+*S005, 7:00 pm cycle, September 17th 2026. `research/studies/S005-or-width-stop-overlay-2026-09-17.md`,
+`data/screen_S005.json` vs `data/screen_S008_host_alone.json`.*
+
+Opening-range width → midday range was VALIDATED but NOT PROMOTED at Portfolio on September 14th: joint
+residual retention ~18% against a 50% bar, and adding it to the forecast stack made the forecast slightly
+**worse** (MAE 0.3252 → 0.3256). The one question that survived was whether it could still earn a place as
+a **sizing** input rather than a forecast input — sizing is a non-linear transform of a forecast, and stop
+placement decides which trades survive noise, so redundancy for forecasting does not logically imply
+uselessness for sizing.
+
+It was screened once, pre-specified, as a stop-distance overlay on the frozen S008 (chosen as the best
+performer and the only non-SLOW strategy in PAPER, and because S008 already sizes its stop off an intraday
+range). **The answer is no.** Identical 704 trades and identical entries, win rate unchanged at 0.4688,
+only 2.3% of trades changed exit reason, and every one of the four cost combinations moved by well under
+3% — slightly worse in dollars, slightly better in R. The scaler itself was live (k median 1.17, half the
+days at a clip bound), so this is not a degenerate-input artefact.
+
+**Two transferable lessons.**
+
+1. **A symmetric stop-and-target rescale is a no-op in R by construction.** Multiplying both the stop and
+   an nR target by the same k cannot change the R outcome of any trade; it can only change *which level is
+   touched first*. Before building any overlay that scales risk, ask whether it can affect the result at
+   all except through first-touch ordering — often that channel is too thin to matter, and the screen is
+   answered before it is run.
+2. **Two range measures of the same session are the same input twice.** ORW (09:30–10:00) and RNG
+   (09:30–15:00) overlap in both window and construction, so using one to scale a stop already sized off
+   the other mostly re-states it. This is the Portfolio finding arriving from a different direction: the
+   opening half-hour **confirms** an already-visible volatility state rather than revealing a new one.
+
+Absent a genuinely different use, hyp-000162 should not be re-sourced. The null was recorded plainly and
+no variant was hunted — searching for a k-band or tercile split that looked better is the ex-post slicing
+the salvage rule exists to forbid.
