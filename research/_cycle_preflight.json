@@ -1,13 +1,13 @@
 {
- "ran_at": "2026-09-17T04:03:01.392106+00:00",
+ "ran_at": "2026-09-17T18:08:49.706886+00:00",
  "owner": "cycle",
- "note": "11:00 pm cycle",
+ "note": "1:00 pm cycle",
  "steps": {
   "lock": {
    "ok": true,
    "returncode": 0,
    "tail": [
-    "BUSY owner=cycle last_heartbeat=0min_ago note='11:00 pm cycle'"
+    "BUSY owner=cycle last_heartbeat=0min_ago note='1:00 pm cycle'"
    ],
    "stderr_tail": []
   },
@@ -64,7 +64,9 @@
     "S005 SOURCE",
     "S006 SOURCE"
    ],
-   "salvage_owed": [],
+   "salvage_owed": [
+    "S004"
+   ],
    "empty": false,
    "note": "next candidate: S005 Opening-range width -> midday excursion (hyp-000162) as a STOP/SIZING INPUT at SOURCE"
   },
@@ -251,7 +253,6 @@
      "S009"
     ],
     "blocked_candidates": [
-     "S004",
      "S009a",
      "S010a"
     ],
@@ -273,7 +274,7 @@
     "  STILL RUNS: step4_source (Discovery names a candidate), step4_specify (price-only candidates), step4_freeze, step4_screen (Discovery slice, price-only), step5_closeout (tests, ops checks, commit, push, report)",
     "  Blocked is not aborted: the cycle runs every step above and reports the block.",
     "  salvage reruns owed: S007, S009 -- blocked by CPI, FOMC, NFP",
-    "  BLOCKED_PENDING_REFERENCE_DATA: S004, S009a, S010a -- these take no queue slot and Step 4 must not advance them"
+    "  BLOCKED_PENDING_REFERENCE_DATA: S009a, S010a -- these take no queue slot and Step 4 must not advance them"
    ],
    "rule": "Jason, September 16th 2026: any reference data past its coverage date blocks the steps that use it and gets reported, never defaulted. A series with no coverage entry is treated as stale (fail closed)."
   },
