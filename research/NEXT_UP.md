@@ -1583,6 +1583,32 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 17th, 9:00 pm cycle -- **S006 (STACK A) CLOSED TO LEARN WITHOUT A FREEZE OR A SCREEN; S011 SOURCED IN ITS PLACE.**
+Detail: research/sessions/2026-09-18-0200.md; study research/studies/S006-stack-a-not-rebuilt-2026-09-17.md.
+The honest first question was "is there anything here to build?" and the record answers it three ways:
+(1) research/mechanisms/stack-a-b2-context-x-b3-breakout.md is PRE-REGISTERED with a U8-1.0 closure form --
+IN minus OUT = +0.0247R, 90% CI (-0.0496,+0.0976), Sidak-adjusted at N=460 (-0.1401,+0.1896), cells n=566/n=977
+against a floor of 100: a CLEAN POWERED NULL, mechanism FALSIFIED (the design excluded anything above ~+0.19R
+where the mechanism implied ~+0.23R); (2) that closure form names the forbidden retest verbatim -- "expected-range
+tercile crossed with the opening-range break, in any variant of tercile edges, breakout windows or targets" --
+which is exactly what S006 would have specified, and the one permitted retest (a DIFFERENT, non-volatility context
+variable) is not met; (3) research/integrity/mechanical-stack-a-2026-09-14.json shows the unconditional trigger at
+raw_mean -0.026599 over n=1543 BEFORE costs, so under the Amendment 2 cost model (1.300 pt MNQ round trip) no cost
+combination screens positive -- and 2 RED of 7, subperiod_stability (halves disagree in sign) and concentration
+(top 5% carry 188%), the S004 defects again, with 2 checks NOT RUN. Directive s.9 lists Stack A at the top of the
+revamp list, but that listing predates the September 14th closure; s.9's own bottom rule (clean nulls stay dead)
+governs. No salvage owed; capacity action REDUCE. NO SLOW projection is reported because nothing was specified.
+**QUEUE: BLOCKAGE, NOT s.10 REASON 2.** See the CANDIDATE QUEUE AFTER S006 section above. S011 (daily reversal
+after a high-volume session, hyp-000152/M18, measured against NQ's own drift) registered at SOURCE -- price+volume
+only, not gate-blocked, fires most sessions; then hyp-000158 (opex-week delta-hedge unwind) and hyp-000147
+(intraday periodicity M17). hyp-000139 deliberately NOT queued (its own doc: counterparty "weak/possibly none").
+**DATA: 45.31 HOURS STALE AT 2026-09-17 22:08 ET, 48h NOT YET CROSSED -- it crosses at 2026-09-18 00:50 ET
+(04:50 UTC), 2.69 hours later.** Whichever cycle first measures >=48h declares the s.10 reason-3 condition.
+Root cause known and NOT a code defect: the 7am cron's Databento fetch gets 403 Forbidden at the egress proxy,
+the same wall as VXN/macro. Needs Jason. Gate blocked 6 steps; paper book NOT scored, no fill invented.
+pytest 704 passed.
+
+
 September 17th, 7:00 pm cycle -- **S005 ADVANCED FOUR STAGES TO A NULL, AND THE NULL IS THE POINT.**
 Detail: research/sessions/2026-09-18-0000.md; study research/studies/S005-or-width-stop-overlay-2026-09-17.md;
 spec research/infrastructure/strategy-specs/S005-or-width-stop-overlay-on-S008.md (sha256 a89e3c3b4b56892d...);
