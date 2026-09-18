@@ -1638,6 +1638,54 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 18th, 9:00 am cycle -- **TWO CORRECTIONS TO THE RECORD, AND S012 CLOSED TO LEARN AS A FORBIDDEN RETEST.**
+Detail: research/sessions/2026-09-18-0900.md; study research/studies/S012-opex-week-not-built-2026-09-18.md.
+**(a) THE 403-CRON ROOT CAUSE IS WITHDRAWN -- IT WAS WRONG.** See the STANDING CORRECTION block near the top of this
+file. data/_fetch_run.log was verified directly this cycle: mtime **2026-09-09 18:15 UTC** (nine days old), traceback
+frames are **sandbox paths** (/sessions/rcw-.../mnt/...), and it is from **src/data_fetch_databento.py** (the full
+historical fetcher, failing on its 2015 chunk), **not** src/data_topup_databento.py which is what the cron runs. It is
+an artifact of a run made inside the sandboxed device VM and says nothing about Jason's Mac. **THE CAUSE OF THE MISSING
+PRICE FILE IS UNKNOWN**: the cron logs to ~/Library/Logs/tony-topup.log, outside the connected folders and unreadable
+from here. Unconfirmed candidates only: Mac asleep at 7am, cron/launchd without Full Disk Access, or an unseen failure.
+The *sandbox* egress wall remains real and verified -- that part is NOT corrected. Corrected in: this file (standing
+block + Operational constraints), research/KNOWLEDGE.md (new lesson), and correction notes appended to
+research/sessions/2026-09-18-0000.md, -0200.md, -0400.md (dated history preserved, not rewritten). The S011 row in
+research/ledger/strategies.jsonl repeats the wrong claim and is left as an immutable ledger record, flagged superseded.
+**(b) DIRECTIVE s.10 REASON-3 CONDITION DECLARED.** Last bar 2026-09-16 00:50 ET (04:50 UTC); measured at this cycle's
+data check 2026-09-18 14:01 UTC = **57.19 HOURS STALE**, 48h crossed at 2026-09-18 04:50 UTC. Declared with the corrected
+(unknown) cause. **Jason has already been told and has no computer access, so it STANDS OPEN and is NOT re-escalated.**
+Future cycles RESTATE IT IN ONE LINE and do not re-declare, re-escalate or re-diagnose -- rule written into the standing
+block. Closed only by a newer data/NQ_1min_databento_*.csv landing.
+**STEP 4: S012 CLOSED TO LEARN WITHOUT A SPECIFY, A FREEZE OR A SCREEN.** Its own gating test has already been run and
+failed: hyp-000158 P1 -- expiration-week NQ return, ATR14-normalized, **net of NQ's own unconditional weekly drift** --
+mean **+0.1872**, ci_90 **(-0.0291,+0.3950)**, **n=80 expiration weeks, adequate**. That P1 IS the two-nulls own-drift
+baseline arm a SPECIFY would have had to build, so the arm was pre-run and did not clear. P2 also not credible
+(+0.2429, ci_90 -0.1167..+0.5907). NULL1's own unconditional weekly mean is **+0.3343**, so a screen against zero would
+have printed a healthy-looking profit that was pure drift -- the S004/H118 error in advance. Closure form U8-1.0:
+status 'clean null', sample 'adequate (80 weeks)', mech 'falsified for NQ', **not_retest 'Opex-week directional claims
+on NQ.'**, **condition 'none'**. s.9's bottom rule governs. **The named fallback hyp-000147 (M17) is banned on identical
+grounds** (P1 FAIL all three slots n=1632; not_retest 'Intraday return periodicity on NQ.'; condition none), and
+hyp-000146/M16 closes session-anchored continuation while its practitioner follow-on P-2 is CLOSED
+(research/sourcing/practitioner.md, the whole P-1..P-4 stream is RULED). **NO SALVAGE OWED** -- a salvage follows a KILL
+after a screen and there was no screen. Published calendar anomalies now **0 for 9** on the directional lane.
+**THIS IS NOT s.10 REASON 2, and the check is recorded:** the revamp list is NOT worked through (137 entries;
+top-tier hyp-000136/139/021/060 and the pre-Gate block hyp-000072-078 carry no U8 closure row and no not_retest ban)
+and the Salvage queue is NOT empty (S007, S009, S004 owed, gate-blocked). A bad queue row, not exhaustion.
+**REPLACEMENT SOURCED: S013 -- opening-auction order imbalance (hyp-000076, pre-Gate tier), SOURCE only.** Only remaining
+tier that is ban-free AND intraday AND fires every session (Amendment 1's top preference, which S012 never had at ~12
+events/year) AND price+volume only. THREE CONDITIONS PRE-REGISTERED so the next cycle cannot drift: (1) a mechanism doc
+naming the forced counterparty must be written FIRST; (2) an explicit overlap check against S011 is mandatory before
+SPECIFY -- same CGW inventory story at the same 09:30 clock means DROP, not build; (3) sign-flipping is forbidden as a
+rationale. Any SPECIFY carries the own-drift baseline arm.
+**STANDING CHANGE (KNOWLEDGE.md): read the closure form's not_retest AND condition at SOURCE, not at SPECIFY.** Twice in
+two cycles (S006, S012) a dead candidate reached the front of the queue because revamp-list *closeness* was read and the
+closure form was not -- closeness ranks how near the number came, `condition` says whether the question may be asked
+again. A SOURCE row now quotes both verbatim or it has not been sourced.
+Gate blocked 6 steps (step3_paper_scoring, step3_b2_risk_state_decision, step4_salvage_check, salvage_reruns,
+step4_specify_S009a, step4_specify_S010a) on VXN/CPI/FOMC/NFP; paper book NOT scored, no fill invented. PAPER BOOK
+unchanged: S008 2 trades/10 days (38 to judgment, six-week mark 4.6 wk, only live clock); SLOW: S001 (1), S002 (2),
+S003 (0), S001a (0). S011 stays BLOCKED_PENDING_REFERENCE_DATA. pytest 712 passed.
+
 September 17th, 11:00 pm cycle -- **S011 SPECIFIED, FROZEN AND SCREENED IN ONE CYCLE; IT PASSED BOTH GATES AND IS
 PARKED BLOCKED_PENDING_REFERENCE_DATA.** Detail: research/sessions/2026-09-18-0400.md.
 Spec research/infrastructure/strategy-specs/S011-daily-reversal-vs-own-drift.md (sha256 b286e28d70995aa8...); module

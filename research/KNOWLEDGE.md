@@ -743,6 +743,37 @@ Two smaller things worth keeping:
   and must never be cited as explaining, anything that happens on Jason's own Mac (see the next
   lesson).
 
+
+### Read the closure form's `not_retest` at SOURCE, not at SPECIFY (2026-09-18)
+
+Twice in two cycles a candidate was registered into the queue and only found to be a **forbidden
+retest** when the next cycle opened it: **S006** (Stack A, 9:00 pm September 17th) and **S012**
+(opex-week delta-hedge unwind, 9:00 am September 18th). Both closed to LEARN without a SPECIFY, a
+FREEZE or a SCREEN. Both were avoidable by reading two fields of a record the project already had.
+
+The U8-1.0 closure form carries `not_retest` and `condition`, and they are decisive:
+
+- `hyp-000158` — `not_retest: "Opex-week directional claims on NQ."`, `condition: "none"` → dead.
+- `hyp-000147` — `not_retest: "Intraday return periodicity on NQ."`, `condition: "none"` → dead.
+- `hyp-000152` — `condition: "...may be conditioned ONCE on a validated state"` → one route open.
+- `hyp-000157`, `hyp-000159` — `condition: "attempt 2 of 2 ..."` → one route open.
+
+**`condition` is the whole difference between a dead row and a live one**, and a high revamp-list
+`closeness` score says nothing about it: hyp-000158 scores 0.863 and hyp-000147 scores 0.954 in
+`revamp_list.json`, and both are banned. Closeness ranks *how near the number came*; the closure
+form records *whether the question is allowed to be asked again*. Ranking by the first and never
+reading the second is how a dead candidate reaches the front of the queue.
+
+**Sharper, and worth more than the process fix:** hyp-000158's P1 was *already* the own-drift
+baseline test — expiration-week return **net of NQ's own unconditional weekly drift**, mean +0.1872,
+CI (−0.0291, +0.3950), n=80. The two-nulls arm a SPECIFY would have built had already been run and
+had already failed. Its NULL1 unconditional weekly mean was **+0.3343**, so a screen against zero
+would have printed a healthy-looking profit that was pure drift. **A Discovery scan that already
+tested against the instrument's own drift has pre-run the strategy's baseline gate; when it failed
+there, there is nothing left for a screen to find.** Check for that before spending a cycle.
+
+**STANDING CHANGE:** the SOURCE step quotes the candidate's `not_retest` and `condition` verbatim
+in its registry row. A row that cannot quote them has not been sourced.
 ### A log file is evidence about the run that WROTE it, not about the failure you are looking at (2026-09-18)
 
 For three cycles the project stated as *known root cause* that the 7:00 am Databento top-up cron on
