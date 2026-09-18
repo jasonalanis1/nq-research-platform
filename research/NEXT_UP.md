@@ -1564,6 +1564,44 @@ research/sessions/2026-09-11-1422.md.
 
 ## Last updated by
 
+September 17th, 7:00 pm cycle -- **S005 ADVANCED FOUR STAGES TO A NULL, AND THE NULL IS THE POINT.**
+Detail: research/sessions/2026-09-18-0000.md; study research/studies/S005-or-width-stop-overlay-2026-09-17.md;
+spec research/infrastructure/strategy-specs/S005-or-width-stop-overlay-on-S008.md (sha256 a89e3c3b4b56892d...);
+module src/strategy_s005_or_width_stop_overlay.py (sha256 332420d32acb3caa...), frozen in its own commit 9206c06
+BEFORE any outcome data was touched. hyp-000162 (opening-range width -> midday range) is VALIDATED_NOT_PROMOTED
+(research/studies/hyp162-portfolio-2026-09-14.md: joint residual retention ~17.7% vs a 50% bar; adding it to the
+forecast stack made the forecast slightly WORSE, MAE 0.3252 -> 0.3256), so it was screened ONLY as a stop-sizing
+overlay on an already-frozen host, never as a standalone strategy. HOST = S008: best performer and the ONLY
+non-SLOW strategy in PAPER (0.3351 trades/session -> 42.2 vs 40), and the one already sizing its stop off an
+intraday RANGE. S008's frozen files were NOT edited (s.13); the overlay imports them read-only.
+**RESULT: NO MATERIAL CHANGE IN ANY OF THE FOUR COST COMBINATIONS** (net $ at one contract, overlay vs host):
+MNQ market 1,901.21 vs 1,950.18 (DECISION BASIS); MNQ limit OPTIMISTIC 2,253.21 vs 2,302.18; NQ market 26,826.48
+vs 27,316.22; NQ limit OPTIMISTIC 30,346.48 vs 30,836.22. Gross 2.6503 vs 2.6851 pt/trade vs the 1.300 pt MNQ
+market cost. Net R -7.9 vs -8.2 (MNQ mkt) -- a hair BETTER in R, a hair WORSE in dollars. 704 trades in both,
+ALL 704 ENTRIES IDENTICAL, win rate 0.4688 in both, only 16/704 (2.3%) changed exit reason. The scaler was live,
+not degenerate: k mean 1.1099, median 1.1657, range 0.750-1.350, 362/704 at a clip bound, zero k=1 fallbacks.
+Both mechanisms were named in the spec BEFORE the screen: a symmetric stop-and-target rescale is a NO-OP IN R by
+construction and can act only through first-touch ordering; and ORW and RNG are both range measures of the SAME
+session, so the scaler re-states what the host's stop already used. **S005 -> LEARN** per the rule fixed before
+the screen. Not salvaged (it did not lose money) and NOT VARIED -- hunting a better k-band is the ex-post slicing
+the salvage rule forbids. hyp-000162 has now failed as a forecast input AND as a sizing input, by two methods on
+two slices: treat it as CLOSED. Lessons in research/KNOWLEDGE.md. **QUEUE ADVANCES TO S006 (Stack A).**
+FIVE CYCLES LOST TODAY: the 9am, 11am, 1pm, 3pm and 5pm cycles were all missed or aborted to a remote-bridge
+outage. Operational fact, not a break in the chain -- directive, queue and ledger were intact and this cycle
+resumed them without loss. The 1:00 pm cycle's leftover research/_cycle_preflight.json was checked (complete and
+valid: ok true, failed [], all ten steps ok, correctly carrying the post-kill salvage_owed S004) and COMMITTED
+(cf9884b), not discarded, as the honest record that the cycle opened and then aborted.
+**PRICE DATA IS 43.2 HOURS STALE AND CROSSES THE 48-HOUR LINE AT ~2026-09-18 00:50 ET -- s.10 reason-3 watch.**
+Newest file data/NQ_1min_databento_2026-09-16.csv, last bar 2026-09-16 00:50 ET. data/_fetch_run.log shows the
+cause is NOT a sleeping Mac: the fetch RUNS and fails at the network layer -- ProxyError, 'Tunnel connection
+failed: 403 Forbidden' to hist.databento.com, which is not on the egress allow-list of either shell. The chunk
+cache is intact and the script resumes at 2015 once the host is reachable. THIS IS A THIRD ITEM ON THE SAME
+ERRAND as the VXN and macro-calendar cron lines Jason already owes from his own Terminal.
+REFERENCE-DATA GATE (session 2026-09-18) BLOCKED SIX STEPS, never bypassed: salvage_reruns (S007, S009 owed),
+step3_b2_risk_state_decision, step3_paper_scoring, step4_salvage_check <- VXN/FOMC/CPI/NFP; step4_specify_S009a
+<- FOMC/CPI/NFP; step4_specify_S010a <- VXN. Nothing was scored in the paper book and no fill was booked.
+Test suite 704/704 green.
+
 September 17th, 11:00 pm cycle -- **S004 WAS STRESS-TESTED BEFORE PAPER ENTRY AND IS A KILL.** Detail:
 research/sessions/2026-09-17-2300.md; study research/studies/S004-scrutiny-2026-09-17.md; tool
 src/study_s004_scrutiny.py; numbers data/s004_scrutiny.json. MEASUREMENT ONLY -- the frozen spec (sha256
